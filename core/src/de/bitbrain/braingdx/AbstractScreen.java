@@ -1,9 +1,13 @@
 package de.bitbrain.braingdx;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 
-public abstract class AbstractScreen<T extends Game> implements Screen {
+/**
+ * Abstract base class for screens
+ *
+ * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ */
+public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     private T game;
 
