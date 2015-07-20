@@ -1,6 +1,16 @@
 package de.bitbrain.braingdx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Abstract base class for screens
@@ -9,7 +19,17 @@ import com.badlogic.gdx.Screen;
  */
 public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
-    private T game;
+    protected T game;
+
+    protected GameWorld world;
+
+    protected OrthographicCamera camera;
+
+    private Color backgroundColor = Color.BLACK.cpy();
+
+    private Batch batch;
+
+    private Stage stage;
 
     public AbstractScreen(T game) {
         this.game = game;
@@ -20,18 +40,36 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     }
 
     @Override
-    public void show() {
-
+    public final void show() {
+        camera = new OrthographicCamera();
+        world = new GameWorld(camera);
+        batch = new SpriteBatch();
     }
 
     @Override
-    public void render(float delta) {
+    public final void render(float delta) {
+        Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        camera.update();
+        stage.act(delta);
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+            beforeWorldRender(batch, delta);
+            world.updateAndRender(batch, delta);
+            afterWorldRender(batch, delta);
+        batch.end();
+        stage.draw();
     }
 
     @Override
-    public void resize(int width, int height) {
-
+    public final void resize(int width, int height) {
+        if (stage == null) {
+            stage = new Stage(getViewport(width, height));
+            onCreateStage(stage, width, height);
+        } else {
+            stage.getViewport().update(width, height);
+        }
     }
 
     @Override
@@ -49,8 +87,29 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     }
 
-    @Override
-    public void dispose() {
+    protected void beforeWorldRender(Batch batch, float delta) {
 
+    }
+
+    protected void afterWorldRender(Batch batch, float delta) {
+
+    }
+
+    protected void onCreateStage(Stage stage, int width, int height) {
+
+    }
+
+    protected Viewport getViewport(int width, int height) {
+        return new ScreenViewport();
+    }
+
+    @Override
+    public final void dispose() {
+        world.reset();
+        stage.dispose();
+    }
+
+    public void setBackgroundColor(Color color) {
+        this.backgroundColor = color;
     }
 }
