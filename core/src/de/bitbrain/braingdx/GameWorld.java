@@ -8,6 +8,8 @@ import com.badlogic.gdx.utils.Pool;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.bitbrain.braingdx.graphics.RenderManager;
+
 /**
  * Game world which handles game objects internally
  *
@@ -36,8 +38,11 @@ public class GameWorld {
 
     private OrthographicCamera camera;
 
+    private RenderManager renderManager;
+
     public GameWorld(OrthographicCamera camera) {
         this.camera = camera;
+        renderManager = new RenderManager();
     }
 
     public void setBounds(WorldBounds bounds) {
@@ -50,12 +55,17 @@ public class GameWorld {
         return object;
     }
 
+    public void registerRenderer(Integer gameObjectId, RenderManager.Renderer renderer) {
+        renderManager.register(gameObjectId, renderer);
+    }
+
     public void updateAndRender(Batch batch, float delta) {
         for (GameObject object : objects) {
             if (!bounds.isInBounds(object, camera)) {
                 removals.add(object);
                 continue;
             }
+            renderManager.render(object, batch, delta);
         }
         for (GameObject removal : removals) {
             remove(removal);
