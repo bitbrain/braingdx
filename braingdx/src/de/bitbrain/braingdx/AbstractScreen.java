@@ -52,7 +52,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
         world = new GameWorld(camera);
         batch = new SpriteBatch();
         tweenManager = new TweenManager();
-        fx.setTweenManager(tweenManager);
+        fx.init(tweenManager, camera);
     }
 
     @Override
@@ -61,6 +61,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         tweenManager.update(delta);
+        fx.begin();
         camera.update();
         stage.act(delta);
         batch.setProjectionMatrix(camera.combined);
@@ -70,6 +71,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
             afterWorldRender(batch, delta);
         batch.end();
         stage.draw();
+        fx.end();
     }
 
     @Override

@@ -1,5 +1,7 @@
 package de.bitbrain.braingdx.fx;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+
 import aurelienribon.tweenengine.TweenManager;
 
 /**
@@ -11,7 +13,9 @@ public final class FX {
 
     private TweenManager tweenManager;
 
-    private ScreenShake screenShake;
+    private ScreenShake shake;
+
+    private OrthographicCamera camera;
 
     private FX() { }
 
@@ -19,12 +23,25 @@ public final class FX {
         return INSTANCE;
     }
 
-    public void setTweenManager(TweenManager tweenManager) {
+    public void begin() {
+        if (camera != null && shake != null) {
+            camera.translate(shake.getShake().x, shake.getShake().y);
+        }
+    }
+
+    public void end() {
+        if (camera != null && shake != null) {
+            camera.translate(-shake.getShake().x, -shake.getShake().y);
+        }
+    }
+
+    public void init(TweenManager tweenManager, OrthographicCamera camera) {
         this.tweenManager = tweenManager;
-        screenShake = new ScreenShake(this.tweenManager);
+        shake = new ScreenShake(this.tweenManager);
+        this.camera = camera;
     }
 
     public void shake(float intensity, float duration) {
-        screenShake.shake(intensity, duration);
+        shake.shake(intensity, duration);
     }
 }
