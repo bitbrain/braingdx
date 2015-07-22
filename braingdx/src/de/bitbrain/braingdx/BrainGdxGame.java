@@ -28,6 +28,9 @@ public abstract class BrainGdxGame extends Game {
     private void loadAssets() {
         AssetManager assetManager = SharedAssetManager.getInstance();
         GameAssetLoader loader = getAssetLoader();
+        if (loader == null) {
+            throw new RuntimeException("No asset loader has been specified.");
+        }
         HashMap<String, Class<?> > mapping = new HashMap<String, Class<?> >();
         loader.put(mapping);
         for (Map.Entry<String, Class<?> > entry : mapping.entrySet()) {

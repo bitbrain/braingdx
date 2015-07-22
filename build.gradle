@@ -10,7 +10,9 @@ buildscript {
 allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
+    apply plugin: "maven"
 
+    group = 'de.bitbrain'
     version = '1.0'
     ext {
         appName = 'braingdx'
@@ -28,7 +30,7 @@ allprojects {
     }
 }
 
-project(":core") {
+project(":braingdx") {
     apply plugin: "java"
 
 

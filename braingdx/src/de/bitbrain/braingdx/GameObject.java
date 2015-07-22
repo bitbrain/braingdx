@@ -29,7 +29,7 @@ public class GameObject implements Pool.Poolable {
     }
 
     public void setType(int typeId) {
-        this.type = type;
+        this.type = typeId;
     }
 
     public int getType() {

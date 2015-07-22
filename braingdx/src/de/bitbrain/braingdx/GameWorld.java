@@ -32,7 +32,7 @@ public class GameWorld {
 
         @Override
         public boolean isInBounds(GameObject object, OrthographicCamera camera) {
-            return object.getRight() < camera.position.x - camera.viewportWidth * camera.zoom / 2;
+            return true;
         }
     };
 
