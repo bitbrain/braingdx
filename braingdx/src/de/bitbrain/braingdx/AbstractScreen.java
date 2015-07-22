@@ -12,6 +12,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import aurelienribon.tweenengine.TweenManager;
+import de.bitbrain.braingdx.fx.FX;
+
 /**
  * Abstract base class for screens
  *
@@ -39,11 +42,17 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
         return game;
     }
 
+    protected TweenManager tweenManager;
+
+    protected FX fx = FX.getInstance();
+
     @Override
     public final void show() {
         camera = new OrthographicCamera();
         world = new GameWorld(camera);
         batch = new SpriteBatch();
+        tweenManager = new TweenManager();
+        fx.setTweenManager(tweenManager);
     }
 
     @Override
@@ -51,6 +60,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
         Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        tweenManager.update(delta);
         camera.update();
         stage.act(delta);
         batch.setProjectionMatrix(camera.combined);
