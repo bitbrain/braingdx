@@ -23,4 +23,8 @@ public final class FX {
         this.tweenManager = tweenManager;
         screenShake = new ScreenShake(this.tweenManager);
     }
+
+    public void shake(float intensity, float duration) {
+        screenShake.shake(intensity, duration);
+    }
 }
