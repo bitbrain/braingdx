@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Pool;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.bitbrain.braingdx.graphics.CameraTracker;
 import de.bitbrain.braingdx.graphics.RenderManager;
 
 /**
@@ -40,9 +41,12 @@ public class GameWorld {
 
     private RenderManager renderManager;
 
+    private CameraTracker tracker;
+
     public GameWorld(OrthographicCamera camera) {
         this.camera = camera;
         renderManager = new RenderManager();
+        tracker = new CameraTracker(camera);
     }
 
     public void setBounds(WorldBounds bounds) {
@@ -59,6 +63,22 @@ public class GameWorld {
         renderManager.register(gameObjectId, renderer);
     }
 
+    public void setCameraTracking(GameObject object) {
+        tracker.setTarget(object);
+    }
+
+    public void focusCamera() {
+        tracker.focus();
+    }
+
+    public void setTrackingSpeed(float speed) {
+        tracker.setSpeed(speed);
+    }
+
+    public void setTrackingZoomScale(float scale) {
+        tracker.setZoomScale(scale);
+    }
+
     public void updateAndRender(Batch batch, float delta) {
         for (GameObject object : objects) {
             if (!bounds.isInBounds(object, camera)) {
@@ -67,6 +87,7 @@ public class GameWorld {
             }
             renderManager.render(object, batch, delta);
         }
+        tracker.update(delta);
         for (GameObject removal : removals) {
             remove(removal);
         }
