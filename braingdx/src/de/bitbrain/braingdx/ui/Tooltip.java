@@ -55,8 +55,14 @@ public class Tooltip {
 
     private TweenEquation equation;
 
+    private float duration;
+
+    private float scale;
+
     private Tooltip() {
         setTweenEquation(TweenEquations.easeOutCubic);
+        duration = 0.9f;
+        scale = 1.0f;
     }
 
     public static Tooltip getInstance() {
@@ -83,18 +89,26 @@ public class Tooltip {
         tooltip.setPosition(x, y);
         stage.addActor(tooltip);
         tooltips.add(tooltip);
-        Tween.to(tooltip, ActorTween.ALPHA, 0.9f).target(0f).setCallbackTriggers(TweenCallback.COMPLETE)
+        Tween.to(tooltip, ActorTween.ALPHA, this.duration).target(0f).setCallbackTriggers(TweenCallback.COMPLETE)
                 .setCallback(new TweenCallback() {
                     @Override
                     public void onEvent(int type, BaseTween<?> source) {
                         stage.getActors().removeValue(tooltip, true);
                     }
                 }).ease(equation).start(tweenManager);
-        Tween.to(tooltip, ActorTween.SCALE, 0.9f).target(2.5f).ease(equation).start(tweenManager);
+        Tween.to(tooltip, ActorTween.SCALE, this.duration).target(scale).ease(equation).start(tweenManager);
+    }
+
+    public void setDuration(float duration) {
+        this.duration = duration;
     }
 
     public void setTweenEquation(TweenEquation equation) {
         this.equation = equation;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 
     public void clear() {
