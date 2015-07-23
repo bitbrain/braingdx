@@ -38,6 +38,9 @@ import de.bitbrain.braingdx.graphics.RenderManager;
  */
 public class GameWorld {
 
+    /** the default cache size this world uses */
+    public static final int DEFAULT_CACHE_SIZE = 100;
+
     public static interface WorldBounds {
         boolean isInBounds(GameObject object, OrthographicCamera camera);
     }
@@ -46,12 +49,7 @@ public class GameWorld {
 
     private final List<GameObject> objects = new ArrayList<GameObject>();
 
-    private final Pool<GameObject> pool = new Pool<GameObject>(160) {
-        @Override
-        protected GameObject newObject() {
-            return new GameObject();
-        }
-    };
+    private final Pool<GameObject> pool;
 
     private WorldBounds bounds = new WorldBounds() {
 
@@ -68,9 +66,19 @@ public class GameWorld {
     private CameraTracker tracker;
 
     public GameWorld(OrthographicCamera camera) {
+        this(camera, DEFAULT_CACHE_SIZE);
+    }
+
+    public GameWorld(OrthographicCamera camera, int cacheSize) {
         this.camera = camera;
         renderManager = new RenderManager();
         tracker = new CameraTracker(camera);
+        pool = new Pool<GameObject>(cacheSize) {
+            @Override
+            protected GameObject newObject() {
+                return new GameObject();
+            }
+        };
     }
 
     /**
