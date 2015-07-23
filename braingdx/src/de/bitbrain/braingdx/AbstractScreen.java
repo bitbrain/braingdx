@@ -32,6 +32,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.fx.FX;
+import de.bitbrain.braingdx.ui.Tooltip;
 
 /**
  * Abstract base class for screens
@@ -66,6 +67,8 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     protected FX fx = FX.getInstance();
 
+    protected Tooltip tooltip = Tooltip.getInstance();
+
     @Override
     public final void show() {
         camera = new OrthographicCamera();
@@ -98,6 +101,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     public final void resize(int width, int height) {
         if (stage == null) {
             stage = new Stage(getViewport(width, height));
+            tooltip.init(tweenManager, stage, camera);
             onCreateStage(stage, width, height);
         } else {
             stage.getViewport().update(width, height);
