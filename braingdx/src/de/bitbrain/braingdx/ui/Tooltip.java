@@ -43,7 +43,7 @@ import de.bitbrain.braingdx.tweens.ActorTween;
  */
 public class Tooltip {
 
-    private static final Tooltip INSTANCE = new Tooltip();
+    private static final Tooltip instance = new Tooltip();
 
     private TweenManager tweenManager;
 
@@ -60,7 +60,7 @@ public class Tooltip {
     }
 
     public static Tooltip getInstance() {
-        return INSTANCE;
+        return instance;
     }
 
     public void create(float x, float y, Label.LabelStyle style, String text) {
