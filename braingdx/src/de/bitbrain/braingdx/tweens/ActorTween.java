@@ -24,7 +24,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import aurelienribon.tweenengine.TweenAccessor;
 
 /**
- * Created by miguel on 22.07.15.
+ * Tween facility for actors
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public class ActorTween implements TweenAccessor<Actor> {
 

@@ -30,8 +30,10 @@ import de.bitbrain.braingdx.graphics.CameraTracker;
 import de.bitbrain.braingdx.graphics.RenderManager;
 
 /**
- * Game world which handles game objects internally
+ * Game world which contains all game objects and managed them.
  *
+ * @since 1.0.0
+ * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public class GameWorld {

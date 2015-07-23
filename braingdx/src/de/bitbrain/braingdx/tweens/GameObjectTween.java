@@ -22,7 +22,11 @@ import aurelienribon.tweenengine.TweenAccessor;
 import de.bitbrain.braingdx.GameObject;
 
 /**
- * Created by miguel on 22.07.15.
+ * Tween facility for game objects
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public class GameObjectTween implements TweenAccessor<GameObject> {
 

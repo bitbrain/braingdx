@@ -23,8 +23,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 
 /**
- * Basic implementation of a game object
+ * Simple game object implementation which can be pooled
  *
+ * @since 1.0.0
+ * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public class GameObject implements Pool.Poolable {

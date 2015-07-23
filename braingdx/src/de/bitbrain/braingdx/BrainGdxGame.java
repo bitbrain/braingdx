@@ -28,8 +28,10 @@ import de.bitbrain.braingdx.assets.GameAssetLoader;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 
 /**
- * Base implementation for BrainGDX games
+ * Base implementation of a brainGdx driven game
  *
+ * @since 1.0.0
+ * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public abstract class BrainGdxGame extends Game {

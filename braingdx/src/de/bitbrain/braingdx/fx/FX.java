@@ -23,7 +23,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import aurelienribon.tweenengine.TweenManager;
 
 /**
- * Created by miguel on 22.07.15.
+ * Provides special effect utilities
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public final class FX {
 
@@ -59,6 +63,12 @@ public final class FX {
         this.camera = camera;
     }
 
+    /**
+     * Shakes the screen by the given intensity for the given duration
+     *
+     * @param intensity the intensity of the shake
+     * @param duration the duration of the shake
+     */
     public void shake(float intensity, float duration) {
         shake.shake(intensity, duration);
     }

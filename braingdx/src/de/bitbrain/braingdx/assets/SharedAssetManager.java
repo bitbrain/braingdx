@@ -26,8 +26,10 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import de.bitbrain.braingdx.assets.loader.ParticleLoader;
 
 /**
- *Implementation of a shared asset manager
+ * Singleton implementation of an asset manager
  *
+ * @since 1.0.0
+ * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public class SharedAssetManager {
@@ -37,6 +39,9 @@ public class SharedAssetManager {
     private SharedAssetManager() {
     }
 
+    /**
+     * Provides the internal asset manager instance
+     */
     public static AssetManager getInstance() {
 
         if (instance == null) {
@@ -46,15 +51,26 @@ public class SharedAssetManager {
         return instance;
     }
 
+    /**
+     * Provides an asset
+     */
     public static <T> T get(String s, Class<T> clss) {
         return getInstance().get(s, clss);
     }
 
+    /**
+     * Disposes the asset manager
+     */
     public static void dispose() {
         if (instance != null) {
             getInstance().dispose();
             instance = null;
         }
+    }
+
+    public static void reload() {
+        instance.dispose();
+        loadInternal();
     }
 
     private static void loadInternal() {
@@ -67,10 +83,5 @@ public class SharedAssetManager {
             instance = new AssetManager();
             instance.setLoader(ParticleEffect.class, new ParticleLoader(new InternalFileHandleResolver()));
         }
-    }
-
-    public static void reload() {
-        instance.dispose();
-        loadInternal();
     }
 }

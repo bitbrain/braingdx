@@ -21,11 +21,18 @@ package de.bitbrain.braingdx.assets;
 import java.util.Map;
 
 /**
- * Loads assets of a game
+ * Indicates and provides functionality to specify asset information.
  *
+ * @since 1.0.0
+ * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public interface GameAssetLoader {
 
+    /**
+     * Puts asset information into the assets map
+     *
+     * @param assets the asset map to fill
+     */
     void put(Map<String, Class<?> > assets);
 }

@@ -24,7 +24,11 @@ import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.GameObject;
 
 /**
- * Created by miguel on 22.07.15.
+ * Tracks a camera and make it following a target
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public class CameraTracker {
 

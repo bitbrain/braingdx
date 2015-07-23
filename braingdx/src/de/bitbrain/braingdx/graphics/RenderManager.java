@@ -26,8 +26,10 @@ import java.util.Map;
 import de.bitbrain.braingdx.GameObject;
 
 /**
- * Manages rendering of game objects
+ * Handles rendering of game objects
  *
+ * @since 1.0.0
+ * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public class RenderManager {

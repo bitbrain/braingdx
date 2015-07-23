@@ -36,6 +36,8 @@ import de.bitbrain.braingdx.fx.FX;
 /**
  * Abstract base class for screens
  *
+ * @since 1.0.0
+ * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {

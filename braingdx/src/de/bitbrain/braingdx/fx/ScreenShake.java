@@ -29,7 +29,12 @@ import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.tweens.VectorTween;
 
 /**
- * Created by miguel on 22.07.15.
+ * Provides screenshake behavior, implemented by the algorithm described
+ * here: http://my-reality.de/2015/04/28/how-to-screenshake.html
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 class ScreenShake {
 

@@ -29,7 +29,11 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * Created by miguel on 20.07.15.
+ * Loader implementation for Particle effects
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public class ParticleLoader extends SynchronousAssetLoader<ParticleEffect, ParticleLoader.ParticleParameter> {
 
@@ -38,7 +42,7 @@ public class ParticleLoader extends SynchronousAssetLoader<ParticleEffect, Parti
     }
 
     static public class ParticleParameter extends AssetLoaderParameters<ParticleEffect> {
-
+        // do nothing here
     }
 
     @SuppressWarnings("rawtypes")

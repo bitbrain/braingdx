@@ -23,7 +23,11 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import aurelienribon.tweenengine.TweenAccessor;
 
 /**
- * Created by miguel on 22.07.15.
+ * Tween facility for sprites
+ *
+ * @since 1.0.0
+ * @version 1.0.0
+ * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public class SpriteTween implements TweenAccessor<Sprite> {
 
