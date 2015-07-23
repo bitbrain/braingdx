@@ -38,6 +38,10 @@ import de.bitbrain.braingdx.graphics.RenderManager;
  */
 public class GameWorld {
 
+    public static interface WorldBounds {
+        boolean isInBounds(GameObject object, OrthographicCamera camera);
+    }
+
     private final List<GameObject> removals = new ArrayList<GameObject>();
 
     private final List<GameObject> objects = new ArrayList<GameObject>();
@@ -69,36 +73,76 @@ public class GameWorld {
         tracker = new CameraTracker(camera);
     }
 
+    /**
+     * Sets the bounds of the world. By default, everything is in bounds.
+     *
+     * @param bounds the new bounds implementation
+     */
     public void setBounds(WorldBounds bounds) {
         this.bounds = bounds;
     }
 
+    /**
+     * Adds a new game object to the game world and provides it.
+     *
+     * @return newly created game object
+     */
     public GameObject addObject() {
         GameObject object = pool.obtain();
         objects.add(object);
         return object;
     }
 
+    /**
+     * Registers a renderer for an existing game object of the given type (id)
+     *
+     * @param gameObjectId type/id of the game object
+     * @param renderer instance of the renderer
+     */
     public void registerRenderer(Integer gameObjectId, RenderManager.Renderer renderer) {
         renderManager.register(gameObjectId, renderer);
     }
 
+    /**
+     * Enables camera tracking for the given object. Tracking can be disabled by providing null.
+     *
+     * @param object game object shich should be tracked.
+     */
     public void setCameraTracking(GameObject object) {
         tracker.setTarget(object);
     }
 
+    /**
+     * Focuses the camera on its target (if available)
+     */
     public void focusCamera() {
         tracker.focus();
     }
 
+    /**
+     * Sets the speed the camera should follow its target
+     *
+     * @param speed camera tracking speed
+     */
     public void setTrackingSpeed(float speed) {
         tracker.setSpeed(speed);
     }
 
+    /**
+     * Sets the zoom scale the camera should have while following its target
+     *
+     * @param scale scale factor of the camera while tracking a target
+     */
     public void setTrackingZoomScale(float scale) {
         tracker.setZoomScale(scale);
     }
 
+    /**
+     * Updates and renders this world
+     *
+     * @param batch the batch
+     * @param delta frame delta
+     */
     public void updateAndRender(Batch batch, float delta) {
         for (GameObject object : objects) {
             if (!bounds.isInBounds(object, camera)) {
@@ -114,10 +158,29 @@ public class GameWorld {
         removals.clear();
     }
 
+    /**
+     * Number of active objects in the world
+     *
+     * @return
+     */
     public int size() {
         return objects.size();
     }
 
+    /**
+     * Resets this world object
+     */
+    public void reset() {
+        pool.clear();
+        objects.clear();
+        removals.clear();
+    }
+
+    /**
+     * Removes the given game objects from this world
+     *
+     * @param objects
+     */
     public void remove(GameObject... objects) {
         for (GameObject object : objects) {
             removals.add(object);
@@ -127,16 +190,5 @@ public class GameWorld {
     private void remove(GameObject object) {
         pool.free(object);
         objects.remove(object);
-    }
-
-    public void reset() {
-        pool.clear();
-        objects.clear();
-        removals.clear();
-    }
-
-    public static interface WorldBounds {
-
-        boolean isInBounds(GameObject object, OrthographicCamera camera);
     }
 }
