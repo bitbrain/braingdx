@@ -20,12 +20,22 @@ package de.bitbrain.braingdx;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import aurelienribon.tweenengine.Tween;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.tweens.ActorTween;
+import de.bitbrain.braingdx.tweens.ColorTween;
+import de.bitbrain.braingdx.tweens.GameObjectTween;
+import de.bitbrain.braingdx.tweens.SpriteTween;
+import de.bitbrain.braingdx.tweens.VectorTween;
 
 /**
  * Base implementation of a brainGdx driven game
@@ -39,6 +49,7 @@ public abstract class BrainGdxGame extends Game {
     @Override
     public final void create() {
         loadAssets();
+        initTweens();
         setScreen(getInitialScreen());
     }
 
@@ -57,5 +68,13 @@ public abstract class BrainGdxGame extends Game {
             assetManager.load(entry.getKey(), entry.getValue());
         }
         assetManager.finishLoading();
+    }
+
+    private void initTweens() {
+        Tween.registerAccessor(Actor.class, new ActorTween());
+        Tween.registerAccessor(Color.class, new ColorTween());
+        Tween.registerAccessor(Sprite.class, new SpriteTween());
+        Tween.registerAccessor(Vector2.class, new VectorTween());
+        Tween.registerAccessor(GameObject.class, new GameObjectTween());
     }
 }
