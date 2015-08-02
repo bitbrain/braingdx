@@ -49,13 +49,20 @@ public final class FX {
 
     private OrthographicCamera camera;
 
+    private Color flashColor;
+
     private FX() {
         flash = new Sprite(GraphicsFactory.createTexture(2, 2, Color.WHITE));
         flash.setAlpha(0f);
+        flashColor = Color.WHITE.cpy();
     }
 
     public static FX getInstance() {
         return INSTANCE;
+    }
+
+    public void setFadeColor(Color color) {
+        flashColor = color.cpy();
     }
 
     public void begin() {
@@ -80,6 +87,7 @@ public final class FX {
         flash.setPosition(camera.position.x - (camera.zoom * camera.viewportWidth) / 2, camera.position.y
                 - (camera.zoom * camera.viewportHeight) / 2);
         flash.setSize(camera.viewportWidth * camera.zoom, camera.viewportHeight * camera.zoom);
+        flash.setColor(flashColor.r, flashColor.g, flashColor.b, flash.getColor().a);
         flash.draw(batch, 1f);
     }
 
