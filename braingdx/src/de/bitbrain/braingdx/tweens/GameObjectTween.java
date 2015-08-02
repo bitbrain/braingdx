@@ -51,6 +51,12 @@ public class GameObjectTween implements TweenAccessor<GameObject> {
             case SCALE_Y:
                 returnValues[0] = target.getScale().y;
                 return 1;
+            case POS_X:
+                returnValues[0] = target.getLeft();
+                return 1;
+            case POS_Y:
+                returnValues[0] = target.getTop();
+                return 1;
         }
         return 0;
     }
@@ -67,6 +73,12 @@ public class GameObjectTween implements TweenAccessor<GameObject> {
                 break;
             case SCALE_Y:
                 target.getScale().y = newValues[0];
+                break;
+            case POS_X:
+                target.setPosition(newValues[0], target.getTop());
+                break;
+            case POS_Y:
+                target.setPosition(target.getLeft(), newValues[0]);
                 break;
         }
     }
