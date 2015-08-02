@@ -92,6 +92,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
             beforeWorldRender(batch, delta);
             world.updateAndRender(batch, delta);
             afterWorldRender(batch, delta);
+            fx.render(batch, delta);
         batch.end();
         stage.draw();
         fx.end();
