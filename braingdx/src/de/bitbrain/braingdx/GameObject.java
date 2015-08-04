@@ -31,7 +31,7 @@ import com.badlogic.gdx.utils.Pool;
  */
 public class GameObject implements Pool.Poolable {
 
-    private Vector2 position, dimensions, lastPosition;
+    private Vector2 position, dimensions, lastPosition, offset;
 
     private String id = "";
 
@@ -41,10 +41,13 @@ public class GameObject implements Pool.Poolable {
 
     private Vector2 scale;
 
+    private float zIndex;
+
     public GameObject() {
         position = new Vector2();
         dimensions = new Vector2();
         lastPosition = new Vector2();
+        offset = new Vector2();
         scale = new Vector2(1f, 1f);
     }
 
@@ -124,6 +127,23 @@ public class GameObject implements Pool.Poolable {
         return scale;
     }
 
+    public Vector2 getOffset() {
+        return offset;
+    }
+
+    public void setOffset(float x, float y) {
+        offset.x = x;
+        offset.y = y;
+    }
+
+    public void setZIndex(float zIndex) {
+        this.zIndex = zIndex;
+    }
+
+    public float getZIndex() {
+        return this.zIndex;
+    }
+
     @Override
     public void reset() {
         lastPosition.x = 0;
@@ -132,6 +152,9 @@ public class GameObject implements Pool.Poolable {
         position.y = 0;
         dimensions.x = 0;
         dimensions.y = 0;
+        offset.x = 0;
+        offset.y = 0;
+        zIndex = 0;
         id = "";
         scale.set(1f, 1f);
         color = Color.WHITE.cpy();

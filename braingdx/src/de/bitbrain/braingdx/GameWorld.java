@@ -24,10 +24,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Pool;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import de.bitbrain.braingdx.graphics.CameraTracker;
 import de.bitbrain.braingdx.graphics.RenderManager;
+import de.bitbrain.braingdx.util.ZIndexComparator;
 
 /**
  * Game world which contains all game objects and managed them.
@@ -64,6 +68,8 @@ public class GameWorld {
     private RenderManager renderManager;
 
     private CameraTracker tracker;
+
+    private Comparator<GameObject> comparator = new ZIndexComparator();
 
     public GameWorld(OrthographicCamera camera) {
         this(camera, DEFAULT_CACHE_SIZE);
@@ -114,7 +120,7 @@ public class GameWorld {
     /**
      * Enables camera tracking for the given object. Tracking can be disabled by providing null.
      *
-     * @param object game object shich should be tracked.
+     * @param object game object which should be tracked.
      */
     public void setCameraTracking(GameObject object) {
         tracker.setTarget(object);
@@ -152,6 +158,7 @@ public class GameWorld {
      * @param delta frame delta
      */
     public void updateAndRender(Batch batch, float delta) {
+        Collections.sort(objects, comparator);
         for (GameObject object : objects) {
             if (!bounds.isInBounds(object, camera)) {
                 removals.add(object);
