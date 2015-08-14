@@ -19,6 +19,11 @@
 package de.bitbrain.braingdx.event;
 
 import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.common.Properties;
+import net.engio.mbassy.bus.config.BusConfiguration;
+import net.engio.mbassy.bus.config.ConfigurationError;
+import net.engio.mbassy.bus.config.ConfigurationErrorHandler;
+import net.engio.mbassy.bus.config.Feature;
 import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import net.engio.mbassy.bus.error.PublicationError;
 
@@ -33,16 +38,20 @@ public final class Events {
 
     private static final Events INSTANCE = new Events();
 
-    private MBassador<GdxEvent> bus;
+    private MBassador bus;
 
     private Events() {
-        bus = new MBassador<GdxEvent>();
-        bus.addErrorHandler(new IPublicationErrorHandler() {
-            @Override
-            public void handleError(PublicationError error) {
-                System.out.println("brainGDX event ERROR: " + error.getMessage());
-            }
-        });
+        bus = new MBassador((new BusConfiguration()
+                .addFeature(Feature.SyncPubSub.Default())
+                .addFeature(Feature.AsynchronousHandlerInvocation.Default())
+                .addFeature(Feature.AsynchronousMessageDispatch.Default())
+                .addConfigurationErrorHandler(new ConfigurationErrorHandler() {
+                    @Override
+                    public void handle(ConfigurationError error) {
+                        // noOp
+                    }
+                })
+        .setProperty(Properties.Common.Id, "global bus")));
     }
 
     public static Events getInstance() {
