@@ -19,6 +19,8 @@
 package de.bitbrain.braingdx.event;
 
 import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.error.IPublicationErrorHandler;
+import net.engio.mbassy.bus.error.PublicationError;
 
 /**
  * Singleton which is able to fire events of any kind
@@ -35,6 +37,12 @@ public final class Events {
 
     private Events() {
         bus = new MBassador<GdxEvent>();
+        bus.addErrorHandler(new IPublicationErrorHandler() {
+            @Override
+            public void handleError(PublicationError error) {
+                System.out.println("brainGDX event ERROR: " + error.getMessage());
+            }
+        });
     }
 
     public static Events getInstance() {
