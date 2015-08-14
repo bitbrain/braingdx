@@ -52,7 +52,7 @@ public class SpriteRenderer implements RenderManager.Renderer {
 
     @Override
     public void render(GameObject object, Batch batch, float delta) {
-        sprite.setPosition(object.getLeft(), object.getTop());
+        sprite.setPosition(object.getLeft() + object.getOffset().x, object.getTop() + object.getOffset().y);
         sprite.setSize(object.getWidth(), object.getHeight());
         sprite.setColor(object.getColor());
         sprite.setScale(object.getScale().x, object.getScale().y);
