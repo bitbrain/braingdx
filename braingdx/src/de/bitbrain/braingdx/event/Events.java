@@ -53,7 +53,7 @@ public final class Events {
         bus.unsubscribe(object);
     }
 
-    private static class GdxEvent {
+    public static class GdxEvent {
 
         private Object primary;
 
