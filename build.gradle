@@ -41,6 +41,7 @@ project(":braingdx") {
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
 	compile "aurelienribon:tweenengine:6.3.3"
 	compile "aurelienribon:tweenengine:6.3.3:sources"
+	compile "net.engio:mbassador:1.2.1"
     }
 }
 
