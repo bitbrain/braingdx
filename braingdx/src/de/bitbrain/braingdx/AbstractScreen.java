@@ -142,7 +142,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     }
 
     @Override
-    public final void dispose() {
+    public void dispose() {
         world.reset();
         stage.dispose();
     }
