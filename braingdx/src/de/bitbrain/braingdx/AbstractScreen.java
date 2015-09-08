@@ -102,7 +102,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     public final void resize(int width, int height) {
         if (stage == null) {
             stage = new Stage(getViewport(width, height));
-            tooltip.init(tweenManager, stage, camera);
+            tooltip.init(stage, camera);
             onCreateStage(stage, width, height);
         } else {
             stage.getViewport().update(width, height);

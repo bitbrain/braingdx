@@ -33,6 +33,7 @@ import aurelienribon.tweenengine.TweenEquation;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.tweens.ActorTween;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
 
 /**
  * Provides tooltips on the screen
@@ -45,7 +46,7 @@ public class Tooltip {
 
     private static final Tooltip instance = new Tooltip();
 
-    private TweenManager tweenManager;
+    private TweenManager tweenManager = SharedTweenManager.getInstance();
 
     private Stage stage;
 
@@ -119,8 +120,7 @@ public class Tooltip {
         tooltips.clear();
     }
 
-    public void init(TweenManager tweenManager, Stage stage, Camera camera) {
-        this.tweenManager = tweenManager;
+    public void init(Stage stage, Camera camera) {
         this.stage = stage;
         this.camera = camera;
     }
