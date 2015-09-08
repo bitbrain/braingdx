@@ -32,6 +32,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.fx.FX;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.ui.Tooltip;
 
 /**
@@ -63,7 +64,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
         return game;
     }
 
-    protected TweenManager tweenManager;
+    protected TweenManager tweenManager = SharedTweenManager.getInstance();
 
     protected FX fx = FX.getInstance();
 
@@ -74,7 +75,6 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
         camera = new OrthographicCamera();
         world = new GameWorld(camera);
         batch = new SpriteBatch();
-        tweenManager = new TweenManager();
         fx.init(tweenManager, camera);
     }
 
