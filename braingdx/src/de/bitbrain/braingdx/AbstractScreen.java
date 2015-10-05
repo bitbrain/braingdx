@@ -19,6 +19,7 @@
 package de.bitbrain.braingdx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -70,11 +71,14 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     protected Tooltip tooltip = Tooltip.getInstance();
 
+    protected InputMultiplexer input;
+
     @Override
     public final void show() {
         camera = new OrthographicCamera();
         world = new GameWorld(camera);
         batch = new SpriteBatch();
+        input = new InputMultiplexer();
         fx.init(tweenManager, camera);
     }
 
@@ -102,8 +106,10 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     public final void resize(int width, int height) {
         if (stage == null) {
             stage = new Stage(getViewport(width, height));
+            input.addProcessor(stage);
             tooltip.init(stage, camera);
             onCreateStage(stage, width, height);
+            Gdx.input.setInputProcessor(input);
         } else {
             stage.getViewport().update(width, height);
         }
