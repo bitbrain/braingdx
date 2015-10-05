@@ -151,6 +151,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     public void dispose() {
         world.reset();
         stage.dispose();
+        input.clear();
     }
 
     public void setBackgroundColor(Color color) {
