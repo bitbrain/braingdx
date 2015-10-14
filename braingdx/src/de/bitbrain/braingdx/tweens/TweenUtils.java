@@ -48,9 +48,9 @@ public final class TweenUtils {
         tweenManager.killTarget(sourceColor, ColorTween.R);
         tweenManager.killTarget(sourceColor, ColorTween.G);
         tweenManager.killTarget(sourceColor, ColorTween.B);
-        Tween.to(sourceColor.r, ColorTween.R, time).ease(equation).target(targetColor.r).start(tweenManager);
-        Tween.to(sourceColor.g, ColorTween.G, time).ease(equation).target(targetColor.g).start(tweenManager);
-        Tween.to(sourceColor.b, ColorTween.B, time).ease(equation).target(targetColor.b).start(tweenManager);
+        Tween.to(sourceColor, ColorTween.R, time).ease(equation).target(targetColor.r).start(tweenManager);
+        Tween.to(sourceColor, ColorTween.G, time).ease(equation).target(targetColor.g).start(tweenManager);
+        Tween.to(sourceColor, ColorTween.B, time).ease(equation).target(targetColor.b).start(tweenManager);
     }
 
     /**
