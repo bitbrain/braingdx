@@ -78,12 +78,22 @@ public class Tooltip {
         final Label tooltip = new Label(text, style) {
             @Override
             public float getX() {
-                return super.getX() - camera.position.x + camera.viewportWidth / 2f;
+                return super.getX() - camera.position.x + camera.viewportWidth / 2f - this.getWidth() / 2f;
             }
 
             @Override
             public float getY() {
-                return super.getY() - camera.position.y + camera.viewportHeight / 2f;
+                return super.getY() - camera.position.y + camera.viewportHeight / 2f - this.getHeight() / 2f;
+            }
+
+            @Override
+            public float getOriginX() {
+                return super.getOriginX() + this.getWidth() / 2f;
+            }
+
+            @Override
+            public float getOriginY() {
+                return super.getOriginY() + this.getHeight() / 2f;
             }
         };
         tooltip.setColor(color);
