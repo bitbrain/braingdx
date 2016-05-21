@@ -1,11 +1,27 @@
-# About this project
+![logo](logo.png)
+-
+Game jam toolkit based on [libgdx](https://libgdx.badlogicgames.com/).
 
-This project contains useful functionality like:
+**[Features](#features) |**
+**[Installation](#installation) |**
+**[Documentation](#documentation) |**
+**[Collaboration](#collaboration) |**
+**[Changelog](CHANGELOG.md)**
 
-- improved asset loading
-- improved particle system management
-- special effect class (FX) for lightning and screenshake
-- extended shader support
-- camera tracking
-- better game states
-- game objects
+---
+
+# Features
+
+todo
+
+# Installation
+
+todo
+
+# Documentation
+
+todo
+
+# Collaboration
+
+todo
