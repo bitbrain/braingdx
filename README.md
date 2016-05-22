@@ -16,10 +16,11 @@ Game jam toolkit based on [libgdx](https://libgdx.badlogicgames.com/).
 * Scene transitions
 * Tweening pipeline
 * World rendering pipeline
+* Parallaxing
 * 3D sound utility
 * Scene shaders
 * Controller support for UI components
-* Actor library
+* Actor library (button menu, nameplates, tooltips)
 * Extended Tiled Map support
 * Character movements
 
