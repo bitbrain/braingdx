@@ -39,7 +39,7 @@ todo
 
 # Collaboration
 
-todo
+Feel free to create [a new pull request](https://github.com/MyRealityCoding/braingdx/pull/new/master). When you detect an issue [please report it here](https://github.com/MyRealityCoding/braingdx/issues).
 
 # License
 
