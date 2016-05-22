@@ -12,11 +12,25 @@ Game jam toolkit based on [libgdx](https://libgdx.badlogicgames.com/).
 
 # Features
 
-todo
+* Scene transitions
+* Tweening pipeline
+* World rendering pipeline
+* 3D sound utility
+* Scene shaders
+* Controller support for UI components
+* Actor library
+* Extended Tiled Map support
+* Character movements
 
 # Installation
 
-todo
+```xml
+<dependency>
+   <artifactId>braingdx</artifactId>
+   <groupId>com.github.myrealitycoding</groupId>
+   <version>{not available yet}</version>
+</dependency>
+```
 
 # Documentation
 
