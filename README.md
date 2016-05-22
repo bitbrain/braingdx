@@ -35,7 +35,7 @@ Game jam toolkit based on [libgdx](https://libgdx.badlogicgames.com/).
 
 # Documentation
 
-todo
+Refer to the [official braingdx wiki](https://github.com/MyRealityCoding/braingdx/wiki) here.
 
 # Collaboration
 
