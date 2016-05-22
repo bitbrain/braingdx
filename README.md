@@ -21,6 +21,8 @@ Game jam toolkit based on [libgdx](https://libgdx.badlogicgames.com/).
 * Scene shaders
 * Controller support for UI components
 * Actor library (button menu, nameplates, tooltips)
+* Networking support
+* 3D utilities
 * Extended Tiled Map support
 * Character movements
 
