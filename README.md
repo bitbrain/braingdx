@@ -6,6 +6,7 @@ Game jam toolkit based on [libgdx](https://libgdx.badlogicgames.com/).
 **[Installation](#installation) |**
 **[Documentation](#documentation) |**
 **[Collaboration](#collaboration) |**
+**[License](#license) |**
 **[Changelog](CHANGELOG.md)**
 
 ---
@@ -37,5 +38,9 @@ Game jam toolkit based on [libgdx](https://libgdx.badlogicgames.com/).
 todo
 
 # Collaboration
+
+todo
+
+# License
 
 todo
