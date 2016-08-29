@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<!-- General information -->
+	<groupId>de.bitbrain</groupId>
+	<artifactId>braingdx</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>brainGDX</name>
+	<packaging>pom</packaging>
+	<description>
+        libGDX utility framework for Java games.
+    </description>
+	<url>https://github.com/MyRealityCoding/braingdx</url>
+	
+	<developers>
+		<developer>
+			<id>mgonzalez</id>
+			<name>Miguel Gonzalez Sanchez</name>
+			<email>miguel-gonzalez@gmx.de</email>
+		</developer>
+	</developers>
+	
+	
+	<!-- Dependencies -->
+	<dependencies>
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx</artifactId>
+			<version>1.6.4</version>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
+	
+	<!-- Build configuration -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
+    <scm>
+        <connection>scm:git:https://github.com/MyRealityCoding/braingdx.git</connection>
+        <developerConnection>scm:git:git@github.com:MyRealityCoding/braingdx.git</developerConnection>
+        <url>https://github.com/MyRealityCoding/braingdx</url>
+        <tag>HEAD</tag>
+    </scm>
+</project>
