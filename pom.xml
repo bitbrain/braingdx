@@ -21,6 +21,11 @@
 		</developer>
 	</developers>
 	
+	<!-- Module definitions -->
+    <modules>
+    	<module>core</module>
+    </modules>
+	
 	
 	<!-- Dependencies -->
 	<dependencies>
