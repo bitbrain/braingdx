@@ -1,0 +1,12 @@
+<module rename-to='braingdx-app'>
+	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
+
+	<source path='core'/>
+	<source path='html'/>
+
+	<public path="resources" />
+
+	<entry-point class='de.bitbrain.braingdx.html.BrainGdxAppHtml'/>
+	<set-configuration-property name="gdx.assetpath" value="assets" />
+	<set-configuration-property name="gdx.assetoutputpath" value="html/target/webapp" />
+</module>

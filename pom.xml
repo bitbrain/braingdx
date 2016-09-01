@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<!-- General information -->
 	<groupId>de.bitbrain</groupId>
 	<artifactId>braingdx</artifactId>
@@ -12,7 +13,7 @@
         libGDX utility framework for Java games.
     </description>
 	<url>https://github.com/MyRealityCoding/braingdx</url>
-	
+
 	<developers>
 		<developer>
 			<id>mgonzalez</id>
@@ -20,13 +21,14 @@
 			<email>miguel-gonzalez@gmx.de</email>
 		</developer>
 	</developers>
-	
+
 	<!-- Module definitions -->
-    <modules>
-    	<module>core</module>
-    </modules>
-	
-	
+	<modules>
+		<module>core</module>
+		<module>braingdx-app</module>
+	</modules>
+
+
 	<!-- Dependencies -->
 	<dependencies>
 		<dependency>
@@ -36,7 +38,7 @@
 			<optional>true</optional>
 		</dependency>
 	</dependencies>
-	
+
 	<!-- Build configuration -->
 	<build>
 		<plugins>
@@ -50,15 +52,15 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-    
-    <scm>
-        <connection>scm:git:https://github.com/MyRealityCoding/braingdx.git</connection>
-        <developerConnection>scm:git:git@github.com:MyRealityCoding/braingdx.git</developerConnection>
-        <url>https://github.com/MyRealityCoding/braingdx</url>
-        <tag>HEAD</tag>
-    </scm>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<scm>
+		<connection>scm:git:https://github.com/MyRealityCoding/braingdx.git</connection>
+		<developerConnection>scm:git:git@github.com:MyRealityCoding/braingdx.git</developerConnection>
+		<url>https://github.com/MyRealityCoding/braingdx</url>
+		<tag>HEAD</tag>
+	</scm>
 </project>
