@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>de.bitbrain.braingdx</groupId>
-		<artifactId>braingdx-app</artifactId>
+		<artifactId>demo</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>braingdx-app-core</artifactId>
+	<artifactId>demo-core</artifactId>
 	<packaging>jar</packaging>
-	<name>BrainGdxApp Core</name>
+	<name>BrainGDX Demo Desktop</name>
 
 	<dependencies>
 		<dependency>

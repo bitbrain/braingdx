@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>de.bitbrain.braingdx</groupId>
-		<artifactId>braingdx-app</artifactId>
+		<artifactId>demo</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>braingdx-app-html</artifactId>
+	<artifactId>BrainGDX Demo HTML</artifactId>
 	<packaging>war</packaging>
-	<name>BrainGdxApp HTML</name>
+	<name>BrainGDX Demo Desktop</name>
 
 	<properties>
 		<gwt.module>de.bitbrain.braingdx.BrainGdxApp</gwt.module>

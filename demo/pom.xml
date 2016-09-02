@@ -8,10 +8,10 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<groupId>de.bitbrain.braingdx</groupId>
-	<artifactId>braingdx-app</artifactId>
+	<artifactId>demo</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>BrainGdxApp Parent</name>
+	<name>BrainGDX Demo</name>
 
 	<properties>
 		<android.version>4.1.1.4</android.version>

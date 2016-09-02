@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>de.bitbrain.braingdx</groupId>
-		<artifactId>braingdx-app</artifactId>
+		<artifactId>demo</artifactId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>braingdx-app-android</artifactId>
+	<artifactId>demo-android</artifactId>
 	<packaging>apk</packaging>
-	<name>BrainGdxApp Android</name>
+	<name>BrainGDX Demo Android</name>
 
 	<properties>
 		<keystore.path>game.keystore</keystore.path>
@@ -24,7 +24,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>de.bitbrain.braingdx</groupId>
-			<artifactId>braingdx-app-core</artifactId>
+			<artifactId>demo-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

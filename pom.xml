@@ -25,7 +25,7 @@
 	<!-- Module definitions -->
 	<modules>
 		<module>core</module>
-		<module>braingdx-app</module>
+		<module>demo</module>
 	</modules>
 
 
