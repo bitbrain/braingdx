@@ -38,6 +38,7 @@
 			<artifactId>gdx-platform</artifactId>
 			<classifier>natives-desktop</classifier>
 		</dependency>
+
 	</dependencies>
 
 	<build>
