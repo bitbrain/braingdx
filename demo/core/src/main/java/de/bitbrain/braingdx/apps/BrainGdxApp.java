@@ -1,10 +1,11 @@
-package de.bitbrain.braingdx.core;
+package de.bitbrain.braingdx.apps;
 
 import java.util.Map;
 
 import de.bitbrain.braingdx.AbstractScreen;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
+import de.bitbrain.braingdx.screens.BrainGdxWelcomeScreen;
 
 public class BrainGdxApp extends BrainGdxGame {
 

@@ -1,8 +1,7 @@
 package de.bitbrain.braingdx.android;
 
-import de.bitbrain.braingdx.core.BrainGdxApp;
-
 import android.os.Bundle;
+import de.bitbrain.braingdx.apps.BrainGdxApp;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;

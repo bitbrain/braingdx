@@ -13,14 +13,17 @@ import javax.swing.JScrollPane;
 
 import com.badlogic.gdx.ApplicationListener;
 
-import de.bitbrain.braingdx.core.BrainGdxApp;
+import de.bitbrain.braingdx.demo.discovery.AppDiscovery;
 
 public class AppBootstrapper {
 
     private ExecutorService executor;
 
+    private AppDiscovery discovery;
+
     public AppBootstrapper() {
 	executor = Executors.newCachedThreadPool();
+	discovery = new AppDiscovery();
     }
 
     public void run() {
@@ -31,17 +34,21 @@ public class AppBootstrapper {
 		JPanel contentPane = new JPanel();
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
 		JScrollPane pane = new JScrollPane(contentPane);
-		for (int i = 0; i < 50; ++i) {
-		    JButton button = new JButton(BrainGdxApp.class.getSimpleName());
-		    button.addActionListener(createListener(BrainGdxApp.class));
-		    contentPane.add(button);
-		}
+		discoverApps(contentPane);
 		frame.getContentPane().add(pane);
 		frame.pack();
 		frame.setVisible(true);
 	    }
 	});
 	
+    }
+
+    private void discoverApps(JPanel pane) {
+	for (Class<? extends ApplicationListener> cl : discovery.discover()) {
+	    JButton button = new JButton(cl.getSimpleName());
+	    button.addActionListener(createListener(cl));
+	    pane.add(button);
+	}
     }
 
     private ActionListener createListener(final Class<? extends ApplicationListener> clazz) {
