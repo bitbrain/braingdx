@@ -6,7 +6,7 @@
 	<!-- General information -->
 	<groupId>de.bitbrain</groupId>
 	<artifactId>braingdx</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>brainGDX</name>
 	<packaging>pom</packaging>
 	<description>

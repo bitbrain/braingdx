@@ -63,7 +63,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     protected TweenManager tweenManager = SharedTweenManager.getInstance();
 
-    protected FX fx = FX.getInstance();
+    protected FX fx;
 
     protected Tooltip tooltip = Tooltip.getInstance();
 
@@ -75,6 +75,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	world = new GameWorld(camera);
 	batch = new SpriteBatch();
 	input = new InputMultiplexer();
+	fx = FX.getInstance();
 	fx.init(tweenManager, camera);
     }
 

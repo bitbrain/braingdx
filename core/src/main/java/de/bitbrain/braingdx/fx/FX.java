@@ -49,12 +49,14 @@ public final class FX {
     private Color flashColor;
 
     private FX() {
-	flash = new Sprite(GraphicsFactory.createTexture(2, 2, Color.WHITE));
-	flash.setAlpha(0f);
-	flashColor = Color.WHITE.cpy();
     }
 
     public static FX getInstance() {
+	if (INSTANCE.flash == null) {
+	    INSTANCE.flash = new Sprite(GraphicsFactory.createTexture(2, 2, Color.WHITE));
+	    INSTANCE.flash.setAlpha(0f);
+	    INSTANCE.flashColor = Color.WHITE.cpy();
+	}
 	return INSTANCE;
     }
 

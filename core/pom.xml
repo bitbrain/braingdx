@@ -4,11 +4,10 @@
 	<parent>
 		<groupId>de.bitbrain</groupId>
 		<artifactId>braingdx</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 	<groupId>de.bitbrain.braingdx</groupId>
 	<artifactId>core</artifactId>
-	<version>1.0.0</version>
 	<name>BrainGDX Core</name>
 	<description>Core project of BrainGDX</description>
 </project>
