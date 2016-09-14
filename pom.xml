@@ -25,8 +25,16 @@
 	<!-- Module definitions -->
 	<modules>
 		<module>core</module>
-		<module>demo</module>
 	</modules>
+
+	<profiles>
+		<profile>
+			<id>demo</id>
+			<modules>
+				<module>demo</module>
+			</modules>
+		</profile>
+	</profiles>
 
 
 	<!-- Dependencies -->
