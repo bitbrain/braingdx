@@ -39,7 +39,7 @@ import de.bitbrain.braingdx.tweening.tweens.VectorTween;
  *
  * @since 1.0.0
  * @version 1.0.0
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  */
 public abstract class BrainGdxGame extends Game {
 

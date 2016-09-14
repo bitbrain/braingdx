@@ -24,7 +24,7 @@ import de.bitbrain.braingdx.GameObject;
  *
  * @since 1.0.0
  * @version 1.0.0
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  */
 public class ZIndexComparator implements Comparator<GameObject> {
 

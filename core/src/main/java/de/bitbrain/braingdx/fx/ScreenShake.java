@@ -26,12 +26,11 @@ import de.bitbrain.braingdx.tweening.TweenManager;
 import de.bitbrain.braingdx.tweening.tweens.VectorTween;
 
 /**
- * Provides screenshake behavior, implemented by the algorithm described here:
- * http://my-reality.de/2015/04/28/how-to-screenshake.html
+ * Provides screenshake behavior.
  *
  * @since 1.0.0
  * @version 1.0.0
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  */
 class ScreenShake {
 

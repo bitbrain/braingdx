@@ -22,7 +22,7 @@ import java.util.Map;
  *
  * @since 1.0.0
  * @version 1.0.0
- * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @author Miguel Gonzalez Sanchez
  */
 public interface GameAssetLoader {
 
