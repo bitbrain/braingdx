@@ -8,7 +8,6 @@ import de.bitbrain.braingdx.tweening.TweenAccessor;
 public class MutableInteger extends Number implements TweenAccessor<MutableInteger> {
 
     private static final long serialVersionUID = 1L;
-
     private int value;
 
     public MutableInteger(int value) {

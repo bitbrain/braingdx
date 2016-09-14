@@ -21,11 +21,10 @@ public class TweenUtils {
     private static TweenEquation[] easings;
 
     /**
-     * Takes an easing name and gives you the corresponding TweenEquation. You
-     * probably won't need this, but tools will love that.
+     * Takes an easing name and gives you the corresponding TweenEquation. You probably won't need
+     * this, but tools will love that.
      *
-     * @param easingName
-     *            The name of an easing, like "Quad.INOUT".
+     * @param easingName The name of an easing, like "Quad.INOUT".
      * @return The parsed equation, or null if there is no match.
      */
     public static TweenEquation parseEasing(String easingName) {

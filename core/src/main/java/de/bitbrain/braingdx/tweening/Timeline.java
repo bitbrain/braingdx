@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A Timeline can be used to create complex animations made of sequences and
- * parallel sets of Tweens.
+ * A Timeline can be used to create complex animations made of sequences and parallel sets of
+ * Tweens.
  * <p/>
  *
  * The following example will create an animation sequence composed of 5 parts:
@@ -19,8 +19,7 @@ import java.util.List;
  * 5. Then, rotation is animated to 360°.
  * <p/>
  *
- * This animation will be repeated 5 times, with a 500ms delay between each
- * iteration: <br/>
+ * This animation will be repeated 5 times, with a 500ms delay between each iteration: <br/>
  * <br/>
  *
  * <pre>
@@ -70,8 +69,8 @@ public final class Timeline extends BaseTween<Timeline> {
     };
 
     /**
-     * Used for debug purpose. Gets the current number of empty timelines that
-     * are waiting in the Timeline pool.
+     * Used for debug purpose. Gets the current number of empty timelines that are waiting in the
+     * Timeline pool.
      */
     public static int getPoolSize() {
 	return pool.size();
@@ -89,8 +88,8 @@ public final class Timeline extends BaseTween<Timeline> {
     // -------------------------------------------------------------------------
 
     /**
-     * Creates a new timeline with a 'sequence' behavior. Its children will be
-     * delayed so that they are triggered one after the other.
+     * Creates a new timeline with a 'sequence' behavior. Its children will be delayed so that they
+     * are triggered one after the other.
      */
     public static Timeline createSequence() {
 	Timeline tl = pool.get();
@@ -99,8 +98,8 @@ public final class Timeline extends BaseTween<Timeline> {
     }
 
     /**
-     * Creates a new timeline with a 'parallel' behavior. Its children will be
-     * triggered all at once.
+     * Creates a new timeline with a 'parallel' behavior. Its children will be triggered all at
+     * once.
      */
     public static Timeline createParallel() {
 	Timeline tl = pool.get();
@@ -177,11 +176,10 @@ public final class Timeline extends BaseTween<Timeline> {
     }
 
     /**
-     * Adds a pause to the timeline. The pause may be negative if you want to
-     * overlap the preceding and following children.
+     * Adds a pause to the timeline. The pause may be negative if you want to overlap the preceding
+     * and following children.
      *
-     * @param time
-     *            A positive or negative duration.
+     * @param time A positive or negative duration.
      * @return The current timeline, for chaining instructions.
      */
     public Timeline pushPause(float time) {
@@ -192,8 +190,8 @@ public final class Timeline extends BaseTween<Timeline> {
     }
 
     /**
-     * Starts a nested timeline with a 'sequence' behavior. Don't forget to call
-     * {@link end()} to close this nested timeline.
+     * Starts a nested timeline with a 'sequence' behavior. Don't forget to call {@link end()} to
+     * close this nested timeline.
      *
      * @return The current timeline, for chaining instructions.
      */
@@ -209,8 +207,8 @@ public final class Timeline extends BaseTween<Timeline> {
     }
 
     /**
-     * Starts a nested timeline with a 'parallel' behavior. Don't forget to call
-     * {@link end()} to close this nested timeline.
+     * Starts a nested timeline with a 'parallel' behavior. Don't forget to call {@link end()} to
+     * close this nested timeline.
      *
      * @return The current timeline, for chaining instructions.
      */
@@ -240,8 +238,7 @@ public final class Timeline extends BaseTween<Timeline> {
     }
 
     /**
-     * Gets a list of the timeline children. If the timeline is started, the
-     * list will be immutable.
+     * Gets a list of the timeline children. If the timeline is started, the list will be immutable.
      */
     public List<BaseTween<?>> getChildren() {
 	if (isBuilt)
@@ -269,15 +266,15 @@ public final class Timeline extends BaseTween<Timeline> {
 	    obj.build();
 
 	    switch (mode) {
-	    case SEQUENCE:
-		float tDelay = duration;
-		duration += obj.getFullDuration();
-		obj.delay += tDelay;
-		break;
+		case SEQUENCE:
+		    float tDelay = duration;
+		    duration += obj.getFullDuration();
+		    obj.delay += tDelay;
+		    break;
 
-	    case PARALLEL:
-		duration = Math.max(duration, obj.getFullDuration());
-		break;
+		case PARALLEL:
+		    duration = Math.max(duration, obj.getFullDuration());
+		    break;
 	    }
 	}
 

@@ -3,8 +3,7 @@ package de.bitbrain.braingdx.tweening.equations;
 import de.bitbrain.braingdx.tweening.TweenEquation;
 
 /**
- * Easing equation based on Robert Penner's work:
- * http://robertpenner.com/easing/
+ * Easing equation based on Robert Penner's work: http://robertpenner.com/easing/
  * 
  * @author Aurelien Ribon | http://www.aurelienribon.com/
  */

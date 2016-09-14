@@ -1,14 +1,12 @@
 package de.bitbrain.braingdx.tweening;
 
 /**
- * BaseTween is the base class of Tween and Timeline. It defines the iteration
- * engine used to play animations for any number of times, and in any direction,
- * at any speed.
+ * BaseTween is the base class of Tween and Timeline. It defines the iteration engine used to play
+ * animations for any number of times, and in any direction, at any speed.
  * <p/>
  *
- * It is responsible for calling the different callbacks at the right moments,
- * and for making sure that every callbacks are triggered, even if the update
- * engine gets a big delta time at once.
+ * It is responsible for calling the different callbacks at the right moments, and for making sure
+ * that every callbacks are triggered, even if the update engine gets a big delta time at once.
  *
  * @see Tween
  * @see Timeline
@@ -65,9 +63,8 @@ public abstract class BaseTween<T> {
     // -------------------------------------------------------------------------
 
     /**
-     * Builds and validates the object. Only needed if you want to finalize a
-     * tween or timeline without starting it, since a call to ".start()" also
-     * calls this method.
+     * Builds and validates the object. Only needed if you want to finalize a tween or timeline
+     * without starting it, since a call to ".start()" also calls this method.
      *
      * @return The current object, for chaining instructions.
      */
@@ -76,9 +73,8 @@ public abstract class BaseTween<T> {
     }
 
     /**
-     * Starts or restarts the object unmanaged. You will need to take care of
-     * its life-cycle. If you want the tween to be managed for you, use a
-     * {@link TweenManager}.
+     * Starts or restarts the object unmanaged. You will need to take care of its life-cycle. If you
+     * want the tween to be managed for you, use a {@link TweenManager}.
      *
      * @return The current object, for chaining instructions.
      */
@@ -90,8 +86,8 @@ public abstract class BaseTween<T> {
     }
 
     /**
-     * Convenience method to add an object to a manager. Its life-cycle will be
-     * handled for you. Relax and enjoy the animation.
+     * Convenience method to add an object to a manager. Its life-cycle will be handled for you.
+     * Relax and enjoy the animation.
      *
      * @return The current object, for chaining instructions.
      */
@@ -103,8 +99,7 @@ public abstract class BaseTween<T> {
     /**
      * Adds a delay to the tween or timeline.
      *
-     * @param delay
-     *            A duration.
+     * @param delay A duration.
      * @return The current object, for chaining instructions.
      */
     public T delay(float delay) {
@@ -113,17 +108,17 @@ public abstract class BaseTween<T> {
     }
 
     /**
-     * Kills the tween or timeline. If you are using a TweenManager, this object
-     * will be removed automatically.
+     * Kills the tween or timeline. If you are using a TweenManager, this object will be removed
+     * automatically.
      */
     public void kill() {
 	isKilled = true;
     }
 
     /**
-     * Stops and resets the tween or timeline, and sends it to its pool, for + *
-     * later reuse. Note that if you use a {@link TweenManager}, this method + *
-     * is automatically called once the animation is finished.
+     * Stops and resets the tween or timeline, and sends it to its pool, for + * later reuse. Note
+     * that if you use a {@link TweenManager}, this method + * is automatically called once the
+     * animation is finished.
      */
     public void free() {
     }
@@ -145,12 +140,10 @@ public abstract class BaseTween<T> {
     /**
      * Repeats the tween or timeline for a given number of times.
      * 
-     * @param count
-     *            The number of repetitions. For infinite repetition, use
-     *            Tween.INFINITY, or a negative number.
+     * @param count The number of repetitions. For infinite repetition, use Tween.INFINITY, or a
+     *            negative number.
      *
-     * @param delay
-     *            A delay between each iteration.
+     * @param delay A delay between each iteration.
      * @return The current tween or timeline, for chaining instructions.
      */
     public T repeat(int count, float delay) {
@@ -163,14 +156,11 @@ public abstract class BaseTween<T> {
     }
 
     /**
-     * Repeats the tween or timeline for a given number of times. Every two
-     * iterations, it will be played backwards.
+     * Repeats the tween or timeline for a given number of times. Every two iterations, it will be
+     * played backwards.
      *
-     * @param count
-     *            The number of repetitions. For infinite repetition, use
-     *            Tween.INFINITY, or '-1'.
-     * @param delay
-     *            A delay before each repetition.
+     * @param count The number of repetitions. For infinite repetition, use Tween.INFINITY, or '-1'.
+     * @param delay A delay before each repetition.
      * @return The current tween or timeline, for chaining instructions.
      */
     public T repeatYoyo(int count, float delay) {
@@ -183,9 +173,9 @@ public abstract class BaseTween<T> {
     }
 
     /**
-     * Sets the callback. By default, it will be fired at the completion of the
-     * tween or timeline (event COMPLETE). If you want to change this behavior
-     * and add more triggers, use the {@link setCallbackTriggers()} method.
+     * Sets the callback. By default, it will be fired at the completion of the tween or timeline
+     * (event COMPLETE). If you want to change this behavior and add more triggers, use the
+     * {@link setCallbackTriggers()} method.
      *
      * @see TweenCallback
      */
@@ -195,8 +185,8 @@ public abstract class BaseTween<T> {
     }
 
     /**
-     * Changes the triggers of the callback. The available triggers, listed as
-     * members of the {@link TweenCallback} interface, are:
+     * Changes the triggers of the callback. The available triggers, listed as members of the
+     * {@link TweenCallback} interface, are:
      * <p/>
      *
      * <b>BEGIN</b>: right after the delay (if any)<br/>
@@ -204,8 +194,7 @@ public abstract class BaseTween<T> {
      * <b>END</b>: at each iteration ending, before the repeat delay<br/>
      * <b>COMPLETE</b>: at last END event<br/>
      * <b>BACK_BEGIN</b>: at the beginning of the first backward iteration<br/>
-     * <b>BACK_START</b>: at each backward iteration beginning, after the repeat
-     * delay<br/>
+     * <b>BACK_START</b>: at each backward iteration beginning, after the repeat delay<br/>
      * <b>BACK_END</b>: at each backward iteration ending<br/>
      * <b>BACK_COMPLETE</b>: at last BACK_END event
      * <p/>
@@ -220,8 +209,7 @@ public abstract class BaseTween<T> {
      * }
      * </pre>
      *
-     * @param flags
-     *            one or more triggers, separated by the '|' operator.
+     * @param flags one or more triggers, separated by the '|' operator.
      * @see TweenCallback
      */
     public T setCallbackTriggers(int flags) {
@@ -230,11 +218,10 @@ public abstract class BaseTween<T> {
     }
 
     /**
-     * Attaches an object to this tween or timeline. It can be useful in order
-     * to retrieve some data from a TweenCallback.
+     * Attaches an object to this tween or timeline. It can be useful in order to retrieve some data
+     * from a TweenCallback.
      *
-     * @param data
-     *            Any kind of object.
+     * @param data Any kind of object.
      * @return The current tween or timeline, for chaining instructions.
      */
     public T setUserData(Object data) {
@@ -247,8 +234,7 @@ public abstract class BaseTween<T> {
     // -------------------------------------------------------------------------
 
     /**
-     * Gets the delay of the tween or timeline. Nothing will happen before this
-     * delay.
+     * Gets the delay of the tween or timeline. Nothing will happen before this delay.
      */
     public float getDelay() {
 	return delay;
@@ -276,8 +262,8 @@ public abstract class BaseTween<T> {
     }
 
     /**
-     * Returns the complete duration, including initial delay and repetitions.
-     * The formula is as follows:
+     * Returns the complete duration, including initial delay and repetitions. The formula is as
+     * follows:
      * 
      * <pre>
      * fullDuration = delay + duration + (repeatDelay + duration) * repeatCnt
@@ -324,26 +310,26 @@ public abstract class BaseTween<T> {
     }
 
     /**
-     * Returns true if the tween or timeline has been initialized. Starting
-     * values for tweens are stored at initialization time. This initialization
-     * takes place right after the initial delay, if any.
+     * Returns true if the tween or timeline has been initialized. Starting values for tweens are
+     * stored at initialization time. This initialization takes place right after the initial delay,
+     * if any.
      */
     public boolean isInitialized() {
 	return isInitialized;
     }
 
     /**
-     * Returns true if the tween is finished (i.e. if the tween has reached its
-     * end or has been killed). If you don't use a TweenManager, you may want to
-     * call {@link free()} to reuse the object later.
+     * Returns true if the tween is finished (i.e. if the tween has reached its end or has been
+     * killed). If you don't use a TweenManager, you may want to call {@link free()} to reuse the
+     * object later.
      */
     public boolean isFinished() {
 	return isFinished || isKilled;
     }
 
     /**
-     * Returns true if the iterations are played as yoyo. Yoyo means that every
-     * two iterations, the animation will be played backwards.
+     * Returns true if the iterations are played as yoyo. Yoyo means that every two iterations, the
+     * animation will be played backwards.
      */
     public boolean isYoyo() {
 	return isYoyo;
@@ -426,15 +412,14 @@ public abstract class BaseTween<T> {
     // -------------------------------------------------------------------------
 
     /**
-     * Updates the tween or timeline state. <b>You may want to use a
-     * TweenManager to update objects for you.</b>
+     * Updates the tween or timeline state. <b>You may want to use a TweenManager to update objects
+     * for you.</b>
      *
-     * Slow motion, fast motion and backward play can be easily achieved by
-     * tweaking this delta time. Multiply it by -1 to play the animation
-     * backward, or by 0.5 to play it twice slower than its normal speed.
+     * Slow motion, fast motion and backward play can be easily achieved by tweaking this delta
+     * time. Multiply it by -1 to play the animation backward, or by 0.5 to play it twice slower
+     * than its normal speed.
      *
-     * @param delta
-     *            A delta time between now and the last call.
+     * @param delta A delta time between now and the last call.
      */
     public void update(float delta) {
 	if (!isStarted || isPaused || isKilled)

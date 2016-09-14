@@ -1,9 +1,8 @@
 package de.bitbrain.braingdx.tweening;
 
 /**
- * TweenCallbacks are used to trigger actions at some specific times. They are
- * used in both Tweens and Timelines. The moment when the callback is triggered
- * depends on its registered triggers:
+ * TweenCallbacks are used to trigger actions at some specific times. They are used in both Tweens
+ * and Timelines. The moment when the callback is triggered depends on its registered triggers:
  * <p/>
  *
  * <b>BEGIN</b>: right after the delay (if any)<br/>
@@ -11,8 +10,7 @@ package de.bitbrain.braingdx.tweening;
  * <b>END</b>: at each iteration ending, before the repeat delay<br/>
  * <b>COMPLETE</b>: at last END event<br/>
  * <b>BACK_BEGIN</b>: at the beginning of the first backward iteration<br/>
- * <b>BACK_START</b>: at each backward iteration beginning, after the repeat
- * delay<br/>
+ * <b>BACK_START</b>: at each backward iteration beginning, after the repeat delay<br/>
  * <b>BACK_END</b>: at each backward iteration ending<br/>
  * <b>BACK_COMPLETE</b>: at last BACK_END event
  * <p/>

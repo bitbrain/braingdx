@@ -29,8 +29,7 @@ public interface GameAssetLoader {
     /**
      * Puts asset information into the assets map
      *
-     * @param assets
-     *            the asset map to fill
+     * @param assets the asset map to fill
      */
     void put(Map<String, Class<?>> assets);
 }

@@ -15,10 +15,10 @@
 
 package de.bitbrain.braingdx.graphics;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.bitbrain.braingdx.GameObject;
 
@@ -30,6 +30,7 @@ import de.bitbrain.braingdx.GameObject;
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
 public class RenderManager {
+
     private static Map<Integer, Renderer> rendererMap = new HashMap<Integer, Renderer>();
 
     public void render(GameObject object, Batch batch, float delta) {

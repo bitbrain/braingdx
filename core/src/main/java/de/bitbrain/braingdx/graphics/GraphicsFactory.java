@@ -31,12 +31,9 @@ public final class GraphicsFactory {
     /**
      * Creates a new texture of the given color and size
      *
-     * @param width
-     *            width of the texture
-     * @param height
-     *            height of the texture
-     * @param color
-     *            color of the texture
+     * @param width width of the texture
+     * @param height height of the texture
+     * @param color color of the texture
      * @return new texture object
      */
     public static Texture createTexture(int width, int height, Color color) {

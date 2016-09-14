@@ -3,8 +3,8 @@ package de.bitbrain.braingdx.tweening;
 import java.util.ArrayList;
 
 /**
- * A light pool of objects that can be resused to avoid allocation. Based on
- * Nathan Sweet pool implementation
+ * A light pool of objects that can be resused to avoid allocation. Based on Nathan Sweet pool
+ * implementation
  */
 abstract class Pool<T> {
     private final ArrayList<T> objects;

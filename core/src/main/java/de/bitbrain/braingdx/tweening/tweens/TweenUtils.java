@@ -36,14 +36,10 @@ public final class TweenUtils {
     /**
      * Fades the source color object into the target color in the given time
      *
-     * @param sourceColor
-     *            the source color
-     * @param targetColor
-     *            the target color
-     * @param time
-     *            given decimal time (in seconds)
-     * @param equation
-     *            tween equation
+     * @param sourceColor the source color
+     * @param targetColor the target color
+     * @param time given decimal time (in seconds)
+     * @param equation tween equation
      */
     public static void toColor(Color sourceColor, Color targetColor, float time, TweenEquation equation) {
 	tweenManager.killTarget(sourceColor, ColorTween.R);
@@ -57,12 +53,9 @@ public final class TweenUtils {
     /**
      * Fades the source color object into the target color in the given time
      *
-     * @param sourceColor
-     *            the source color
-     * @param targetColor
-     *            the target color
-     * @param time
-     *            given decimal time (in seconds)
+     * @param sourceColor the source color
+     * @param targetColor the target color
+     * @param time given decimal time (in seconds)
      */
     public static void toColor(Color sourceColor, Color targetColor, float time) {
 	toColor(sourceColor, targetColor, time, TweenEquations.easeNone);
@@ -71,10 +64,8 @@ public final class TweenUtils {
     /**
      * Fades the source color object into the target color in 1 second
      *
-     * @param sourceColor
-     *            the source color
-     * @param targetColor
-     *            the target color
+     * @param sourceColor the source color
+     * @param targetColor the target color
      */
     public static void toColor(Color sourceColor, Color targetColor) {
 	toColor(sourceColor, targetColor, 1f, TweenEquations.easeNone);

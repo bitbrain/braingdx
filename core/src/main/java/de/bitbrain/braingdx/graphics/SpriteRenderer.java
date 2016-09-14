@@ -33,9 +33,7 @@ import de.bitbrain.braingdx.assets.SharedAssetManager;
 public class SpriteRenderer implements RenderManager.Renderer {
 
     protected Sprite sprite;
-
     private AssetManager assets = SharedAssetManager.getInstance();
-
     private String textureId;
 
     public SpriteRenderer(String textureId) {

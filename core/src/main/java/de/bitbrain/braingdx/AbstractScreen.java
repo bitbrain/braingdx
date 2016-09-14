@@ -62,11 +62,8 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     }
 
     protected TweenManager tweenManager = SharedTweenManager.getInstance();
-
     protected FX fx;
-
     protected Tooltip tooltip = Tooltip.getInstance();
-
     protected InputMultiplexer input;
 
     @Override

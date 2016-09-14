@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Pool;
 
 import de.bitbrain.braingdx.graphics.CameraTracker;
 import de.bitbrain.braingdx.graphics.RenderManager;
+import de.bitbrain.braingdx.graphics.VectorCameraTracker;
 import de.bitbrain.braingdx.util.ZIndexComparator;
 
 /**
@@ -70,11 +71,11 @@ public class GameWorld {
 	this(camera, DEFAULT_CACHE_SIZE);
     }
 
-    public GameWorld(OrthographicCamera camera, int cacheSize) {
+    public GameWorld(OrthographicCamera camera, RenderManager renderManager, CameraTracker tracker, int cacheSize) {
 	this.camera = camera;
-	renderManager = new RenderManager();
-	tracker = new CameraTracker(camera);
-	pool = new Pool<GameObject>(cacheSize) {
+	this.renderManager = renderManager;
+	this.tracker = tracker;
+	this.pool = new Pool<GameObject>(cacheSize) {
 	    @Override
 	    protected GameObject newObject() {
 		return new GameObject();
@@ -82,11 +83,14 @@ public class GameWorld {
 	};
     }
 
+    public GameWorld(OrthographicCamera camera, int cacheSize) {
+	this(camera, new RenderManager(), new VectorCameraTracker(camera), cacheSize);
+    }
+
     /**
      * Sets the bounds of the world. By default, everything is in bounds.
      *
-     * @param bounds
-     *            the new bounds implementation
+     * @param bounds the new bounds implementation
      */
     public void setBounds(WorldBounds bounds) {
 	this.bounds = bounds;
@@ -106,21 +110,17 @@ public class GameWorld {
     /**
      * Registers a renderer for an existing game object of the given type (id)
      *
-     * @param gameObjectId
-     *            type/id of the game object
-     * @param renderer
-     *            instance of the renderer
+     * @param gameObjectId type/id of the game object
+     * @param renderer instance of the renderer
      */
     public void registerRenderer(Integer gameObjectId, RenderManager.Renderer renderer) {
 	renderManager.register(gameObjectId, renderer);
     }
 
     /**
-     * Enables camera tracking for the given object. Tracking can be disabled by
-     * providing null.
+     * Enables camera tracking for the given object. Tracking can be disabled by providing null.
      *
-     * @param object
-     *            game object which should be tracked.
+     * @param object game object which should be tracked.
      */
     public void setCameraTracking(GameObject object) {
 	tracker.setTarget(object);
@@ -136,8 +136,7 @@ public class GameWorld {
     /**
      * Sets the speed the camera should follow its target
      *
-     * @param speed
-     *            camera tracking speed
+     * @param speed camera tracking speed
      */
     public void setTrackingSpeed(float speed) {
 	tracker.setSpeed(speed);
@@ -146,8 +145,7 @@ public class GameWorld {
     /**
      * Sets the zoom scale the camera should have while following its target
      *
-     * @param scale
-     *            scale factor of the camera while tracking a target
+     * @param scale scale factor of the camera while tracking a target
      */
     public void setTrackingZoomScale(float scale) {
 	tracker.setZoomScale(scale);
@@ -156,10 +154,8 @@ public class GameWorld {
     /**
      * Updates and renders this world
      *
-     * @param batch
-     *            the batch
-     * @param delta
-     *            frame delta
+     * @param batch the batch
+     * @param delta frame delta
      */
     public void updateAndRender(Batch batch, float delta) {
 	Collections.sort(objects, comparator);

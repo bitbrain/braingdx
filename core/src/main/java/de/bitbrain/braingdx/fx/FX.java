@@ -113,10 +113,8 @@ public final class FX {
     /**
      * Shakes the screen by the given intensity for the given duration
      *
-     * @param intensity
-     *            the intensity of the shake
-     * @param duration
-     *            the duration of the shake
+     * @param intensity the intensity of the shake
+     * @param duration the duration of the shake
      */
     public void shake(float intensity, float duration) {
 	shake.shake(intensity, duration);
