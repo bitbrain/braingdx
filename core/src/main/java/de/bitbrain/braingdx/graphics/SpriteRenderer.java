@@ -30,7 +30,7 @@ import de.bitbrain.braingdx.assets.SharedAssetManager;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public class SpriteRenderer implements RenderManager.Renderer {
+public class SpriteRenderer implements GameObjectRenderManager.GameObjectRenderer {
 
     protected Sprite sprite;
     private final AssetManager assets = SharedAssetManager.getInstance();

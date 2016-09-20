@@ -25,7 +25,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Pool;
 
 import de.bitbrain.braingdx.graphics.CameraTracker;
-import de.bitbrain.braingdx.graphics.RenderManager;
+import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.VectorCameraTracker;
 import de.bitbrain.braingdx.util.ZIndexComparator;
 
@@ -61,7 +61,7 @@ public class GameWorld {
 
     private OrthographicCamera camera;
 
-    private RenderManager renderManager;
+    private GameObjectRenderManager renderManager;
 
     private CameraTracker tracker;
 
@@ -71,7 +71,7 @@ public class GameWorld {
 	this(camera, DEFAULT_CACHE_SIZE);
     }
 
-    public GameWorld(OrthographicCamera camera, RenderManager renderManager, CameraTracker tracker, int cacheSize) {
+    public GameWorld(OrthographicCamera camera, GameObjectRenderManager renderManager, CameraTracker tracker, int cacheSize) {
 	this.camera = camera;
 	this.renderManager = renderManager;
 	this.tracker = tracker;
@@ -84,7 +84,7 @@ public class GameWorld {
     }
 
     public GameWorld(OrthographicCamera camera, int cacheSize) {
-	this(camera, new RenderManager(), new VectorCameraTracker(camera), cacheSize);
+	this(camera, new GameObjectRenderManager(), new VectorCameraTracker(camera), cacheSize);
     }
 
     /**
@@ -113,7 +113,7 @@ public class GameWorld {
      * @param gameObjectId type/id of the game object
      * @param renderer instance of the renderer
      */
-    public void registerRenderer(Integer gameObjectId, RenderManager.Renderer renderer) {
+    public void registerRenderer(Integer gameObjectId, GameObjectRenderManager.GameObjectRenderer renderer) {
 	renderManager.register(gameObjectId, renderer);
     }
 
