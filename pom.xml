@@ -45,6 +45,12 @@
 			<version>1.6.4</version>
 			<optional>true</optional>
 		</dependency>
+	
+	    <dependency>
+	        <groupId>com.github.arcnor</groupId>
+	        <artifactId>universal-tween-engine</artifactId>
+	        <version>6.3.3</version>        
+	    </dependency>
 	</dependencies>
 
 	<!-- Build configuration -->
@@ -64,6 +70,13 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
+	<repositories>		
+		<repository>
+	    <id>jitpack.io</id>
+	    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
 	<scm>
 		<connection>scm:git:https://github.com/MyRealityCoding/braingdx.git</connection>

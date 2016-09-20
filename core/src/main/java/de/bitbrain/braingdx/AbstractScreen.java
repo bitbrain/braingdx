@@ -27,9 +27,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.fx.FX;
-import de.bitbrain.braingdx.tweening.TweenManager;
-import de.bitbrain.braingdx.tweening.tweens.SharedTweenManager;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.ui.Tooltip;
 
 /**
@@ -104,9 +104,8 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    tooltip.init(stage, camera);
 	    onCreateStage(stage, width, height);
 	    Gdx.input.setInputProcessor(input);
-	} else {
+	} else
 	    stage.getViewport().update(width, height);
-	}
 	camera.setToOrtho(false, width, height);
     }
 

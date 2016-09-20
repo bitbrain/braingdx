@@ -20,12 +20,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquation;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.graphics.GraphicsFactory;
-import de.bitbrain.braingdx.tweening.Tween;
-import de.bitbrain.braingdx.tweening.TweenEquation;
-import de.bitbrain.braingdx.tweening.TweenEquations;
-import de.bitbrain.braingdx.tweening.TweenManager;
-import de.bitbrain.braingdx.tweening.tweens.SpriteTween;
+import de.bitbrain.braingdx.tweens.SpriteTween;
 
 /**
  * Provides special effect utilities
@@ -65,15 +65,13 @@ public final class FX {
     }
 
     public void begin() {
-	if (camera != null && shake != null) {
+	if (camera != null && shake != null)
 	    camera.translate(shake.getShake().x, shake.getShake().y);
-	}
     }
 
     public void end() {
-	if (camera != null && shake != null) {
+	if (camera != null && shake != null)
 	    camera.translate(-shake.getShake().x, -shake.getShake().y);
-	}
     }
 
     public void init(TweenManager tweenManager, OrthographicCamera camera) {

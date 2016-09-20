@@ -23,14 +23,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
-import de.bitbrain.braingdx.tweening.BaseTween;
-import de.bitbrain.braingdx.tweening.Tween;
-import de.bitbrain.braingdx.tweening.TweenCallback;
-import de.bitbrain.braingdx.tweening.TweenEquation;
-import de.bitbrain.braingdx.tweening.TweenEquations;
-import de.bitbrain.braingdx.tweening.TweenManager;
-import de.bitbrain.braingdx.tweening.tweens.ActorTween;
-import de.bitbrain.braingdx.tweening.tweens.SharedTweenManager;
+import aurelienribon.tweenengine.BaseTween;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.TweenEquation;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
+import de.bitbrain.braingdx.tweens.ActorTween;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
 
 /**
  * Provides tooltips on the screen
@@ -43,13 +43,13 @@ public class Tooltip {
 
     private static final Tooltip instance = new Tooltip();
 
-    private TweenManager tweenManager = SharedTweenManager.getInstance();
+    private final TweenManager tweenManager = SharedTweenManager.getInstance();
 
     private Stage stage;
 
     private Camera camera;
 
-    private Set<Label> tooltips = new HashSet<Label>();
+    private final Set<Label> tooltips = new HashSet<Label>();
 
     private TweenEquation equation;
 
@@ -120,7 +120,7 @@ public class Tooltip {
     }
 
     public void clear() {
-	for (Label l : tooltips) {
+	for (final Label l : tooltips) {
 	    tweenManager.killTarget(l);
 	    stage.getActors().removeValue(l, true);
 	}

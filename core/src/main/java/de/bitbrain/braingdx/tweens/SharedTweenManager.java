@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tweening.tweens;
+package de.bitbrain.braingdx.tweens;
 
-import de.bitbrain.braingdx.tweening.TweenManager;
+import aurelienribon.tweenengine.TweenManager;
 
 /**
  * Shared instance of TweenManager

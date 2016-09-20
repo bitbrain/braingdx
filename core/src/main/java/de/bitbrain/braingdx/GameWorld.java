@@ -65,7 +65,7 @@ public class GameWorld {
 
     private CameraTracker tracker;
 
-    private Comparator<GameObject> comparator = new ZIndexComparator();
+    private final Comparator<GameObject> comparator = new ZIndexComparator();
 
     public GameWorld(OrthographicCamera camera) {
 	this(camera, DEFAULT_CACHE_SIZE);
@@ -102,7 +102,7 @@ public class GameWorld {
      * @return newly created game object
      */
     public GameObject addObject() {
-	GameObject object = pool.obtain();
+	final GameObject object = pool.obtain();
 	objects.add(object);
 	return object;
     }
@@ -159,7 +159,7 @@ public class GameWorld {
      */
     public void updateAndRender(Batch batch, float delta) {
 	Collections.sort(objects, comparator);
-	for (GameObject object : objects) {
+	for (final GameObject object : objects) {
 	    if (!bounds.isInBounds(object, camera)) {
 		removals.add(object);
 		continue;
@@ -167,9 +167,8 @@ public class GameWorld {
 	    renderManager.render(object, batch, delta);
 	}
 	tracker.update(delta);
-	for (GameObject removal : removals) {
+	for (final GameObject removal : removals)
 	    remove(removal);
-	}
 	removals.clear();
     }
 
@@ -197,9 +196,8 @@ public class GameWorld {
      * @param objects
      */
     public void remove(GameObject... objects) {
-	for (GameObject object : objects) {
+	for (final GameObject object : objects)
 	    removals.add(object);
-	}
     }
 
     private void remove(GameObject object) {

@@ -20,10 +20,10 @@ import java.util.UUID;
 
 import com.badlogic.gdx.math.Vector2;
 
-import de.bitbrain.braingdx.tweening.Tween;
-import de.bitbrain.braingdx.tweening.TweenEquations;
-import de.bitbrain.braingdx.tweening.TweenManager;
-import de.bitbrain.braingdx.tweening.tweens.VectorTween;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
+import de.bitbrain.braingdx.tweens.VectorTween;
 
 /**
  * Provides screenshake behavior.
@@ -37,13 +37,13 @@ class ScreenShake {
     // Interval in miliseconds between each movement
     public static final float STEP_INTERVAL = 0.05f;
 
-    private Vector2 shake;
+    private final Vector2 shake;
 
     // our tween manager provided by Universal Tween Engine
-    private TweenManager tweenManager;
+    private final TweenManager tweenManager;
 
     // We use a random to select an angle at random
-    private SecureRandom random = new SecureRandom(UUID.randomUUID().toString().getBytes());
+    private final SecureRandom random = new SecureRandom(UUID.randomUUID().toString().getBytes());
 
     static {
 	// it is important to tell Universal Tween Engine how
@@ -72,9 +72,9 @@ class ScreenShake {
 	tweenManager.killTarget(shake);
 	for (int step = 0; step < STEPS; ++step) {
 	    // Step 1: Let's find a random angle
-	    double angle = Math.toRadians(random.nextFloat() * 360f);
-	    float x = (float) Math.floor(strength * Math.cos(angle));
-	    float y = (float) Math.floor(strength * Math.sin(angle));
+	    final double angle = Math.toRadians(random.nextFloat() * 360f);
+	    final float x = (float) Math.floor(strength * Math.cos(angle));
+	    final float y = (float) Math.floor(strength * Math.sin(angle));
 
 	    // Step 2: ease to the calculated point. Do not forget to set
 	    // delay!

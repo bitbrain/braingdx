@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tweening.tweens;
+package de.bitbrain.braingdx.tweens;
 
+import aurelienribon.tweenengine.TweenAccessor;
 import de.bitbrain.braingdx.GameObject;
-import de.bitbrain.braingdx.tweening.TweenAccessor;
 
 /**
  * Tween facility for game objects
@@ -39,7 +39,7 @@ public class GameObjectTween implements TweenAccessor<GameObject> {
     public static final int G = ColorTween.G;
     public static final int B = ColorTween.B;
 
-    private ColorTween colorTween = new ColorTween();
+    private final ColorTween colorTween = new ColorTween();
 
     @Override
     public int getValues(GameObject target, int tweenType, float[] returnValues) {

@@ -13,12 +13,12 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tweening.tweens;
+package de.bitbrain.braingdx.tweens;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
-import de.bitbrain.braingdx.tweening.TweenAccessor;
+import aurelienribon.tweenengine.TweenAccessor;
 
 /**
  * Tween facility for actors
@@ -83,9 +83,8 @@ public class ActorTween implements TweenAccessor<Actor> {
 		target.setRotation(newValues[0]);
 		break;
 	    case SCALE:
-		if (target instanceof Label) {
+		if (target instanceof Label)
 		    ((Label) target).setFontScale(newValues[0]);
-		}
 		target.setScaleX(newValues[0]);
 		target.setScaleY(newValues[1]);
 		break;

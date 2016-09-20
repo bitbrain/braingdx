@@ -13,14 +13,14 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tweening.tweens;
+package de.bitbrain.braingdx.tweens;
 
 import com.badlogic.gdx.graphics.Color;
 
-import de.bitbrain.braingdx.tweening.Tween;
-import de.bitbrain.braingdx.tweening.TweenEquation;
-import de.bitbrain.braingdx.tweening.TweenEquations;
-import de.bitbrain.braingdx.tweening.TweenManager;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquation;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
 
 /**
  * Provides animation utilities

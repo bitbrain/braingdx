@@ -51,7 +51,7 @@ public class ParticleLoader extends SynchronousAssetLoader<ParticleEffect, Parti
     @Override
     public ParticleEffect load(AssetManager assetManager, String fileName, FileHandle file,
 	    ParticleParameter parameter) {
-	ParticleEffect effect = new ParticleEffect();
+	final ParticleEffect effect = new ParticleEffect();
 	effect.load(file, Gdx.files.internal("particles/"));
 	return effect;
     }

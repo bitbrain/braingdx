@@ -41,9 +41,8 @@ public class SharedAssetManager {
      */
     public static AssetManager getInstance() {
 
-	if (instance == null) {
+	if (instance == null)
 	    loadInternal();
-	}
 
 	return instance;
     }
@@ -72,9 +71,8 @@ public class SharedAssetManager {
 
     private static void loadInternal() {
 
-	if (Gdx.files == null) {
+	if (Gdx.files == null)
 	    throw new RuntimeException("LibGDX is not initialized yet!");
-	}
 
 	if (Gdx.files.isLocalStorageAvailable()) {
 	    instance = new AssetManager();

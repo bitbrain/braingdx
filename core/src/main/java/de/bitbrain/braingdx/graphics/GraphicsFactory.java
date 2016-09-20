@@ -37,10 +37,10 @@ public final class GraphicsFactory {
      * @return new texture object
      */
     public static Texture createTexture(int width, int height, Color color) {
-	Pixmap map = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+	final Pixmap map = new Pixmap(width, height, Pixmap.Format.RGBA8888);
 	map.setColor(color);
 	map.fill();
-	Texture texture = new Texture(map);
+	final Texture texture = new Texture(map);
 	map.dispose();
 	return texture;
     }

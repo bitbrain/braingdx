@@ -25,14 +25,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import aurelienribon.tweenengine.Tween;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
-import de.bitbrain.braingdx.tweening.Tween;
-import de.bitbrain.braingdx.tweening.tweens.ActorTween;
-import de.bitbrain.braingdx.tweening.tweens.ColorTween;
-import de.bitbrain.braingdx.tweening.tweens.GameObjectTween;
-import de.bitbrain.braingdx.tweening.tweens.SpriteTween;
-import de.bitbrain.braingdx.tweening.tweens.VectorTween;
+import de.bitbrain.braingdx.tweens.ActorTween;
+import de.bitbrain.braingdx.tweens.ColorTween;
+import de.bitbrain.braingdx.tweens.GameObjectTween;
+import de.bitbrain.braingdx.tweens.SpriteTween;
+import de.bitbrain.braingdx.tweens.VectorTween;
 
 /**
  * Base implementation of a brainGdx driven game
@@ -55,16 +55,14 @@ public abstract class BrainGdxGame extends Game {
     protected abstract AbstractScreen<?> getInitialScreen();
 
     private void loadAssets() {
-	AssetManager assetManager = SharedAssetManager.getInstance();
-	GameAssetLoader loader = getAssetLoader();
-	if (loader == null) {
+	final AssetManager assetManager = SharedAssetManager.getInstance();
+	final GameAssetLoader loader = getAssetLoader();
+	if (loader == null)
 	    throw new RuntimeException("No asset loader has been specified.");
-	}
-	HashMap<String, Class<?>> mapping = new HashMap<String, Class<?>>();
+	final HashMap<String, Class<?>> mapping = new HashMap<String, Class<?>>();
 	loader.put(mapping);
-	for (Map.Entry<String, Class<?>> entry : mapping.entrySet()) {
+	for (final Map.Entry<String, Class<?>> entry : mapping.entrySet())
 	    assetManager.load(entry.getKey(), entry.getValue());
-	}
 	assetManager.finishLoading();
     }
 

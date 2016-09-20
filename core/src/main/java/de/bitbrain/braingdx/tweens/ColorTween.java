@@ -13,11 +13,11 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tweening.tweens;
+package de.bitbrain.braingdx.tweens;
 
 import com.badlogic.gdx.graphics.Color;
 
-import de.bitbrain.braingdx.tweening.TweenAccessor;
+import aurelienribon.tweenengine.TweenAccessor;
 
 public class ColorTween implements TweenAccessor<Color> {
 

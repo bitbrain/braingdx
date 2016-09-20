@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.Pool;
  */
 public class GameObject implements Pool.Poolable {
 
-    private Vector2 position, dimensions, lastPosition, offset;
+    private final Vector2 position, dimensions, lastPosition, offset;
 
     private String id = "";
 
@@ -36,7 +36,7 @@ public class GameObject implements Pool.Poolable {
 
     private Color color = Color.WHITE.cpy();
 
-    private Vector2 scale;
+    private final Vector2 scale;
 
     private float zIndex;
 

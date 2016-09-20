@@ -13,11 +13,11 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tweening.tweens;
+package de.bitbrain.braingdx.tweens;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import de.bitbrain.braingdx.tweening.TweenAccessor;
+import aurelienribon.tweenengine.TweenAccessor;
 
 /**
  * Tween facility for sprites
@@ -89,9 +89,8 @@ public class SpriteTween implements TweenAccessor<Sprite> {
 		target.setScale(newValues[0]);
 		break;
 	    case COLOR:
-		if (newValues.length == 3) {
+		if (newValues.length == 3)
 		    target.setColor(newValues[0], newValues[1], newValues[2], target.getColor().a);
-		}
 		break;
 	    case COLOR_R:
 		target.setColor(newValues[0], target.getColor().g, target.getColor().b, target.getColor().a);

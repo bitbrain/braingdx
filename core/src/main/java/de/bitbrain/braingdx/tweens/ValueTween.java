@@ -13,49 +13,38 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tweening.tweens;
+package de.bitbrain.braingdx.tweens;
 
-import com.badlogic.gdx.math.Vector2;
-
-import de.bitbrain.braingdx.tweening.TweenAccessor;
+import aurelienribon.tweenengine.TweenAccessor;
+import de.bitbrain.braingdx.util.ValueProvider;
 
 /**
- * Tween facility for vectors
+ * Tweening accessor for values
  *
  * @since 1.0.0
  * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
  */
-public class VectorTween implements TweenAccessor<Vector2> {
+public class ValueTween implements TweenAccessor<ValueProvider> {
 
-    public static final int POS_X = 1;
-
-    public static final int POS_Y = 2;
+    public static final int VALUE = 1;
 
     @Override
-    public int getValues(Vector2 target, int tweenType, float[] returnValues) {
+    public int getValues(ValueProvider target, int tweenType, float[] returnValues) {
 	switch (tweenType) {
-	    case POS_X:
-		returnValues[0] = target.x;
+	    case VALUE:
+		returnValues[0] = target.getValue();
 		return 1;
-	    case POS_Y:
-		returnValues[0] = target.y;
-		return 1;
-	    default:
-		return 0;
 	}
+	return 0;
     }
 
     @Override
-    public void setValues(Vector2 target, int tweenType, float[] newValues) {
+    public void setValues(ValueProvider target, int tweenType, float[] newValues) {
 	switch (tweenType) {
-	    case POS_X:
-		target.x = newValues[0];
-		break;
-	    case POS_Y:
-		target.y = newValues[0];
+	    case VALUE:
+		target.setValue(newValues[0]);
 		break;
 	}
     }
-
 }

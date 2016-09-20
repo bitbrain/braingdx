@@ -13,21 +13,21 @@ public interface CameraTracker {
 
     /**
      * Updates the tracker in a frame step
-     * 
+     *
      * @param delta the frame delta
      */
     void update(float delta);
 
     /**
      * Sets a new speed value
-     * 
+     *
      * @param speed
      */
     void setSpeed(float speed);
 
     /**
      * Sets a new zoom scale factor
-     * 
+     *
      * @param zoomScale
      */
     void setZoomScale(float zoomScale);
@@ -39,7 +39,7 @@ public interface CameraTracker {
 
     /**
      * Sets a new target
-     * 
+     *
      * @param target the target
      */
     void setTarget(GameObject target);

@@ -31,8 +31,8 @@ import de.bitbrain.braingdx.GameObject;
  */
 public class VectorCameraTracker implements CameraTracker {
 
-    private OrthographicCamera camera;
-    private Vector2 velocity;
+    private final OrthographicCamera camera;
+    private final Vector2 velocity;
     private GameObject target;
     private float speed = 5.2f;
     private float zoomScale = 0.0025f;
@@ -50,15 +50,14 @@ public class VectorCameraTracker implements CameraTracker {
 
     @Override
     public void update(float delta) {
-	if (target == null) {
+	if (target == null)
 	    return;
-	}
 	velocity.x = (float) (target.getLeft() + Math.floor(target.getWidth() / 2.0f) - (camera.position.x));
 	velocity.y = (float) (target.getTop() + Math.floor(target.getHeight() / 2.0f) - (camera.position.y + 100f));
 
-	float distance = velocity.len();
+	final float distance = velocity.len();
 	velocity.nor();
-	double overAllSpeed = distance * speed;
+	final double overAllSpeed = distance * speed;
 
 	// Round it up to prevent camera shaking
 	camera.position.x = (float) (camera.position.x + (velocity.x * overAllSpeed * delta));
@@ -78,9 +77,8 @@ public class VectorCameraTracker implements CameraTracker {
 
     @Override
     public void focus() {
-	if (target == null) {
+	if (target == null)
 	    return;
-	}
 	camera.position.x = target.getLeft();
 	camera.position.y = target.getTop();
 	camera.zoom = 1;

@@ -34,10 +34,9 @@ public class RenderManager {
     private static Map<Integer, Renderer> rendererMap = new HashMap<Integer, Renderer>();
 
     public void render(GameObject object, Batch batch, float delta) {
-	Renderer renderer = rendererMap.get(object.getType());
-	if (renderer != null) {
+	final Renderer renderer = rendererMap.get(object.getType());
+	if (renderer != null)
 	    renderer.render(object, batch, delta);
-	}
     }
 
     public void register(Integer gameObjectType, Renderer renderer) {
