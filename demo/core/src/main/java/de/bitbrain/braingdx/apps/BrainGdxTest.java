@@ -7,7 +7,7 @@ import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
 import de.bitbrain.braingdx.screens.BrainGdxWelcomeScreen;
 
-public class BrainGdxApp extends BrainGdxGame {
+public class BrainGdxTest extends BrainGdxGame {
 
     @Override
     protected GameAssetLoader getAssetLoader() {

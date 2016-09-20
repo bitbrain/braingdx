@@ -51,6 +51,12 @@
 	        <artifactId>universal-tween-engine</artifactId>
 	        <version>6.3.3</version>        
 	    </dependency>
+	    
+	    <dependency>
+		  <groupId>com.badlogicgames.box2dlights</groupId>
+		  <artifactId>box2dlights</artifactId>
+		  <version>1.4</version>
+		</dependency>
 	</dependencies>
 
 	<!-- Build configuration -->
