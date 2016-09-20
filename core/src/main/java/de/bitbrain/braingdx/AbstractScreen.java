@@ -23,11 +23,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import aurelienribon.tweenengine.TweenManager;
+import de.bitbrain.braingdx.graphics.LightingManager;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.ui.Tooltip;
 
@@ -52,6 +57,12 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     private Stage stage;
 
+    protected RenderPipeline renderPipeline;
+
+    protected LightingManager lightingManager;
+
+    protected World boxWorld;
+
     public AbstractScreen(T game) {
 	this.game = game;
     }
@@ -70,22 +81,23 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	world = new GameWorld(camera);
 	batch = new SpriteBatch();
 	input = new InputMultiplexer();
+	renderPipeline = new RenderPipeline();
+	boxWorld = new World(Vector2.Zero, false);
+	lightingManager = new LightingManager(boxWorld, camera);
+	buildLayers();
     }
 
     @Override
     public final void render(float delta) {
 	Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 	tweenManager.update(delta);
 	camera.update();
 	stage.act(delta);
 	batch.setProjectionMatrix(camera.combined);
-	batch.begin();
-	beforeWorldRender(batch, delta);
-	world.updateAndRender(batch, delta);
-	afterWorldRender(batch, delta);
-	batch.end();
+
+	renderPipeline.render(batch, delta);
+
 	stage.draw();
     }
 
@@ -142,5 +154,29 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     public void setBackgroundColor(Color color) {
 	this.backgroundColor = color;
+    }
+
+    private void buildLayers() {
+	// 1. World layer
+	renderPipeline.add(new RenderLayer() {
+	    @Override
+	    public void render(Batch batch, float delta) {
+		batch.begin();
+		beforeWorldRender(batch, delta);
+		world.updateAndRender(batch, delta);
+		afterWorldRender(batch, delta);
+		batch.end();
+	    }
+	});
+	// 2. Lighting layer
+	renderPipeline.add(lightingManager);
+	// 3. UI layer
+	renderPipeline.add(new RenderLayer() {
+	    @Override
+	    public void render(Batch batch, float delta) {
+		stage.draw();
+	    }
+
+	});
     }
 }
