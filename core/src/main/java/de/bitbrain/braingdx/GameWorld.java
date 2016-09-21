@@ -24,6 +24,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Pool;
 
+import de.bitbrain.braingdx.behavior.Behavior;
+import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.graphics.CameraTracker;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.VectorCameraTracker;
@@ -67,6 +69,8 @@ public class GameWorld {
 
     private final Comparator<GameObject> comparator = new ZIndexComparator();
 
+    private final BehaviorManager behaviorManager = new BehaviorManager();
+
     public GameWorld(OrthographicCamera camera) {
 	this(camera, DEFAULT_CACHE_SIZE);
     }
@@ -85,6 +89,22 @@ public class GameWorld {
 
     public GameWorld(OrthographicCamera camera, int cacheSize) {
 	this(camera, new GameObjectRenderManager(), new VectorCameraTracker(camera), cacheSize);
+    }
+
+    public void applyBehavior(String id, Behavior behavior) {
+	behaviorManager.apply(behavior, id);
+    }
+
+    public void removeBehavior(String id) {
+	behaviorManager.remove(id);
+    }
+
+    public void removeBehavior(GameObject source) {
+	behaviorManager.remove(source);
+    }
+
+    public void applyBehavior(Behavior behavior, GameObject source) {
+	behaviorManager.apply(behavior, source);
     }
 
     /**
@@ -163,6 +183,13 @@ public class GameWorld {
 	    if (!bounds.isInBounds(object, camera)) {
 		removals.add(object);
 		continue;
+	    }
+	    behaviorManager.updateGlobally(object, delta);
+	    behaviorManager.updateLocally(object, delta);
+	    for (final GameObject other : objects) {
+		if (!object.getId().equals(other.getId())) {
+		    behaviorManager.updateLocallyCompared(object, other, delta);
+		}
 	    }
 	    renderManager.render(object, batch, delta);
 	}
