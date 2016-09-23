@@ -56,8 +56,10 @@ public class BehaviorManager {
 
     public void remove(GameObject source) {
 	List<Behavior> behaviors = localBehaviors.remove(source.getId());
-	for (Behavior behavior : behaviors) {
-	    behavior.onRemove(source);
+	if (behaviors != null) {
+	    for (Behavior behavior : behaviors) {
+		behavior.onRemove(source);
+	    }
 	}
     }
 
@@ -68,16 +70,20 @@ public class BehaviorManager {
     }
 
     public void updateLocally(GameObject source, float delta) {
-	List<Behavior> behaviors = localBehaviors.get(source);
-	for (Behavior behavior : behaviors) {
-	    behavior.update(source, delta);
+	List<Behavior> behaviors = localBehaviors.get(source.getId());
+	if (behaviors != null) {
+	    for (Behavior behavior : behaviors) {
+		behavior.update(source, delta);
+	    }
 	}
     }
 
     public void updateLocallyCompared(GameObject source, GameObject target, float delta) {
-	List<Behavior> behaviors = localBehaviors.get(source);
-	for (Behavior behavior : behaviors) {
-	    behavior.update(source, target, delta);
+	List<Behavior> behaviors = localBehaviors.get(source.getId());
+	if (behaviors != null) {
+	    for (Behavior behavior : behaviors) {
+		behavior.update(source, target, delta);
+	    }
 	}
     }
 

@@ -34,15 +34,23 @@ public class SpriteRenderer implements GameObjectRenderManager.GameObjectRendere
 
     protected Sprite sprite;
     private final AssetManager assets = SharedAssetManager.getInstance();
-    private final String textureId;
+    private String textureId;
+    private Texture texture;
 
     public SpriteRenderer(String textureId) {
 	this.textureId = textureId;
     }
 
+    public SpriteRenderer(Texture texture) {
+	this.texture = texture;
+    }
+
     @Override
     public void init() {
-	sprite = new Sprite(assets.get(textureId, Texture.class));
+	if (textureId != null) {
+	    texture = assets.get(textureId, Texture.class);
+	}
+	sprite = new Sprite(texture);
     }
 
     @Override

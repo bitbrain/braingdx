@@ -27,10 +27,12 @@ import com.badlogic.gdx.utils.Pool;
  * @author Miguel Gonzalez Sanchez
  */
 public class GameObject implements Pool.Poolable {
+    
+    private static int COUNTER = 0;
 
     private final Vector2 position, dimensions, lastPosition, offset;
 
-    private String id = "";
+    private String id;
 
     private int type;
 
@@ -46,6 +48,7 @@ public class GameObject implements Pool.Poolable {
 	lastPosition = new Vector2();
 	offset = new Vector2();
 	scale = new Vector2(1f, 1f);
+	id = getClass().getCanonicalName() + "_" + String.valueOf(COUNTER++);
     }
 
     public void setType(int typeId) {
@@ -152,7 +155,7 @@ public class GameObject implements Pool.Poolable {
 	offset.x = 0;
 	offset.y = 0;
 	zIndex = 0;
-	id = "";
+	id = getClass().getCanonicalName() + "_" + String.valueOf(COUNTER++);
 	scale.set(1f, 1f);
 	color = Color.WHITE.cpy();
     }
