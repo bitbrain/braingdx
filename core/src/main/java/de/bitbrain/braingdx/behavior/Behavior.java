@@ -27,6 +27,13 @@ import de.bitbrain.braingdx.GameObject;
 public interface Behavior {
 
     /**
+     * Callback which is called whenever this behavior gets detached from the source provided.
+     * 
+     * @param source the source where this behavior gets detached from
+     */
+    void onRemove(GameObject source);
+
+    /**
      * Updates the behavior for a given source object.
      * 
      * @param source the game object to apply the behavior to

@@ -215,6 +215,7 @@ public class GameWorld {
 	pool.clear();
 	objects.clear();
 	removals.clear();
+	behaviorManager.clear();
     }
 
     /**
@@ -228,6 +229,7 @@ public class GameWorld {
     }
 
     private void remove(GameObject object) {
+	behaviorManager.remove(object);
 	pool.free(object);
 	objects.remove(object);
     }

@@ -55,7 +55,10 @@ public class BehaviorManager {
     }
 
     public void remove(GameObject source) {
-	localBehaviors.remove(source.getId());
+	List<Behavior> behaviors = localBehaviors.remove(source.getId());
+	for (Behavior behavior : behaviors) {
+	    behavior.onRemove(source);
+	}
     }
 
     public void updateGlobally(GameObject source, float delta) {
@@ -76,5 +79,10 @@ public class BehaviorManager {
 	for (Behavior behavior : behaviors) {
 	    behavior.update(source, target, delta);
 	}
+    }
+
+    public void clear() {
+	localBehaviors.clear();
+	globalBehaviors.clear();
     }
 }
