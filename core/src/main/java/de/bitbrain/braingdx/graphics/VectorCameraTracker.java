@@ -16,6 +16,7 @@
 package de.bitbrain.braingdx.graphics;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -31,12 +32,13 @@ import de.bitbrain.braingdx.GameObject;
  */
 public class VectorCameraTracker implements CameraTracker {
 
+    private static final MathContext PRECISION = MathContext.DECIMAL128;
+
     private final OrthographicCamera camera;
     private final Vector2 velocity;
     private GameObject target;
-    private float speed = 5.2f;
-    private float zoomScale = 0.0025f;
-    private BigDecimal value;
+    private BigDecimal speed = new BigDecimal(5.2f, PRECISION);
+    private BigDecimal zoomScale = new BigDecimal(0.0025f, PRECISION);
 
     public VectorCameraTracker(OrthographicCamera camera) {
 	this.camera = camera;
@@ -52,27 +54,36 @@ public class VectorCameraTracker implements CameraTracker {
     public void update(float delta) {
 	if (target == null)
 	    return;
-	velocity.x = (float) (target.getLeft() + Math.floor(target.getWidth() / 2.0f) - (camera.position.x));
-	velocity.y = (float) (target.getTop() + Math.floor(target.getHeight() / 2.0f) - (camera.position.y + 100f));
+	BigDecimal preciseDelta = BigDecimal.valueOf(delta);
+	BigDecimal left = new BigDecimal(target.getLeft(), PRECISION);
+	BigDecimal width = new BigDecimal(target.getWidth(), PRECISION);
+	BigDecimal camLeft = new BigDecimal(camera.position.x, PRECISION);
+	BigDecimal top = new BigDecimal(target.getTop(), PRECISION);
+	BigDecimal height = new BigDecimal(target.getHeight(), PRECISION);
+	BigDecimal camTop = new BigDecimal(camera.position.y, PRECISION);
+	
+	velocity.x = left.add(width.divide(BigDecimal.valueOf(2.0))).subtract(camLeft).floatValue();
+	velocity.y = top.add(height.divide(BigDecimal.valueOf(2.0))).subtract(camTop).floatValue();
 
-	final float distance = velocity.len();
+	BigDecimal distance = BigDecimal.valueOf(velocity.len());
 	velocity.nor();
-	final double overAllSpeed = distance * speed;
+	BigDecimal overAllSpeed = distance.multiply(speed);
 
-	// Round it up to prevent camera shaking
-	camera.position.x = (float) (camera.position.x + (velocity.x * overAllSpeed * delta));
-	camera.position.y = (float) (camera.position.y + (velocity.y * overAllSpeed * delta));
-	camera.zoom = 1.0f + zoomScale * distance;
+	BigDecimal deltaX = BigDecimal.valueOf(velocity.x).multiply(overAllSpeed).multiply(preciseDelta);
+	BigDecimal deltaY = BigDecimal.valueOf(velocity.y).multiply(overAllSpeed, PRECISION).multiply(preciseDelta);
+	camera.position.x = camLeft.add(deltaX).floatValue();
+	camera.position.y = camTop.add(deltaY).floatValue();
+	camera.zoom = zoomScale.multiply(distance).add(BigDecimal.ONE).floatValue();
     }
 
     @Override
     public void setSpeed(float speed) {
-	this.speed = speed;
+	this.speed = new BigDecimal(Math.abs(speed), PRECISION);
     }
 
     @Override
     public void setZoomScale(float zoomScale) {
-	this.zoomScale = zoomScale;
+	this.zoomScale = new BigDecimal(zoomScale, PRECISION);
     }
 
     @Override
