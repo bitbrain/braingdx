@@ -33,6 +33,7 @@ import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
+import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.ui.Tooltip;
 
@@ -85,7 +86,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	world = new GameWorld(camera);
 	batch = new SpriteBatch();
 	input = new InputMultiplexer();
-	renderPipeline = new RenderPipeline();
+	renderPipeline = new RenderPipeline(getShaderConfig());
 	boxWorld = new World(Vector2.Zero, false);
 	lightingManager = new LightingManager(boxWorld, camera);
 	buildLayers();
@@ -143,6 +144,10 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     protected void onCreateStage(Stage stage, int width, int height) {
 
+    }
+
+    protected ShaderConfig getShaderConfig() {
+	return new ShaderConfig();
     }
 
     protected Viewport getViewport(int width, int height) {

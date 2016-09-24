@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.bitfire.postprocessing.PostProcessorEffect;
 
+import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.graphics.shader.ShaderManager;
 
 /**
@@ -39,9 +40,9 @@ public class RenderPipe {
 
     private FrameBuffer buffer;
 
-    public RenderPipe(RenderLayer layer, PostProcessorEffect... effects) {
+    public RenderPipe(RenderLayer layer, ShaderConfig config, PostProcessorEffect... effects) {
 	this.renderLayer = layer;
-	this.shaderManager = new ShaderManager("postprocessing/shaders/", effects);
+	this.shaderManager = new ShaderManager(config, effects);
 	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
     }
 

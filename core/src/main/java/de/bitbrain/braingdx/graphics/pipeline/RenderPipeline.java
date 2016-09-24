@@ -20,6 +20,8 @@ import java.util.Map;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.bitfire.postprocessing.PostProcessorEffect;
 
+import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
+
 /**
  * Handles the complete pipeline of rendering internally. The pipeline consists of render pipes.
  * Each pipe consists of two layers: the rendering layer and the shader layer which gets applied
@@ -32,12 +34,15 @@ public class RenderPipeline {
 
     private Map<String, RenderPipe> pipes;
 
-    public RenderPipeline() {
+    private ShaderConfig config;
+
+    public RenderPipeline(ShaderConfig config) {
 	pipes = new HashMap<String, RenderPipe>();
+	this.config = config;
     }
 
     public void add(String id, RenderLayer layer, PostProcessorEffect... effects) {
-	RenderPipe pipe = new RenderPipe(layer, effects);
+	RenderPipe pipe = new RenderPipe(layer, config, effects);
 	pipes.put(id, pipe);
     }
 

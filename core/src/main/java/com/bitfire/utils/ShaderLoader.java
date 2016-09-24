@@ -28,7 +28,7 @@ public final class ShaderLoader {
 
     public static String BasePath = "";
     public static boolean Pedantic = true;
-    public static PathResolver pathResolver = new InternalPathResolver();
+    public static PathResolver PathResolver = new InternalPathResolver();
 
     public static ShaderProgram fromFile(String vertexFileName, String fragmentFileName) {
 	return ShaderLoader.fromFile(vertexFileName, fragmentFileName, "");
@@ -41,8 +41,8 @@ public final class ShaderLoader {
 	}
 	log += "...";
 	Gdx.app.log("ShaderLoader", "Compiling " + log);
-	String vpSrc = pathResolver.resolve(BasePath + vertexFileName + ".vertex").readString();
-	String fpSrc = pathResolver.resolve(BasePath + fragmentFileName + ".fragment").readString();
+	String vpSrc = PathResolver.resolve(BasePath + vertexFileName + ".vertex").readString();
+	String fpSrc = PathResolver.resolve(BasePath + fragmentFileName + ".fragment").readString();
 
 	ShaderProgram program = ShaderLoader.fromString(vpSrc, fpSrc, vertexFileName, fragmentFileName, defines);
 	return program;
