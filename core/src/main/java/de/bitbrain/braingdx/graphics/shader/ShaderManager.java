@@ -18,6 +18,7 @@ package de.bitbrain.braingdx.graphics.shader;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Rectangle;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.postprocessing.PostProcessorEffect;
 import com.bitfire.utils.ShaderLoader;
@@ -66,5 +67,9 @@ public class ShaderManager {
 
     public void resume() {
 	processor.rebind();
+    }
+
+    public void resize(int width, int height) {
+	processor.setViewport(new Rectangle(0f, 0f, width, height));
     }
 }

@@ -55,4 +55,10 @@ public class RenderPipeline {
 	    pipe.render(batch, delta);
 	}
     }
+
+    public void resize(int width, int height) {
+	for (RenderPipe pipe : pipes.values()) {
+	    pipe.resize(width, height);
+	}
+    }
 }

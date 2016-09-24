@@ -43,19 +43,28 @@ public class RenderPipe {
     public RenderPipe(RenderLayer layer, ShaderConfig config, PostProcessorEffect... effects) {
 	this.renderLayer = layer;
 	this.shaderManager = new ShaderManager(config, effects);
-	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
     }
 
     public void render(Batch batch, float delta) {
-	buffer.begin();
-	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	renderLayer.render(batch, delta);
-	buffer.end();
-	this.shaderManager.begin();
-	batch.begin();
-	batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
-	batch.end();
-	this.shaderManager.end();
+	if (buffer != null) {
+	    buffer.begin();
+	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	    renderLayer.render(batch, delta);
+	    buffer.end();
+	    this.shaderManager.begin();
+	    batch.begin();
+	    batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
+	    batch.end();
+	    this.shaderManager.end();
+	}
+    }
+
+    public void resize(int width, int height) {
+	if (buffer != null) {
+	    buffer.dispose();
+	}
+	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+	shaderManager.resize(width, height);
     }
 
     public void addEffects(PostProcessorEffect... effects) {

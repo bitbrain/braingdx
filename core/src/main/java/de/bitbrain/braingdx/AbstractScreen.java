@@ -114,8 +114,10 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    tooltip.init(stage, camera);
 	    onCreateStage(stage, width, height);
 	    Gdx.input.setInputProcessor(input);
-	} else
+	} else {
 	    stage.getViewport().update(width, height);
+	}
+	renderPipeline.resize(width, height);
 	camera.setToOrtho(false, width, height);
     }
 
