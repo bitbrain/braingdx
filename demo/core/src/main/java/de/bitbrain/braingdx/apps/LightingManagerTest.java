@@ -11,13 +11,14 @@ import de.bitbrain.braingdx.AbstractScreen;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
+import de.bitbrain.braingdx.behavior.RandomMovementBehavior;
 import de.bitbrain.braingdx.graphics.GraphicsFactory;
 import de.bitbrain.braingdx.graphics.SpriteRenderer;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 
 public class LightingManagerTest extends BrainGdxGame {
 
-    private static final int OBJECTS = 5;
+    private static final int OBJECTS = 205;
 
     private static final int TYPE = 1;
 
@@ -42,17 +43,18 @@ public class LightingManagerTest extends BrainGdxGame {
 		super.onCreateStage(stage, width, height);
 		setBackgroundColor(Color.GRAY);
 		lightingManager.setAmbientLight(new Color(0.1f, 0f, 0.2f, 0.1f));
-		Texture texture = GraphicsFactory.createTexture(100, 100, Color.DARK_GRAY);
+		Texture texture = GraphicsFactory.createTexture(30, 30, Color.DARK_GRAY);
 		world.registerRenderer(TYPE, new SpriteRenderer(texture));
 		for (int i = 0; i < OBJECTS; ++i) {
 		    GameObject object = world.addObject();
-		    object.setDimensions(100, 100);
+		    object.setDimensions(30, 30);
 		    object.setPosition((int) (Gdx.graphics.getWidth() * Math.random()),
 			    (int) (Gdx.graphics.getHeight() * Math.random()));
 		    object.setType(TYPE);
 		    Color randomColor = new Color((float) Math.random(), (float) Math.random(), (float) Math.random(),
-			    1f);
+			    0.27f);
 		    world.applyBehavior(new PointLightBehavior(randomColor, 300f, lightingManager), object);
+		    world.applyBehavior(new RandomMovementBehavior(), object);
 		}
 	    }
 	};
