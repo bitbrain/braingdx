@@ -20,6 +20,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.postprocessing.PostProcessorEffect;
+import com.bitfire.utils.ClassPathResolver;
 import com.bitfire.utils.ShaderLoader;
 
 /**
@@ -37,6 +38,7 @@ public class ShaderManager {
 
     public ShaderManager(String baseDirectory, PostProcessorEffect... effects) {
 	ShaderLoader.BasePath = baseDirectory;
+	ShaderLoader.pathResolver = new ClassPathResolver();
 	processor = new PostProcessor(true, true, isDesktop);
 	addEffects(effects);
     }

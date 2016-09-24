@@ -14,7 +14,11 @@
  */
 package de.bitbrain.braingdx.graphics.pipeline;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.bitfire.postprocessing.PostProcessorEffect;
 
 import de.bitbrain.braingdx.graphics.shader.ShaderManager;
@@ -33,14 +37,23 @@ public class RenderPipe {
 
     private ShaderManager shaderManager;
 
+    private FrameBuffer buffer;
+
     public RenderPipe(RenderLayer layer, PostProcessorEffect... effects) {
 	this.renderLayer = layer;
-	this.shaderManager = new ShaderManager("postprocessing/shaders", effects);
+	this.shaderManager = new ShaderManager("postprocessing/shaders/", effects);
+	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
     }
 
     public void render(Batch batch, float delta) {
-	this.shaderManager.begin();
+	buffer.begin();
+	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	renderLayer.render(batch, delta);
+	buffer.end();
+	this.shaderManager.begin();
+	batch.begin();
+	batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
+	batch.end();
 	this.shaderManager.end();
     }
 
