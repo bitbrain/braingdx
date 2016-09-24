@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.bitfire.postprocessing.PostProcessorEffect;
 
 /**
  * Handles the complete pipeline of rendering internally. The pipeline consists of render pipes.
@@ -35,8 +36,8 @@ public class RenderPipeline {
 	pipes = new ArrayList<RenderPipe>();
     }
 
-    public void add(RenderLayer layer) {
-	RenderPipe pipe = new RenderPipe(layer);
+    public void add(RenderLayer layer, PostProcessorEffect... effects) {
+	RenderPipe pipe = new RenderPipe(layer, effects);
 	pipes.add(pipe);
     }
 

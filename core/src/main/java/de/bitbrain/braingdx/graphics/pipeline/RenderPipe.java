@@ -15,6 +15,9 @@
 package de.bitbrain.braingdx.graphics.pipeline;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.bitfire.postprocessing.PostProcessorEffect;
+
+import de.bitbrain.braingdx.graphics.shader.ShaderManager;
 
 /**
  * A renderpipe is compatible with other pipes and is responsible for rendering internal layers.
@@ -28,11 +31,16 @@ public class RenderPipe {
 
     private RenderLayer renderLayer;
 
-    public RenderPipe(RenderLayer layer) {
+    private ShaderManager shaderManager;
+
+    public RenderPipe(RenderLayer layer, PostProcessorEffect... effects) {
 	this.renderLayer = layer;
+	this.shaderManager = new ShaderManager("postprocessing/shaders", effects);
     }
 
     public void render(Batch batch, float delta) {
+	this.shaderManager.begin();
 	renderLayer.render(batch, delta);
+	this.shaderManager.end();
     }
 }
