@@ -1,182 +1,174 @@
 package com.bitfire.utils;
 
 /**************************************************************************
- * *
- * General Purpose Hash Function Algorithms Library *
- * *
- * Author: Arash Partow - 2002 *
- * URL: http://www.partow.net *
- * URL: http://www.partow.net/programming/hashfunctions/index.html *
- * *
- * Copyright notice: *
- * Free use of the General Purpose Hash Function Algorithms Library is *
- * permitted under the guidelines and in accordance with the most current *
- * version of the Common Public License. *
- * http://www.opensource.org/licenses/cpl1.0.php *
- * *
+ * * General Purpose Hash Function Algorithms Library * * Author: Arash Partow - 2002 * URL:
+ * http://www.partow.net * URL: http://www.partow.net/programming/hashfunctions/index.html * *
+ * Copyright notice: * Free use of the General Purpose Hash Function Algorithms Library is *
+ * permitted under the guidelines and in accordance with the most current * version of the Common
+ * Public License. * http://www.opensource.org/licenses/cpl1.0.php * *
  * *************************************************************************
  */
 
 public final class Hash {
 
-	private Hash() {
+    private Hash() {
+    }
+
+    public static long RSHash(String str) {
+	int b = 378551;
+	int a = 63689;
+	long hash = 0;
+
+	for (int i = 0; i < str.length(); i++) {
+	    hash = hash * a + str.charAt(i);
+	    a = a * b;
 	}
 
-	public static long RSHash( String str ) {
-		int b = 378551;
-		int a = 63689;
-		long hash = 0;
+	return hash;
+    }
 
-		for( int i = 0; i < str.length(); i++ ) {
-			hash = hash * a + str.charAt( i );
-			a = a * b;
-		}
+    /* End Of RS Hash Function */
 
-		return hash;
+    public static long JSHash(String str) {
+	long hash = 1315423911;
+
+	for (int i = 0; i < str.length(); i++) {
+	    hash ^= ((hash << 5) + str.charAt(i) + (hash >> 2));
 	}
 
-	/* End Of RS Hash Function */
+	return hash;
+    }
 
-	public static long JSHash( String str ) {
-		long hash = 1315423911;
+    /* End Of JS Hash Function */
 
-		for( int i = 0; i < str.length(); i++ ) {
-			hash ^= ((hash << 5) + str.charAt( i ) + (hash >> 2));
-		}
+    public static long PJWHash(String str) {
+	long BitsInUnsignedInt = (long) (4 * 8);
+	long ThreeQuarters = (long) ((BitsInUnsignedInt * 3) / 4);
+	long OneEighth = (long) (BitsInUnsignedInt / 8);
+	long HighBits = (long) (0xFFFFFFFF) << (BitsInUnsignedInt - OneEighth);
+	long hash = 0;
+	long test = 0;
 
-		return hash;
+	for (int i = 0; i < str.length(); i++) {
+	    hash = (hash << OneEighth) + str.charAt(i);
+
+	    test = hash & HighBits;
+	    if (test != 0) {
+		hash = ((hash ^ (test >> ThreeQuarters)) & (~HighBits));
+	    }
 	}
 
-	/* End Of JS Hash Function */
+	return hash;
+    }
 
-	public static long PJWHash( String str ) {
-		long BitsInUnsignedInt = (long)(4 * 8);
-		long ThreeQuarters = (long)((BitsInUnsignedInt * 3) / 4);
-		long OneEighth = (long)(BitsInUnsignedInt / 8);
-		long HighBits = (long)(0xFFFFFFFF) << (BitsInUnsignedInt - OneEighth);
-		long hash = 0;
-		long test = 0;
+    /* End Of P. J. Weinberger Hash Function */
 
-		for( int i = 0; i < str.length(); i++ ) {
-			hash = (hash << OneEighth) + str.charAt( i );
+    public static long ELFHash(String str) {
+	long hash = 0;
+	long x = 0;
 
-			test = hash & HighBits;
-			if( test != 0 ) {
-				hash = ((hash ^ (test >> ThreeQuarters)) & (~HighBits));
-			}
-		}
+	for (int i = 0; i < str.length(); i++) {
+	    hash = (hash << 4) + str.charAt(i);
 
-		return hash;
+	    x = hash & 0xF0000000L;
+	    if (x != 0) {
+		hash ^= (x >> 24);
+	    }
+	    hash &= ~x;
 	}
 
-	/* End Of P. J. Weinberger Hash Function */
+	return hash;
+    }
 
-	public static long ELFHash( String str ) {
-		long hash = 0;
-		long x = 0;
+    /* End Of ELF Hash Function */
 
-		for( int i = 0; i < str.length(); i++ ) {
-			hash = (hash << 4) + str.charAt( i );
+    public static long BKDRHash(String str) {
+	long seed = 131; // 31 131 1313 13131 131313 etc..
+	long hash = 0;
 
-			x = hash & 0xF0000000L;
-			if( x != 0 ) {
-				hash ^= (x >> 24);
-			}
-			hash &= ~x;
-		}
-
-		return hash;
+	for (int i = 0; i < str.length(); i++) {
+	    hash = (hash * seed) + str.charAt(i);
 	}
 
-	/* End Of ELF Hash Function */
+	return hash;
+    }
 
-	public static long BKDRHash( String str ) {
-		long seed = 131; // 31 131 1313 13131 131313 etc..
-		long hash = 0;
+    /* End Of BKDR Hash Function */
 
-		for( int i = 0; i < str.length(); i++ ) {
-			hash = (hash * seed) + str.charAt( i );
-		}
+    public static long SDBMHash(String str) {
+	long hash = 0;
 
-		return hash;
+	for (int i = 0; i < str.length(); i++) {
+	    hash = str.charAt(i) + (hash << 6) + (hash << 16) - hash;
 	}
 
-	/* End Of BKDR Hash Function */
+	return hash;
+    }
 
-	public static long SDBMHash( String str ) {
-		long hash = 0;
+    /* End Of SDBM Hash Function */
 
-		for( int i = 0; i < str.length(); i++ ) {
-			hash = str.charAt( i ) + (hash << 6) + (hash << 16) - hash;
-		}
+    public static long DJBHash(String str) {
+	long hash = 5381;
 
-		return hash;
+	for (int i = 0; i < str.length(); i++) {
+	    hash = ((hash << 5) + hash) + str.charAt(i);
 	}
 
-	/* End Of SDBM Hash Function */
+	return hash;
+    }
 
-	public static long DJBHash( String str ) {
-		long hash = 5381;
+    /* End Of DJB Hash Function */
 
-		for( int i = 0; i < str.length(); i++ ) {
-			hash = ((hash << 5) + hash) + str.charAt( i );
-		}
+    public static long DEKHash(String str) {
+	long hash = str.length();
 
-		return hash;
+	for (int i = 0; i < str.length(); i++) {
+	    hash = ((hash << 5) ^ (hash >> 27)) ^ str.charAt(i);
 	}
 
-	/* End Of DJB Hash Function */
+	return hash;
+    }
 
-	public static long DEKHash( String str ) {
-		long hash = str.length();
+    /* End Of DEK Hash Function */
 
-		for( int i = 0; i < str.length(); i++ ) {
-			hash = ((hash << 5) ^ (hash >> 27)) ^ str.charAt( i );
-		}
+    public static long BPHash(String str) {
+	long hash = 0;
 
-		return hash;
+	for (int i = 0; i < str.length(); i++) {
+	    hash = hash << 7 ^ str.charAt(i);
 	}
 
-	/* End Of DEK Hash Function */
+	return hash;
+    }
 
-	public static long BPHash( String str ) {
-		long hash = 0;
+    /* End Of BP Hash Function */
 
-		for( int i = 0; i < str.length(); i++ ) {
-			hash = hash << 7 ^ str.charAt( i );
-		}
+    public static long FNVHash(String str) {
+	long fnv_prime = 0x811C9DC5;
+	long hash = 0;
 
-		return hash;
+	for (int i = 0; i < str.length(); i++) {
+	    hash *= fnv_prime;
+	    hash ^= str.charAt(i);
 	}
 
-	/* End Of BP Hash Function */
+	return hash;
+    }
 
-	public static long FNVHash( String str ) {
-		long fnv_prime = 0x811C9DC5;
-		long hash = 0;
+    /* End Of FNV Hash Function */
 
-		for( int i = 0; i < str.length(); i++ ) {
-			hash *= fnv_prime;
-			hash ^= str.charAt( i );
-		}
+    public static long APHash(String str) {
+	long hash = 0xAAAAAAAA;
 
-		return hash;
+	for (int i = 0; i < str.length(); i++) {
+	    if ((i & 1) == 0) {
+		hash ^= ((hash << 7) ^ str.charAt(i) * (hash >> 3));
+	    } else {
+		hash ^= (~((hash << 11) + str.charAt(i) ^ (hash >> 5)));
+	    }
 	}
 
-	/* End Of FNV Hash Function */
-
-	public static long APHash( String str ) {
-		long hash = 0xAAAAAAAA;
-
-		for( int i = 0; i < str.length(); i++ ) {
-			if( (i & 1) == 0 ) {
-				hash ^= ((hash << 7) ^ str.charAt( i ) * (hash >> 3));
-			} else {
-				hash ^= (~((hash << 11) + str.charAt( i ) ^ (hash >> 5)));
-			}
-		}
-
-		return hash;
-	}
-	/* End Of AP Hash Function */
+	return hash;
+    }
+    /* End Of AP Hash Function */
 }

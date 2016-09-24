@@ -26,44 +26,45 @@ public final class ShaderLoader {
 	FileHandle load(String path);
     }
 
-	public static String BasePath = "";
-	public static boolean Pedantic = true;
+    public static String BasePath = "";
+    public static boolean Pedantic = true;
     public static PathResolver pathResolver = new InternalPathResolver();
 
-	public static ShaderProgram fromFile( String vertexFileName, String fragmentFileName ) {
-		return ShaderLoader.fromFile( vertexFileName, fragmentFileName, "" );
-	}
+    public static ShaderProgram fromFile(String vertexFileName, String fragmentFileName) {
+	return ShaderLoader.fromFile(vertexFileName, fragmentFileName, "");
+    }
 
-	public static ShaderProgram fromFile( String vertexFileName, String fragmentFileName, String defines ) {
-		String log = "\"" + vertexFileName + "/" + fragmentFileName + "\"";
-		if( defines.length() > 0 ) {
-			log += " w/ (" + defines.replace( "\n", ", " ) + ")";
-		}
-		log += "...";
-		Gdx.app.log( "ShaderLoader", "Compiling " + log );
+    public static ShaderProgram fromFile(String vertexFileName, String fragmentFileName, String defines) {
+	String log = "\"" + vertexFileName + "/" + fragmentFileName + "\"";
+	if (defines.length() > 0) {
+	    log += " w/ (" + defines.replace("\n", ", ") + ")";
+	}
+	log += "...";
+	Gdx.app.log("ShaderLoader", "Compiling " + log);
 	String vpSrc = pathResolver.resolve(BasePath + vertexFileName + ".vertex").readString();
 	String fpSrc = pathResolver.resolve(BasePath + fragmentFileName + ".fragment").readString();
 
-		ShaderProgram program = ShaderLoader.fromString( vpSrc, fpSrc, vertexFileName, fragmentFileName, defines );
-		return program;
+	ShaderProgram program = ShaderLoader.fromString(vpSrc, fpSrc, vertexFileName, fragmentFileName, defines);
+	return program;
+    }
+
+    public static ShaderProgram fromString(String vertex, String fragment, String vertexName, String fragmentName) {
+	return ShaderLoader.fromString(vertex, fragment, vertexName, fragmentName, "");
+    }
+
+    public static ShaderProgram fromString(String vertex, String fragment, String vertexName, String fragmentName,
+	    String defines) {
+	ShaderProgram.pedantic = ShaderLoader.Pedantic;
+	ShaderProgram shader = new ShaderProgram(defines + "\n" + vertex, defines + "\n" + fragment);
+
+	if (!shader.isCompiled()) {
+	    Gdx.app.error("ShaderLoader", shader.getLog());
+	    System.exit(-1);
 	}
 
-	public static ShaderProgram fromString( String vertex, String fragment, String vertexName, String fragmentName ) {
-		return ShaderLoader.fromString( vertex, fragment, vertexName, fragmentName, "" );
-	}
+	return shader;
+    }
 
-	public static ShaderProgram fromString( String vertex, String fragment, String vertexName, String fragmentName, String defines ) {
-		ShaderProgram.pedantic = ShaderLoader.Pedantic;
-		ShaderProgram shader = new ShaderProgram( defines + "\n" + vertex, defines + "\n" + fragment );
-
-		if( !shader.isCompiled() ) {
-			Gdx.app.error( "ShaderLoader", shader.getLog() );
-			System.exit( -1 );
-		}
-
-		return shader;
-	}
-
-	private ShaderLoader() {
-	}
+    private ShaderLoader() {
+    }
 }

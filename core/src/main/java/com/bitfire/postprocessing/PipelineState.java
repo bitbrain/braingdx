@@ -8,35 +8,37 @@ import com.badlogic.gdx.utils.Disposable;
 
 import java.nio.ByteBuffer;
 
-/** Provides a simple mechanism to query OpenGL pipeline states. Note: state queries are costly and stall the pipeline, especially
- * on mobile devices!
+/**
+ * Provides a simple mechanism to query OpenGL pipeline states. Note: state queries are costly and
+ * stall the pipeline, especially on mobile devices!
  * 
- * @author bmanuel */
+ * @author bmanuel
+ */
 public final class PipelineState implements Disposable {
 
-	private ByteBuffer byteBuffer;
+    private ByteBuffer byteBuffer;
 
-	protected PipelineState () {
-		byteBuffer = BufferUtils.newByteBuffer(32);
+    protected PipelineState() {
+	byteBuffer = BufferUtils.newByteBuffer(32);
+    }
+
+    public boolean isEnabled(int pname) {
+	boolean ret = false;
+
+	switch (pname) {
+	    case GL20.GL_BLEND:
+		Gdx.gl20.glGetBooleanv(GL20.GL_BLEND, byteBuffer);
+		ret = (byteBuffer.get() == 1);
+		byteBuffer.clear();
+		break;
+	    default:
+		ret = false;
 	}
 
-	public boolean isEnabled (int pname) {
-		boolean ret = false;
+	return ret;
+    }
 
-		switch (pname) {
-		case GL20.GL_BLEND:
-			Gdx.gl20.glGetBooleanv(GL20.GL_BLEND, byteBuffer);
-			ret = (byteBuffer.get() == 1);
-			byteBuffer.clear();
-			break;
-		default:
-			ret = false;
-		}
-
-		return ret;
-	}
-
-	@Override
-	public void dispose () {
-	}
+    @Override
+    public void dispose() {
+    }
 }

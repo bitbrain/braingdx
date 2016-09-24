@@ -55,6 +55,7 @@ public class LightingManagerTest extends BrainGdxGame {
 		bloom.setBloomIntesity(3.1f);
 		bloom.setBlurPasses(8);
 		pipe.addEffects(bloom);
+		pipe = renderPipeline.getPipe(PIPE_WORLD);
 
 		for (int i = 0; i < OBJECTS; ++i) {
 		    GameObject object = world.addObject();

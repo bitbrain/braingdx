@@ -75,7 +75,8 @@ public class GameWorld {
 	this(camera, DEFAULT_CACHE_SIZE);
     }
 
-    public GameWorld(OrthographicCamera camera, GameObjectRenderManager renderManager, CameraTracker tracker, int cacheSize) {
+    public GameWorld(OrthographicCamera camera, GameObjectRenderManager renderManager, CameraTracker tracker,
+	    int cacheSize) {
 	this.camera = camera;
 	this.renderManager = renderManager;
 	this.tracker = tracker;

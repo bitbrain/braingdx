@@ -49,7 +49,7 @@ public class BehaviorManager {
     public void apply(Behavior behavior, String identifier) {
 	globalBehaviors.put(identifier, behavior);
     }
-    
+
     public void remove(String identifier) {
 	globalBehaviors.remove(identifier);
     }

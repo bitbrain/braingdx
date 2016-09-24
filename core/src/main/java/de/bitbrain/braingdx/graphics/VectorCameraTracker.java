@@ -61,7 +61,7 @@ public class VectorCameraTracker implements CameraTracker {
 	BigDecimal top = new BigDecimal(target.getTop(), PRECISION);
 	BigDecimal height = new BigDecimal(target.getHeight(), PRECISION);
 	BigDecimal camTop = new BigDecimal(camera.position.y, PRECISION);
-	
+
 	velocity.x = left.add(width.divide(BigDecimal.valueOf(2.0))).subtract(camLeft).floatValue();
 	velocity.y = top.add(height.divide(BigDecimal.valueOf(2.0))).subtract(camTop).floatValue();
 
