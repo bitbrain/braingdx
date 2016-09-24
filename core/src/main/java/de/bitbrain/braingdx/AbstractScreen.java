@@ -45,6 +45,10 @@ import de.bitbrain.braingdx.ui.Tooltip;
  */
 public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
+    public static final String PIPE_LIGHTING = "lighting";
+    public static final String PIPE_WORLD = "world";
+    public static final String PIPE_UI = "ui";
+
     protected T game;
 
     protected GameWorld world;
@@ -158,7 +162,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     private void buildLayers() {
 	// 1. World layer
-	renderPipeline.add(new RenderLayer() {
+	renderPipeline.add(PIPE_WORLD, new RenderLayer() {
 	    @Override
 	    public void render(Batch batch, float delta) {
 		batch.begin();
@@ -169,9 +173,9 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    }
 	});
 	// 2. Lighting layer
-	renderPipeline.add(lightingManager);
+	renderPipeline.add(PIPE_LIGHTING, lightingManager);
 	// 3. UI layer
-	renderPipeline.add(new RenderLayer() {
+	renderPipeline.add(PIPE_UI, new RenderLayer() {
 	    @Override
 	    public void render(Batch batch, float delta) {
 		stage.draw();

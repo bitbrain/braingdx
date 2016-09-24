@@ -38,6 +38,10 @@ public class ShaderManager {
     public ShaderManager(String baseDirectory, PostProcessorEffect... effects) {
 	ShaderLoader.BasePath = baseDirectory;
 	processor = new PostProcessor(true, true, isDesktop);
+	addEffects(effects);
+    }
+
+    public void addEffects(PostProcessorEffect... effects) {
 	for (PostProcessorEffect effect : effects) {
 	    processor.addEffect(effect);
 	}

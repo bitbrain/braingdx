@@ -14,8 +14,8 @@
  */
 package de.bitbrain.braingdx.graphics.pipeline;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.bitfire.postprocessing.PostProcessorEffect;
@@ -30,19 +30,23 @@ import com.bitfire.postprocessing.PostProcessorEffect;
  */
 public class RenderPipeline {
 
-    private List<RenderPipe> pipes;
+    private Map<String, RenderPipe> pipes;
 
     public RenderPipeline() {
-	pipes = new ArrayList<RenderPipe>();
+	pipes = new HashMap<String, RenderPipe>();
     }
 
-    public void add(RenderLayer layer, PostProcessorEffect... effects) {
+    public void add(String id, RenderLayer layer, PostProcessorEffect... effects) {
 	RenderPipe pipe = new RenderPipe(layer, effects);
-	pipes.add(pipe);
+	pipes.put(id, pipe);
+    }
+
+    public RenderPipe getPipe(String id) {
+	return pipes.get(id);
     }
 
     public void render(Batch batch, float delta) {
-	for (RenderPipe pipe : pipes) {
+	for (RenderPipe pipe : pipes.values()) {
 	    pipe.render(batch, delta);
 	}
     }

@@ -43,4 +43,8 @@ public class RenderPipe {
 	renderLayer.render(batch, delta);
 	this.shaderManager.end();
     }
+
+    public void addEffects(PostProcessorEffect... effects) {
+	shaderManager.addEffects(effects);
+    }
 }
