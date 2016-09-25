@@ -59,15 +59,17 @@ public class RenderPipe implements Disposable {
 
     public void render(Batch batch, float delta) {
 	if (buffer != null && isEnabled()) {
+	    buffer.bind();
 	    buffer.begin();
-	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	    Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 	    renderLayer.render(batch, delta);
 	    buffer.end();
-	    shaderManager.begin();
+	    // shaderManager.begin();
 	    batch.begin();
 	    batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
 	    batch.end();
-	    shaderManager.end();
+	    // shaderManager.end();
 	}
     }
 
@@ -75,7 +77,7 @@ public class RenderPipe implements Disposable {
 	if (buffer != null) {
 	    buffer.dispose();
 	}
-	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 	shaderManager.resize(width, height);
     }
 

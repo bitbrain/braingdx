@@ -42,13 +42,19 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	world.registerRenderer(TYPE, new SpriteRenderer(texture));
 
 	// Shading
-	RenderPipe pipe = renderPipeline.getPipe(PIPE_WORLD);
+	RenderPipe worldPipe = renderPipeline.getPipe(PIPE_WORLD);
 	Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth()), Math.round(Gdx.graphics.getHeight()));
 	bloom.setBlurAmount(20f);
 	bloom.setBloomIntesity(3.1f);
 	bloom.setBlurPasses(8);
-	pipe.addEffects(bloom);
-	pipe = renderPipeline.getPipe(PIPE_WORLD);
+	worldPipe.addEffects(bloom);
+	RenderPipe uiPipe = renderPipeline.getPipe(PIPE_UI);
+	Bloom uiBloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 0.5f),
+		Math.round(Gdx.graphics.getHeight() / 0.5f));
+	uiBloom.setBlurAmount(20f);
+	uiBloom.setBloomIntesity(3.1f);
+	uiBloom.setBlurPasses(8);
+	uiPipe.addEffects(uiBloom);
 
 	// Objects
 	for (int i = 0; i < OBJECTS; ++i) {

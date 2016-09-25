@@ -287,7 +287,6 @@ public final class PostProcessor implements Disposable {
      */
     public boolean capture() {
 	hasCaptured = false;
-
 	if (enabled && !capturing) {
 	    if (buildEnabledEffectsList() == 0) {
 		// no enabled effects
