@@ -40,22 +40,33 @@ public class RenderPipe {
 
     private FrameBuffer buffer;
 
+    private boolean enabled;
+
     public RenderPipe(RenderLayer layer, ShaderConfig config, PostProcessorEffect... effects) {
 	this.renderLayer = layer;
 	this.shaderManager = new ShaderManager(config, effects);
+	this.setEnabled(true);
+    }
+
+    public boolean isEnabled() {
+	return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+	this.enabled = enabled;
     }
 
     public void render(Batch batch, float delta) {
-	if (buffer != null) {
+	if (buffer != null && isEnabled()) {
 	    buffer.begin();
 	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	    renderLayer.render(batch, delta);
 	    buffer.end();
-	    this.shaderManager.begin();
+	    shaderManager.begin();
 	    batch.begin();
 	    batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
 	    batch.end();
-	    this.shaderManager.end();
+	    shaderManager.end();
 	}
     }
 
