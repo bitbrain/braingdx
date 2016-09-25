@@ -15,7 +15,7 @@
 package de.bitbrain.braingdx.graphics.pipeline;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -38,7 +38,7 @@ public class RenderPipeline {
     private ShaderConfig config;
 
     public RenderPipeline(ShaderConfig config) {
-	pipes = new HashMap<String, RenderPipe>();
+	pipes = new LinkedHashMap<String, RenderPipe>();
 	this.config = config;
     }
 
