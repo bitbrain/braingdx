@@ -54,7 +54,7 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	uiBloom.setBlurAmount(20f);
 	uiBloom.setBloomIntesity(3.1f);
 	uiBloom.setBlurPasses(8);
-	uiPipe.addEffects(uiBloom);
+	// uiPipe.addEffects(uiBloom);
 
 	// Objects
 	for (int i = 0; i < OBJECTS; ++i) {
