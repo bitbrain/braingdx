@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Disposable;
 import com.bitfire.postprocessing.PostProcessorEffect;
 
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
@@ -31,7 +32,7 @@ import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-public class RenderPipeline {
+public class RenderPipeline implements Disposable {
 
     private Map<String, RenderPipe> pipes;
 
@@ -64,6 +65,14 @@ public class RenderPipeline {
     public void resize(int width, int height) {
 	for (RenderPipe pipe : pipes.values()) {
 	    pipe.resize(width, height);
+	}
+    }
+
+
+    @Override
+    public void dispose() {
+	for (RenderPipe pipe : pipes.values()) {
+	    pipe.dispose();
 	}
     }
 }

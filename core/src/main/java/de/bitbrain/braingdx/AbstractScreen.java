@@ -100,10 +100,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	camera.update();
 	stage.act(delta);
 	batch.setProjectionMatrix(camera.combined);
-
 	renderPipeline.render(batch, delta);
-
-	stage.draw();
     }
 
     @Override
@@ -118,7 +115,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    stage.getViewport().update(width, height);
 	}
 	renderPipeline.resize(width, height);
-	camera.setToOrtho(false, width, height);
+	camera.setToOrtho(true, width, height);
     }
 
     @Override
@@ -161,6 +158,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	world.reset();
 	stage.dispose();
 	input.clear();
+	renderPipeline.dispose();
     }
 
     public void setBackgroundColor(Color color) {

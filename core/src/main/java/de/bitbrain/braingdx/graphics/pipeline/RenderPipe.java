@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.utils.Disposable;
 import com.bitfire.postprocessing.PostProcessorEffect;
 
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
@@ -32,7 +33,7 @@ import de.bitbrain.braingdx.graphics.shader.ShaderManager;
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-public class RenderPipe {
+public class RenderPipe implements Disposable {
 
     private RenderLayer renderLayer;
 
@@ -80,5 +81,11 @@ public class RenderPipe {
 
     public void addEffects(PostProcessorEffect... effects) {
 	shaderManager.addEffects(effects);
+    }
+
+    @Override
+    public void dispose() {
+	buffer.dispose();
+	shaderManager.dispose();
     }
 }

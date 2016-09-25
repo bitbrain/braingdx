@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.bitfire.postprocessing.effects.Bloom;
 
@@ -63,9 +63,8 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	}
 
 	// UI
-	VerticalGroup group = new VerticalGroup();
+	Table group = new Table();
 	group.setFillParent(true);
-	group.setWidth(200f);
 	for (String pipeId : renderPipeline.getPipeIds()) {
 	    final RenderPipe renderPipe = renderPipeline.getPipe(pipeId);
 	    final TextButton textButton = new TextButton("Disable " + pipeId, Styles.BUTTON_DEFAULT_ACTIVE);
@@ -81,7 +80,7 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 		    }
 		}
 	    });
-	    group.addActor(textButton);
+	    group.left().top().add(textButton).width(300f).row();
 	}
 	stage.addActor(group);
     }
