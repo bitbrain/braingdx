@@ -14,6 +14,7 @@
  */
 package de.bitbrain.braingdx.graphics.pipeline;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +49,10 @@ public class RenderPipeline {
 
     public RenderPipe getPipe(String id) {
 	return pipes.get(id);
+    }
+
+    public Collection<String> getPipeIds() {
+	return pipes.keySet();
     }
 
     public void render(Batch batch, float delta) {

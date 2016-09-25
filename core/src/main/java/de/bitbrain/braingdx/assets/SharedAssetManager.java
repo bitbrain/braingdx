@@ -29,7 +29,7 @@ import de.bitbrain.braingdx.assets.loader.ParticleLoader;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public class SharedAssetManager {
+public class SharedAssetManager extends AssetManager {
 
     private static AssetManager instance = null;
 
@@ -45,23 +45,6 @@ public class SharedAssetManager {
 	    loadInternal();
 
 	return instance;
-    }
-
-    /**
-     * Provides an asset
-     */
-    public static <T> T get(String s, Class<T> clss) {
-	return getInstance().get(s, clss);
-    }
-
-    /**
-     * Disposes the asset manager
-     */
-    public static void dispose() {
-	if (instance != null) {
-	    getInstance().dispose();
-	    instance = null;
-	}
     }
 
     public static void reload() {

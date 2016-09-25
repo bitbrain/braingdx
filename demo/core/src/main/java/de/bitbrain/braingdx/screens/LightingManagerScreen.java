@@ -3,7 +3,11 @@ package de.bitbrain.braingdx.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.bitfire.postprocessing.effects.Bloom;
 
 import de.bitbrain.braingdx.AbstractScreen;
@@ -14,6 +18,7 @@ import de.bitbrain.braingdx.graphics.GraphicsFactory;
 import de.bitbrain.braingdx.graphics.SpriteRenderer;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
+import de.bitbrain.braingdx.ui.Styles;
 
 public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 
@@ -28,6 +33,9 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
     @Override
     protected void onCreateStage(Stage stage, int width, int height) {
 	super.onCreateStage(stage, width, height);
+
+	// Basic setup
+	Styles.init();
 	setBackgroundColor(Color.GRAY);
 	lightingManager.setAmbientLight(new Color(0.1f, 0f, 0.2f, 0.1f));
 	Texture texture = GraphicsFactory.createTexture(30, 30, Color.DARK_GRAY);
@@ -42,6 +50,7 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	pipe.addEffects(bloom);
 	pipe = renderPipeline.getPipe(PIPE_WORLD);
 
+	// Objects
 	for (int i = 0; i < OBJECTS; ++i) {
 	    GameObject object = world.addObject();
 	    object.setDimensions(30, 30);
@@ -52,5 +61,28 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	    world.applyBehavior(new PointLightBehavior(randomColor, 300f, lightingManager), object);
 	    world.applyBehavior(new RandomMovementBehavior(), object);
 	}
+
+	// UI
+	VerticalGroup group = new VerticalGroup();
+	group.setFillParent(true);
+	group.setWidth(200f);
+	for (String pipeId : renderPipeline.getPipeIds()) {
+	    final RenderPipe renderPipe = renderPipeline.getPipe(pipeId);
+	    final TextButton textButton = new TextButton("Disable " + pipeId, Styles.BUTTON_DEFAULT_ACTIVE);
+	    textButton.addListener(new ClickListener() {
+		@Override
+		public void clicked(InputEvent event, float x, float y) {
+		    if (renderPipe.isEnabled()) {
+			textButton.setStyle(Styles.BUTTON_DEFAULT_INACTIVE);
+			renderPipe.setEnabled(false);
+		    } else {
+			textButton.setStyle(Styles.BUTTON_DEFAULT_ACTIVE);
+			renderPipe.setEnabled(true);
+		    }
+		}
+	    });
+	    group.addActor(textButton);
+	}
+	stage.addActor(group);
     }
 }
