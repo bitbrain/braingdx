@@ -20,9 +20,9 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
+import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.postprocessing.PostProcessorEffect;
 
-import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.graphics.shader.ShaderManager;
 
 /**
@@ -43,9 +43,9 @@ public class RenderPipe implements Disposable {
 
     private boolean enabled;
 
-    public RenderPipe(RenderLayer layer, ShaderConfig config, PostProcessorEffect... effects) {
+    public RenderPipe(RenderLayer layer, PostProcessor processor, PostProcessorEffect... effects) {
 	this.renderLayer = layer;
-	this.shaderManager = new ShaderManager(config, effects);
+	this.shaderManager = new ShaderManager(processor, effects);
 	this.setEnabled(true);
     }
 
@@ -59,9 +59,9 @@ public class RenderPipe implements Disposable {
 
     public void render(Batch batch, float delta) {
 	if (buffer != null && isEnabled()) {
-	    buffer.bind();
 	    buffer.begin();
-	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	    Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 	    renderLayer.render(batch, delta);
 	    buffer.end();
 	    shaderManager.begin();
@@ -76,8 +76,7 @@ public class RenderPipe implements Disposable {
 	if (buffer != null) {
 	    buffer.dispose();
 	}
-	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-	shaderManager.resize(width, height);
+	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
     }
 
     public void addEffects(PostProcessorEffect... effects) {
@@ -87,6 +86,5 @@ public class RenderPipe implements Disposable {
     @Override
     public void dispose() {
 	buffer.dispose();
-	shaderManager.dispose();
     }
 }

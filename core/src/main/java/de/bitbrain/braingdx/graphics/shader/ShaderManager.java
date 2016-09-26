@@ -15,14 +15,13 @@
 
 package de.bitbrain.braingdx.graphics.shader;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.math.Rectangle;
 import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.postprocessing.PostProcessorEffect;
-import com.bitfire.utils.ShaderLoader;
 
 /**
  * Manages GLSL shaders internally
@@ -33,46 +32,48 @@ import com.bitfire.utils.ShaderLoader;
  */
 public class ShaderManager {
 
-    private static final boolean isDesktop = (Gdx.app.getType() == Application.ApplicationType.Desktop);
-
     private PostProcessor processor;
 
-    public ShaderManager(ShaderConfig config, PostProcessorEffect... effects) {
-	ShaderLoader.BasePath = config.basePath;
-	ShaderLoader.PathResolver = config.pathResolver;
-	processor = new PostProcessor(true, true, isDesktop);
+    private List<PostProcessorEffect> effects;
+
+    public ShaderManager(PostProcessor processor, PostProcessorEffect... effects) {
+	this.processor = processor;
+	this.effects = new ArrayList<PostProcessorEffect>();
 	addEffects(effects);
     }
 
     public void addEffects(PostProcessorEffect... effects) {
 	for (PostProcessorEffect effect : effects) {
+	    this.effects.add(effect);
 	    processor.addEffect(effect);
+	    effect.setEnabled(false);
 	}
     }
 
     public void begin() {
-	processor.setClearColor(0f, 0f, 0f, 0f);
+	setEffectsEnabled(true);
+	processor.setClearColor(1f, 1f, 1f, 0f);
 	processor.setClearBits(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 	processor.capture();
     }
 
     public void end(FrameBuffer buffer) {
 	processor.render(buffer);
+	setEffectsEnabled(false);
     }
 
     public void end() {
 	processor.render();
-    }
-
-    public void dispose() {
-	processor.dispose();
+	setEffectsEnabled(false);
     }
 
     public void resume() {
 	processor.rebind();
     }
 
-    public void resize(int width, int height) {
-	processor.setViewport(new Rectangle(0f, 0f, width, height));
+    private void setEffectsEnabled(boolean enabled) {
+	for (PostProcessorEffect effect : effects) {
+	    effect.setEnabled(enabled);
+	}
     }
 }

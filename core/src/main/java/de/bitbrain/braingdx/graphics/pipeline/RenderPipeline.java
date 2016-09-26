@@ -18,9 +18,14 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
+import com.bitfire.postprocessing.PostProcessor;
 import com.bitfire.postprocessing.PostProcessorEffect;
+import com.bitfire.utils.ShaderLoader;
 
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 
@@ -34,17 +39,24 @@ import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
  */
 public class RenderPipeline implements Disposable {
 
+    private static final boolean isDesktop = (Gdx.app.getType() == Application.ApplicationType.Desktop);
+
     private Map<String, RenderPipe> pipes;
 
     private ShaderConfig config;
 
+    private PostProcessor processor;
+
     public RenderPipeline(ShaderConfig config) {
-	pipes = new LinkedHashMap<String, RenderPipe>();
+	this.pipes = new LinkedHashMap<String, RenderPipe>();
 	this.config = config;
+	ShaderLoader.BasePath = this.config.basePath;
+	ShaderLoader.PathResolver = this.config.pathResolver;
+	this.processor = new PostProcessor(true, true, isDesktop);
     }
 
     public void add(String id, RenderLayer layer, PostProcessorEffect... effects) {
-	RenderPipe pipe = new RenderPipe(layer, config, effects);
+	RenderPipe pipe = new RenderPipe(layer, processor, effects);
 	pipes.put(id, pipe);
     }
 
@@ -63,6 +75,7 @@ public class RenderPipeline implements Disposable {
     }
 
     public void resize(int width, int height) {
+	processor.setViewport(new Rectangle(0f, 0f, width, height));
 	for (RenderPipe pipe : pipes.values()) {
 	    pipe.resize(width, height);
 	}
@@ -74,5 +87,6 @@ public class RenderPipeline implements Disposable {
 	for (RenderPipe pipe : pipes.values()) {
 	    pipe.dispose();
 	}
+	processor.dispose();
     }
 }
