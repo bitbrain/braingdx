@@ -52,14 +52,18 @@ public class ShaderManager {
 
     public void begin() {
 	setEffectsEnabled(true);
-	processor.setClearColor(1f, 1f, 1f, 0f);
-	processor.setClearBits(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+	processor.setClearColor(0f, 0f, 0f, 0f);
+	processor.setClearBits(GL20.GL_COLOR_BUFFER_BIT);
 	processor.capture();
     }
 
     public void end(FrameBuffer buffer) {
 	processor.render(buffer);
 	setEffectsEnabled(false);
+    }
+
+    public boolean hasEffects() {
+	return !effects.isEmpty();
     }
 
     public void end() {

@@ -11,6 +11,8 @@ public class AppGameAssetLoader implements GameAssetLoader {
     public void put(Map<String, Class<?>> assets) {
 	assets.put(Assets.BUTTON_DEFAULT, Texture.class);
 	assets.put(Assets.FONT_BYOM_32, BitmapFont.class);
+	assets.put(Assets.TEX_BACKGROUND, Texture.class);
+	assets.put(Assets.TEX_BALL, Texture.class);
     }
 
 }

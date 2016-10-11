@@ -49,6 +49,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     public static final String PIPE_LIGHTING = "lighting";
     public static final String PIPE_WORLD = "world";
     public static final String PIPE_UI = "ui";
+    public static final String PIPE_BACKGROUND = "background";
 
     protected T game;
 
@@ -166,6 +167,15 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     }
 
     private void buildLayers() {
+	// 0. Background layer
+	renderPipeline.add(PIPE_BACKGROUND, new RenderLayer() {
+
+	    @Override
+	    public void render(Batch batch, float delta) {
+	    }
+
+	});
+
 	// 1. World layer
 	renderPipeline.add(PIPE_WORLD, new RenderLayer() {
 	    @Override

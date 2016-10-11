@@ -15,7 +15,7 @@
 package de.bitbrain.braingdx.graphics.pipeline;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -59,16 +59,13 @@ public class RenderPipe implements Disposable {
 
     public void render(Batch batch, float delta) {
 	if (buffer != null && isEnabled()) {
-	    buffer.begin();
-	    Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
-	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-	    renderLayer.render(batch, delta);
-	    buffer.end();
 	    shaderManager.begin();
+	    renderLayer.render(batch, delta);
+	    shaderManager.end(buffer);
 	    batch.begin();
+	    batch.setColor(Color.WHITE);
 	    batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
 	    batch.end();
-	    shaderManager.end();
 	}
     }
 
@@ -76,7 +73,8 @@ public class RenderPipe implements Disposable {
 	if (buffer != null) {
 	    buffer.dispose();
 	}
-	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
+		false);
     }
 
     public void addEffects(PostProcessorEffect... effects) {
