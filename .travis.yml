@@ -1,0 +1,9 @@
+language: java
+
+branches:
+  only:
+  - master
+
+cache:
+  directories:
+  - ~/.m2/repository
