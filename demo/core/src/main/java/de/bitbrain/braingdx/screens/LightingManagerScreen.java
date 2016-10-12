@@ -67,8 +67,8 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	bloom.setBlurPasses(8);
 	worldPipe.addEffects(bloom);
 	RenderPipe uiPipe = renderPipeline.getPipe(PIPE_UI);
-	Bloom uiBloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 0.5f),
-		Math.round(Gdx.graphics.getHeight() / 0.5f));
+	Bloom uiBloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 0.3f),
+		Math.round(Gdx.graphics.getHeight() / 0.3f));
 	uiBloom.setBlurAmount(20f);
 	uiBloom.setBloomIntesity(3.1f);
 	uiBloom.setBlurPasses(8);
@@ -107,7 +107,7 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 		    }
 		}
 	    });
-	    group.left().top().add(textButton).width(300f).row();
+	    group.left().top().add(textButton).width(400f).padBottom(10f).row();
 	}
 	stage.addActor(group);
     }

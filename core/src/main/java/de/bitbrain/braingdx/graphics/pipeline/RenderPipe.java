@@ -16,6 +16,7 @@ package de.bitbrain.braingdx.graphics.pipeline;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -59,13 +60,8 @@ public class RenderPipe implements Disposable {
 
     public void render(Batch batch, float delta) {
 	if (buffer != null && isEnabled()) {
-	    shaderManager.begin();
-	    renderLayer.render(batch, delta);
-	    shaderManager.end(buffer);
-	    batch.begin();
-	    batch.setColor(Color.WHITE);
-	    batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
-	    batch.end();
+	    renderOntoBuffer(batch, delta);
+	    blendAndDraw(batch);
 	}
     }
 
@@ -84,5 +80,22 @@ public class RenderPipe implements Disposable {
     @Override
     public void dispose() {
 	buffer.dispose();
+    }
+
+    private void renderOntoBuffer(Batch batch, float delta) {
+	shaderManager.begin();
+	renderLayer.render(batch, delta);
+	shaderManager.end(buffer);
+    }
+
+    private void blendAndDraw(Batch batch) {
+	int srcFunc = batch.getBlendSrcFunc();
+	int dstFunc = batch.getBlendDstFunc();
+	batch.begin();
+	batch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_DST_ALPHA);
+	batch.setColor(Color.WHITE);
+	batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
+	batch.end();
+	batch.setBlendFunction(srcFunc, dstFunc);
     }
 }
