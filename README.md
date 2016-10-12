@@ -2,6 +2,8 @@
 -
 Game jam toolkit based on [libgdx](https://libgdx.badlogicgames.com/).
 
+[![Build Status](https://travis-ci.org/MyRealityCoding/braingdx.svg?branch=master)](https://travis-ci.org/MyRealityCoding/braingdx)
+
 **[Features](#features) |**
 **[Installation](#installation) |**
 **[Documentation](#documentation) |**
