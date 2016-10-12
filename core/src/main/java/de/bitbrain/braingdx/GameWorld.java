@@ -24,8 +24,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Pool;
 
+import de.bitbrain.braingdx.behavior.Behavior;
+import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.graphics.CameraTracker;
-import de.bitbrain.braingdx.graphics.RenderManager;
+import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.VectorCameraTracker;
 import de.bitbrain.braingdx.util.ZIndexComparator;
 
@@ -61,17 +63,20 @@ public class GameWorld {
 
     private OrthographicCamera camera;
 
-    private RenderManager renderManager;
+    private GameObjectRenderManager renderManager;
 
     private CameraTracker tracker;
 
     private final Comparator<GameObject> comparator = new ZIndexComparator();
 
+    private final BehaviorManager behaviorManager = new BehaviorManager();
+
     public GameWorld(OrthographicCamera camera) {
 	this(camera, DEFAULT_CACHE_SIZE);
     }
 
-    public GameWorld(OrthographicCamera camera, RenderManager renderManager, CameraTracker tracker, int cacheSize) {
+    public GameWorld(OrthographicCamera camera, GameObjectRenderManager renderManager, CameraTracker tracker,
+	    int cacheSize) {
 	this.camera = camera;
 	this.renderManager = renderManager;
 	this.tracker = tracker;
@@ -84,7 +89,23 @@ public class GameWorld {
     }
 
     public GameWorld(OrthographicCamera camera, int cacheSize) {
-	this(camera, new RenderManager(), new VectorCameraTracker(camera), cacheSize);
+	this(camera, new GameObjectRenderManager(), new VectorCameraTracker(camera), cacheSize);
+    }
+
+    public void applyBehavior(String id, Behavior behavior) {
+	behaviorManager.apply(behavior, id);
+    }
+
+    public void removeBehavior(String id) {
+	behaviorManager.remove(id);
+    }
+
+    public void removeBehavior(GameObject source) {
+	behaviorManager.remove(source);
+    }
+
+    public void applyBehavior(Behavior behavior, GameObject source) {
+	behaviorManager.apply(behavior, source);
     }
 
     /**
@@ -113,7 +134,7 @@ public class GameWorld {
      * @param gameObjectId type/id of the game object
      * @param renderer instance of the renderer
      */
-    public void registerRenderer(Integer gameObjectId, RenderManager.Renderer renderer) {
+    public void registerRenderer(Integer gameObjectId, GameObjectRenderManager.GameObjectRenderer renderer) {
 	renderManager.register(gameObjectId, renderer);
     }
 
@@ -164,6 +185,13 @@ public class GameWorld {
 		removals.add(object);
 		continue;
 	    }
+	    behaviorManager.updateGlobally(object, delta);
+	    behaviorManager.updateLocally(object, delta);
+	    for (final GameObject other : objects) {
+		if (!object.getId().equals(other.getId())) {
+		    behaviorManager.updateLocallyCompared(object, other, delta);
+		}
+	    }
 	    renderManager.render(object, batch, delta);
 	}
 	tracker.update(delta);
@@ -188,6 +216,7 @@ public class GameWorld {
 	pool.clear();
 	objects.clear();
 	removals.clear();
+	behaviorManager.clear();
     }
 
     /**
@@ -201,6 +230,7 @@ public class GameWorld {
     }
 
     private void remove(GameObject object) {
+	behaviorManager.remove(object);
 	pool.free(object);
 	objects.remove(object);
     }

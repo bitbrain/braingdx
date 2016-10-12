@@ -23,11 +23,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import aurelienribon.tweenengine.TweenManager;
+import de.bitbrain.braingdx.graphics.lighting.LightingManager;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
+import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.ui.Tooltip;
 
@@ -40,6 +46,11 @@ import de.bitbrain.braingdx.ui.Tooltip;
  */
 public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
+    public static final String PIPE_LIGHTING = "lighting";
+    public static final String PIPE_WORLD = "world";
+    public static final String PIPE_UI = "ui";
+    public static final String PIPE_BACKGROUND = "background";
+
     protected T game;
 
     protected GameWorld world;
@@ -51,6 +62,12 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     private Batch batch;
 
     private Stage stage;
+
+    protected RenderPipeline renderPipeline;
+
+    protected LightingManager lightingManager;
+
+    protected World boxWorld;
 
     public AbstractScreen(T game) {
 	this.game = game;
@@ -70,23 +87,21 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	world = new GameWorld(camera);
 	batch = new SpriteBatch();
 	input = new InputMultiplexer();
+	renderPipeline = new RenderPipeline(getShaderConfig());
+	boxWorld = new World(Vector2.Zero, false);
+	lightingManager = new LightingManager(boxWorld, camera);
+	buildLayers();
     }
 
     @Override
     public final void render(float delta) {
 	Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
-	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 	tweenManager.update(delta);
 	camera.update();
 	stage.act(delta);
 	batch.setProjectionMatrix(camera.combined);
-	batch.begin();
-	beforeWorldRender(batch, delta);
-	world.updateAndRender(batch, delta);
-	afterWorldRender(batch, delta);
-	batch.end();
-	stage.draw();
+	renderPipeline.render(batch, delta);
     }
 
     @Override
@@ -97,9 +112,11 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    tooltip.init(stage, camera);
 	    onCreateStage(stage, width, height);
 	    Gdx.input.setInputProcessor(input);
-	} else
+	} else {
 	    stage.getViewport().update(width, height);
-	camera.setToOrtho(false, width, height);
+	}
+	renderPipeline.resize(width, height);
+	camera.setToOrtho(true, width, height);
     }
 
     @Override
@@ -129,6 +146,10 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     }
 
+    protected ShaderConfig getShaderConfig() {
+	return new ShaderConfig();
+    }
+
     protected Viewport getViewport(int width, int height) {
 	return new ScreenViewport();
     }
@@ -138,9 +159,43 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	world.reset();
 	stage.dispose();
 	input.clear();
+	renderPipeline.dispose();
     }
 
     public void setBackgroundColor(Color color) {
 	this.backgroundColor = color;
+    }
+
+    private void buildLayers() {
+	// 0. Background layer
+	renderPipeline.add(PIPE_BACKGROUND, new RenderLayer() {
+
+	    @Override
+	    public void render(Batch batch, float delta) {
+	    }
+
+	});
+
+	// 1. World layer
+	renderPipeline.add(PIPE_WORLD, new RenderLayer() {
+	    @Override
+	    public void render(Batch batch, float delta) {
+		batch.begin();
+		beforeWorldRender(batch, delta);
+		world.updateAndRender(batch, delta);
+		afterWorldRender(batch, delta);
+		batch.end();
+	    }
+	});
+	// 2. Lighting layer
+	renderPipeline.add(PIPE_LIGHTING, lightingManager);
+	// 3. UI layer
+	renderPipeline.add(PIPE_UI, new RenderLayer() {
+	    @Override
+	    public void render(Batch batch, float delta) {
+		stage.draw();
+	    }
+
+	});
     }
 }

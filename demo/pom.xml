@@ -69,6 +69,14 @@
 				<classifier>natives-armeabi-v7a</classifier>
 				<scope>provided</scope>
 			</dependency>
+			
+			<dependency>
+			    <groupId>com.badlogicgames.gdx</groupId>
+			    <artifactId>gdx-box2d-platform</artifactId>
+			    <classifier>natives-desktop</classifier>
+			    <version>1.6.4</version>
+			    <scope>compile</scope>
+			</dependency>
 
 			<!-- gwt-specific dependencies -->
 			<dependency>

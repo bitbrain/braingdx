@@ -18,6 +18,7 @@ package de.bitbrain.braingdx.graphics;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 
 /**
  * Contains utils for graphics creation
@@ -43,5 +44,30 @@ public final class GraphicsFactory {
 	final Texture texture = new Texture(map);
 	map.dispose();
 	return texture;
+    }
+
+    /**
+     * Creates a valid NinePatch from a texture with the given radius.
+     * 
+     * @param texture the texture
+     * @param borderRadius the border radius
+     * @return a new NinePatch instance
+     */
+    public static NinePatch createNinePatch(Texture texture, int borderRadius) {
+	return new NinePatch(texture, borderRadius, borderRadius, borderRadius, borderRadius);
+    }
+
+    /**
+     * Creates a valid NinePatch from a texture with the given radius and the given color.
+     * 
+     * @param texture the texture
+     * @param borderRadius the border radius
+     * @param color the color
+     * @return a new NinePatch instance
+     */
+    public static NinePatch createNinePatch(Texture texture, int borderRadius, Color color) {
+	NinePatch patch = GraphicsFactory.createNinePatch(texture, borderRadius);
+	patch.setColor(color.cpy());
+	return patch;
     }
 }

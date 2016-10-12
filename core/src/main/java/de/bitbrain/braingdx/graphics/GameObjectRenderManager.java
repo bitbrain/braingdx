@@ -29,24 +29,24 @@ import de.bitbrain.braingdx.GameObject;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public class RenderManager {
+public class GameObjectRenderManager {
 
-    private static Map<Integer, Renderer> rendererMap = new HashMap<Integer, Renderer>();
+    private static Map<Integer, GameObjectRenderer> rendererMap = new HashMap<Integer, GameObjectRenderer>();
 
     public void render(GameObject object, Batch batch, float delta) {
-	final Renderer renderer = rendererMap.get(object.getType());
+	final GameObjectRenderer renderer = rendererMap.get(object.getType());
 	if (renderer != null)
 	    renderer.render(object, batch, delta);
     }
 
-    public void register(Integer gameObjectType, Renderer renderer) {
+    public void register(Integer gameObjectType, GameObjectRenderer renderer) {
 	if (!rendererMap.containsKey(gameObjectType)) {
 	    renderer.init();
 	    rendererMap.put(gameObjectType, renderer);
 	}
     }
 
-    public static interface Renderer {
+    public static interface GameObjectRenderer {
 
 	void init();
 

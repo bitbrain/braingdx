@@ -15,7 +15,6 @@
 
 package de.bitbrain.braingdx.assets.loader;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
@@ -52,7 +51,7 @@ public class ParticleLoader extends SynchronousAssetLoader<ParticleEffect, Parti
     public ParticleEffect load(AssetManager assetManager, String fileName, FileHandle file,
 	    ParticleParameter parameter) {
 	final ParticleEffect effect = new ParticleEffect();
-	effect.load(file, Gdx.files.internal("particles/"));
+	effect.load(file, resolve("particles/"));
 	return effect;
     }
 }
