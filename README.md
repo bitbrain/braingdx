@@ -4,12 +4,12 @@
 
 [![Build Status](https://travis-ci.org/MyRealityCoding/braingdx.svg?branch=master)](https://travis-ci.org/MyRealityCoding/braingdx)
 
-**[Features](#features) |**
-**[Installation](#installation) |**
-**[Documentation](#documentation) |**
-**[Collaboration](#collaboration) |**
-**[License](#license) |**
-**[Changelog](CHANGELOG.md)**
+**[:space_invader: Features](#features) |**
+**[:package: Installation](#installation) |**
+**[:green_book: Documentation](#documentation) |**
+**[:beers: Collaboration](#collaboration) |**
+**[:rocket: License](#license) |**
+**[:pencil: Changelog](CHANGELOG.md)**
 
 ---
 
