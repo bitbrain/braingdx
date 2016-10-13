@@ -1,6 +1,6 @@
 ![logo](logo.png)
 -
-Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
+:video_game: Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
 
 [![Build Status](https://travis-ci.org/MyRealityCoding/braingdx.svg?branch=master)](https://travis-ci.org/MyRealityCoding/braingdx)
 
