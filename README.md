@@ -1,6 +1,6 @@
 ![logo](logo.png)
 -
-Game jam toolkit based on [libgdx](https://libgdx.badlogicgames.com/).
+Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
 
 [![Build Status](https://travis-ci.org/MyRealityCoding/braingdx.svg?branch=master)](https://travis-ci.org/MyRealityCoding/braingdx)
 
@@ -40,7 +40,7 @@ Game jam toolkit based on [libgdx](https://libgdx.badlogicgames.com/).
 
 # Documentation
 
-Refer to the [official braingdx wiki](https://github.com/MyRealityCoding/braingdx/wiki/Getting-started) here.
+Wiki is not available yet. :-)
 
 # Collaboration
 
