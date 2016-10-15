@@ -38,6 +38,40 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
  */
 public class LightingManager implements RenderLayer {
 
+    public class LightingConfig {
+	boolean shadows = true;
+	boolean diffuseLighting = false;
+	boolean blur = true;
+	boolean culling = true;
+	boolean gammaCorrection = false;
+
+	public LightingConfig shadows(boolean enabled) {
+	    this.shadows = enabled;
+	    return this;
+	}
+
+	public LightingConfig diffuseLighting(boolean enabled) {
+	    this.diffuseLighting = enabled;
+	    return this;
+	}
+
+	public LightingConfig blur(boolean enabled) {
+	    this.blur = enabled;
+	    return this;
+	}
+
+	public LightingConfig culling(boolean enabled) {
+	    this.culling = enabled;
+	    return this;
+	}
+
+	public LightingConfig gammaCorrection(boolean enabled) {
+	    this.gammaCorrection = enabled;
+	    return this;
+	}
+
+    }
+
     private static final int DEFAULT_RAYS = 80;
 
     private final RayHandler handler;
@@ -54,9 +88,16 @@ public class LightingManager implements RenderLayer {
 
     public LightingManager(World world, OrthographicCamera camera) {
 	this.handler = new RayHandler(world);
-	this.handler.setShadows(false);
-	RayHandler.useDiffuseLight(false);
 	this.camera = camera;
+	setConfig(new LightingConfig());
+    }
+
+    public void setConfig(LightingConfig lightingConfig) {
+	this.handler.setShadows(lightingConfig.shadows);
+	this.handler.setBlur(lightingConfig.blur);
+	this.handler.setCulling(lightingConfig.culling);
+	RayHandler.setGammaCorrection(lightingConfig.gammaCorrection);
+	RayHandler.useDiffuseLight(lightingConfig.diffuseLighting);
     }
 
     public void setAmbientLight(Color color) {
