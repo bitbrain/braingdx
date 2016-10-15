@@ -54,7 +54,7 @@ public class LightingManager implements RenderLayer {
 
     public LightingManager(World world, OrthographicCamera camera) {
 	this.handler = new RayHandler(world);
-	this.handler.setShadows(false);
+	this.handler.setShadows(true);
 	RayHandler.useDiffuseLight(false);
 	this.camera = camera;
     }

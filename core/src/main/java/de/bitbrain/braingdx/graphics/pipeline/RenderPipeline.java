@@ -70,7 +70,9 @@ public class RenderPipeline implements Disposable {
 
     public void render(Batch batch, float delta) {
 	for (RenderPipe pipe : pipes.values()) {
-	    pipe.render(batch, delta);
+	    if (pipe.isEnabled()) {
+		pipe.render(batch, delta);
+	    }
 	}
     }
 

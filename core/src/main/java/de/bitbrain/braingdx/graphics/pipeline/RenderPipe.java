@@ -59,9 +59,11 @@ public class RenderPipe implements Disposable {
     }
 
     public void render(Batch batch, float delta) {
-	if (buffer != null && isEnabled()) {
-	    renderOntoBuffer(batch, delta);
-	    blendAndDraw(batch);
+	if (shaderManager.hasEffects() && buffer != null) {
+		renderOntoBuffer(batch, delta);
+		blendAndDraw(batch);
+	} else {
+	    draw(batch, delta);
 	}
     }
 
@@ -97,5 +99,10 @@ public class RenderPipe implements Disposable {
 	batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
 	batch.end();
 	batch.setBlendFunction(srcFunc, dstFunc);
+    }
+
+    private void draw(Batch batch, float delta) {
+	batch.setColor(Color.WHITE);
+	renderLayer.render(batch, delta);
     }
 }
