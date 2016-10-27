@@ -21,10 +21,10 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
-import com.bitfire.postprocessing.PostProcessor;
-import com.bitfire.postprocessing.PostProcessorEffect;
 
 import de.bitbrain.braingdx.graphics.shader.ShaderManager;
+import de.bitbrain.braingdx.postprocessing.PostProcessor;
+import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 
 /**
  * A renderpipe is compatible with other pipes and is responsible for rendering internal layers.

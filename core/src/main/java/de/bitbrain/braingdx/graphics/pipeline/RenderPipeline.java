@@ -23,11 +23,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
-import com.bitfire.postprocessing.PostProcessor;
-import com.bitfire.postprocessing.PostProcessorEffect;
-import com.bitfire.utils.ShaderLoader;
 
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
+import de.bitbrain.braingdx.postprocessing.PostProcessor;
+import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
+import de.bitbrain.braingdx.util.ShaderLoader;
 
 /**
  * Handles the complete pipeline of rendering internally. The pipeline consists of render pipes.

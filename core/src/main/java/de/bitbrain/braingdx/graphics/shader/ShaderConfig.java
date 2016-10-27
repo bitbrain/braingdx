@@ -1,7 +1,7 @@
 package de.bitbrain.braingdx.graphics.shader;
 
-import com.bitfire.utils.ClassPathResolver;
-import com.bitfire.utils.PathResolver;
+import de.bitbrain.braingdx.util.ClassPathResolver;
+import de.bitbrain.braingdx.util.PathResolver;
 
 public class ShaderConfig {
     

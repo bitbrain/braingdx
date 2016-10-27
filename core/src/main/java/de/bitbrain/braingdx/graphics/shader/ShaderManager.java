@@ -20,8 +20,9 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.bitfire.postprocessing.PostProcessor;
-import com.bitfire.postprocessing.PostProcessorEffect;
+
+import de.bitbrain.braingdx.postprocessing.PostProcessor;
+import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 
 /**
  * Manages GLSL shaders internally
