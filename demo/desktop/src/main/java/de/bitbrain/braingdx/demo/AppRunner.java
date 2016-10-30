@@ -36,6 +36,8 @@ public final class AppRunner {
 	    throw new RuntimeException("No application provided!");
 	}
 	Class<ApplicationListener> app = (Class<ApplicationListener>) Class.forName(args[0]);
+	config.width = 1500;
+	config.height = 1000;
 	new LwjglApplication(app.newInstance(), config);
     }
 

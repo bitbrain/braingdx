@@ -40,10 +40,10 @@ public class LightingManager implements RenderLayer {
 
     public class LightingConfig {
 	boolean shadows = true;
-	boolean diffuseLighting = false;
+	boolean diffuseLighting = true;
 	boolean blur = true;
 	boolean culling = true;
-	boolean gammaCorrection = false;
+	boolean gammaCorrection = true;
 
 	public LightingConfig shadows(boolean enabled) {
 	    this.shadows = enabled;

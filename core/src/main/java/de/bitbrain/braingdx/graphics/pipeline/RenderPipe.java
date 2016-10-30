@@ -60,11 +60,11 @@ public class RenderPipe implements Disposable {
 
     public void render(Batch batch, float delta) {
 	if (shaderManager.hasEffects() && buffer != null) {
-		renderOntoBuffer(batch, delta);
-		blendAndDraw(batch);
+	    renderOntoBuffer(batch, delta);
 	} else {
 	    draw(batch, delta);
 	}
+	blendAndDraw(batch);
     }
 
     public void resize(int width, int height) {
@@ -94,8 +94,8 @@ public class RenderPipe implements Disposable {
 	int srcFunc = batch.getBlendSrcFunc();
 	int dstFunc = batch.getBlendDstFunc();
 	batch.begin();
-	batch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_DST_ALPHA);
 	batch.setColor(Color.WHITE);
+	batch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_DST_ALPHA);
 	batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
 	batch.end();
 	batch.setBlendFunction(srcFunc, dstFunc);

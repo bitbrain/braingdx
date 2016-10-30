@@ -9,4 +9,8 @@ public interface Assets {
 
     String TEX_BACKGROUND = "background.png";
 
+    String SOLDIER = "soldier.png";
+
+    String WALL = "wall.jpg";
+
 }

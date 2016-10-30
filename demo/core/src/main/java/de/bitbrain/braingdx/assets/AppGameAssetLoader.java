@@ -13,6 +13,8 @@ public class AppGameAssetLoader implements GameAssetLoader {
 	assets.put(Assets.FONT_BYOM_32, BitmapFont.class);
 	assets.put(Assets.TEX_BACKGROUND, Texture.class);
 	assets.put(Assets.TEX_BALL, Texture.class);
+	assets.put(Assets.SOLDIER, Texture.class);
+	assets.put(Assets.WALL, Texture.class);
     }
 
 }
