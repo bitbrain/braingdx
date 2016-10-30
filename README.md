@@ -6,7 +6,7 @@
 
 **:space_invader: [Features](#features) |**
 **:package: [Installation](#installation) |**
-**:green_book: [Documentation](#documentation) |**
+**:green_book: [Documentation](https://github.com/MyRealityCoding/braingdx/wiki) |**
 **:beers: [Collaboration](#collaboration) |**
 **:rocket: [License](#license) |**
 **:pencil: [Changelog](CHANGELOG.md)**
@@ -37,10 +37,6 @@
    <version>{not available yet}</version>
 </dependency>
 ```
-
-# Documentation
-
-Wiki is not available yet. :-)
 
 # Collaboration
 
