@@ -1,9 +1,20 @@
 language: java
 
+sudo: required
+
 branches:
   only:
-  - master
+  - deploy
+
+env:
+  global:
+    - COMMIT=${TRAVIS_COMMIT::8}
+    - CH_VERSION=$(docker run -v $(pwd):/chime bitbrain/chime:latest CHANGELOG.md version)
+    - CH_TEXT=$(docker run -v $(pwd):/chime bitbrain/chime:latest CHANGELOG.md text)
 
 cache:
   directories:
   - ~/.m2/repository
+
+before_install:
+  - mvn versions:set -DnewVersion=$CH_VERSION
