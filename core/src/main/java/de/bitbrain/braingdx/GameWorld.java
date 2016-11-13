@@ -18,17 +18,13 @@ package de.bitbrain.braingdx;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Pool;
 
-import de.bitbrain.braingdx.behavior.Behavior;
-import de.bitbrain.braingdx.behavior.BehaviorManager;
-import de.bitbrain.braingdx.graphics.CameraTracker;
-import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
-import de.bitbrain.braingdx.graphics.VectorCameraTracker;
 import de.bitbrain.braingdx.util.ZIndexComparator;
 
 /**
@@ -43,6 +39,21 @@ public class GameWorld {
     /** the default cache size this world uses */
     public static final int DEFAULT_CACHE_SIZE = 100;
 
+    /**
+     * Listens to GameWorld events.
+     */
+    public static class GameWorldListener {
+	public void onAdd(GameObject object) { }
+	public void onRemove(GameObject object) { }
+	public void onUpdate(float delta) { }
+	public void onUpdate(GameObject object, float delta) { }
+	public void onUpdate(GameObject object, GameObject other, float delta) { }
+	public void onClear() { }
+    }
+
+    /**
+     * Describes when a game object is in bounds.
+     */
     public static interface WorldBounds {
 	boolean isInBounds(GameObject object, OrthographicCamera camera);
     }
@@ -63,23 +74,16 @@ public class GameWorld {
 
     private OrthographicCamera camera;
 
-    private GameObjectRenderManager renderManager;
-
-    private CameraTracker tracker;
-
     private final Comparator<GameObject> comparator = new ZIndexComparator();
 
-    private final BehaviorManager behaviorManager = new BehaviorManager();
+    private final Set<GameWorldListener> listeners = new HashSet<GameWorldListener>();
 
     public GameWorld(OrthographicCamera camera) {
 	this(camera, DEFAULT_CACHE_SIZE);
     }
 
-    public GameWorld(OrthographicCamera camera, GameObjectRenderManager renderManager, CameraTracker tracker,
-	    int cacheSize) {
+    public GameWorld(OrthographicCamera camera, int cacheSize) {
 	this.camera = camera;
-	this.renderManager = renderManager;
-	this.tracker = tracker;
 	this.pool = new Pool<GameObject>(cacheSize) {
 	    @Override
 	    protected GameObject newObject() {
@@ -88,24 +92,12 @@ public class GameWorld {
 	};
     }
 
-    public GameWorld(OrthographicCamera camera, int cacheSize) {
-	this(camera, new GameObjectRenderManager(), new VectorCameraTracker(camera), cacheSize);
+    public void addListener(GameWorldListener listener) {
+	listeners.add(listener);
     }
 
-    public void applyBehavior(String id, Behavior behavior) {
-	behaviorManager.apply(behavior, id);
-    }
-
-    public void removeBehavior(String id) {
-	behaviorManager.remove(id);
-    }
-
-    public void removeBehavior(GameObject source) {
-	behaviorManager.remove(source);
-    }
-
-    public void applyBehavior(Behavior behavior, GameObject source) {
-	behaviorManager.apply(behavior, source);
+    public void removeListener(GameWorldListener listener) {
+	listeners.remove(listener);
     }
 
     /**
@@ -125,51 +117,10 @@ public class GameWorld {
     public GameObject addObject() {
 	final GameObject object = pool.obtain();
 	objects.add(object);
+	for (GameWorldListener l : listeners) {
+	    l.onAdd(object);
+	}
 	return object;
-    }
-
-    /**
-     * Registers a renderer for an existing game object of the given type (id)
-     *
-     * @param gameObjectId type/id of the game object
-     * @param renderer instance of the renderer
-     */
-    public void registerRenderer(Integer gameObjectId, GameObjectRenderManager.GameObjectRenderer renderer) {
-	renderManager.register(gameObjectId, renderer);
-    }
-
-    /**
-     * Enables camera tracking for the given object. Tracking can be disabled by providing null.
-     *
-     * @param object game object which should be tracked.
-     */
-    public void setCameraTracking(GameObject object) {
-	tracker.setTarget(object);
-    }
-
-    /**
-     * Focuses the camera on its target (if available)
-     */
-    public void focusCamera() {
-	tracker.focus();
-    }
-
-    /**
-     * Sets the speed the camera should follow its target
-     *
-     * @param speed camera tracking speed
-     */
-    public void setTrackingSpeed(float speed) {
-	tracker.setSpeed(speed);
-    }
-
-    /**
-     * Sets the zoom scale the camera should have while following its target
-     *
-     * @param scale scale factor of the camera while tracking a target
-     */
-    public void setTrackingZoomScale(float scale) {
-	tracker.setZoomScale(scale);
     }
 
     /**
@@ -178,23 +129,24 @@ public class GameWorld {
      * @param batch the batch
      * @param delta frame delta
      */
-    public void updateAndRender(Batch batch, float delta) {
+    public void update(float delta) {
 	Collections.sort(objects, comparator);
-	for (final GameObject object : objects) {
+	for (GameObject object : objects) {
 	    if (!bounds.isInBounds(object, camera)) {
 		removals.add(object);
 		continue;
 	    }
-	    behaviorManager.updateGlobally(object, delta);
-	    behaviorManager.updateLocally(object, delta);
-	    for (final GameObject other : objects) {
+	    for (GameWorldListener l : listeners) {
+		l.onUpdate(object, delta);
+	    }
+	    for (GameObject other : objects) {
 		if (!object.getId().equals(other.getId())) {
-		    behaviorManager.updateLocallyCompared(object, other, delta);
+		    for (GameWorldListener l : listeners) {
+			l.onUpdate(object, other, delta);
+		    }
 		}
 	    }
-	    renderManager.render(object, batch, delta);
 	}
-	tracker.update(delta);
 	for (final GameObject removal : removals)
 	    remove(removal);
 	removals.clear();
@@ -212,11 +164,13 @@ public class GameWorld {
     /**
      * Resets this world object
      */
-    public void reset() {
+    public void clear() {
 	pool.clear();
 	objects.clear();
 	removals.clear();
-	behaviorManager.clear();
+	for (GameWorldListener l : listeners) {
+	    l.onClear();
+	}
     }
 
     /**
@@ -230,8 +184,10 @@ public class GameWorld {
     }
 
     private void remove(GameObject object) {
-	behaviorManager.remove(object);
 	pool.free(object);
 	objects.remove(object);
+	for (GameWorldListener l : listeners) {
+	    l.onRemove(object);
+	}
     }
 }

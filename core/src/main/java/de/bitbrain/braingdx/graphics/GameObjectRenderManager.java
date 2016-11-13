@@ -33,10 +33,17 @@ public class GameObjectRenderManager {
 
     private static Map<Integer, GameObjectRenderer> rendererMap = new HashMap<Integer, GameObjectRenderer>();
 
-    public void render(GameObject object, Batch batch, float delta) {
+    private final Batch batch;
+
+    public GameObjectRenderManager(Batch batch) {
+	this.batch = batch;
+    }
+
+    public void render(GameObject object, float delta) {
 	final GameObjectRenderer renderer = rendererMap.get(object.getType());
-	if (renderer != null)
+	if (renderer != null) {
 	    renderer.render(object, batch, delta);
+	}
     }
 
     public void register(Integer gameObjectType, GameObjectRenderer renderer) {

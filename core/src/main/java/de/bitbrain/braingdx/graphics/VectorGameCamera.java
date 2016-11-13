@@ -18,6 +18,7 @@ package de.bitbrain.braingdx.graphics;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
@@ -30,7 +31,7 @@ import de.bitbrain.braingdx.GameObject;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public class VectorCameraTracker implements CameraTracker {
+public class VectorGameCamera implements GameCamera {
 
     private static final MathContext PRECISION = MathContext.DECIMAL128;
 
@@ -40,7 +41,7 @@ public class VectorCameraTracker implements CameraTracker {
     private BigDecimal speed = new BigDecimal(5.2f, PRECISION);
     private BigDecimal zoomScale = new BigDecimal(0.0025f, PRECISION);
 
-    public VectorCameraTracker(OrthographicCamera camera) {
+    public VectorGameCamera(OrthographicCamera camera) {
 	this.camera = camera;
 	velocity = new Vector2();
     }
@@ -52,6 +53,7 @@ public class VectorCameraTracker implements CameraTracker {
 
     @Override
     public void update(float delta) {
+	camera.update();
 	if (target == null)
 	    return;
 	BigDecimal preciseDelta = BigDecimal.valueOf(delta);
@@ -93,5 +95,10 @@ public class VectorCameraTracker implements CameraTracker {
 	camera.position.x = target.getLeft();
 	camera.position.y = target.getTop();
 	camera.zoom = 1;
+    }
+
+    @Override
+    public Camera getInternal() {
+	return camera;
     }
 }

@@ -30,6 +30,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import aurelienribon.tweenengine.TweenManager;
+import de.bitbrain.braingdx.behavior.BehaviorManager;
+import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
+import de.bitbrain.braingdx.graphics.GameCamera;
+import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
+import de.bitbrain.braingdx.graphics.GameObjectRenderManagerAdapter;
+import de.bitbrain.braingdx.graphics.VectorGameCamera;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
@@ -51,11 +57,17 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     public static final String PIPE_UI = "ui";
     public static final String PIPE_BACKGROUND = "background";
 
-    protected T game;
+    private T game;
 
-    protected GameWorld world;
+    private GameWorld world;
 
-    protected OrthographicCamera camera;
+    private BehaviorManager behaviorManager;
+
+    private GameObjectRenderManager renderManager;
+
+    private GameCamera gameCamera;
+
+    private OrthographicCamera camera;
 
     private Color backgroundColor = Color.BLACK.cpy();
 
@@ -63,11 +75,11 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     private Stage stage;
 
-    protected RenderPipeline renderPipeline;
+    private RenderPipeline renderPipeline;
 
-    protected LightingManager lightingManager;
+    private LightingManager lightingManager;
 
-    protected World boxWorld;
+    private World boxWorld;
 
     public AbstractScreen(T game) {
 	this.game = game;
@@ -85,11 +97,15 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     public final void show() {
 	camera = new OrthographicCamera();
 	world = new GameWorld(camera);
+	behaviorManager = new BehaviorManager();
 	batch = new SpriteBatch();
 	input = new InputMultiplexer();
 	renderPipeline = new RenderPipeline(getShaderConfig());
 	boxWorld = new World(Vector2.Zero, false);
 	lightingManager = new LightingManager(boxWorld, camera);
+	renderManager = new GameObjectRenderManager(batch);
+	gameCamera = new VectorGameCamera(camera);
+	wire();
 	buildLayers();
     }
 
@@ -98,7 +114,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 	tweenManager.update(delta);
-	camera.update();
+	gameCamera.update(delta);
 	stage.act(delta);
 	batch.setProjectionMatrix(camera.combined);
 	renderPipeline.render(batch, delta);
@@ -134,6 +150,46 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     }
 
+    public GameWorld getGameWorld() {
+	return world;
+    }
+
+    public Color getBackgroundColor() {
+	return backgroundColor;
+    }
+
+    public Stage getStage() {
+	return stage;
+    }
+
+    public RenderPipeline getRenderPipeline() {
+	return renderPipeline;
+    }
+
+    public World getBoxWorld() {
+	return boxWorld;
+    }
+
+    public TweenManager getTweenManager() {
+	return tweenManager;
+    }
+
+    public BehaviorManager getBehaviorManager() {
+	return behaviorManager;
+    }
+
+    public GameObjectRenderManager getRenderManager() {
+	return renderManager;
+    }
+
+    public GameCamera getGameCamera() {
+	return gameCamera;
+    }
+
+    public LightingManager getLightingManager() {
+	return lightingManager;
+    }
+
     protected void beforeWorldRender(Batch batch, float delta) {
 
     }
@@ -156,7 +212,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     @Override
     public void dispose() {
-	world.reset();
+	world.clear();
 	stage.dispose();
 	input.clear();
 	renderPipeline.dispose();
@@ -182,7 +238,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    public void render(Batch batch, float delta) {
 		batch.begin();
 		beforeWorldRender(batch, delta);
-		world.updateAndRender(batch, delta);
+		world.update(delta);
 		afterWorldRender(batch, delta);
 		batch.end();
 	    }
@@ -197,5 +253,10 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    }
 
 	});
+    }
+
+    private void wire() {
+	world.addListener(new BehaviorManagerAdapter(behaviorManager));
+	world.addListener(new GameObjectRenderManagerAdapter(renderManager));
     }
 }

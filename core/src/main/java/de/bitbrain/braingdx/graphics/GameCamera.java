@@ -1,5 +1,7 @@
 package de.bitbrain.braingdx.graphics;
 
+import com.badlogic.gdx.graphics.Camera;
+
 import de.bitbrain.braingdx.GameObject;
 
 /**
@@ -9,7 +11,7 @@ import de.bitbrain.braingdx.GameObject;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public interface CameraTracker {
+public interface GameCamera {
 
     /**
      * Updates the tracker in a frame step
@@ -43,5 +45,12 @@ public interface CameraTracker {
      * @param target the target
      */
     void setTarget(GameObject target);
+
+    /**
+     * Provides the internal camera
+     * 
+     * @return the internal camera object
+     */
+    Camera getInternal();
 
 }

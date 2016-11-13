@@ -45,7 +45,7 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
     private void prepareResources() {
 	Styles.init();
 	final Texture background = SharedAssetManager.getInstance().get(Assets.WALL, Texture.class);
-	renderPipeline.add(PIPE_BACKGROUND, new RenderLayer() {
+	getRenderPipeline().add(PIPE_BACKGROUND, new RenderLayer() {
 
 	    @Override
 	    public void render(Batch batch, float delta) {
@@ -55,13 +55,13 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	    }
 
 	});
-	lightingManager.setAmbientLight(new Color(0.1f, 0f, 0.2f, 0.25f));
+	getLightingManager().setAmbientLight(new Color(0.1f, 0f, 0.2f, 0.25f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.SOLDIER);
-	world.registerRenderer(TYPE, new SpriteRenderer(texture));
+	getRenderManager().register(TYPE, new SpriteRenderer(texture));
     }
 
     private void setupShaders() {
-	RenderPipe uiPipe = renderPipeline.getPipe(PIPE_UI);
+	RenderPipe uiPipe = getRenderPipeline().getPipe(PIPE_UI);
 	Bloom uiBloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 1f), Math.round(Gdx.graphics.getHeight() / 1f));
 	uiBloom.setBlurAmount(10f);
 	uiBloom.setBloomIntesity(2.1f);
@@ -74,14 +74,14 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 
     private void addRandomObjects() {
 	for (int i = 0; i < OBJECTS; ++i) {
-	    GameObject object = world.addObject();
+	    GameObject object = getGameWorld().addObject();
 	    object.setDimensions(230, 230);
 	    object.setPosition((int) (Gdx.graphics.getWidth() * Math.random()),
 		    (int) (Gdx.graphics.getHeight() * Math.random()));
 	    object.setType(TYPE);
 	    Color randomColor = new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1f);
-	    world.applyBehavior(new PointLightBehavior(randomColor, 500f, lightingManager), object);
-	    world.applyBehavior(new RandomMovementBehavior(), object);
+	    getBehaviorManager().apply(new PointLightBehavior(randomColor, 500f, getLightingManager()), object);
+	    getBehaviorManager().apply(new RandomMovementBehavior(), object);
 	    Color objectColor = randomColor.cpy();
 	    objectColor.a = 1f;
 	    // object.setColor(objectColor);
@@ -91,8 +91,8 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
     private void createButtonUI(Stage stage) {
 	Table group = new Table();
 	group.setFillParent(true);
-	for (String pipeId : renderPipeline.getPipeIds()) {
-	    final RenderPipe renderPipe = renderPipeline.getPipe(pipeId);
+	for (String pipeId : getRenderPipeline().getPipeIds()) {
+	    final RenderPipe renderPipe = getRenderPipeline().getPipe(pipeId);
 	    final TextButton textButton = new TextButton("Disable " + pipeId, Styles.BUTTON_DEFAULT_ACTIVE);
 	    textButton.getColor().a = 0.7f;
 	    textButton.addListener(new ClickListener() {

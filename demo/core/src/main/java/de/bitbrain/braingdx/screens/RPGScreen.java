@@ -34,9 +34,9 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     }
 
     private void prepareResources() {
-	lightingManager.setAmbientLight(new Color(0.05f, 0f, 0.5f, 0.15f));
+	getLightingManager().setAmbientLight(new Color(0.05f, 0f, 0.5f, 0.15f));
 	final Texture background = SharedAssetManager.getInstance().get(Assets.WALL, Texture.class);
-	renderPipeline.add(PIPE_BACKGROUND, new RenderLayer() {
+	getRenderPipeline().add(PIPE_BACKGROUND, new RenderLayer() {
 
 	    @Override
 	    public void render(Batch batch, float delta) {
@@ -47,11 +47,11 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
 	});
 	Texture texture = SharedAssetManager.getInstance().get(Assets.SOLDIER);
-	world.registerRenderer(SOLDIER, new SpriteRenderer(texture));
+	getRenderManager().register(SOLDIER, new SpriteRenderer(texture));
     }
 
     private void setupShaders() {
-	RenderPipe worldPipe = renderPipeline.getPipe(PIPE_WORLD);
+	RenderPipe worldPipe = getRenderPipeline().getPipe(PIPE_WORLD);
 	Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 1.5f),
 		Math.round(Gdx.graphics.getHeight() / 1.5f));
 	bloom.setBlurAmount(15f);
@@ -63,10 +63,11 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     }
 
     private void addSoldier(float x, float y, int size) {
-	GameObject object = world.addObject();
+	GameObject object = getGameWorld().addObject();
 	object.setPosition(x, y);
 	object.setType(SOLDIER);
 	object.setDimensions(size, size);
-	world.applyBehavior(new PointLightBehavior(Color.valueOf("885522"), 700f, lightingManager), object);
+	getBehaviorManager().apply(new PointLightBehavior(Color.valueOf("885522"), 700f, getLightingManager()),
+		object);
     }
 }
