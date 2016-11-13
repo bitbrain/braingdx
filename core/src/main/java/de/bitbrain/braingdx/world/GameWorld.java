@@ -45,7 +45,6 @@ public class GameWorld {
     public static class GameWorldListener {
 	public void onAdd(GameObject object) { }
 	public void onRemove(GameObject object) { }
-	public void onUpdate(float delta) { }
 	public void onUpdate(GameObject object, float delta) { }
 	public void onUpdate(GameObject object, GameObject other, float delta) { }
 	public void onClear() { }
