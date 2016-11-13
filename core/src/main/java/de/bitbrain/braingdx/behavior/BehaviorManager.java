@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.bitbrain.braingdx.GameObject;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Manages behavior of game objects.

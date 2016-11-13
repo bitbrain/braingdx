@@ -22,7 +22,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
-import de.bitbrain.braingdx.GameObject;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Using underlying vectors to calculate the camera tracking.

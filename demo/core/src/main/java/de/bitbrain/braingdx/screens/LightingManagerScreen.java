@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import de.bitbrain.braingdx.AbstractScreen;
-import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.apps.LightingManagerTest;
 import de.bitbrain.braingdx.assets.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
@@ -23,6 +21,7 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
 import de.bitbrain.braingdx.ui.Styles;
+import de.bitbrain.braingdx.world.GameObject;
 
 public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 

@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import de.bitbrain.braingdx.GameObject;
+import de.bitbrain.braingdx.world.GameObject;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BehaviorManagerTest {

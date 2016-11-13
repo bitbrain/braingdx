@@ -2,7 +2,7 @@ package de.bitbrain.braingdx.graphics;
 
 import com.badlogic.gdx.graphics.Camera;
 
-import de.bitbrain.braingdx.GameObject;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Tracks a camera and make it following a target

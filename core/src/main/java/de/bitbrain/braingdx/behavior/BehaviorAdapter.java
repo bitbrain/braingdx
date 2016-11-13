@@ -15,7 +15,7 @@
 
 package de.bitbrain.braingdx.behavior;
 
-import de.bitbrain.braingdx.GameObject;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Adapter for behaviors

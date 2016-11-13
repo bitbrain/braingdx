@@ -17,7 +17,7 @@ package de.bitbrain.braingdx.util;
 
 import java.util.Comparator;
 
-import de.bitbrain.braingdx.GameObject;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Compares ZIndex of game objects

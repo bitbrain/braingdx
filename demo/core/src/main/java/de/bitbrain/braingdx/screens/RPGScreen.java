@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import de.bitbrain.braingdx.AbstractScreen;
-import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.apps.RPGTest;
 import de.bitbrain.braingdx.assets.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
@@ -17,6 +15,7 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
+import de.bitbrain.braingdx.world.GameObject;
 
 public class RPGScreen extends AbstractScreen<RPGTest> {
 

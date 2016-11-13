@@ -20,7 +20,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import de.bitbrain.braingdx.GameObject;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Handles rendering of game objects

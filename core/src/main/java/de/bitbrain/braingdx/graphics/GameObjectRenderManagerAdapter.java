@@ -1,7 +1,7 @@
 package de.bitbrain.braingdx.graphics;
 
-import de.bitbrain.braingdx.GameObject;
-import de.bitbrain.braingdx.GameWorld.GameWorldListener;
+import de.bitbrain.braingdx.world.GameObject;
+import de.bitbrain.braingdx.world.GameWorld.GameWorldListener;
 
 public class GameObjectRenderManagerAdapter extends GameWorldListener {
 

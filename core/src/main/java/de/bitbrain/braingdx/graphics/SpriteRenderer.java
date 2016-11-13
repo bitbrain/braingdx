@@ -20,8 +20,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * renderer implementation for sprites

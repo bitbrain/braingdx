@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx;
+package de.bitbrain.braingdx.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -30,6 +30,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import aurelienribon.tweenengine.TweenManager;
+import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
 import de.bitbrain.braingdx.graphics.GameCamera;
@@ -42,6 +43,7 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.ui.Tooltip;
+import de.bitbrain.braingdx.world.GameWorld;
 
 /**
  * Abstract base class for screens

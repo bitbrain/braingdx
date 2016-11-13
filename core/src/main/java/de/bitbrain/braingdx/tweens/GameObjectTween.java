@@ -16,7 +16,7 @@
 package de.bitbrain.braingdx.tweens;
 
 import aurelienribon.tweenengine.TweenAccessor;
-import de.bitbrain.braingdx.GameObject;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Tween facility for game objects

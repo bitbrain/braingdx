@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx;
+package de.bitbrain.braingdx.world;
 
 import java.util.ArrayList;
 import java.util.Collections;
