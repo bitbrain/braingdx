@@ -58,27 +58,16 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     public static final String PIPE_BACKGROUND = "background";
 
     private T game;
-
     private GameWorld world;
-
     private BehaviorManager behaviorManager;
-
     private GameObjectRenderManager renderManager;
-
     private GameCamera gameCamera;
-
     private OrthographicCamera camera;
-
     private Color backgroundColor = Color.BLACK.cpy();
-
     private Batch batch;
-
     private Stage stage;
-
     private RenderPipeline renderPipeline;
-
     private LightingManager lightingManager;
-
     private World boxWorld;
 
     public AbstractScreen(T game) {
@@ -221,6 +210,13 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     public void setBackgroundColor(Color color) {
 	this.backgroundColor = color;
     }
+    
+
+
+    private void wire() {
+	world.addListener(new BehaviorManagerAdapter(behaviorManager));
+	world.addListener(new GameObjectRenderManagerAdapter(renderManager));
+    }
 
     private void buildLayers() {
 	// 0. Background layer
@@ -253,10 +249,5 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    }
 
 	});
-    }
-
-    private void wire() {
-	world.addListener(new BehaviorManagerAdapter(behaviorManager));
-	world.addListener(new GameObjectRenderManagerAdapter(renderManager));
     }
 }
