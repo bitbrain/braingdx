@@ -32,14 +32,14 @@
 ```xml
 <dependency>
    <artifactId>braingdx</artifactId>
-   <groupId>com.github.myrealitycoding</groupId>
+   <groupId>com.github.bitbrain</groupId>
    <version>{not available yet}</version>
 </dependency>
 ```
 
 # Collaboration
 
-Feel free to create [a new pull request](https://github.com/bitbrain/braingdx/pull/new/master). When you detect an issue [please report it here](https://github.com/MyRealityCoding/braingdx/issues).
+Feel free to create [a new pull request](https://github.com/bitbrain/braingdx/pull/new/master). When you detect an issue [please report it here](https://github.com/bitbrain/braingdx/issues).
 
 # License
 
