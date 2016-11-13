@@ -12,7 +12,7 @@
 	<description>
         libGDX utility framework for Java games.
     </description>
-	<url>https://github.com/MyRealityCoding/braingdx</url>
+	<url>https://github.com/bitbrain/braingdx</url>
 
 	<developers>
 		<developer>
@@ -21,6 +21,18 @@
 			<email>miguel-gonzalez@gmx.de</email>
 		</developer>
 	</developers>
+	
+	<!-- Properties -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sdk.version>1.6</sdk.version>
+		<libgdx.version>1.6.4</libgdx.version>
+		<tween.version>6.3.3</tween.version>
+		<box2dlights.version>1.4</box2dlights.version>
+		<junit.version>4.12</junit.version>
+		<mockito.version>1.9.5</mockito.version>
+		<assertj.version>3.3.0</assertj.version>
+	</properties>
 
 	<!-- Module definitions -->
 	<modules>
@@ -42,21 +54,48 @@
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
 			<artifactId>gdx</artifactId>
-			<version>1.6.4</version>
+			<version>${libgdx.version}</version>
 			<optional>true</optional>
 		</dependency>
 	
 	    <dependency>
 	        <groupId>com.github.arcnor</groupId>
 	        <artifactId>universal-tween-engine</artifactId>
-	        <version>6.3.3</version>        
+	        <version>${tween.version}</version>        
 	    </dependency>
 	    
 	    <dependency>
 		  <groupId>com.badlogicgames.box2dlights</groupId>
 		  <artifactId>box2dlights</artifactId>
-		  <version>1.4</version>
+		  <version>${box2dlights.version}</version>
 		</dependency>
+		
+		<!-- TESTING -->
+		
+		<dependency>
+		    <groupId>junit</groupId>
+		    <artifactId>junit</artifactId>
+		    <version>${junit.version}</version>
+		    <scope>test</scope>
+		    <optional>true</optional>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-all</artifactId>
+		    <version>${mockito.version}</version>
+		    <scope>test</scope>
+		    <optional>true</optional>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.assertj</groupId>
+		    <artifactId>assertj-core</artifactId>
+		    <version>${assertj.version}</version>
+		    <scope>test</scope>
+		    <optional>true</optional>
+		</dependency>
+		
 	</dependencies>
 
 	<!-- Build configuration -->
@@ -66,16 +105,12 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>${sdk.version}</source>
+					<target>${sdk.version}</target>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
 	
 	<repositories>		
 		<repository>
@@ -85,9 +120,9 @@
 	</repositories>
 
 	<scm>
-		<connection>scm:git:https://github.com/MyRealityCoding/braingdx.git</connection>
-		<developerConnection>scm:git:git@github.com:MyRealityCoding/braingdx.git</developerConnection>
-		<url>https://github.com/MyRealityCoding/braingdx</url>
+		<connection>scm:git:https://github.com/bitbrain/braingdx.git</connection>
+		<developerConnection>scm:git:git@github.com:bitbrain/braingdx.git</developerConnection>
+		<url>https://github.com/bitbrain/braingdx</url>
 		<tag>HEAD</tag>
 	</scm>
 </project>

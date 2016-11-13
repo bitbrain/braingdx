@@ -17,8 +17,10 @@ package de.bitbrain.braingdx.behavior;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.bitbrain.braingdx.GameObject;
 
@@ -30,24 +32,24 @@ import de.bitbrain.braingdx.GameObject;
  */
 public class BehaviorManager {
 
-    private Map<String, Behavior> globalBehaviors;
+    private Set<Behavior> globalBehaviors;
 
-    private Map<String, List<Behavior>> localBehaviors;
+    private Map<GameObject, List<Behavior>> localBehaviors;
 
     public BehaviorManager() {
-	globalBehaviors = new HashMap<String, Behavior>();
-	localBehaviors = new HashMap<String, List<Behavior>>();
+	globalBehaviors = new HashSet<Behavior>();
+	localBehaviors = new HashMap<GameObject, List<Behavior>>();
     }
 
     public void apply(Behavior behavior, GameObject source) {
-	if (!localBehaviors.containsKey(source.getId())) {
-	    localBehaviors.put(source.getId(), new ArrayList<Behavior>());
+	if (!localBehaviors.containsKey(source)) {
+	    localBehaviors.put(source, new ArrayList<Behavior>());
 	}
-	localBehaviors.get(source.getId()).add(behavior);
+	localBehaviors.get(source).add(behavior);
     }
 
-    public void apply(Behavior behavior, String identifier) {
-	globalBehaviors.put(identifier, behavior);
+    public void apply(Behavior behavior) {
+	globalBehaviors.add(behavior);
     }
 
     public void remove(String identifier) {
@@ -55,7 +57,7 @@ public class BehaviorManager {
     }
 
     public void remove(GameObject source) {
-	List<Behavior> behaviors = localBehaviors.remove(source.getId());
+	List<Behavior> behaviors = localBehaviors.remove(source);
 	if (behaviors != null) {
 	    for (Behavior behavior : behaviors) {
 		behavior.onRemove(source);
@@ -64,13 +66,13 @@ public class BehaviorManager {
     }
 
     public void updateGlobally(GameObject source, float delta) {
-	for (Behavior behavior : globalBehaviors.values()) {
+	for (Behavior behavior : globalBehaviors) {
 	    behavior.update(source, delta);
 	}
     }
 
     public void updateLocally(GameObject source, float delta) {
-	List<Behavior> behaviors = localBehaviors.get(source.getId());
+	List<Behavior> behaviors = localBehaviors.get(source);
 	if (behaviors != null) {
 	    for (Behavior behavior : behaviors) {
 		behavior.update(source, delta);
@@ -79,7 +81,7 @@ public class BehaviorManager {
     }
 
     public void updateLocallyCompared(GameObject source, GameObject target, float delta) {
-	List<Behavior> behaviors = localBehaviors.get(source.getId());
+	List<Behavior> behaviors = localBehaviors.get(source);
 	if (behaviors != null) {
 	    for (Behavior behavior : behaviors) {
 		behavior.update(source, target, delta);
