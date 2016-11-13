@@ -57,7 +57,7 @@ public class PointLightBehavior extends BehaviorAdapter {
     }
 
     @Override
-    public void onRemove(GameObject source) {
+    public void onDetach(GameObject source) {
 	lightingManager.removePointLight(lightId);
     }
 

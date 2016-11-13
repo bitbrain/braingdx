@@ -27,11 +27,18 @@ import de.bitbrain.braingdx.world.GameObject;
 public interface Behavior {
 
     /**
+     * Callback which is called whenever this behavior gets attached to the source provided.
+     * 
+     * @param source the source where this behavior gets attached to
+     */
+    void onAttach(GameObject source);
+
+    /**
      * Callback which is called whenever this behavior gets detached from the source provided.
      * 
      * @param source the source where this behavior gets detached from
      */
-    void onRemove(GameObject source);
+    void onDetach(GameObject source);
 
     /**
      * Updates the behavior for a given source object.

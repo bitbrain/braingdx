@@ -42,25 +42,28 @@ public class BehaviorManager {
     }
 
     public void apply(Behavior behavior, GameObject source) {
-	if (!localBehaviors.containsKey(source)) {
-	    localBehaviors.put(source, new ArrayList<Behavior>());
+	List<Behavior> behaviors = localBehaviors.get(source);
+	if (behaviors == null) {
+	    behaviors = new ArrayList<Behavior>();
+	    localBehaviors.put(source, behaviors);
 	}
-	localBehaviors.get(source).add(behavior);
+	behaviors.add(behavior);
+	behavior.onAttach(source);
     }
 
     public void apply(Behavior behavior) {
 	globalBehaviors.add(behavior);
     }
 
-    public void remove(String identifier) {
-	globalBehaviors.remove(identifier);
+    public void remove(Behavior behavior) {
+	globalBehaviors.remove(behavior);
     }
 
     public void remove(GameObject source) {
 	List<Behavior> behaviors = localBehaviors.remove(source);
 	if (behaviors != null) {
 	    for (Behavior behavior : behaviors) {
-		behavior.onRemove(source);
+		behavior.onDetach(source);
 	    }
 	}
     }

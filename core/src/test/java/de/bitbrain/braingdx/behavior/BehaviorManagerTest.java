@@ -24,6 +24,7 @@ public class BehaviorManagerTest {
 	GameObject mockObject = Mockito.mock(GameObject.class);
 	manager.apply(mockBehavior, mockObject);
 	manager.updateLocally(mockObject, 0f);
+	Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onAttach(mockObject);
 	Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(mockObject, 0f);
     }
 
@@ -47,6 +48,7 @@ public class BehaviorManagerTest {
 	manager.remove(mockObject);
 	manager.updateLocally(mockObject, 0f);
 	manager.updateGlobally(mockObject, 0f);
+	Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onDetach(mockObject);
 	Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(mockObject, 0f);
     }
 }

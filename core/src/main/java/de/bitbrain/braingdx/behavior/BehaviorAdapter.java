@@ -27,7 +27,12 @@ import de.bitbrain.braingdx.world.GameObject;
 public abstract class BehaviorAdapter implements Behavior {
 
     @Override
-    public void onRemove(GameObject source) {
+    public void onAttach(GameObject source) {
+	// noOp
+    }
+
+    @Override
+    public void onDetach(GameObject source) {
 	// noOp
     }
 
