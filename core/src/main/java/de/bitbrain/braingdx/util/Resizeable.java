@@ -12,21 +12,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.bitbrain.braingdx.graphics.pipeline;
 
-import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
+package de.bitbrain.braingdx.util;
 
 /**
- * A renderpipe is compatible with other pipes and is responsible for rendering internal layers.
+ * An resizeable element.
  * 
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-public interface RenderPipe {
+public interface Resizeable {
 
-    public boolean isEnabled();
-
-    void setEnabled(boolean enabled);
-
-    void addEffects(PostProcessorEffect... effects);
+    /**
+     * Is called whenever this element gets resized.
+     * 
+     * @param width new width to size to
+     * @param height new heigtht to size to
+     */
+    void resize(int width, int height);
 }

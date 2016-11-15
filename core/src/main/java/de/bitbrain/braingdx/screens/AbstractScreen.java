@@ -38,6 +38,7 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManagerAdapter;
 import de.bitbrain.braingdx.graphics.VectorGameCamera;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
+import de.bitbrain.braingdx.graphics.pipeline.LayeredRenderPipeline;
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
@@ -91,7 +92,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	behaviorManager = new BehaviorManager();
 	batch = new SpriteBatch();
 	input = new InputMultiplexer();
-	renderPipeline = new RenderPipeline(getShaderConfig());
+	renderPipeline = new LayeredRenderPipeline(getShaderConfig());
 	boxWorld = new World(Vector2.Zero, false);
 	lightingManager = new LightingManager(boxWorld, camera);
 	renderManager = new GameObjectRenderManager(batch);

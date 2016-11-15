@@ -12,21 +12,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package de.bitbrain.braingdx.graphics.pipeline;
 
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 
-/**
- * A renderpipe is compatible with other pipes and is responsible for rendering internal layers.
- * 
- * @author Miguel Gonzalez Sanchez
- * @version 1.0.0
- */
-public interface RenderPipe {
+class CombinedRenderPipe implements RenderPipe {
 
-    public boolean isEnabled();
+    @Override
+    public boolean isEnabled() {
+	// TODO Auto-generated method stub
+	return false;
+    }
 
-    void setEnabled(boolean enabled);
+    @Override
+    public void setEnabled(boolean enabled) {
+	// TODO Auto-generated method stub
 
-    void addEffects(PostProcessorEffect... effects);
+    }
+
+    @Override
+    public void addEffects(PostProcessorEffect... effects) {
+	// TODO Auto-generated method stub
+
+    }
 }
