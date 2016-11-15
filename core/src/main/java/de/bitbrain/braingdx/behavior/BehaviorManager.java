@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import de.bitbrain.braingdx.world.GameObject;
@@ -93,6 +94,11 @@ public class BehaviorManager {
     }
 
     public void clear() {
+	for (Entry<GameObject, List<Behavior>> behaviors : localBehaviors.entrySet()) {
+	    for (Behavior behavior : behaviors.getValue()) {
+		behavior.onDetach(behaviors.getKey());
+	    }
+	}
 	localBehaviors.clear();
 	globalBehaviors.clear();
     }
