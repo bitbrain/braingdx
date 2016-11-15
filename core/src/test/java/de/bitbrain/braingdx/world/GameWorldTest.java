@@ -44,6 +44,7 @@ public class GameWorldTest {
     public void testRemoveObject() {
 	GameObject object = world.addObject();
 	world.remove(object);
+	world.update(0f);
 	assertThat(world.size()).isEqualTo(0);
     }
 
