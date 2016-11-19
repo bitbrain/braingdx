@@ -38,7 +38,7 @@ import de.bitbrain.braingdx.util.ItemsManager;
  *
  * @author bmanuel
  */
-public final class PostProcessor implements Disposable {
+public class PostProcessor implements Disposable {
     /** Enable pipeline state queries: beware the pipeline can stall! */
     public static boolean EnableQueryStates = false;
 

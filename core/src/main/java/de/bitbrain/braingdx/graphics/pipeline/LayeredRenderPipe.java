@@ -15,13 +15,12 @@
 
 package de.bitbrain.braingdx.graphics.pipeline;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
 
+import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderManager;
 import de.bitbrain.braingdx.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
@@ -41,11 +40,15 @@ class LayeredRenderPipe implements RenderPipe, Disposable, Resizeable {
 
     private FrameBuffer buffer;
 
+    private final FrameBufferFactory bufferFactory;
+
     private boolean enabled;
 
-    LayeredRenderPipe(RenderLayer layer, PostProcessor processor, PostProcessorEffect... effects) {
+    LayeredRenderPipe(RenderLayer layer, PostProcessor processor, FrameBufferFactory factory,
+	    PostProcessorEffect... effects) {
 	this.renderLayer = layer;
 	this.shaderManager = new ShaderManager(processor, effects);
+	this.bufferFactory = factory;
 	this.setEnabled(true);
     }
 
@@ -73,7 +76,7 @@ class LayeredRenderPipe implements RenderPipe, Disposable, Resizeable {
 	if (buffer != null) {
 	    buffer.dispose();
 	}
-	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+	this.buffer = bufferFactory.create(width, height);
     }
 
     @Override
