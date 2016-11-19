@@ -15,25 +15,37 @@
 
 package de.bitbrain.braingdx.graphics.pipeline;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 
 class CombinedRenderPipe implements RenderPipe {
 
+    private final RenderLayer layer;
+
+    private boolean enabled;
+
+    public CombinedRenderPipe(RenderLayer layer) {
+	this.layer = layer;
+    }
+
     @Override
     public boolean isEnabled() {
-	// TODO Auto-generated method stub
-	return false;
+	return enabled;
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-	// TODO Auto-generated method stub
-
+	this.enabled = enabled;
     }
 
     @Override
     public void addEffects(PostProcessorEffect... effects) {
 	// TODO Auto-generated method stub
 
+    }
+
+    public void draw(Batch batch, float delta) {
+	layer.render(batch, delta);
     }
 }

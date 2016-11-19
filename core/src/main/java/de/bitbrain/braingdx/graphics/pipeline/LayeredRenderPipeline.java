@@ -43,7 +43,7 @@ public class LayeredRenderPipeline implements RenderPipeline {
 
     private static final boolean isDesktop = (Gdx.app.getType() == Application.ApplicationType.Desktop);
 
-    private final Map<String, LayeredRenderPipe> pipes;
+    private final Map<String, LayeredRenderPipe> pipes = new LinkedHashMap<String, LayeredRenderPipe>();
 
     private final ShaderConfig config;
 
@@ -63,7 +63,6 @@ public class LayeredRenderPipeline implements RenderPipeline {
     }
 
     LayeredRenderPipeline(ShaderConfig config, PostProcessor processor, FrameBufferFactory factory) {
-	this.pipes = new LinkedHashMap<String, LayeredRenderPipe>();
 	this.config = config;
 	ShaderLoader.BasePath = this.config.basePath;
 	ShaderLoader.PathResolver = this.config.pathResolver;

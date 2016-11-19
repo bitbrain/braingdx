@@ -16,10 +16,21 @@
 package de.bitbrain.braingdx.graphics.pipeline;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.math.Rectangle;
 
+import de.bitbrain.braingdx.graphics.FrameBufferFactory;
+import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
+import de.bitbrain.braingdx.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
+import de.bitbrain.braingdx.util.ShaderLoader;
 
 /**
  * Combined implementation of {@link RenderPipeline}. This pipeline will bake together all layers
@@ -34,39 +45,65 @@ import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
  */
 public class CombinedRenderPipeline implements RenderPipeline {
 
+    private static final boolean isDesktop = (Gdx.app.getType() == Application.ApplicationType.Desktop);
+
+    private final Map<String, CombinedRenderPipe> pipes = new LinkedHashMap<String, CombinedRenderPipe>();
+
+    private final PostProcessor processor;
+
+    private final FrameBufferFactory bufferFactory;
+
+    private final ShaderConfig config;
+
+    public CombinedRenderPipeline(ShaderConfig config) {
+	this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
+
+	    @Override
+	    public FrameBuffer create(int width, int height) {
+		return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+	    }
+
+	});
+    }
+
+    CombinedRenderPipeline(ShaderConfig config, PostProcessor processor, FrameBufferFactory factory) {
+	this.config = config;
+	ShaderLoader.BasePath = this.config.basePath;
+	ShaderLoader.PathResolver = this.config.pathResolver;
+	this.processor = processor;
+	this.bufferFactory = factory;
+    }
+
     @Override
     public void dispose() {
-	// TODO Auto-generated method stub
-
+	processor.dispose();
     }
 
     @Override
     public void resize(int width, int height) {
-	// TODO Auto-generated method stub
-
+	processor.setViewport(new Rectangle(0f, 0f, width, height));
     }
 
     @Override
     public void add(String id, RenderLayer layer, PostProcessorEffect... effects) {
-	// TODO Auto-generated method stub
-
+	CombinedRenderPipe pipe = new CombinedRenderPipe(layer);
+	pipes.put(id, pipe);
     }
 
     @Override
     public RenderPipe getPipe(String id) {
-	// TODO Auto-generated method stub
-	return null;
+	return pipes.getOrDefault(id, null);
     }
 
     @Override
     public Collection<String> getPipeIds() {
-	// TODO Auto-generated method stub
-	return null;
+	return pipes.keySet();
     }
 
     @Override
     public void render(Batch batch, float delta) {
-	// TODO Auto-generated method stub
-
+	for (CombinedRenderPipe pipe : pipes.values()) {
+	    pipe.draw(batch, delta);
+	}
     }
 }

@@ -36,6 +36,7 @@ public class RenderPipelineTest {
 	Gdx.app = mock(Application.class);
 	when(Gdx.app.getType()).thenReturn(ApplicationType.Desktop);
 	params.add(new RenderPipelineFactory[] { new LayeredRenderPipelineFactory() });
+	params.add(new RenderPipelineFactory[] { new CombinedRenderPipelineFactory() });
 	return params;
     }
 
