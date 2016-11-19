@@ -14,6 +14,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 
 import com.badlogic.gdx.Application;
@@ -52,12 +53,19 @@ public class RenderPipelineTest {
 
     @Test
     public void testRender() {
-	RenderLayer layer = mock(RenderLayer.class);
+	RenderLayer layerA = mock(RenderLayer.class);
+	RenderLayer layerB = mock(RenderLayer.class);
+	RenderLayer layerC = mock(RenderLayer.class);
 	Batch batch = mock(Batch.class);
-	pipeline.add("my-id", layer);
+	pipeline.add("my-id-a", layerA);
+	pipeline.add("my-id-b", layerB);
+	pipeline.add("my-id-c", layerC);
 	pipeline.resize(0, 0);
 	pipeline.render(batch, 0f);
-	Mockito.inOrder(layer).verify(layer, Mockito.calls(1)).render(batch, 0f);
+	InOrder order = Mockito.inOrder(layerA, layerB, layerC);
+	order.verify(layerA, Mockito.calls(1)).render(batch, 0f);
+	order.verify(layerB, Mockito.calls(1)).render(batch, 0f);
+	order.verify(layerC, Mockito.calls(1)).render(batch, 0f);
     }
 
     @Test
