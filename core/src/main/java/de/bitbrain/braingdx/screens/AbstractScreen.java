@@ -230,8 +230,9 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    }
 
 	    @Override
-	    public boolean hasShaderSupport() {
-		return true;
+	    public void beforeRender() {
+		// TODO Auto-generated method stub
+
 	    }
 
 	});
@@ -248,8 +249,9 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    }
 
 	    @Override
-	    public boolean hasShaderSupport() {
-		return true;
+	    public void beforeRender() {
+		// TODO Auto-generated method stub
+
 	    }
 	});
 	// 2. Lighting layer
@@ -262,8 +264,9 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    }
 
 	    @Override
-	    public boolean hasShaderSupport() {
-		return true;
+	    public void beforeRender() {
+		// TODO Auto-generated method stub
+
 	    }
 
 	});

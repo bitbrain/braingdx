@@ -22,7 +22,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-public interface RenderLayer extends Shadeable {
+public interface RenderLayer {
+
+    void beforeRender();
 
     /**
      * Renders the layer with the given batch and delta.

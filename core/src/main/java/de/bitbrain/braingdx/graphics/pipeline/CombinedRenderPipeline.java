@@ -21,6 +21,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -83,6 +84,9 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
     @Override
     public void resize(int width, int height) {
+	for (CombinedRenderPipe pipe : pipes.values()) {
+	    pipe.resize(width, height);
+	}
 	processor.setViewport(new Rectangle(0f, 0f, width, height));
 	if (buffer != null) {
 	    buffer.dispose();
@@ -92,7 +96,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
     @Override
     public void add(String id, RenderLayer layer, PostProcessorEffect... effects) {
-	CombinedRenderPipe pipe = new CombinedRenderPipe(layer);
+	CombinedRenderPipe pipe = new CombinedRenderPipe(layer, processor, effects);
 	pipes.put(id, pipe);
     }
 
@@ -109,7 +113,14 @@ public class CombinedRenderPipeline implements RenderPipeline {
     @Override
     public void render(Batch batch, float delta) {
 	for (CombinedRenderPipe pipe : pipes.values()) {
+	    pipe.beforeRender();
+	    buffer.begin();
 	    pipe.draw(batch, delta);
+	    buffer.end();
 	}
+	batch.begin();
+	batch.setColor(Color.WHITE);
+	batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
+	batch.end();
     }
 }

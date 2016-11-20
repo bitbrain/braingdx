@@ -17,16 +17,22 @@ package de.bitbrain.braingdx.graphics.pipeline;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import de.bitbrain.braingdx.graphics.shader.ShaderManager;
+import de.bitbrain.braingdx.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
+import de.bitbrain.braingdx.util.Resizeable;
 
-class CombinedRenderPipe implements RenderPipe {
+class CombinedRenderPipe implements RenderPipe, Resizeable {
 
     private final RenderLayer layer;
 
+    private final ShaderManager shaderManager;
+
     private boolean enabled = true;
 
-    public CombinedRenderPipe(RenderLayer layer) {
+    public CombinedRenderPipe(RenderLayer layer, PostProcessor processor, PostProcessorEffect... effects) {
 	this.layer = layer;
+	this.shaderManager = new ShaderManager(processor, effects);
     }
 
     @Override
@@ -41,8 +47,7 @@ class CombinedRenderPipe implements RenderPipe {
 
     @Override
     public void addEffects(PostProcessorEffect... effects) {
-	// TODO Auto-generated method stub
-
+	shaderManager.addEffects(effects);
     }
 
     public void draw(Batch batch, float delta) {
@@ -51,8 +56,14 @@ class CombinedRenderPipe implements RenderPipe {
 	}
     }
 
+    public void beforeRender() {
+	layer.beforeRender();
+    }
+
     @Override
-    public boolean hasShaderSupport() {
-	return layer.hasShaderSupport();
+    public void resize(int width, int height) {
+	if (layer instanceof Resizeable) {
+	    ((Resizeable) layer).resize(width, height);
+	}
     }
 }

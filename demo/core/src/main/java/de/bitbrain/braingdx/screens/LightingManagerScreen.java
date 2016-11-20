@@ -54,8 +54,9 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	    }
 
 	    @Override
-	    public boolean hasShaderSupport() {
-		return true;
+	    public void beforeRender() {
+		// TODO Auto-generated method stub
+
 	    }
 
 	});

@@ -45,8 +45,9 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	    }
 
 	    @Override
-	    public boolean hasShaderSupport() {
-		return true;
+	    public void beforeRender() {
+		// TODO Auto-generated method stub
+
 	    }
 
 	});

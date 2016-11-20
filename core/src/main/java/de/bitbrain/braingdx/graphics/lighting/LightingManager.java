@@ -29,6 +29,7 @@ import box2dLight.DirectionalLight;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
+import de.bitbrain.braingdx.util.Resizeable;
 
 /**
  * Manages box2d lights internally and stores them in memory.
@@ -36,7 +37,7 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-public class LightingManager implements RenderLayer {
+public class LightingManager implements RenderLayer, Resizeable {
 
     public class LightingConfig {
 	boolean shadows = true;
@@ -167,15 +168,18 @@ public class LightingManager implements RenderLayer {
 
     @Override
     public void render(Batch batch, float delta) {
-	handler.setCombinedMatrix(camera);
-	handler.updateAndRender();
+	handler.renderOnly();
     }
 
-    /**
-     * Lighting does not like shading per-se
-     */
     @Override
-    public boolean hasShaderSupport() {
-	return false;
+    public void beforeRender() {
+	handler.setCombinedMatrix(camera);
+	handler.update();
+	handler.prepareRender();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+	handler.resizeFBO(width, height);
     }
 }
