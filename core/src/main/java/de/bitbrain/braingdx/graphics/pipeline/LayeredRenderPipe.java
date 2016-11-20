@@ -109,4 +109,9 @@ class LayeredRenderPipe implements RenderPipe, Disposable, Resizeable {
 	batch.setColor(Color.WHITE);
 	renderLayer.render(batch, delta);
     }
+
+    @Override
+    public boolean hasShaderSupport() {
+	return renderLayer.hasShaderSupport();
+    }
 }

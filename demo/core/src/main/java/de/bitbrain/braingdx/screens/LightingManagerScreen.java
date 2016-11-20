@@ -53,6 +53,11 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 		batch.end();
 	    }
 
+	    @Override
+	    public boolean hasShaderSupport() {
+		return true;
+	    }
+
 	});
 	getLightingManager().setAmbientLight(new Color(0.1f, 0f, 0.2f, 0.25f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.SOLDIER);

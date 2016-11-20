@@ -170,4 +170,12 @@ public class LightingManager implements RenderLayer {
 	handler.setCombinedMatrix(camera);
 	handler.updateAndRender();
     }
+
+    /**
+     * Lighting does not like shading per-se
+     */
+    @Override
+    public boolean hasShaderSupport() {
+	return false;
+    }
 }

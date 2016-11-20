@@ -44,6 +44,11 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 		batch.end();
 	    }
 
+	    @Override
+	    public boolean hasShaderSupport() {
+		return true;
+	    }
+
 	});
 	Texture texture = SharedAssetManager.getInstance().get(Assets.SOLDIER);
 	getRenderManager().register(SOLDIER, new SpriteRenderer(texture));

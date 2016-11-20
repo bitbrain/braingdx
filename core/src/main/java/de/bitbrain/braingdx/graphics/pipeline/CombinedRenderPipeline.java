@@ -55,6 +55,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
     private final ShaderConfig config;
 
+    private FrameBuffer buffer;
+
     public CombinedRenderPipeline(ShaderConfig config) {
 	this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
@@ -82,6 +84,10 @@ public class CombinedRenderPipeline implements RenderPipeline {
     @Override
     public void resize(int width, int height) {
 	processor.setViewport(new Rectangle(0f, 0f, width, height));
+	if (buffer != null) {
+	    buffer.dispose();
+	}
+	buffer = bufferFactory.create(width, height);
     }
 
     @Override

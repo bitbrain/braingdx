@@ -23,7 +23,7 @@ class CombinedRenderPipe implements RenderPipe {
 
     private final RenderLayer layer;
 
-    private boolean enabled;
+    private boolean enabled = true;
 
     public CombinedRenderPipe(RenderLayer layer) {
 	this.layer = layer;
@@ -46,6 +46,13 @@ class CombinedRenderPipe implements RenderPipe {
     }
 
     public void draw(Batch batch, float delta) {
-	layer.render(batch, delta);
+	if (isEnabled()) {
+	    layer.render(batch, delta);
+	}
+    }
+
+    @Override
+    public boolean hasShaderSupport() {
+	return layer.hasShaderSupport();
     }
 }

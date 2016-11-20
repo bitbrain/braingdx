@@ -229,6 +229,11 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    public void render(Batch batch, float delta) {
 	    }
 
+	    @Override
+	    public boolean hasShaderSupport() {
+		return true;
+	    }
+
 	});
 
 	// 1. World layer
@@ -241,6 +246,11 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 		afterWorldRender(batch, delta);
 		batch.end();
 	    }
+
+	    @Override
+	    public boolean hasShaderSupport() {
+		return true;
+	    }
 	});
 	// 2. Lighting layer
 	renderPipeline.add(PIPE_LIGHTING, lightingManager);
@@ -249,6 +259,11 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	    @Override
 	    public void render(Batch batch, float delta) {
 		stage.draw();
+	    }
+
+	    @Override
+	    public boolean hasShaderSupport() {
+		return true;
 	    }
 
 	});

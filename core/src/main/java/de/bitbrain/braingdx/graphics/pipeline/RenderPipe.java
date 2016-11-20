@@ -22,7 +22,7 @@ import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-public interface RenderPipe {
+public interface RenderPipe extends Shadeable {
 
     public boolean isEnabled();
 
