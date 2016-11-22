@@ -38,8 +38,8 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManagerAdapter;
 import de.bitbrain.braingdx.graphics.VectorGameCamera;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
+import de.bitbrain.braingdx.graphics.pipeline.AbstractRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipeline;
-import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
@@ -223,22 +223,14 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     private void buildLayers() {
 	// 0. Background layer
-	renderPipeline.add(PIPE_BACKGROUND, new RenderLayer() {
-
+	renderPipeline.add(PIPE_BACKGROUND, new AbstractRenderLayer() {
 	    @Override
 	    public void render(Batch batch, float delta) {
 	    }
-
-	    @Override
-	    public void beforeRender() {
-		// TODO Auto-generated method stub
-
-	    }
-
 	});
 
 	// 1. World layer
-	renderPipeline.add(PIPE_WORLD, new RenderLayer() {
+	renderPipeline.add(PIPE_WORLD, new AbstractRenderLayer() {
 	    @Override
 	    public void render(Batch batch, float delta) {
 		batch.begin();
@@ -247,26 +239,14 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 		afterWorldRender(batch, delta);
 		batch.end();
 	    }
-
-	    @Override
-	    public void beforeRender() {
-		// TODO Auto-generated method stub
-
-	    }
 	});
 	// 2. Lighting layer
 	renderPipeline.add(PIPE_LIGHTING, lightingManager);
 	// 3. UI layer
-	renderPipeline.add(PIPE_UI, new RenderLayer() {
+	renderPipeline.add(PIPE_UI, new AbstractRenderLayer() {
 	    @Override
 	    public void render(Batch batch, float delta) {
 		stage.draw();
-	    }
-
-	    @Override
-	    public void beforeRender() {
-		// TODO Auto-generated method stub
-
 	    }
 
 	});

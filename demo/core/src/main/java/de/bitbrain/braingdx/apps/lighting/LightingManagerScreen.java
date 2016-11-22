@@ -15,7 +15,7 @@ import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.behavior.RandomMovementBehavior;
 import de.bitbrain.braingdx.graphics.SpriteRenderer;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
-import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.AbstractRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
@@ -43,21 +43,13 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
     private void prepareResources() {
 	Styles.init();
 	final Texture background = SharedAssetManager.getInstance().get(Assets.WALL, Texture.class);
-	getRenderPipeline().add(PIPE_BACKGROUND, new RenderLayer() {
-
+	getRenderPipeline().add(PIPE_BACKGROUND, new AbstractRenderLayer() {
 	    @Override
 	    public void render(Batch batch, float delta) {
 		batch.begin();
 		batch.draw(background, 0f, 0f);
 		batch.end();
 	    }
-
-	    @Override
-	    public void beforeRender() {
-		// TODO Auto-generated method stub
-
-	    }
-
 	});
 	getLightingManager().setAmbientLight(new Color(0.1f, 0f, 0.2f, 0.25f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.SOLDIER);
