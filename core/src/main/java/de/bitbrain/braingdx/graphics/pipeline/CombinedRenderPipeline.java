@@ -114,9 +114,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
     public void render(Batch batch, float delta) {
 	for (CombinedRenderPipe pipe : pipes.values()) {
 	    pipe.beforeRender();
-	    buffer.begin();
-	    pipe.draw(batch, delta);
-	    buffer.end();
+	    pipe.render(batch, delta, buffer);
 	}
 	batch.begin();
 	batch.setColor(Color.WHITE);

@@ -74,7 +74,7 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	uiPipe.addEffects(uiBloom);
 	Fxaa aliasing = new Fxaa(Gdx.graphics.getWidth(),
 		Gdx.graphics.getHeight());
-	uiPipe.addEffects(aliasing);
+	getRenderPipeline().getPipe(PIPE_WORLD).addEffects(aliasing);
     }
 
     private void addRandomObjects() {
