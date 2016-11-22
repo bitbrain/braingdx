@@ -1,21 +1,19 @@
-package de.bitbrain.braingdx.apps;
+package de.bitbrain.braingdx.apps.lighting;
 
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
-import de.bitbrain.braingdx.assets.RPGAssetLoader;
 import de.bitbrain.braingdx.screens.AbstractScreen;
-import de.bitbrain.braingdx.screens.RPGScreen;
 
-public class RPGTest extends BrainGdxGame {
+public class LightingManagerTest extends BrainGdxGame {
 
     @Override
     protected GameAssetLoader getAssetLoader() {
-	return new RPGAssetLoader();
+	return new AppGameAssetLoader();
     }
 
     @Override
     protected AbstractScreen<?> getInitialScreen() {
-	return new RPGScreen(this);
+	return new LightingManagerScreen(this);
     }
 
 }

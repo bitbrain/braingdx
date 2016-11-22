@@ -1,10 +1,9 @@
 package de.bitbrain.braingdx.apps;
 
 import de.bitbrain.braingdx.BrainGdxGame;
-import de.bitbrain.braingdx.assets.AppGameAssetLoader;
+import de.bitbrain.braingdx.apps.lighting.AppGameAssetLoader;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
 import de.bitbrain.braingdx.screens.AbstractScreen;
-import de.bitbrain.braingdx.screens.BrainGdxWelcomeScreen;
 
 public class BrainGdxTest extends BrainGdxGame {
 

@@ -1,8 +1,8 @@
-package de.bitbrain.braingdx.screens;
+package de.bitbrain.braingdx.apps;
 
 import com.badlogic.gdx.graphics.Color;
 
-import de.bitbrain.braingdx.apps.BrainGdxTest;
+import de.bitbrain.braingdx.screens.AbstractScreen;
 
 public class BrainGdxWelcomeScreen extends AbstractScreen<BrainGdxTest> {
 

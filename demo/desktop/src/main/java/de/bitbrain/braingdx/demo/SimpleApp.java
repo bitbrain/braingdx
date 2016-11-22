@@ -3,7 +3,7 @@ package de.bitbrain.braingdx.demo;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-import de.bitbrain.braingdx.apps.LightingManagerTest;
+import de.bitbrain.braingdx.apps.lighting.LightingManagerTest;
 
 public class SimpleApp {
 

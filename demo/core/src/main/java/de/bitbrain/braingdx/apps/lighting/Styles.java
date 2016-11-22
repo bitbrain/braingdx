@@ -1,16 +1,16 @@
-package de.bitbrain.braingdx.ui;
+package de.bitbrain.braingdx.apps.lighting;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
-import de.bitbrain.braingdx.assets.Assets;
+import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.graphics.GraphicsFactory;
 import de.bitbrain.braingdx.utl.Colors;
 
-public final class Styles {
+final class Styles {
 
     public static final TextButtonStyle BUTTON_DEFAULT_ACTIVE = new TextButtonStyle();
     public static final TextButtonStyle BUTTON_DEFAULT_INACTIVE = new TextButtonStyle();
