@@ -3,7 +3,6 @@ package de.bitbrain.braingdx.apps.lighting;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -15,8 +14,9 @@ import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.behavior.RandomMovementBehavior;
 import de.bitbrain.braingdx.graphics.SpriteRenderer;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
-import de.bitbrain.braingdx.graphics.pipeline.AbstractRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
+import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
+import de.bitbrain.braingdx.graphics.pipeline.layers.TextureRenderLayer;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
 import de.bitbrain.braingdx.screens.AbstractScreen;
@@ -43,21 +43,14 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
     private void prepareResources() {
 	Styles.init();
 	final Texture background = SharedAssetManager.getInstance().get(Assets.WALL, Texture.class);
-	getRenderPipeline().add(PIPE_BACKGROUND, new AbstractRenderLayer() {
-	    @Override
-	    public void render(Batch batch, float delta) {
-		batch.begin();
-		batch.draw(background, 0f, 0f);
-		batch.end();
-	    }
-	});
+	getRenderPipeline().add(RenderPipeIds.BACKGROUND, new TextureRenderLayer(background));
 	getLightingManager().setAmbientLight(new Color(0.1f, 0f, 0.2f, 0.25f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.SOLDIER);
 	getRenderManager().register(TYPE, new SpriteRenderer(texture));
     }
 
     private void setupShaders() {
-	RenderPipe uiPipe = getRenderPipeline().getPipe(PIPE_UI);
+	RenderPipe uiPipe = getRenderPipeline().getPipe(RenderPipeIds.UI);
 	Bloom uiBloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 1f), Math.round(Gdx.graphics.getHeight() / 1f));
 	uiBloom.setBlurAmount(10f);
 	uiBloom.setBloomIntesity(2.1f);
@@ -65,7 +58,7 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	uiPipe.addEffects(uiBloom);
 	Fxaa aliasing = new Fxaa(Gdx.graphics.getWidth(),
 		Gdx.graphics.getHeight());
-	getRenderPipeline().getPipe(PIPE_WORLD).addEffects(aliasing);
+	getRenderPipeline().getPipe(RenderPipeIds.WORLD).addEffects(aliasing);
     }
 
     private void addRandomObjects() {

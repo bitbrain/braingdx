@@ -3,15 +3,15 @@ package de.bitbrain.braingdx.apps.rpg;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.graphics.SpriteRenderer;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
-import de.bitbrain.braingdx.graphics.pipeline.AbstractRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
+import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
+import de.bitbrain.braingdx.graphics.pipeline.layers.TextureRenderLayer;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
 import de.bitbrain.braingdx.screens.AbstractScreen;
@@ -35,20 +35,13 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     private void prepareResources() {
 	getLightingManager().setAmbientLight(new Color(0.05f, 0f, 0.5f, 0.15f));
 	final Texture background = SharedAssetManager.getInstance().get(Assets.WALL, Texture.class);
-	getRenderPipeline().add(PIPE_BACKGROUND, new AbstractRenderLayer() {
-	    @Override
-	    public void render(Batch batch, float delta) {
-		batch.begin();
-		batch.draw(background, 0f, 0f);
-		batch.end();
-	    }
-	});
+	getRenderPipeline().add(RenderPipeIds.BACKGROUND, new TextureRenderLayer(background));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.SOLDIER);
 	getRenderManager().register(SOLDIER, new SpriteRenderer(texture));
     }
 
     private void setupShaders() {
-	RenderPipe worldPipe = getRenderPipeline().getPipe(PIPE_WORLD);
+	RenderPipe worldPipe = getRenderPipeline().getPipe(RenderPipeIds.WORLD);
 	Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 1.5f),
 		Math.round(Gdx.graphics.getHeight() / 1.5f));
 	bloom.setBlurAmount(15f);
