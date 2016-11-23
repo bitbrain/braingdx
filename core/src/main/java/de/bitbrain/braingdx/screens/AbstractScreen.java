@@ -38,12 +38,11 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManagerAdapter;
 import de.bitbrain.braingdx.graphics.VectorGameCamera;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
-import de.bitbrain.braingdx.graphics.pipeline.AbstractRenderLayer;
-import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipeline;
+import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipelineFactory;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
+import de.bitbrain.braingdx.graphics.pipeline.RenderPipelineFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
-import de.bitbrain.braingdx.ui.Tooltip;
 import de.bitbrain.braingdx.world.GameWorld;
 
 /**
@@ -73,6 +72,8 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     private LightingManager lightingManager;
     private World boxWorld;
 
+    private boolean uiInitialized = false;
+
     public AbstractScreen(T game) {
 	this.game = game;
     }
@@ -82,7 +83,6 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     }
 
     protected TweenManager tweenManager = SharedTweenManager.getInstance();
-    protected Tooltip tooltip = Tooltip.getInstance();
     protected InputMultiplexer input;
 
     @Override
@@ -92,13 +92,13 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	behaviorManager = new BehaviorManager();
 	batch = new SpriteBatch();
 	input = new InputMultiplexer();
-	renderPipeline = new CombinedRenderPipeline(getShaderConfig());
 	boxWorld = new World(Vector2.Zero, false);
 	lightingManager = new LightingManager(boxWorld, camera);
 	renderManager = new GameObjectRenderManager(batch);
 	gameCamera = new VectorGameCamera(camera);
+	stage = new Stage();
+	renderPipeline = getRenderPipelineFactory().create();
 	wire();
-	buildLayers();
     }
 
     @Override
@@ -114,15 +114,13 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     @Override
     public final void resize(int width, int height) {
-	if (stage == null) {
-	    stage = new Stage(getViewport(width, height));
+	if (!uiInitialized) {
 	    input.addProcessor(stage);
-	    tooltip.init(stage, camera);
 	    onCreateStage(stage, width, height);
 	    Gdx.input.setInputProcessor(input);
-	} else {
-	    stage.getViewport().update(width, height);
+	    uiInitialized = true;
 	}
+	stage.getViewport().update(width, height);
 	renderPipeline.resize(width, height);
 	camera.setToOrtho(true, width, height);
     }
@@ -182,14 +180,6 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	return lightingManager;
     }
 
-    protected void beforeWorldRender(Batch batch, float delta) {
-
-    }
-
-    protected void afterWorldRender(Batch batch, float delta) {
-
-    }
-
     protected void onCreateStage(Stage stage, int width, int height) {
 
     }
@@ -221,34 +211,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	world.addListener(new GameObjectRenderManagerAdapter(renderManager));
     }
 
-    private void buildLayers() {
-	// 0. Background layer
-	renderPipeline.add(PIPE_BACKGROUND, new AbstractRenderLayer() {
-	    @Override
-	    public void render(Batch batch, float delta) {
-	    }
-	});
-
-	// 1. World layer
-	renderPipeline.add(PIPE_WORLD, new AbstractRenderLayer() {
-	    @Override
-	    public void render(Batch batch, float delta) {
-		batch.begin();
-		beforeWorldRender(batch, delta);
-		world.update(delta);
-		afterWorldRender(batch, delta);
-		batch.end();
-	    }
-	});
-	// 2. Lighting layer
-	renderPipeline.add(PIPE_LIGHTING, lightingManager);
-	// 3. UI layer
-	renderPipeline.add(PIPE_UI, new AbstractRenderLayer() {
-	    @Override
-	    public void render(Batch batch, float delta) {
-		stage.draw();
-	    }
-
-	});
+    protected RenderPipelineFactory getRenderPipelineFactory() {
+	return new CombinedRenderPipelineFactory(getShaderConfig(), world, lightingManager, stage);
     }
 }

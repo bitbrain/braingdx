@@ -35,8 +35,8 @@ public class RenderPipelineTest {
 	List<RenderPipelineFactory[]> params = new ArrayList<RenderPipelineFactory[]>();
 	Gdx.app = mock(Application.class);
 	when(Gdx.app.getType()).thenReturn(ApplicationType.Desktop);
-	params.add(new RenderPipelineFactory[] { new LayeredRenderPipelineFactory() });
-	params.add(new RenderPipelineFactory[] { new CombinedRenderPipelineFactory() });
+	params.add(new RenderPipelineFactory[] { new MockedLayeredRenderPipelineFactory() });
+	params.add(new RenderPipelineFactory[] { new MockedCombinedRenderPipelineFactory() });
 	return params;
     }
 

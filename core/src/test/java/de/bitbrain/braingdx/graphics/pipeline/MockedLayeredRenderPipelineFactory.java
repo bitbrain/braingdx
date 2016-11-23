@@ -11,7 +11,7 @@ import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.postprocessing.PostProcessor;
 
-public class LayeredRenderPipelineFactory implements RenderPipelineFactory {
+public class MockedLayeredRenderPipelineFactory implements RenderPipelineFactory {
 
     @Override
     public RenderPipeline create() {
