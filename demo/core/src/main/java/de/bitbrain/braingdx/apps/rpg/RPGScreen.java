@@ -11,7 +11,6 @@ import de.bitbrain.braingdx.graphics.SpriteRenderer;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
-import de.bitbrain.braingdx.graphics.pipeline.layers.TextureRenderLayer;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
 import de.bitbrain.braingdx.screens.AbstractScreen;
@@ -34,9 +33,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
     private void prepareResources() {
 	getLightingManager().setAmbientLight(new Color(0.05f, 0f, 0.5f, 0.15f));
-	final Texture background = SharedAssetManager.getInstance().get(Assets.WALL, Texture.class);
-	getRenderPipeline().add(RenderPipeIds.BACKGROUND, new TextureRenderLayer(background));
-	Texture texture = SharedAssetManager.getInstance().get(Assets.SOLDIER);
+	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
 	getRenderManager().register(SOLDIER, new SpriteRenderer(texture));
     }
 
