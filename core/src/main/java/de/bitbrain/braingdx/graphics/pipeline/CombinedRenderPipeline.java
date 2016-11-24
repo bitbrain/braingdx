@@ -22,6 +22,7 @@ import java.util.Map;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -112,6 +113,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
     @Override
     public void render(Batch batch, float delta) {
+	clearBuffer();
 	for (CombinedRenderPipe pipe : pipes.values()) {
 	    pipe.beforeRender();
 	    pipe.render(batch, delta, buffer);
@@ -120,5 +122,12 @@ public class CombinedRenderPipeline implements RenderPipeline {
 	batch.setColor(Color.WHITE);
 	batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
 	batch.end();
+    }
+
+    private void clearBuffer() {
+	buffer.begin();
+	Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	buffer.end();
     }
 }
