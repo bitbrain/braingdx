@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.graphics.animation.types;
+package de.bitbrain.braingdx.graphics.animation;
 
 /**
  * An animation type describes the behavior of frames which belong to a certain animation.
@@ -30,5 +30,5 @@ public interface AnimationType {
      * @param totalFrames number of total frames
      * @return the optionally modified current frame
      */
-    int updateCurrentFrame(int currentFrame, int totalFrames);
+    int updateCurrentFrame(int currentFrame, int totalFrames, int origin);
 }

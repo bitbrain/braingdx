@@ -15,6 +15,8 @@
 
 package de.bitbrain.braingdx.graphics.animation.types;
 
+import de.bitbrain.braingdx.graphics.animation.AnimationType;
+
 /**
  * Moves the frame from start to end and starts again.
  * 
@@ -24,7 +26,7 @@ package de.bitbrain.braingdx.graphics.animation.types;
 class ForwardAnimationType implements AnimationType {
 
     @Override
-    public int updateCurrentFrame(int currentFrame, int totalFrames) {
+    public int updateCurrentFrame(int currentFrame, int totalFrames, int origin) {
 	currentFrame++;
 	if (currentFrame >= totalFrames) {
 	    currentFrame = 0;

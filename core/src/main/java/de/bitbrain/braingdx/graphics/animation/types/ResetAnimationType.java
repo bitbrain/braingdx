@@ -18,28 +18,16 @@ package de.bitbrain.braingdx.graphics.animation.types;
 import de.bitbrain.braingdx.graphics.animation.AnimationType;
 
 /**
- * Moves the frames from start to end and vise versa.
+ * Moves the frames back to the origin of the animation and remains there
  * 
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-class ForwardYoyoAnimationType implements AnimationType {
-
-    private boolean bounce;
+class ResetAnimationType implements AnimationType {
 
     @Override
     public int updateCurrentFrame(int currentFrame, int totalFrames, int origin) {
-	if (bounce) {
-	    currentFrame--;
-	    if (currentFrame == 0) {
-		bounce = false;
-	    }
-	} else {
-	    currentFrame++;
-	    if (currentFrame >= totalFrames - 1) {
-		bounce = true;
-	    }
-	}
-	return currentFrame;
+	return origin;
     }
+
 }

@@ -15,6 +15,8 @@
 
 package de.bitbrain.braingdx.graphics.animation.types;
 
+import de.bitbrain.braingdx.graphics.animation.AnimationType;
+
 /**
  * Describes default {@link AnimationType} objects.
  * 
@@ -23,6 +25,7 @@ package de.bitbrain.braingdx.graphics.animation.types;
  */
 public interface AnimationTypes {
 
+    AnimationType RESET = new ResetAnimationType();
     AnimationType FORWARD = new ForwardAnimationType();
     AnimationType FORWARD_YOYO = new ForwardYoyoAnimationType();
 }
