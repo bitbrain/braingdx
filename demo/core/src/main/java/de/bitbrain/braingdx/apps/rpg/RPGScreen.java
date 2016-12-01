@@ -9,6 +9,7 @@ import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation;
+import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation.Direction;
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
@@ -42,6 +43,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	   new SpriteSheetAnimation(sheet)
 	      .offset(3, 0)
 	      .interval(0.2f)
+	      .direction(Direction.HORIZONTAL)
 	      .type(AnimationTypes.FORWARD_YOYO)
 	      .frames(3)
 	));

@@ -29,6 +29,10 @@ import de.bitbrain.braingdx.util.DeltaTimer;
  */
 public class SpriteSheetAnimation implements Animation {
 
+    public enum Direction {
+	HORIZONTAL, VERTICAL
+    }
+
     public static final float DEFAULT_INTERVAL = 0.2f;
 
     private SpriteSheet sheet;
@@ -38,6 +42,7 @@ public class SpriteSheetAnimation implements Animation {
     private int totalFrames = 1;
     private int currentFrame;
     private float interval;
+    private Direction direction = Direction.HORIZONTAL;
 
     private AnimationType type = AnimationTypes.FORWARD;
 
@@ -81,6 +86,13 @@ public class SpriteSheetAnimation implements Animation {
 	return this;
     }
 
+    public SpriteSheetAnimation direction(Direction direction) {
+	if (direction != null) {
+	    this.direction = direction;
+	}
+	return this;
+    }
+
     @Override
     public void render(Batch batch, float x, float y, float width, float height, float delta) {
 	timer.update(delta);
@@ -89,7 +101,21 @@ public class SpriteSheetAnimation implements Animation {
 	    timer.reset();
 	}
 	if (sheet != null) {
-	    sheet.draw(batch, offsetX + currentFrame, offsetY, x, y, width, height);
+	    sheet.draw(batch, getDirectionalOffsetX(), getDirectionalOffsetY(), x, y, width, height);
 	}
+    }
+
+    private int getDirectionalOffsetX() {
+	if (Direction.HORIZONTAL.equals(direction)) {
+	    return offsetX + currentFrame;
+	}
+	return offsetX;
+    }
+
+    private int getDirectionalOffsetY() {
+	if (Direction.VERTICAL.equals(direction)) {
+	    return offsetY + currentFrame;
+	}
+	return offsetY;
     }
 }
