@@ -7,10 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
-import de.bitbrain.braingdx.graphics.SpriteRenderer;
+import de.bitbrain.braingdx.graphics.animation.AnimationBuilder;
+import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
+import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
+import de.bitbrain.braingdx.graphics.renderer.AnimationRenderer;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
 import de.bitbrain.braingdx.screens.AbstractScreen;
@@ -27,14 +30,23 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     @Override
     protected void onCreateStage(Stage stage, int width, int height) {
 	prepareResources();
-	addSoldier(100, 100, 350);
+	addSoldier(100, 100, 64);
 	setupShaders();
     }
 
     private void prepareResources() {
 	getLightingManager().setAmbientLight(new Color(0.05f, 0f, 0.5f, 0.15f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
-	getRenderManager().register(SOLDIER, new SpriteRenderer(texture));
+	SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
+	getRenderManager().register(SOLDIER, new AnimationRenderer(
+	   new AnimationBuilder()
+	      .with(sheet)
+	      .offset(3, 0)
+	      .interval(0.2f)
+	      .type(AnimationTypes.FORWARD_YOYO)
+	      .frames(3)
+	      .build()
+	));
     }
 
     private void setupShaders() {
@@ -53,8 +65,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	GameObject object = getGameWorld().addObject();
 	object.setPosition(x, y);
 	object.setType(SOLDIER);
-	object.setDimensions(size, size);
-	getBehaviorManager().apply(new PointLightBehavior(Color.valueOf("885522"), 700f, getLightingManager()),
+	object.setDimensions(48, 64);
+	getBehaviorManager().apply(new PointLightBehavior(Color.valueOf("ff5522ff"), 700f, getLightingManager()),
 		object);
     }
 }

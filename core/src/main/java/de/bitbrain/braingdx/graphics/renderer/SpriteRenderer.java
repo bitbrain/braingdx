@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.graphics;
+package de.bitbrain.braingdx.graphics.renderer;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,10 +21,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
- * renderer implementation for sprites
+ * Renderer implementation for sprites.
  *
  * @since 1.0.0
  * @version 1.0.0
