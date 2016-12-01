@@ -1,12 +1,15 @@
 package de.bitbrain.braingdx.apps.rpg;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.behavior.movement.MovementDirection;
+import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation.Direction;
@@ -24,6 +27,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
     private static final int SOLDIER = 1;
 
+    private RasteredMovementBehavior behavior;
+
     public RPGScreen(RPGTest rpgTest) {
 	super(rpgTest);
     }
@@ -31,8 +36,22 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     @Override
     protected void onCreateStage(Stage stage, int width, int height) {
 	prepareResources();
+	behavior = new RasteredMovementBehavior().interval(0.2f);
 	addSoldier(100, 100, 64);
 	setupShaders();
+    }
+
+    @Override
+    protected void onUpdate(float delta) {
+	if (Gdx.input.isKeyPressed(Keys.W)) {
+	    behavior.move(MovementDirection.UP);
+	} else if (Gdx.input.isKeyPressed(Keys.A)) {
+	    behavior.move(MovementDirection.LEFT);
+	} else if (Gdx.input.isKeyPressed(Keys.S)) {
+	    behavior.move(MovementDirection.DOWN);
+	} else if (Gdx.input.isKeyPressed(Keys.D)) {
+	    behavior.move(MovementDirection.RIGHT);
+	}
     }
 
     private void prepareResources() {
@@ -68,5 +87,6 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	object.setDimensions(48, 64);
 	getBehaviorManager().apply(new PointLightBehavior(Color.valueOf("ff5522ff"), 700f, getLightingManager()),
 		object);
+	getBehaviorManager().apply(behavior, object);
     }
 }

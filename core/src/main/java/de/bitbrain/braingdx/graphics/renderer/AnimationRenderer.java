@@ -43,6 +43,7 @@ public class AnimationRenderer implements GameObjectRenderer {
 
     @Override
     public void render(GameObject object, Batch batch, float delta) {
-	animation.render(batch, object.getLeft(), object.getTop(), object.getWidth(), object.getHeight(), delta);
+	animation.render(batch, object.getLeft() + object.getOffset().x, object.getTop() + object.getOffset().y,
+		object.getWidth(), object.getHeight(), delta);
     }
 }

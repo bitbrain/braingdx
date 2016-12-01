@@ -15,11 +15,31 @@
 
 package de.bitbrain.braingdx.behavior.movement;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * Describes movement directions.
  * 
  * @author Miguel Gonzalez Sanchez
  */
 public enum MovementDirection {
-    LEFT, RIGHT, DOWN, UP
+    
+    LEFT(-1, 0), 
+    RIGHT(1, 0), 
+    DOWN(0, 1), 
+    UP(0, -1);
+
+    private Vector2 direction;
+
+    MovementDirection(float x, float y) {
+	direction = new Vector2(x, y);
+    }
+
+    public float getXFactor() {
+	return direction.x;
+    }
+
+    public float getYFactor() {
+	return direction.y;
+    }
 }

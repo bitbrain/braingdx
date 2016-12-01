@@ -100,6 +100,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     public final void render(float delta) {
 	Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+	onUpdate(delta);
 	tweenManager.update(delta);
 	gameCamera.update(delta);
 	stage.act(delta);
@@ -176,6 +177,10 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     }
 
     protected void onCreateStage(Stage stage, int width, int height) {
+
+    }
+
+    protected void onUpdate(float delta) {
 
     }
 
