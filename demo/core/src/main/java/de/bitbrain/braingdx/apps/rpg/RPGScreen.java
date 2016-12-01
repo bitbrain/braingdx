@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
-import de.bitbrain.braingdx.graphics.animation.AnimationBuilder;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
+import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation;
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
@@ -39,13 +39,11 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
 	SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
 	getRenderManager().register(SOLDIER, new AnimationRenderer(
-	   new AnimationBuilder()
-	      .with(sheet)
+	   new SpriteSheetAnimation(sheet)
 	      .offset(3, 0)
 	      .interval(0.2f)
 	      .type(AnimationTypes.FORWARD_YOYO)
 	      .frames(3)
-	      .build()
 	));
     }
 

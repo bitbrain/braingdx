@@ -18,6 +18,7 @@ package de.bitbrain.braingdx.graphics.animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.bitbrain.braingdx.graphics.animation.types.AnimationType;
+import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.util.DeltaTimer;
 
 /**
@@ -26,40 +27,69 @@ import de.bitbrain.braingdx.util.DeltaTimer;
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-class SpriteSheetAnimation implements Animation {
+public class SpriteSheetAnimation implements Animation {
 
     public static final float DEFAULT_INTERVAL = 0.2f;
 
-    private final SpriteSheet sheet;
+    private SpriteSheet sheet;
 
-    private final int offsetX;
-    private final int offsetY;
-    private final int totalFrames;
-
+    private int offsetX;
+    private int offsetY;
+    private int totalFrames = 1;
     private int currentFrame;
     private float interval;
 
-    private AnimationType strategy;
+    private AnimationType type = AnimationTypes.FORWARD;
 
-    private final DeltaTimer timer = new DeltaTimer();
+    private DeltaTimer timer = new DeltaTimer();
 
-    SpriteSheetAnimation(SpriteSheet sheet, int offsetX, int offsetY, int frames, float interval,
-	    AnimationType strategy) {
+    public SpriteSheetAnimation() {
+	this(null);
+    }
+
+    public SpriteSheetAnimation(SpriteSheet sheet) {
 	this.sheet = sheet;
-	this.offsetX = offsetX;
-	this.offsetY = offsetY;
-	this.totalFrames = frames;
-	this.interval = interval;
-	this.strategy = strategy;
+    }
+
+    public SpriteSheetAnimation offset(int offsetX, int offsetY) {
+	this.offsetX = Math.abs(offsetX);
+	this.offsetY = Math.abs(offsetY);
+	return this;
+    }
+
+    public SpriteSheetAnimation interval(float interval) {
+	this.interval = Math.abs(interval);
+	return this;
+    }
+
+    public SpriteSheetAnimation frames(int frames) {
+	this.totalFrames = Math.max(frames, 1);
+	return this;
+    }
+
+    public SpriteSheetAnimation source(SpriteSheet source) {
+	if (source != null) {
+	    this.sheet = source;
+	}
+	return this;
+    }
+
+    public SpriteSheetAnimation type(AnimationType type) {
+	if (type != null) {
+	    this.type = type;
+	}
+	return this;
     }
 
     @Override
     public void render(Batch batch, float x, float y, float width, float height, float delta) {
 	timer.update(delta);
 	if (timer.reached(interval)) {
-	    currentFrame = strategy.updateCurrentFrame(currentFrame, totalFrames);
+	    currentFrame = type.updateCurrentFrame(currentFrame, totalFrames);
 	    timer.reset();
 	}
-	sheet.draw(batch, offsetX + currentFrame, offsetY, x, y, width, height);
+	if (sheet != null) {
+	    sheet.draw(batch, offsetX + currentFrame, offsetY, x, y, width, height);
+	}
     }
 }
