@@ -22,7 +22,7 @@ import com.badlogic.gdx.math.Vector2;
  * 
  * @author Miguel Gonzalez Sanchez
  */
-public enum MovementDirection {
+public enum Orientation {
     
     LEFT(-1, 0), 
     RIGHT(1, 0), 
@@ -31,7 +31,7 @@ public enum MovementDirection {
 
     private Vector2 direction;
 
-    MovementDirection(float x, float y) {
+    Orientation(float x, float y) {
 	direction = new Vector2(x, y);
     }
 

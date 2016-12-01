@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
-import de.bitbrain.braingdx.behavior.movement.MovementDirection;
+import de.bitbrain.braingdx.behavior.movement.Orientation;
 import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation;
@@ -17,7 +17,7 @@ import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
-import de.bitbrain.braingdx.graphics.renderer.AnimationRenderer;
+import de.bitbrain.braingdx.graphics.renderer.SpriteSheetAnimationRenderer;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
 import de.bitbrain.braingdx.screens.AbstractScreen;
@@ -28,6 +28,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     private static final int SOLDIER = 1;
 
     private RasteredMovementBehavior behavior;
+
+    private SpriteSheetAnimation animation;
 
     public RPGScreen(RPGTest rpgTest) {
 	super(rpgTest);
@@ -44,13 +46,19 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     @Override
     protected void onUpdate(float delta) {
 	if (Gdx.input.isKeyPressed(Keys.W)) {
-	    behavior.move(MovementDirection.UP);
+	    animation.type(AnimationTypes.FORWARD_YOYO);
+	    behavior.move(Orientation.UP);
 	} else if (Gdx.input.isKeyPressed(Keys.A)) {
-	    behavior.move(MovementDirection.LEFT);
+	    animation.type(AnimationTypes.FORWARD_YOYO);
+	    behavior.move(Orientation.LEFT);
 	} else if (Gdx.input.isKeyPressed(Keys.S)) {
-	    behavior.move(MovementDirection.DOWN);
+	    animation.type(AnimationTypes.FORWARD_YOYO);
+	    behavior.move(Orientation.DOWN);
 	} else if (Gdx.input.isKeyPressed(Keys.D)) {
-	    behavior.move(MovementDirection.RIGHT);
+	    animation.type(AnimationTypes.FORWARD_YOYO);
+	    behavior.move(Orientation.RIGHT);
+	} else if (!behavior.isMoving()) {
+	    animation.type(AnimationTypes.RESET);
 	}
     }
 
@@ -58,23 +66,29 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	getLightingManager().setAmbientLight(new Color(0.05f, 0f, 0.5f, 0.15f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
 	SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
-	getRenderManager().register(SOLDIER, new AnimationRenderer(
-	   new SpriteSheetAnimation(sheet)
-	      .offset(3, 0)
-	      .interval(0.2f)
-	      .direction(Direction.HORIZONTAL)
-	      .type(AnimationTypes.FORWARD_YOYO)
-	      .frames(3)
-	));
+	animation = new SpriteSheetAnimation(sheet)
+	         .origin(3, 0)
+	         .interval(0.2f)
+	         .direction(Direction.HORIZONTAL)
+		.type(AnimationTypes.RESET)
+	         .base(1)
+	         .frames(3);
+	getRenderManager().register(SOLDIER, 
+	   new SpriteSheetAnimationRenderer(animation)
+	      .map(Orientation.DOWN, 0)
+	      .map(Orientation.LEFT, 1)
+	      .map(Orientation.RIGHT, 2)
+	      .map(Orientation.UP, 3)
+	);
     }
 
     private void setupShaders() {
 	RenderPipe worldPipe = getRenderPipeline().getPipe(RenderPipeIds.WORLD);
 	Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 1.5f),
 		Math.round(Gdx.graphics.getHeight() / 1.5f));
-	bloom.setBlurAmount(15f);
-	bloom.setBloomIntesity(1.1f);
-	bloom.setBlurPasses(5);
+	bloom.setBlurAmount(25f);
+	bloom.setBloomIntesity(1.4f);
+	bloom.setBlurPasses(7);
 	worldPipe.addEffects(bloom);
 	Fxaa aliasing = new Fxaa(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	worldPipe.addEffects(aliasing);

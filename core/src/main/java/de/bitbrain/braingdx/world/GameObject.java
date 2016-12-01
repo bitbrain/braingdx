@@ -15,6 +15,9 @@
 
 package de.bitbrain.braingdx.world;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
@@ -41,6 +44,8 @@ public class GameObject implements Pool.Poolable {
     private final Vector2 scale;
 
     private float zIndex;
+
+    private Map<Object, Object> attributes = new HashMap<Object, Object>();
 
     public GameObject() {
 	position = new Vector2();
@@ -136,6 +141,18 @@ public class GameObject implements Pool.Poolable {
 	offset.y = y;
     }
 
+    public void setAttribute(Object key, Object attribute) {
+	attributes.put(key, attribute);
+    }
+
+    public boolean hasAttribute(Object key) {
+	return attributes.containsKey(key);
+    }
+
+    public Object getAttribute(Object key) {
+	return attributes.get(key);
+    }
+
     public void setZIndex(float zIndex) {
 	this.zIndex = zIndex;
     }
@@ -158,5 +175,6 @@ public class GameObject implements Pool.Poolable {
 	id = getClass().getCanonicalName() + "_" + String.valueOf(COUNTER++);
 	scale.set(1f, 1f);
 	color = Color.WHITE.cpy();
+	attributes.clear();
     }
 }

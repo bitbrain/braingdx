@@ -31,13 +31,17 @@ class ForwardYoyoAnimationType implements AnimationType {
     public int updateCurrentFrame(int currentFrame, int totalFrames, int origin) {
 	if (bounce) {
 	    currentFrame--;
-	    if (currentFrame == 0) {
+	    if (currentFrame <= 0) {
 		bounce = false;
+		// Ensure that after type switch the frame is still valid
+		currentFrame = 0;
 	    }
 	} else {
 	    currentFrame++;
 	    if (currentFrame >= totalFrames - 1) {
 		bounce = true;
+		// Ensure that after type switch the frame is still valid
+		currentFrame = totalFrames - 1;
 	    }
 	}
 	return currentFrame;

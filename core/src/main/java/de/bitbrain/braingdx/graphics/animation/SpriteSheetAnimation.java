@@ -36,12 +36,14 @@ public class SpriteSheetAnimation implements Animation {
 
     private SpriteSheet sheet;
 
+    private int originX;
+    private int originY;
     private int offsetX;
     private int offsetY;
     private int totalFrames = 1;
     private int currentFrame;
     private float interval;
-    private int origin = 0;
+    private int base = 0;
     private Direction direction = Direction.HORIZONTAL;
 
     private AnimationType type = AnimationTypes.FORWARD;
@@ -54,6 +56,12 @@ public class SpriteSheetAnimation implements Animation {
 
     public SpriteSheetAnimation(SpriteSheet sheet) {
 	this.sheet = sheet;
+    }
+
+    public SpriteSheetAnimation origin(int originX, int originY) {
+	this.originX = Math.abs(originX);
+	this.originY = Math.abs(originY);
+	return this;
     }
 
     public SpriteSheetAnimation offset(int offsetX, int offsetY) {
@@ -93,8 +101,8 @@ public class SpriteSheetAnimation implements Animation {
 	return this;
     }
 
-    public SpriteSheetAnimation origin(int origin) {
-	this.origin = Math.abs(origin);
+    public SpriteSheetAnimation base(int base) {
+	this.base = Math.abs(base);
 	return this;
     }
 
@@ -102,7 +110,7 @@ public class SpriteSheetAnimation implements Animation {
     public void render(Batch batch, float x, float y, float width, float height, float delta) {
 	timer.update(delta);
 	if (timer.reached(interval)) {
-	    currentFrame = type.updateCurrentFrame(currentFrame, totalFrames, origin);
+	    currentFrame = type.updateCurrentFrame(currentFrame, totalFrames, base);
 	    timer.reset();
 	}
 	if (sheet != null) {
@@ -112,15 +120,15 @@ public class SpriteSheetAnimation implements Animation {
 
     private int getDirectionalOffsetX() {
 	if (Direction.HORIZONTAL.equals(direction)) {
-	    return offsetX + currentFrame;
+	    return originX + currentFrame;
 	}
-	return offsetX;
+	return originX + offsetX;
     }
 
     private int getDirectionalOffsetY() {
 	if (Direction.VERTICAL.equals(direction)) {
-	    return offsetY + currentFrame;
+	    return originY + currentFrame;
 	}
-	return offsetY;
+	return originY + offsetY;
     }
 }

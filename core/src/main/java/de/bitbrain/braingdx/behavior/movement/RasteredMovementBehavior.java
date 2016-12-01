@@ -10,13 +10,13 @@ import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameObject;
 
-public class RasteredMovementBehavior extends BehaviorAdapter implements Movement<MovementDirection> {
+public class RasteredMovementBehavior extends BehaviorAdapter implements Movement<Orientation> {
 
     public static final int DEFAULT_RASTER_SIZE = 32;
     public static final float DEFAULT_INTERVAL = 1f;
-    public static final MovementDirection DEFAULT_DIRECTION = MovementDirection.DOWN;
+    public static final Orientation DEFAULT_DIRECTION = Orientation.DOWN;
 
-    private MovementDirection direction = DEFAULT_DIRECTION;
+    private Orientation direction = DEFAULT_DIRECTION;
     private int rasterSize = DEFAULT_RASTER_SIZE;
     private float interval = DEFAULT_INTERVAL;
 
@@ -35,12 +35,21 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 	return this;
     }
 
+    public boolean isMoving() {
+	return moving;
+    }
+
     @Override
-    public void move(MovementDirection direction) {
+    public void move(Orientation direction) {
 	if (direction != null) {
 	    this.direction = direction;
 	    moveRequest = true;
 	}
+    }
+
+    @Override
+    public void onAttach(GameObject source) {
+	source.setAttribute(Orientation.class, direction);
     }
 
     @Override
@@ -52,6 +61,7 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
     @Override
     public void update(GameObject source, float delta) {
 	if (moveRequest && !moving) {
+	    source.setAttribute(Orientation.class, direction);
 	    float movementX = rasterSize * direction.getXFactor();
 	    float movementY = rasterSize * direction.getYFactor();
 	    source.setPosition(source.getLeft() + movementX, source.getTop() + movementY);
