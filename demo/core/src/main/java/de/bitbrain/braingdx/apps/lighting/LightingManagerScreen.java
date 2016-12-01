@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
-import de.bitbrain.braingdx.behavior.RandomMovementBehavior;
+import de.bitbrain.braingdx.behavior.movement.RandomMovementBehavior;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;

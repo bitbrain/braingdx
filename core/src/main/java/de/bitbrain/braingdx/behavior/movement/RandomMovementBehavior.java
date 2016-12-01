@@ -13,12 +13,13 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.behavior;
+package de.bitbrain.braingdx.behavior.movement;
 
 import java.util.Random;
 
 import com.badlogic.gdx.math.Vector2;
 
+import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.util.DeltaTimer;
 import de.bitbrain.braingdx.world.GameObject;
 
