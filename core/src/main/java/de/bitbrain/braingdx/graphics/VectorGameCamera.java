@@ -38,8 +38,9 @@ public class VectorGameCamera implements GameCamera {
     private final OrthographicCamera camera;
     private final Vector2 velocity;
     private GameObject target;
-    private BigDecimal speed = new BigDecimal(5.2f, PRECISION);
+    private BigDecimal speed = new BigDecimal(6.2f, PRECISION);
     private BigDecimal zoomScale = new BigDecimal(0.0025f, PRECISION);
+    private boolean focusRequested = false;
 
     public VectorGameCamera(OrthographicCamera camera) {
 	this.camera = camera;
@@ -49,33 +50,40 @@ public class VectorGameCamera implements GameCamera {
     @Override
     public void setTarget(GameObject target) {
 	this.target = target;
+	focus();
     }
 
     @Override
     public void update(float delta) {
-	camera.update();
 	if (target == null)
 	    return;
-	BigDecimal preciseDelta = BigDecimal.valueOf(delta);
-	BigDecimal left = new BigDecimal(target.getLeft(), PRECISION);
-	BigDecimal width = new BigDecimal(target.getWidth(), PRECISION);
-	BigDecimal camLeft = new BigDecimal(camera.position.x, PRECISION);
-	BigDecimal top = new BigDecimal(target.getTop(), PRECISION);
-	BigDecimal height = new BigDecimal(target.getHeight(), PRECISION);
-	BigDecimal camTop = new BigDecimal(camera.position.y, PRECISION);
+	if (focusRequested) {
+	    camera.position.x = target.getLeft() + target.getOffset().x + target.getWidth() / 2f;
+	    camera.position.y = target.getTop() + target.getOffset().y + target.getHeight() / 2f;
+	    focusRequested = false;
+	} else {
+	    BigDecimal preciseDelta = BigDecimal.valueOf(delta);
+	    BigDecimal left = new BigDecimal(target.getLeft() + target.getOffset().x, PRECISION);
+	    BigDecimal width = new BigDecimal(target.getWidth(), PRECISION);
+	    BigDecimal camLeft = new BigDecimal(camera.position.x, PRECISION);
+	    BigDecimal top = new BigDecimal(target.getTop() + target.getOffset().y, PRECISION);
+	    BigDecimal height = new BigDecimal(target.getHeight(), PRECISION);
+	    BigDecimal camTop = new BigDecimal(camera.position.y, PRECISION);
 
-	velocity.x = left.add(width.divide(BigDecimal.valueOf(2.0))).subtract(camLeft).floatValue();
-	velocity.y = top.add(height.divide(BigDecimal.valueOf(2.0))).subtract(camTop).floatValue();
+	    velocity.x = left.add(width.divide(BigDecimal.valueOf(2.0))).subtract(camLeft).floatValue();
+	    velocity.y = top.add(height.divide(BigDecimal.valueOf(2.0))).subtract(camTop).floatValue();
 
-	BigDecimal distance = BigDecimal.valueOf(velocity.len());
-	velocity.nor();
-	BigDecimal overAllSpeed = distance.multiply(speed);
+	    BigDecimal distance = BigDecimal.valueOf(velocity.len());
+	    velocity.nor();
+	    BigDecimal overAllSpeed = distance.multiply(speed);
 
-	BigDecimal deltaX = BigDecimal.valueOf(velocity.x).multiply(overAllSpeed).multiply(preciseDelta);
-	BigDecimal deltaY = BigDecimal.valueOf(velocity.y).multiply(overAllSpeed, PRECISION).multiply(preciseDelta);
-	camera.position.x = camLeft.add(deltaX).floatValue();
-	camera.position.y = camTop.add(deltaY).floatValue();
-	camera.zoom = zoomScale.multiply(distance).add(BigDecimal.ONE).floatValue();
+	    BigDecimal deltaX = BigDecimal.valueOf(velocity.x).multiply(overAllSpeed).multiply(preciseDelta);
+	    BigDecimal deltaY = BigDecimal.valueOf(velocity.y).multiply(overAllSpeed).multiply(preciseDelta);
+	    camera.position.x = camLeft.add(deltaX).floatValue();
+	    camera.position.y = camTop.add(deltaY).floatValue();
+	    camera.zoom = zoomScale.multiply(distance).add(BigDecimal.ONE).floatValue();
+	}
+	camera.update();
     }
 
     @Override
@@ -90,11 +98,7 @@ public class VectorGameCamera implements GameCamera {
 
     @Override
     public void focus() {
-	if (target == null)
-	    return;
-	camera.position.x = target.getLeft();
-	camera.position.y = target.getTop();
-	camera.zoom = 1;
+	focusRequested = true;
     }
 
     @Override

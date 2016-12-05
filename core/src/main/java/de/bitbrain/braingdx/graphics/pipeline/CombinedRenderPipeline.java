@@ -23,6 +23,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -59,8 +60,10 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
     private FrameBuffer buffer;
 
-    public CombinedRenderPipeline(ShaderConfig config) {
-	this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
+    private OrthographicCamera camera;
+
+    public CombinedRenderPipeline(ShaderConfig config, OrthographicCamera camera) {
+	this(config, new PostProcessor(true, true, isDesktop), camera, new FrameBufferFactory() {
 
 	    @Override
 	    public FrameBuffer create(int width, int height) {
@@ -70,11 +73,13 @@ public class CombinedRenderPipeline implements RenderPipeline {
 	});
     }
 
-    CombinedRenderPipeline(ShaderConfig config, PostProcessor processor, FrameBufferFactory factory) {
+    CombinedRenderPipeline(ShaderConfig config, PostProcessor processor, OrthographicCamera camera,
+	    FrameBufferFactory factory) {
 	this.config = config;
 	ShaderLoader.BasePath = this.config.basePath;
 	ShaderLoader.PathResolver = this.config.pathResolver;
 	this.processor = processor;
+	this.camera = camera;
 	this.bufferFactory = factory;
     }
 
@@ -120,7 +125,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
 	}
 	batch.begin();
 	batch.setColor(Color.WHITE);
-	batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
+	batch.draw(buffer.getColorBufferTexture(), camera.position.x - camera.viewportWidth / 2f,
+		camera.position.y - camera.viewportHeight / 2f);
 	batch.end();
     }
 

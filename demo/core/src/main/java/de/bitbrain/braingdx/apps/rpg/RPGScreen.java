@@ -17,6 +17,7 @@ import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
+import de.bitbrain.braingdx.graphics.pipeline.layers.TextureRenderLayer;
 import de.bitbrain.braingdx.graphics.renderer.SpriteSheetAnimationRenderer;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
@@ -39,7 +40,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     protected void onCreateStage(Stage stage, int width, int height) {
 	prepareResources();
 	behavior = new RasteredMovementBehavior().interval(0.2f);
-	addSoldier(100, 100, 64);
+	addSoldier(0f, 0f, 64);
 	setupShaders();
     }
 
@@ -63,14 +64,16 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     }
 
     private void prepareResources() {
-	getLightingManager().setAmbientLight(new Color(0.05f, 0f, 0.5f, 0.15f));
+	final Texture background = SharedAssetManager.getInstance().get(Assets.RPG.BACKGROUND, Texture.class);
+	getRenderPipeline().add(RenderPipeIds.BACKGROUND, new TextureRenderLayer(background));
+	getLightingManager().setAmbientLight(new Color(0.06f, 0f, 0.1f, 0.1f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
 	SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
 	animation = new SpriteSheetAnimation(sheet)
 	         .origin(3, 0)
 	         .interval(0.2f)
 	         .direction(Direction.HORIZONTAL)
-		.type(AnimationTypes.RESET)
+		 .type(AnimationTypes.RESET)
 	         .base(1)
 	         .frames(3);
 	getRenderManager().register(SOLDIER, 
@@ -99,8 +102,11 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	object.setPosition(x, y);
 	object.setType(SOLDIER);
 	object.setDimensions(48, 64);
-	getBehaviorManager().apply(new PointLightBehavior(Color.valueOf("ff5522ff"), 700f, getLightingManager()),
+	getBehaviorManager().apply(new PointLightBehavior(Color.valueOf("ff5544ff"), 700f, getLightingManager()),
 		object);
 	getBehaviorManager().apply(behavior, object);
+	getGameCamera().setTarget(object);
+	getGameCamera().setSpeed(3f);
+	getGameCamera().setZoomScale(0f);
     }
 }

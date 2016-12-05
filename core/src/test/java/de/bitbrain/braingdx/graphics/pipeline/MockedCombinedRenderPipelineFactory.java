@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import org.mockito.Mockito;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
@@ -19,8 +20,11 @@ public class MockedCombinedRenderPipelineFactory implements RenderPipelineFactor
 	PostProcessor processorMock = mock(PostProcessor.class);
 	FrameBufferFactory factory = mock(FrameBufferFactory.class);
 	FrameBuffer buffer = mock(FrameBuffer.class);
+	OrthographicCamera camera = mock(OrthographicCamera.class);
+	when(camera.viewportWidth).thenReturn(0f);
+	when(camera.viewportHeight).thenReturn(0f);
 	when(factory.create(Mockito.anyInt(), Mockito.anyInt())).thenReturn(buffer);
-	return new CombinedRenderPipeline(config, processorMock, factory);
+	return new CombinedRenderPipeline(config, processorMock, camera, factory);
     }
 
 }
