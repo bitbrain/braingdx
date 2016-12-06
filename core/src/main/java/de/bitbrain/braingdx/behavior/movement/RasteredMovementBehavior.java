@@ -1,13 +1,12 @@
 package de.bitbrain.braingdx.behavior.movement;
 
-import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
+import de.bitbrain.braingdx.util.DeltaTimer;
 import de.bitbrain.braingdx.world.GameObject;
 
 public class RasteredMovementBehavior extends BehaviorAdapter implements Movement<Orientation> {
@@ -16,14 +15,14 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
     public static final float DEFAULT_INTERVAL = 1f;
     public static final Orientation DEFAULT_DIRECTION = Orientation.DOWN;
 
-    private Orientation direction = DEFAULT_DIRECTION;
     private int rasterSize = DEFAULT_RASTER_SIZE;
     private float interval = DEFAULT_INTERVAL;
 
-    private final TweenManager tweenManager = SharedTweenManager.getInstance();
-
-    private boolean moveRequest = false;
     private boolean moving = false;
+    private GameObject source;
+
+    private final TweenManager tweenManager = SharedTweenManager.getInstance();
+    private final DeltaTimer timer = new DeltaTimer(DEFAULT_INTERVAL);
 
     public RasteredMovementBehavior rasterSize(int size) {
 	this.rasterSize = Math.max(size, 1);
@@ -32,6 +31,7 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 
     public RasteredMovementBehavior interval(float interval) {
 	this.interval = interval;
+	timer.update(interval);
 	return this;
     }
 
@@ -41,15 +41,29 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 
     @Override
     public void move(Orientation direction) {
-	if (direction != null) {
-	    this.direction = direction;
-	    moveRequest = true;
+	if (isReadyToMove() && source != null) {
+	    moving = true;
+	    timer.reset();
+	    source.setAttribute(Orientation.class, direction);
+	    float moveX = direction.getXFactor() * rasterSize;
+	    float moveY = direction.getYFactor() * rasterSize;
+	    source.move(moveX, moveY);
+	    source.setOffset(-moveX, -moveY);
+	    Tween.to(source, GameObjectTween.OFFSET_X, interval)
+	         .target(0f)
+	         .ease(TweenEquations.easeNone)
+	         .start(tweenManager);
+	    Tween.to(source, GameObjectTween.OFFSET_Y, interval)
+	         .target(0f)
+	         .ease(TweenEquations.easeNone)
+	         .start(tweenManager);
 	}
     }
 
     @Override
     public void onAttach(GameObject source) {
-	source.setAttribute(Orientation.class, direction);
+	this.source = source;
+	source.setAttribute(Orientation.class, DEFAULT_DIRECTION);
     }
 
     @Override
@@ -60,29 +74,15 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 
     @Override
     public void update(GameObject source, float delta) {
-	if (moveRequest && !moving) {
-	    source.setAttribute(Orientation.class, direction);
-	    float movementX = rasterSize * direction.getXFactor();
-	    float movementY = rasterSize * direction.getYFactor();
-	    source.setPosition(source.getLeft() + movementX, source.getTop() + movementY);
-	    source.setOffset(-movementX, -movementY);
-	    Tween.to(source, GameObjectTween.OFFSET_X, interval)
-	         .target(0f)
-	         .ease(TweenEquations.easeNone)
-	         .start(tweenManager);
-	    Tween.to(source, GameObjectTween.OFFSET_Y, interval)
-	         .target(0f)
-	         .ease(TweenEquations.easeNone)
-		    .setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
-			@Override
-			public void onEvent(int arg0, BaseTween<?> arg1) {
-			    moving = false;
-			}
-		    })
-	         .start(tweenManager);
-	    moveRequest = false;
-	    moving = true;
+	this.source = source;
+	timer.update(delta);
+	if (moving && isReadyToMove()) {
+	    moving = false;
 	}
+    }
+
+    private boolean isReadyToMove() {
+	return timer.reached(interval);
     }
 
 }

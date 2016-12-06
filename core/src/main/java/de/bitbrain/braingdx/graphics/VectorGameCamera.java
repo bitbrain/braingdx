@@ -57,6 +57,9 @@ public class VectorGameCamera implements GameCamera {
     public void update(float delta) {
 	if (target == null)
 	    return;
+	if (speed.longValueExact() == 0L) {
+	    focus();
+	}
 	if (focusRequested) {
 	    camera.position.x = target.getLeft() + target.getOffset().x + target.getWidth() / 2f;
 	    camera.position.y = target.getTop() + target.getOffset().y + target.getHeight() / 2f;

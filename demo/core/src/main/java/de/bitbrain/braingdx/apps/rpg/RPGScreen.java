@@ -39,8 +39,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     @Override
     protected void onCreateStage(Stage stage, int width, int height) {
 	prepareResources();
-	behavior = new RasteredMovementBehavior().interval(0.2f);
-	addSoldier(0f, 0f, 64);
+	behavior = new RasteredMovementBehavior().interval(0.5f).rasterSize(32);
+	addSoldier(0f, 0f, 32);
 	setupShaders();
     }
 
@@ -101,12 +101,12 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	GameObject object = getGameWorld().addObject();
 	object.setPosition(x, y);
 	object.setType(SOLDIER);
-	object.setDimensions(48, 64);
+	object.setDimensions(size, size);
 	getBehaviorManager().apply(new PointLightBehavior(Color.valueOf("ff5544ff"), 700f, getLightingManager()),
 		object);
 	getBehaviorManager().apply(behavior, object);
 	getGameCamera().setTarget(object);
-	getGameCamera().setSpeed(3f);
+	getGameCamera().setSpeed(0f);
 	getGameCamera().setZoomScale(0f);
     }
 }
