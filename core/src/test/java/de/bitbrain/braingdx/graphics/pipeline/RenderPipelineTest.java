@@ -20,6 +20,7 @@ import org.mockito.Mockito;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 @RunWith(Parameterized.class)
@@ -34,6 +35,7 @@ public class RenderPipelineTest {
     public static Collection<RenderPipelineFactory[]> getParams() {
 	List<RenderPipelineFactory[]> params = new ArrayList<RenderPipelineFactory[]>();
 	Gdx.app = mock(Application.class);
+	Gdx.gl = mock(GL20.class);
 	when(Gdx.app.getType()).thenReturn(ApplicationType.Desktop);
 	params.add(new RenderPipelineFactory[] { new MockedLayeredRenderPipelineFactory() });
 	params.add(new RenderPipelineFactory[] { new MockedCombinedRenderPipelineFactory() });

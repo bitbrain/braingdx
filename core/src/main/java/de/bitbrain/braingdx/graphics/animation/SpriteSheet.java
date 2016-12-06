@@ -42,6 +42,6 @@ public class SpriteSheet {
     }
 
     public void draw(Batch batch, int indexX, int indexY, float x, float y, float width, float height) {
-	batch.draw(sprites[indexY][indexX], x, y, width, flip * height);
+	batch.draw(sprites[indexY][indexX], x, flip == -1 ? y + height : y, width, flip * height);
     }
 }

@@ -39,7 +39,6 @@ public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
 	pipeline.add(RenderPipeIds.BACKGROUND, new AbstractRenderLayer() {
 	    @Override
 	    public void render(Batch batch, float delta) {
-		// noOp
 	    }
 	});
 	pipeline.add(RenderPipeIds.FOREGROUND, new AbstractRenderLayer() {
