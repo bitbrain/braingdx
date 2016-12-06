@@ -26,6 +26,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -62,25 +63,39 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
     private OrthographicCamera camera;
 
-    public CombinedRenderPipeline(ShaderConfig config, OrthographicCamera camera) {
-	this(config, new PostProcessor(true, true, isDesktop), camera, new FrameBufferFactory() {
+    private final SpriteBatch internalBatch;
+
+    public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera) {
+	this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
 	    @Override
 	    public FrameBuffer create(int width, int height) {
 		return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
 	    }
 
-	});
+	}, internalBatch, camera);
     }
 
-    CombinedRenderPipeline(ShaderConfig config, PostProcessor processor, OrthographicCamera camera,
-	    FrameBufferFactory factory) {
+    public CombinedRenderPipeline(ShaderConfig config) {
+	this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
+
+	    @Override
+	    public FrameBuffer create(int width, int height) {
+		return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+	    }
+
+	}, new SpriteBatch(), new OrthographicCamera());
+    }
+
+    CombinedRenderPipeline(ShaderConfig config, PostProcessor processor, FrameBufferFactory factory,
+	    SpriteBatch internalBatch, OrthographicCamera camera) {
 	this.config = config;
 	ShaderLoader.BasePath = this.config.basePath;
 	ShaderLoader.PathResolver = this.config.pathResolver;
 	this.processor = processor;
-	this.camera = camera;
 	this.bufferFactory = factory;
+	this.internalBatch = internalBatch;
+	this.camera = camera;
     }
 
     @Override
@@ -98,6 +113,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
 	    buffer.dispose();
 	}
 	buffer = bufferFactory.create(width, height);
+	camera.setToOrtho(true, width, height);
+	camera.update();
     }
 
     @Override
@@ -123,11 +140,11 @@ public class CombinedRenderPipeline implements RenderPipeline {
 	    pipe.beforeRender();
 	    pipe.render(batch, delta, buffer);
 	}
-	batch.begin();
-	batch.setColor(Color.WHITE);
-	batch.draw(buffer.getColorBufferTexture(), camera.position.x - camera.viewportWidth / 2f,
-		camera.position.y - camera.viewportHeight / 2f);
-	batch.end();
+	internalBatch.setProjectionMatrix(camera.combined);
+	internalBatch.begin();
+	internalBatch.setColor(Color.WHITE);
+	internalBatch.draw(buffer.getColorBufferTexture(), 0f, 0f);
+	internalBatch.end();
     }
 
     private void clearBuffer() {

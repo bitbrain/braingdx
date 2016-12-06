@@ -212,6 +212,6 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     }
 
     protected RenderPipelineFactory getRenderPipelineFactory() {
-	return new CombinedRenderPipelineFactory(getShaderConfig(), world, lightingManager, stage, camera);
+	return new CombinedRenderPipelineFactory(getShaderConfig(), world, lightingManager, stage);
     }
 }

@@ -1,4 +1,4 @@
-package de.bitbrain.braingdx.utl;
+package de.bitbrain.braingdx.util;
 
 import com.badlogic.gdx.graphics.Color;
 

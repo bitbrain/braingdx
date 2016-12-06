@@ -20,7 +20,6 @@ import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.pipeline.layers.TextureRenderLayer;
 import de.bitbrain.braingdx.graphics.renderer.SpriteSheetAnimationRenderer;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
-import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.world.GameObject;
 
@@ -93,8 +92,6 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	bloom.setBloomIntesity(1.4f);
 	bloom.setBlurPasses(7);
 	worldPipe.addEffects(bloom);
-	Fxaa aliasing = new Fxaa(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-	worldPipe.addEffects(aliasing);
     }
 
     private void addSoldier(float x, float y, int size) {
@@ -106,7 +103,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 		object);
 	getBehaviorManager().apply(behavior, object);
 	getGameCamera().setTarget(object);
-	getGameCamera().setSpeed(0f);
-	getGameCamera().setZoomScale(0f);
+	getGameCamera().setSpeed(1f);
+	getGameCamera().setZoomScale(0.001f);
     }
 }

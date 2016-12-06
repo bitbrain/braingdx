@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.graphics.GraphicsFactory;
-import de.bitbrain.braingdx.utl.Colors;
+import de.bitbrain.braingdx.util.Colors;
 
 final class Styles {
 

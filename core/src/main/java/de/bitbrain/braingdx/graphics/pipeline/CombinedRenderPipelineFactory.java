@@ -1,6 +1,5 @@
 package de.bitbrain.braingdx.graphics.pipeline;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -22,20 +21,17 @@ public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
 
     private final Stage stage;
 
-    private final OrthographicCamera camera;
-
     public CombinedRenderPipelineFactory(ShaderConfig config, GameWorld world, LightingManager lightingManager,
-	    Stage stage, OrthographicCamera camera) {
+	    Stage stage) {
 	this.config = config;
 	this.world = world;
 	this.lightingManager = lightingManager;
 	this.stage = stage;
-	this.camera = camera;
     }
 
     @Override
     public RenderPipeline create() {
-	RenderPipeline pipeline = new CombinedRenderPipeline(config, camera);
+	RenderPipeline pipeline = new CombinedRenderPipeline(config);
 	pipeline.add(RenderPipeIds.BACKGROUND, new AbstractRenderLayer() {
 	    @Override
 	    public void render(Batch batch, float delta) {

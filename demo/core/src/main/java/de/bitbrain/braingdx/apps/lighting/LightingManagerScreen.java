@@ -62,8 +62,12 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
     }
 
     private void addRandomObjects() {
+	GameObject first = null;
 	for (int i = 0; i < OBJECTS; ++i) {
 	    GameObject object = getGameWorld().addObject();
+	    if (first == null) {
+		first = object;
+	    }
 	    object.setDimensions(230, 230);
 	    object.setPosition((int) (Gdx.graphics.getWidth() * Math.random()),
 		    (int) (Gdx.graphics.getHeight() * Math.random()));
@@ -75,6 +79,7 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	    objectColor.a = 1f;
 	    // object.setColor(objectColor);
 	}
+	getGameCamera().setTarget(first);
     }
 
     private void createButtonUI(Stage stage) {

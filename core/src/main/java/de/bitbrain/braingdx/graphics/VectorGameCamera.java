@@ -57,7 +57,7 @@ public class VectorGameCamera implements GameCamera {
     public void update(float delta) {
 	if (target == null)
 	    return;
-	if (speed.longValueExact() == 0L) {
+	if (speed.round(PRECISION).longValue() == 0L) {
 	    focus();
 	}
 	if (focusRequested) {
