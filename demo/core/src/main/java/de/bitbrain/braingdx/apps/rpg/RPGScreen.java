@@ -38,8 +38,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     @Override
     protected void onCreateStage(Stage stage, int width, int height) {
 	prepareResources();
-	behavior = new RasteredMovementBehavior().interval(0.5f).rasterSize(64);
-	addSoldier(0f, 0f, 64);
+	behavior = new RasteredMovementBehavior().interval(0.2f).rasterSize(32);
+	addSoldier(0f, 0f, 32);
 	setupShaders();
     }
 
