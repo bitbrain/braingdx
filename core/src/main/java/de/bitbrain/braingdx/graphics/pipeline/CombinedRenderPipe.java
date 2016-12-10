@@ -15,7 +15,9 @@
 
 package de.bitbrain.braingdx.graphics.pipeline;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
 import de.bitbrain.braingdx.graphics.shader.ShaderManager;
@@ -31,9 +33,16 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
 
     private boolean enabled = true;
 
-    public CombinedRenderPipe(RenderLayer layer, PostProcessor processor, PostProcessorEffect... effects) {
+    private final OrthographicCamera camera;
+
+    private final SpriteBatch batch;
+
+    public CombinedRenderPipe(RenderLayer layer, PostProcessor processor, OrthographicCamera camera, SpriteBatch batch,
+	    PostProcessorEffect... effects) {
 	this.layer = layer;
 	this.shaderManager = new ShaderManager(processor, effects);
+	this.camera = camera;
+	this.batch = batch;
     }
 
     @Override
@@ -55,9 +64,10 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
 	if (isEnabled()) {
 	    if (shaderManager.hasEffects()) {
 		shaderManager.begin();
-		batch.begin();
-		batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
-		batch.end();
+		this.batch.setProjectionMatrix(camera.combined);
+		this.batch.begin();
+		this.batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
+		this.batch.end();
 		layer.render(batch, delta);
 		shaderManager.end(buffer);
 	    } else {
@@ -74,6 +84,7 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
 
     @Override
     public void resize(int width, int height) {
+	camera.setToOrtho(true, width, height);
 	if (layer instanceof Resizeable) {
 	    ((Resizeable) layer).resize(width, height);
 	}

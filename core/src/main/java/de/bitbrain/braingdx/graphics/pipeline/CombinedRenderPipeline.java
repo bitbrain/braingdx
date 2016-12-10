@@ -119,7 +119,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
     @Override
     public void add(String id, RenderLayer layer, PostProcessorEffect... effects) {
-	CombinedRenderPipe pipe = new CombinedRenderPipe(layer, processor, effects);
+	CombinedRenderPipe pipe = new CombinedRenderPipe(layer, processor, camera, internalBatch, effects);
 	pipes.put(id, pipe);
     }
 
