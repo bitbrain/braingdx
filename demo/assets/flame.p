@@ -2,39 +2,43 @@ Untitled
 - Delay -
 active: true
 lowMin: 20.0
-lowMax: 30.0
+lowMax: 100.0
 - Duration - 
 lowMin: 5000.0
 lowMax: 5000.0
 - Count - 
-min: 20
+min: 10
 max: 200
 - Emission - 
 lowMin: 0.0
-lowMax: 0.0
-highMin: 250.0
+lowMax: 100.0
+highMin: 50.0
 highMax: 250.0
 relative: false
-scalingCount: 2
+scalingCount: 3
 scaling0: 1.0
 scaling1: 1.0
-timelineCount: 2
+scaling2: 0.08163265
+timelineCount: 3
 timeline0: 0.0
 timeline1: 0.39726028
+timeline2: 0.91780823
 - Life - 
 lowMin: 0.0
 lowMax: 0.0
 highMin: 500.0
 highMax: 1000.0
 relative: false
-scalingCount: 3
+scalingCount: 4
 scaling0: 1.0
-scaling1: 1.0
-scaling2: 0.3
-timelineCount: 3
+scaling1: 0.71428573
+scaling2: 1.0
+scaling3: 0.3
+timelineCount: 4
 timeline0: 0.0
-timeline1: 0.66
-timeline2: 1.0
+timeline1: 0.39041096
+timeline2: 0.66
+timeline3: 1.0
 - Life Offset - 
 active: false
 - X Offset - 
@@ -66,7 +70,7 @@ timeline0: 0.0
 - Scale - 
 lowMin: 0.0
 lowMax: 3.0
-highMin: 32.0
+highMin: 8.0
 highMax: 3.0
 relative: false
 scalingCount: 7
@@ -88,8 +92,8 @@ timeline6: 1.0
 - Velocity - 
 active: true
 lowMin: 0.0
-lowMax: 400.0
-highMin: 20.0
+lowMax: 100.0
+highMin: 5.0
 highMax: 10.0
 relative: false
 scalingCount: 3
@@ -104,23 +108,34 @@ timeline2: 1.0
 active: true
 lowMin: 90.0
 lowMax: 90.0
-highMin: 45.0
-highMax: 135.0
+highMin: 260.0
+highMax: 280.0
 relative: false
-scalingCount: 3
+scalingCount: 4
 scaling0: 1.0
-scaling1: 0.0
+scaling1: 1.0
 scaling2: 0.0
-timelineCount: 3
+scaling3: 0.0
+timelineCount: 4
 timeline0: 0.0
-timeline1: 0.5
-timeline2: 1.0
+timeline1: 0.6164383
+timeline2: 0.8287671
+timeline3: 1.0
 - Rotation - 
 active: false
 - Wind - 
 active: false
 - Gravity - 
-active: false
+active: true
+lowMin: 0.0
+lowMax: 0.0
+highMin: 0.0
+highMax: 0.0
+relative: false
+scalingCount: 1
+scaling0: 1.0
+timelineCount: 1
+timeline0: 0.0
 - Tint - 
 colorsCount: 12
 colors0: 1.0
@@ -166,4 +181,4 @@ additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-particle.png
+/home/miguel/particle.png

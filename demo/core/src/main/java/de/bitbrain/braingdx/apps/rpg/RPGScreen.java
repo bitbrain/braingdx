@@ -28,6 +28,7 @@ import de.bitbrain.braingdx.world.GameObject;
 public class RPGScreen extends AbstractScreen<RPGTest> {
 
     private static final int SOLDIER = 1;
+    private static final int CAMPFIRE = 2;
 
     private RasteredMovementBehavior behavior;
 
@@ -42,6 +43,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	prepareResources();
 	behavior = new RasteredMovementBehavior().interval(0.2f).rasterSize(32);
 	addSoldier(0f, 0f, 32);
+	spawnCampfire(512f, 256f);
+	spawnCampfire(770f, 440f);
 	setupShaders();
     }
 
@@ -70,8 +73,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	getLightingManager().setAmbientLight(new Color(0.06f, 0f, 0.1f, 0.1f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
 	SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
-	ParticleRendererFactory particleRendererFactory = new ParticleRendererFactory(getParticleManager(),
-		getBehaviorManager());
+
 	animation = new SpriteSheetAnimation(sheet)
 	         .origin(3, 0)
 	         .interval(0.2f)
@@ -85,8 +87,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	      .map(Orientation.DOWN, 0)
 	      .map(Orientation.LEFT, 1)
 	      .map(Orientation.RIGHT, 2)
-	      .map(Orientation.UP, 3),
-	  particleRendererFactory.create(Assets.RPG.FLAME))
+	      .map(Orientation.UP, 3))
 	);
     }
 
@@ -104,12 +105,35 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	GameObject object = getGameWorld().addObject();
 	object.setPosition(x, y);
 	object.setType(SOLDIER);
-	object.setDimensions(size, size);
-	getBehaviorManager().apply(new PointLightBehavior(Color.valueOf("ff5544ff"), 700f, getLightingManager()),
-		object);
+	object.setDimensions(size, size * 1.3f);
 	getBehaviorManager().apply(behavior, object);
 	getGameCamera().setTarget(object);
 	getGameCamera().setSpeed(1f);
 	getGameCamera().setZoomScale(0.001f);
+    }
+
+    private void spawnCampfire(float x, float y) {
+	ParticleRendererFactory particleRendererFactory = new ParticleRendererFactory(getParticleManager(),
+		getBehaviorManager());
+	GameObject object = getGameWorld().addObject();
+	object.setPosition(x, y);
+	object.setType(CAMPFIRE);
+	object.setDimensions(32, 32);
+	getBehaviorManager().apply(new PointLightBehavior(Color.valueOf("ff3366ff"), 500f, getLightingManager()),
+		object);
+	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CAMPFIRE);
+	SpriteSheet sheet = new SpriteSheet(texture, 4, 1);
+
+	SpriteSheetAnimation animation = new SpriteSheetAnimation(sheet)
+	         .origin(0, 0)
+	         .interval(0.05f)
+	         .direction(Direction.HORIZONTAL)
+		 .type(AnimationTypes.FORWARD)
+	         .base(0)
+	         .frames(4);
+	getRenderManager().register(CAMPFIRE,
+		GameObjectRenderManager.combine(
+	      particleRendererFactory.create(Assets.RPG.FLAME))
+	);
     }
 }

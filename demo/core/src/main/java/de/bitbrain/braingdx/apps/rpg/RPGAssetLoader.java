@@ -13,6 +13,7 @@ public class RPGAssetLoader implements GameAssetLoader {
     @Override
     public void put(Map<String, Class<?>> assets) {
 	assets.put(Assets.RPG.CHARACTER_TILESET, Texture.class);
+	assets.put(Assets.RPG.CAMPFIRE, Texture.class);
 	assets.put(Assets.RPG.BACKGROUND, Texture.class);
 	assets.put(Assets.RPG.FLAME, ParticleEffect.class);
     }
