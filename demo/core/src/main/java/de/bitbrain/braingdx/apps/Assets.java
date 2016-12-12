@@ -11,6 +11,7 @@ public interface Assets {
     public static interface RPG {
 	String CHARACTER_TILESET = "rpg/character-tiles.png";
 	String BACKGROUND = "wall.jpg";
+	String FLAME = "flame.p";
     }
 
 }

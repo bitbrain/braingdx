@@ -34,7 +34,7 @@ import de.bitbrain.braingdx.assets.SharedAssetManager;
 public class ParticleManager implements Disposable {
     
     public static final int DEFAULT_INITIAL_CAPACITY = 25;
-    public static final int DEFAULT_MAXIMUM_EFFECTS = -1;
+    public static final int DEFAULT_MAXIMUM_EFFECTS = 500;
 
     private final Map<String, ParticleEffectPool> pools = new HashMap<String, ParticleEffectPool>();
 

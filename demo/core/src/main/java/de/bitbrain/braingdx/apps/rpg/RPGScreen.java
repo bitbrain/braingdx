@@ -10,6 +10,7 @@ import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
 import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
+import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation.Direction;
@@ -18,6 +19,7 @@ import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.pipeline.layers.TextureRenderLayer;
+import de.bitbrain.braingdx.graphics.renderer.ParticleRendererFactory;
 import de.bitbrain.braingdx.graphics.renderer.SpriteSheetAnimationRenderer;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.screens.AbstractScreen;
@@ -68,6 +70,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	getLightingManager().setAmbientLight(new Color(0.06f, 0f, 0.1f, 0.1f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
 	SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
+	ParticleRendererFactory particleRendererFactory = new ParticleRendererFactory(getParticleManager(),
+		getBehaviorManager());
 	animation = new SpriteSheetAnimation(sheet)
 	         .origin(3, 0)
 	         .interval(0.2f)
@@ -75,12 +79,14 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 		 .type(AnimationTypes.RESET)
 	         .base(1)
 	         .frames(3);
-	getRenderManager().register(SOLDIER, 
+	getRenderManager().register(SOLDIER,
+		GameObjectRenderManager.combine(
 	   new SpriteSheetAnimationRenderer(animation)
 	      .map(Orientation.DOWN, 0)
 	      .map(Orientation.LEFT, 1)
 	      .map(Orientation.RIGHT, 2)
-	      .map(Orientation.UP, 3)
+	      .map(Orientation.UP, 3),
+	  particleRendererFactory.create(Assets.RPG.FLAME))
 	);
     }
 

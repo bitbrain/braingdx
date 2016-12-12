@@ -51,7 +51,7 @@ public class ParticleLoader extends SynchronousAssetLoader<ParticleEffect, Parti
     public ParticleEffect load(AssetManager assetManager, String fileName, FileHandle file,
 	    ParticleParameter parameter) {
 	final ParticleEffect effect = new ParticleEffect();
-	effect.load(file, resolve("particles/"));
+	effect.load(file, resolve(""));
 	return effect;
     }
 }

@@ -17,6 +17,7 @@ package de.bitbrain.braingdx.graphics.particles;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -32,6 +33,8 @@ public class ManagedParticleEffect {
     private final String path;
 
     private Vector2 offset = new Vector2();
+
+    private boolean started = false;
 
     ManagedParticleEffect(PooledEffect effect, String path) {
 	this.effect = effect;
@@ -57,7 +60,18 @@ public class ManagedParticleEffect {
 	return this;
     }
 
+    public ManagedParticleEffect attached(boolean attached) {
+	for (ParticleEmitter emitter : effect.getEmitters()) {
+	    emitter.setAttached(attached);
+	}
+	return this;
+    }
+
     public void render(float x, float y, Batch batch, float delta) {
+	if (!started) {
+	    effect.start();
+	    started = true;
+	}
 	effect.setPosition(x + offset.x, y + offset.y);
 	effect.draw(batch, delta);
     }

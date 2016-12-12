@@ -38,6 +38,7 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManagerAdapter;
 import de.bitbrain.braingdx.graphics.VectorGameCamera;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
+import de.bitbrain.braingdx.graphics.particles.ParticleManager;
 import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipelineFactory;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipelineFactory;
@@ -65,6 +66,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     private Stage stage;
     private RenderPipeline renderPipeline;
     private LightingManager lightingManager;
+    private ParticleManager particleManager;
     private World boxWorld;
 
     private boolean uiInitialized = false;
@@ -91,6 +93,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	lightingManager = new LightingManager(boxWorld, camera);
 	renderManager = new GameObjectRenderManager(batch);
 	gameCamera = new VectorGameCamera(camera);
+	particleManager = new ParticleManager();
 	stage = new Stage();
 	renderPipeline = getRenderPipelineFactory().create();
 	wire();
@@ -156,6 +159,10 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	return boxWorld;
     }
 
+    public ParticleManager getParticleManager() {
+	return particleManager;
+    }
+
     public TweenManager getTweenManager() {
 	return tweenManager;
     }
@@ -197,6 +204,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	world.clear();
 	stage.dispose();
 	input.clear();
+	particleManager.dispose();
 	renderPipeline.dispose();
     }
 
