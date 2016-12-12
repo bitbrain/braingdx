@@ -53,10 +53,44 @@ public class GameObjectRenderManager {
 	}
     }
 
+    /**
+     * Combines multiple renderers for a particular game object
+     * 
+     * @param gameObjectRenderers renderers
+     * @return a new combined {@link GameObjectRenderer}
+     */
+    public static GameObjectRenderer combine(GameObjectRenderer... gameObjectRenderers) {
+	return new CombinedGameObjectRenderer(gameObjectRenderers);
+    }
+
     public static interface GameObjectRenderer {
 
 	void init();
 
 	void render(GameObject object, Batch batch, float delta);
+    }
+
+    static class CombinedGameObjectRenderer implements GameObjectRenderer {
+
+	private final GameObjectRenderer[] renderers;
+
+	public CombinedGameObjectRenderer(GameObjectRenderer... gameObjectRenderers) {
+	    this.renderers = gameObjectRenderers;
+	}
+
+	@Override
+	public void init() {
+	    for (GameObjectRenderer renderer : renderers) {
+		renderer.init();
+	    }
+	}
+
+	@Override
+	public void render(GameObject object, Batch batch, float delta) {
+	    for (GameObjectRenderer renderer : renderers) {
+		renderer.render(object, batch, delta);
+	    }
+	}
+
     }
 }
