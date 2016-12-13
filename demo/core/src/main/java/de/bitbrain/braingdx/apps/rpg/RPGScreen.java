@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.bitbrain.braingdx.apps.Assets;
@@ -18,17 +19,20 @@ import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
-import de.bitbrain.braingdx.graphics.pipeline.layers.TextureRenderLayer;
 import de.bitbrain.braingdx.graphics.renderer.ParticleRendererFactory;
+import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
 import de.bitbrain.braingdx.graphics.renderer.SpriteSheetAnimationRenderer;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
+import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
+import de.bitbrain.braingdx.postprocessing.effects.Vignette;
 import de.bitbrain.braingdx.screens.AbstractScreen;
+import de.bitbrain.braingdx.tmx.TiledMapRenderer;
 import de.bitbrain.braingdx.world.GameObject;
 
 public class RPGScreen extends AbstractScreen<RPGTest> {
 
     private static final int SOLDIER = 1;
-    private static final int CAMPFIRE = 2;
+    private static final int TORCH = 2;
 
     private RasteredMovementBehavior behavior;
 
@@ -41,8 +45,9 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     @Override
     protected void onCreateStage(Stage stage, int width, int height) {
 	prepareResources();
-	behavior = new RasteredMovementBehavior().interval(0.2f).rasterSize(32);
-	addSoldier(0f, 0f, 32);
+	getGameCamera().setBaseZoom(0.5f);
+	behavior = new RasteredMovementBehavior().interval(0.2f).rasterSize(16);
+	addSoldier(0f, 0f, 16);
 	spawnCampfire(512f, 256f);
 	spawnCampfire(770f, 440f);
 	setupShaders();
@@ -68,9 +73,9 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     }
 
     private void prepareResources() {
-	final Texture background = SharedAssetManager.getInstance().get(Assets.RPG.BACKGROUND, Texture.class);
-	getRenderPipeline().add(RenderPipeIds.BACKGROUND, new TextureRenderLayer(background));
-	getLightingManager().setAmbientLight(new Color(0.06f, 0f, 0.1f, 0.1f));
+	TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_1, TiledMap.class);
+	getRenderPipeline().add(RenderPipeIds.BACKGROUND, new TiledMapRenderer(map));
+	getLightingManager().setAmbientLight(new Color(0.1f, 0.05f, 0.3f, 0.4f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
 	SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
 
@@ -95,10 +100,16 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	RenderPipe worldPipe = getRenderPipeline().getPipe(RenderPipeIds.WORLD);
 	Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 1.5f),
 		Math.round(Gdx.graphics.getHeight() / 1.5f));
-	bloom.setBlurAmount(25f);
-	bloom.setBloomIntesity(1.4f);
+	bloom.setBlurAmount(6f);
+	bloom.setBloomIntesity(1.3f);
 	bloom.setBlurPasses(7);
+	Vignette vignette = new Vignette(Math.round(Gdx.graphics.getWidth() / 1.5f),
+		Math.round(Gdx.graphics.getHeight() / 1.5f), false);
+	vignette.setIntensity(0.6f);
+	worldPipe.addEffects(vignette);
 	worldPipe.addEffects(bloom);
+	Fxaa fxaa = new Fxaa(Math.round(Gdx.graphics.getWidth()), Math.round(Gdx.graphics.getHeight()));
+	worldPipe.addEffects(fxaa);
     }
 
     private void addSoldier(float x, float y, int size) {
@@ -117,22 +128,13 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 		getBehaviorManager());
 	GameObject object = getGameWorld().addObject();
 	object.setPosition(x, y);
-	object.setType(CAMPFIRE);
-	object.setDimensions(32, 32);
-	getBehaviorManager().apply(new PointLightBehavior(Color.valueOf("ff3366ff"), 500f, getLightingManager()),
+	object.setType(TORCH);
+	object.setDimensions(16, 16);
+	getBehaviorManager().apply(new PointLightBehavior(Color.valueOf("ff8899ff"), 400f, getLightingManager()),
 		object);
-	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CAMPFIRE);
-	SpriteSheet sheet = new SpriteSheet(texture, 4, 1);
-
-	SpriteSheetAnimation animation = new SpriteSheetAnimation(sheet)
-	         .origin(0, 0)
-	         .interval(0.05f)
-	         .direction(Direction.HORIZONTAL)
-		 .type(AnimationTypes.FORWARD)
-	         .base(0)
-	         .frames(4);
-	getRenderManager().register(CAMPFIRE,
+	getRenderManager().register(TORCH,
 		GameObjectRenderManager.combine(
+			new SpriteRenderer(Assets.RPG.TORCH),
 	      particleRendererFactory.create(Assets.RPG.FLAME))
 	);
     }

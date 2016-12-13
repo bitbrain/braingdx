@@ -8,7 +8,7 @@ lowMin: 5000.0
 lowMax: 5000.0
 - Count - 
 min: 10
-max: 200
+max: 100
 - Emission - 
 lowMin: 0.0
 lowMax: 100.0
@@ -70,8 +70,8 @@ timeline0: 0.0
 - Scale - 
 lowMin: 0.0
 lowMax: 3.0
-highMin: 8.0
-highMax: 3.0
+highMin: 12.0
+highMax: 5.0
 relative: false
 scalingCount: 7
 scaling0: 1.0
@@ -108,8 +108,8 @@ timeline2: 1.0
 active: true
 lowMin: 90.0
 lowMax: 90.0
-highMin: 260.0
-highMax: 280.0
+highMin: 80.0
+highMax: 100.0
 relative: false
 scalingCount: 4
 scaling0: 1.0
@@ -137,24 +137,28 @@ scaling0: 1.0
 timelineCount: 1
 timeline0: 0.0
 - Tint - 
-colorsCount: 12
+colorsCount: 15
 colors0: 1.0
 colors1: 0.19215687
 colors2: 0.0
-colors3: 0.8
-colors4: 0.0
+colors3: 1.0
+colors4: 0.2
 colors5: 0.2
-colors6: 0.2
+colors6: 0.6
 colors7: 0.0
 colors8: 0.2
-colors9: 0.0
-colors10: 0.0
-colors11: 0.0
-timelineCount: 4
+colors9: 0.2
+colors10: 0.2
+colors11: 0.2
+colors12: 0.0
+colors13: 0.0
+colors14: 0.0
+timelineCount: 5
 timeline0: 0.0
 timeline1: 0.30653265
-timeline2: 0.8308208
-timeline3: 0.9966499
+timeline2: 0.6515913
+timeline3: 0.75711894
+timeline4: 0.9966499
 - Transparency - 
 lowMin: 0.0
 lowMax: 0.0
@@ -163,22 +167,22 @@ highMax: 1.0
 relative: false
 scalingCount: 5
 scaling0: 0.0
-scaling1: 0.50877196
+scaling1: 0.22807017
 scaling2: 1.0
-scaling3: 0.54385966
+scaling3: 0.21052632
 scaling4: 0.0
 timelineCount: 5
 timeline0: 0.0
-timeline1: 0.09589041
+timeline1: 0.11643836
 timeline2: 0.33561644
-timeline3: 0.74657536
+timeline3: 0.7191781
 timeline4: 1.0
 - Options - 
-attached: true
+attached: false
 continuous: true
 aligned: true
 additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-/home/miguel/particle.png
+particle.png

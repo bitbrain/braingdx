@@ -121,7 +121,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	}
 	stage.getViewport().update(width, height);
 	renderPipeline.resize(width, height);
-	camera.setToOrtho(true, width, height);
+	camera.setToOrtho(false, width, height);
     }
 
     @Override

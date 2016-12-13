@@ -41,6 +41,7 @@ public class VectorGameCamera implements GameCamera {
     private BigDecimal speed = new BigDecimal(6.2f, PRECISION);
     private BigDecimal zoomScale = new BigDecimal(0.0025f, PRECISION);
     private boolean focusRequested = false;
+    private BigDecimal baseZoom = new BigDecimal(1, PRECISION);
 
     public VectorGameCamera(OrthographicCamera camera) {
 	this.camera = camera;
@@ -84,9 +85,14 @@ public class VectorGameCamera implements GameCamera {
 	    BigDecimal deltaY = BigDecimal.valueOf(velocity.y).multiply(overAllSpeed).multiply(preciseDelta);
 	    camera.position.x = camLeft.add(deltaX).floatValue();
 	    camera.position.y = camTop.add(deltaY).floatValue();
-	    camera.zoom = zoomScale.multiply(distance).add(BigDecimal.ONE).floatValue();
+	    camera.zoom = zoomScale.multiply(distance).add(baseZoom).floatValue();
 	}
 	camera.update();
+    }
+
+    @Override
+    public void setBaseZoom(float zoom) {
+	this.baseZoom = new BigDecimal(zoom, PRECISION);
     }
 
     @Override

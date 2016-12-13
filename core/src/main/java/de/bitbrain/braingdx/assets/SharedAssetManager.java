@@ -19,6 +19,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 import de.bitbrain.braingdx.assets.loader.ParticleLoader;
 
@@ -60,6 +62,8 @@ public class SharedAssetManager extends AssetManager {
 	if (Gdx.files.isLocalStorageAvailable()) {
 	    instance = new AssetManager();
 	    instance.setLoader(ParticleEffect.class, new ParticleLoader(new InternalFileHandleResolver()));
+	    instance.setLoader(TiledMap.class, new TmxMapLoader());
 	}
+
     }
 }

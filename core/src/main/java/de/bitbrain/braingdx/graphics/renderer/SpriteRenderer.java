@@ -52,7 +52,6 @@ public class SpriteRenderer implements GameObjectRenderManager.GameObjectRendere
 	    texture = assets.get(textureId, Texture.class);
 	}
 	sprite = new Sprite(texture);
-	sprite.setFlip(false, true);
     }
 
     @Override

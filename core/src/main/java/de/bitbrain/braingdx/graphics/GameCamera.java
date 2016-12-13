@@ -35,6 +35,13 @@ public interface GameCamera {
     void setZoomScale(float zoomScale);
 
     /**
+     * Sets the base zoom
+     * 
+     * @param zoom baseZoom
+     */
+    void setBaseZoom(float zoom);
+
+    /**
      * Focuses directly on the target
      */
     void focus();

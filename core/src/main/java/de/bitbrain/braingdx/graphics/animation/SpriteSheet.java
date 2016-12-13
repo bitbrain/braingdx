@@ -29,7 +29,7 @@ public class SpriteSheet {
 
     private final TextureRegion[][] sprites;
 
-    private float flip = -1;
+    private float flip = 1;
 
     public SpriteSheet(Texture texture, int spritesHorizontal, int spritesVertical) {
 	sprites = TextureRegion.split(texture, texture.getWidth() / spritesHorizontal,

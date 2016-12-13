@@ -10,9 +10,10 @@ public interface Assets {
 
     public static interface RPG {
 	String CHARACTER_TILESET = "rpg/character-tiles.png";
-	String CAMPFIRE = "rpg/campfire.png";
+	String TORCH = "rpg/torch.png";
 	String BACKGROUND = "wall.jpg";
 	String FLAME = "flame.p";
+	String MAP_1 = "rpg/map.tmx";
     }
 
 }
