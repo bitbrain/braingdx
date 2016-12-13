@@ -15,7 +15,7 @@
 
 package de.bitbrain.braingdx.tmx;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -26,7 +26,10 @@ public class TiledMapRenderer implements RenderLayer {
 
     private final OrthogonalTiledMapRenderer mapRenderer;
 
-    public TiledMapRenderer(TiledMap map) {
+    private final OrthographicCamera camera;
+
+    public TiledMapRenderer(TiledMap map, OrthographicCamera camera) {
+	this.camera = camera;
 	mapRenderer = new OrthogonalTiledMapRenderer(map);
     }
 
@@ -38,7 +41,7 @@ public class TiledMapRenderer implements RenderLayer {
 
     @Override
     public void render(Batch batch, float delta) {
-	mapRenderer.setView(batch.getProjectionMatrix(), 0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	mapRenderer.setView(camera);
 	mapRenderer.render();
     }
 

@@ -3,6 +3,7 @@ package de.bitbrain.braingdx.apps.rpg;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -23,7 +24,6 @@ import de.bitbrain.braingdx.graphics.renderer.ParticleRendererFactory;
 import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
 import de.bitbrain.braingdx.graphics.renderer.SpriteSheetAnimationRenderer;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
-import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
 import de.bitbrain.braingdx.postprocessing.effects.Vignette;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.tmx.TiledMapRenderer;
@@ -45,7 +45,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     @Override
     protected void onCreateStage(Stage stage, int width, int height) {
 	prepareResources();
-	getGameCamera().setBaseZoom(0.5f);
+	getGameCamera().setBaseZoom(0.35f);
 	behavior = new RasteredMovementBehavior().interval(0.2f).rasterSize(16);
 	addSoldier(0f, 0f, 16);
 	spawnCampfire(512f, 256f);
@@ -74,7 +74,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
     private void prepareResources() {
 	TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_1, TiledMap.class);
-	getRenderPipeline().add(RenderPipeIds.BACKGROUND, new TiledMapRenderer(map));
+	getRenderPipeline().add(RenderPipeIds.BACKGROUND,
+		new TiledMapRenderer(map, (OrthographicCamera) getGameCamera().getInternal()));
 	getLightingManager().setAmbientLight(new Color(0.1f, 0.05f, 0.3f, 0.4f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
 	SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
@@ -98,18 +99,17 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
     private void setupShaders() {
 	RenderPipe worldPipe = getRenderPipeline().getPipe(RenderPipeIds.WORLD);
-	Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 1.5f),
-		Math.round(Gdx.graphics.getHeight() / 1.5f));
-	bloom.setBlurAmount(6f);
+	Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 3.5f),
+		Math.round(Gdx.graphics.getHeight() / 3.5f));
+	bloom.setBlurAmount(1.6f);
 	bloom.setBloomIntesity(1.3f);
-	bloom.setBlurPasses(7);
+	bloom.setBlurPasses(5);
 	Vignette vignette = new Vignette(Math.round(Gdx.graphics.getWidth() / 1.5f),
 		Math.round(Gdx.graphics.getHeight() / 1.5f), false);
-	vignette.setIntensity(0.6f);
+	vignette.setIntensity(0.8f);
 	worldPipe.addEffects(vignette);
 	worldPipe.addEffects(bloom);
-	Fxaa fxaa = new Fxaa(Math.round(Gdx.graphics.getWidth()), Math.round(Gdx.graphics.getHeight()));
-	worldPipe.addEffects(fxaa);
+
     }
 
     private void addSoldier(float x, float y, int size) {
