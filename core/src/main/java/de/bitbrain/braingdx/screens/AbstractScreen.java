@@ -80,7 +80,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     }
 
     protected TweenManager tweenManager = SharedTweenManager.getInstance();
-    protected InputMultiplexer input;
+    private InputMultiplexer input;
 
     @Override
     public final void show() {
@@ -181,6 +181,10 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     public LightingManager getLightingManager() {
 	return lightingManager;
+    }
+
+    public InputMultiplexer getInput() {
+	return input;
     }
 
     protected void onCreateStage(Stage stage, int width, int height) {

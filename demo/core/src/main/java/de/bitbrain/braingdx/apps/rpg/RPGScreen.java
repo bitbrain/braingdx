@@ -23,6 +23,7 @@ import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.renderer.ParticleRendererFactory;
 import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
 import de.bitbrain.braingdx.graphics.renderer.SpriteSheetAnimationRenderer;
+import de.bitbrain.braingdx.input.OrientationMovementController;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Vignette;
 import de.bitbrain.braingdx.screens.AbstractScreen;
@@ -34,9 +35,9 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     private static final int SOLDIER = 1;
     private static final int TORCH = 2;
 
-    private RasteredMovementBehavior behavior;
-
+    private OrientationMovementController movementController;
     private SpriteSheetAnimation animation;
+    private RasteredMovementBehavior behavior;
 
     public RPGScreen(RPGTest rpgTest) {
 	super(rpgTest);
@@ -47,6 +48,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	prepareResources();
 	getGameCamera().setBaseZoom(0.35f);
 	behavior = new RasteredMovementBehavior().interval(0.2f).rasterSize(16);
+	movementController = new OrientationMovementController(behavior);
 	addSoldier(0f, 0f, 16);
 	spawnCampfire(512f, 256f);
 	spawnCampfire(770f, 440f);
@@ -55,18 +57,15 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
     @Override
     protected void onUpdate(float delta) {
+	movementController.update();
 	if (Gdx.input.isKeyPressed(Keys.W)) {
 	    animation.type(AnimationTypes.FORWARD_YOYO);
-	    behavior.move(Orientation.UP);
 	} else if (Gdx.input.isKeyPressed(Keys.A)) {
 	    animation.type(AnimationTypes.FORWARD_YOYO);
-	    behavior.move(Orientation.LEFT);
 	} else if (Gdx.input.isKeyPressed(Keys.S)) {
 	    animation.type(AnimationTypes.FORWARD_YOYO);
-	    behavior.move(Orientation.DOWN);
 	} else if (Gdx.input.isKeyPressed(Keys.D)) {
 	    animation.type(AnimationTypes.FORWARD_YOYO);
-	    behavior.move(Orientation.RIGHT);
 	} else if (!behavior.isMoving()) {
 	    animation.type(AnimationTypes.RESET);
 	}
