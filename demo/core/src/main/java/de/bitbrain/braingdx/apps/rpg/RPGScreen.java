@@ -1,7 +1,6 @@
 package de.bitbrain.braingdx.apps.rpg;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +12,7 @@ import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
 import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
+import de.bitbrain.braingdx.graphics.animation.OrientationSpritesheetAnimator;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation.Direction;
@@ -36,8 +36,9 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     private static final int TORCH = 2;
 
     private OrientationMovementController movementController;
-    private SpriteSheetAnimation animation;
     private RasteredMovementBehavior behavior;
+    private OrientationSpritesheetAnimator animator;
+    private SpriteSheetAnimation animation;
 
     public RPGScreen(RPGTest rpgTest) {
 	super(rpgTest);
@@ -58,17 +59,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     @Override
     protected void onUpdate(float delta) {
 	movementController.update();
-	if (Gdx.input.isKeyPressed(Keys.W)) {
-	    animation.type(AnimationTypes.FORWARD_YOYO);
-	} else if (Gdx.input.isKeyPressed(Keys.A)) {
-	    animation.type(AnimationTypes.FORWARD_YOYO);
-	} else if (Gdx.input.isKeyPressed(Keys.S)) {
-	    animation.type(AnimationTypes.FORWARD_YOYO);
-	} else if (Gdx.input.isKeyPressed(Keys.D)) {
-	    animation.type(AnimationTypes.FORWARD_YOYO);
-	} else if (!behavior.isMoving()) {
-	    animation.type(AnimationTypes.RESET);
-	}
+
     }
 
     private void prepareResources() {
@@ -117,6 +108,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	object.setType(SOLDIER);
 	object.setDimensions(size, size * 1.3f);
 	getBehaviorManager().apply(behavior, object);
+	getBehaviorManager().apply(new OrientationSpritesheetAnimator(behavior, animation, AnimationTypes.FORWARD_YOYO),
+		object);
 	getGameCamera().setTarget(object);
 	getGameCamera().setSpeed(1f);
 	getGameCamera().setZoomScale(0.001f);
