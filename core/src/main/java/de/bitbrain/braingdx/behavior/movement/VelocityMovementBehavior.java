@@ -20,4 +20,9 @@ public class VelocityMovementBehavior extends BehaviorAdapter implements Movemen
 	source.setPosition(source.getLeft() + velocity.x * delta, source.getTop() + velocity.y * delta);
     }
 
+    @Override
+    public boolean isMoving() {
+	return velocity.len() > 0f;
+    }
+
 }

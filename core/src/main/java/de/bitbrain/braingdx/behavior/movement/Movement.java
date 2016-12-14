@@ -28,4 +28,12 @@ public interface Movement<T> {
      * @param influencer the influencer of the movement
      */
     void move(T influencer);
+
+    /**
+     * Determines if currently moving
+     * 
+     * @return true if moving
+     */
+    boolean isMoving();
+
 }
