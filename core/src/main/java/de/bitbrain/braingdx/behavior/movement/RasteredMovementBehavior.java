@@ -24,6 +24,11 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 
     private final TweenManager tweenManager = SharedTweenManager.getInstance();
     private final DeltaTimer timer = new DeltaTimer(DEFAULT_INTERVAL);
+    private final MovementController<Orientation> controller;
+
+    public RasteredMovementBehavior(MovementController<Orientation> controller) {
+	this.controller = controller;
+    }
 
     public RasteredMovementBehavior rasterSize(int size) {
 	this.rasterSize = Math.max(size, 1);
@@ -81,6 +86,7 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 	    moving = false;
 	}
 	wasMoving = moving;
+	controller.update(this, delta);
     }
 
     private boolean isReadyToMove() {

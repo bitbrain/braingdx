@@ -35,7 +35,6 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     private static final int SOLDIER = 1;
     private static final int TORCH = 2;
 
-    private OrientationMovementController movementController;
     private RasteredMovementBehavior behavior;
     private SpriteSheetAnimation animation;
 
@@ -47,18 +46,11 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
     protected void onCreateStage(Stage stage, int width, int height) {
 	prepareResources();
 	getGameCamera().setBaseZoom(0.35f);
-	behavior = new RasteredMovementBehavior().interval(0.2f).rasterSize(16);
-	movementController = new OrientationMovementController(behavior);
+	behavior = new RasteredMovementBehavior(new OrientationMovementController()).interval(0.2f).rasterSize(16);
 	addSoldier(0f, 0f, 16);
 	spawnCampfire(512f, 256f);
 	spawnCampfire(770f, 440f);
 	setupShaders();
-    }
-
-    @Override
-    protected void onUpdate(float delta) {
-	movementController.update();
-
     }
 
     private void prepareResources() {

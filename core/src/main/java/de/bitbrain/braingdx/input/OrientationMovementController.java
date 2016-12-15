@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 import de.bitbrain.braingdx.behavior.movement.Movement;
+import de.bitbrain.braingdx.behavior.movement.MovementController;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
 
 /**
@@ -28,15 +29,10 @@ import de.bitbrain.braingdx.behavior.movement.Orientation;
  * @since 1.0.0
  * @version 1.0.0
  */
-public class OrientationMovementController {
+public class OrientationMovementController implements MovementController<Orientation> {
 
-    private final Movement<Orientation> movement;
-    
-    public OrientationMovementController(Movement<Orientation> movement) {
-	this.movement = movement;
-    }
-    
-    public void update() {
+    @Override
+    public void update(Movement<Orientation> movement, float delta) {
 	if (Gdx.input.isKeyPressed(Keys.W)) {
 	    movement.move(Orientation.UP);
 	} else if (Gdx.input.isKeyPressed(Keys.A)) {
