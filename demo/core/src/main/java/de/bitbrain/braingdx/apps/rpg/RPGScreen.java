@@ -37,7 +37,6 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
     private OrientationMovementController movementController;
     private RasteredMovementBehavior behavior;
-    private OrientationSpritesheetAnimator animator;
     private SpriteSheetAnimation animation;
 
     public RPGScreen(RPGTest rpgTest) {

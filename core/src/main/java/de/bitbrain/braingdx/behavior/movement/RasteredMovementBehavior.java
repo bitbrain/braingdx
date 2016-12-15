@@ -19,6 +19,7 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
     private float interval = DEFAULT_INTERVAL;
 
     private boolean moving = false;
+    private boolean wasMoving = false;
     private GameObject source;
 
     private final TweenManager tweenManager = SharedTweenManager.getInstance();
@@ -76,9 +77,10 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
     public void update(GameObject source, float delta) {
 	this.source = source;
 	timer.update(delta);
-	if (moving && isReadyToMove()) {
+	if (wasMoving && moving && isReadyToMove()) {
 	    moving = false;
 	}
+	wasMoving = moving;
     }
 
     private boolean isReadyToMove() {
