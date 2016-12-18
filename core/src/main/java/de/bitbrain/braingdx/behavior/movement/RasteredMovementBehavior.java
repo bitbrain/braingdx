@@ -8,6 +8,7 @@ import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.util.DeltaTimer;
 import de.bitbrain.braingdx.world.GameObject;
+import de.bitbrain.braingdx.world.GameObjectAttributes;
 
 public class RasteredMovementBehavior extends BehaviorAdapter implements Movement<Orientation> {
 
@@ -50,7 +51,7 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 	if (isReadyToMove() && source != null) {
 	    moving = true;
 	    timer.reset();
-	    source.setAttribute(Orientation.class, direction);
+	    source.setAttribute(GameObjectAttributes.ORIENTATION, direction);
 	    float moveX = direction.getXFactor() * rasterSize;
 	    float moveY = direction.getYFactor() * rasterSize;
 	    source.move(moveX, moveY);
@@ -69,7 +70,7 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
     @Override
     public void onAttach(GameObject source) {
 	this.source = source;
-	source.setAttribute(Orientation.class, DEFAULT_DIRECTION);
+	source.setAttribute(GameObjectAttributes.ORIENTATION, DEFAULT_DIRECTION);
     }
 
     @Override

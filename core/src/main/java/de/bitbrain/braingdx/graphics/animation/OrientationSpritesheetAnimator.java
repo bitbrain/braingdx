@@ -20,6 +20,7 @@ import de.bitbrain.braingdx.behavior.movement.Movement;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.world.GameObject;
+import de.bitbrain.braingdx.world.GameObjectAttributes;
 
 /**
  * Orientation based implementation of {@link Animator}
@@ -53,8 +54,8 @@ public class OrientationSpritesheetAnimator extends BehaviorAdapter {
     public void update(GameObject source, float delta) {
 	if (!movement.isMoving()) {
 	    animation.type(stillType);
-	} else if (source.hasAttribute(Orientation.class)) {
-	    Orientation orientation = (Orientation) source.getAttribute(Orientation.class);
+	} else if (source.hasAttribute(GameObjectAttributes.ORIENTATION)) {
+	    Orientation orientation = (Orientation) source.getAttribute(GameObjectAttributes.ORIENTATION);
 	    switch (orientation) {
 		case DOWN:  case LEFT:
 		case RIGHT: case UP:

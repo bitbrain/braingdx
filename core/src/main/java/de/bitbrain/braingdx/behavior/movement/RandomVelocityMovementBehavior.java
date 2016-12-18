@@ -30,7 +30,7 @@ import de.bitbrain.braingdx.world.GameObject;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public class RandomMovementBehavior extends BehaviorAdapter {
+public class RandomVelocityMovementBehavior extends BehaviorAdapter {
 
     private float interval = 1f;
 
@@ -42,7 +42,7 @@ public class RandomMovementBehavior extends BehaviorAdapter {
 
     private Random random = new Random();
 
-    public RandomMovementBehavior() {
+    public RandomVelocityMovementBehavior() {
 	changeInterval();
 	timer = new DeltaTimer(interval);
     }

@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
-import de.bitbrain.braingdx.behavior.movement.RandomMovementBehavior;
+import de.bitbrain.braingdx.behavior.movement.RandomVelocityMovementBehavior;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
@@ -74,7 +74,7 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
 	    object.setType(TYPE);
 	    Color randomColor = new Color((float) Math.random(), (float) Math.random(), (float) Math.random(), 1f);
 	    getBehaviorManager().apply(new PointLightBehavior(randomColor, 500f, getLightingManager()), object);
-	    getBehaviorManager().apply(new RandomMovementBehavior(), object);
+	    getBehaviorManager().apply(new RandomVelocityMovementBehavior(), object);
 	    Color objectColor = randomColor.cpy();
 	    objectColor.a = 1f;
 	    // object.setColor(objectColor);

@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation;
 import de.bitbrain.braingdx.world.GameObject;
+import de.bitbrain.braingdx.world.GameObjectAttributes;
 
 /**
  * Renderer implementation for animations
@@ -49,13 +50,17 @@ public class SpriteSheetAnimationRenderer extends AnimationRenderer {
 
     @Override
     public void render(GameObject object, Batch batch, float delta) {
-	if (object.hasAttribute(Orientation.class)) {
-	    Orientation direction = (Orientation) object.getAttribute(Orientation.class);
+	if (object.hasAttribute(GameObjectAttributes.ORIENTATION)) {
+	    Orientation direction = (Orientation) object.getAttribute(GameObjectAttributes.ORIENTATION);
 	    if (orientations.containsKey(direction)) {
 		int offset = orientations.get(direction);
 		animation.offset(offset, offset);
 	    }
 	}
+	if (object.hasAttribute(GameObjectAttributes.CURRENT_FRAME)) {
+	    animation.currentFrame((Integer) object.getAttribute(GameObjectAttributes.CURRENT_FRAME));
+	}
 	super.render(object, batch, delta);
+	object.setAttribute(GameObjectAttributes.CURRENT_FRAME, animation.getCurrentFrame());
     }
 }
