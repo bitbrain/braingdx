@@ -15,6 +15,7 @@ import de.bitbrain.braingdx.apps.rpg.NPCAnimationFactory.Index;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.behavior.movement.MovementController;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
+import de.bitbrain.braingdx.behavior.movement.RandomOrientationMovementController;
 import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
 import de.bitbrain.braingdx.graphics.animation.OrientationSpritesheetAnimator;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
@@ -62,16 +63,25 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	factory = new NPCFactory(BLOCK_SIZE, getGameWorld());
 	GameObject player = spawnObject(10, 10, NPC.CITIZEN_MALE, new OrientationMovementController());
 	getGameCamera().setTarget(player);
+	final int NPCS = 15;
+
+	for (int i = 0; i < NPCS; ++i) {
+	    int randomX = (int) (Math.random() * 25);
+	    int randomY = (int) (Math.random() * 25);
+	    spawnObject(randomX, randomY, NPC.random(), new RandomOrientationMovementController());
+	}
+
+	getLightingManager().addPointLight("lantern", 200, 200, 500, Color.valueOf("ff9955ff"));
     }
 
-    private GameObject spawnObject(int indexX, int indexY, int type,
+    private GameObject spawnObject(int indexX, int indexY, NPC type,
 	    MovementController<Orientation> controller) {
-	GameObject object = factory.spawn(indexX, indexY, type, controller);
+	GameObject object = factory.spawn(indexX, indexY, type.ordinal(), controller);
 	RasteredMovementBehavior behavior = new RasteredMovementBehavior(controller).interval(0.2f)
 		.rasterSize(BLOCK_SIZE);
 	getBehaviorManager().apply(behavior, object);
 	OrientationSpritesheetAnimator spritesheetAnimator = new OrientationSpritesheetAnimator(behavior,
-		animations.get(type),
+		animations.get(type.ordinal()),
 		AnimationTypes.FORWARD_YOYO);
 	getBehaviorManager().apply(spritesheetAnimator, object);
 	return object;
@@ -97,13 +107,14 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
     private Map<Integer, Index> createSpriteIndices() {
 	Map<Integer, Index> indices = new HashMap<Integer, Index>();
-	indices.put(NPC.CITIZEN_MALE, new Index(0, 0));
-	indices.put(NPC.CLERIC_MALE, new Index(0, 0));
-	indices.put(NPC.DANCER_FEMALE, new Index(0, 0));
-	indices.put(NPC.DANCER_FEMALE_ALT, new Index(0, 0));
-	indices.put(NPC.EXPLORER_FEMALE, new Index(0, 0));
-	indices.put(NPC.PRIEST_MALE, new Index(0, 0));
-	indices.put(NPC.SAGE_FEMALE, new Index(0, 0));
+	indices.put(NPC.PRIEST_MALE.ordinal(), new Index(0, 0));
+	indices.put(NPC.SAGE_FEMALE.ordinal(), new Index(3, 0));
+	indices.put(NPC.CLERIC_MALE.ordinal(), new Index(6, 0));
+	indices.put(NPC.DANCER_FEMALE.ordinal(), new Index(9, 0));
+	indices.put(NPC.CITIZEN_MALE.ordinal(), new Index(0, 4));
+	indices.put(NPC.DANCER_FEMALE_ALT.ordinal(), new Index(3, 4));
+	indices.put(NPC.EXPLORER_MALE.ordinal(), new Index(6, 4));
+	indices.put(NPC.EXPLORER_FEMALE.ordinal(), new Index(9, 4));
 	return indices;
     }
 
@@ -111,8 +122,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	RenderPipe worldPipe = getRenderPipeline().getPipe(RenderPipeIds.WORLD);
 	Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 3.5f),
 		Math.round(Gdx.graphics.getHeight() / 3.5f));
-	bloom.setBlurAmount(1.6f);
-	bloom.setBloomIntesity(1.3f);
+	bloom.setBlurAmount(0.1f);
+	bloom.setBloomIntesity(1.2f);
 	bloom.setBlurPasses(5);
 	Vignette vignette = new Vignette(Math.round(Gdx.graphics.getWidth() / 1.5f),
 		Math.round(Gdx.graphics.getHeight() / 1.5f), false);
