@@ -45,9 +45,10 @@ public class GameObject implements Pool.Poolable {
 
     private float zIndex;
 
-    private Map<Object, Object> attributes = new HashMap<Object, Object>();
+    private Map<Object, Object> attributes;
 
     public GameObject() {
+	attributes = new HashMap<Object, Object>();
 	position = new Vector2();
 	dimensions = new Vector2();
 	lastPosition = new Vector2();

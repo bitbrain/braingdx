@@ -101,11 +101,6 @@ public class SpriteSheetAnimation implements Animation {
 	return this;
     }
 
-    public SpriteSheetAnimation currentFrame(int frame) {
-	this.currentFrame = frame;
-	return this;
-    }
-
     public SpriteSheetAnimation base(int base) {
 	this.base = Math.abs(base);
 	return this;
