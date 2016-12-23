@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.graphics.animation.Animation;
+import de.bitbrain.braingdx.graphics.animation.AnimationSupplier;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -30,10 +31,10 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class AnimationRenderer implements GameObjectRenderer {
 
-    private final Animation animation;
+    private final AnimationSupplier<GameObject> supplier;
 
-    public AnimationRenderer(Animation animation) {
-	this.animation = animation;
+    public AnimationRenderer(AnimationSupplier<GameObject> supplier) {
+	this.supplier = supplier;
     }
 
     @Override
@@ -43,6 +44,7 @@ public class AnimationRenderer implements GameObjectRenderer {
 
     @Override
     public void render(GameObject object, Batch batch, float delta) {
+	Animation animation = supplier.supplyFor(object);
 	animation.render(batch, object.getLeft() + object.getOffset().x, object.getTop() + object.getOffset().y,
 		object.getWidth(), object.getHeight(), delta);
     }

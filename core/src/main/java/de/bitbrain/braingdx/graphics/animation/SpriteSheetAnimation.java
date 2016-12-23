@@ -51,11 +51,23 @@ public class SpriteSheetAnimation implements Animation {
     private DeltaTimer timer = new DeltaTimer();
 
     public SpriteSheetAnimation() {
-	this(null);
+	this((SpriteSheet) null);
     }
 
     public SpriteSheetAnimation(SpriteSheet sheet) {
 	this.sheet = sheet;
+    }
+
+    private SpriteSheetAnimation(SpriteSheetAnimation other) {
+	this(other.sheet);
+	this.originX = other.originX;
+	this.originY = other.originY;
+	this.offsetX = other.offsetX;
+	this.offsetY = other.offsetY;
+	this.interval = other.interval;
+	this.base = other.base;
+	this.direction = other.direction;
+	this.type = other.type;
     }
 
     public SpriteSheetAnimation origin(int originX, int originY) {
@@ -104,6 +116,11 @@ public class SpriteSheetAnimation implements Animation {
     public SpriteSheetAnimation base(int base) {
 	this.base = Math.abs(base);
 	return this;
+    }
+
+    @Override
+    public SpriteSheetAnimation clone() {
+	return new SpriteSheetAnimation(this);
     }
 
     @Override

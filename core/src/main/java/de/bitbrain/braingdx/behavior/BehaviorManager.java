@@ -50,6 +50,9 @@ public class BehaviorManager {
 	}
 	behaviors.add(behavior);
 	behavior.onAttach(source);
+	for (Behavior globalBehavior : globalBehaviors) {
+	    globalBehavior.onAttach(source);
+	}
     }
 
     public void apply(Behavior behavior) {
@@ -66,6 +69,9 @@ public class BehaviorManager {
 	    for (Behavior behavior : behaviors) {
 		behavior.onDetach(source);
 	    }
+	}
+	for (Behavior globalBehavior : globalBehaviors) {
+	    globalBehavior.onDetach(source);
 	}
     }
 

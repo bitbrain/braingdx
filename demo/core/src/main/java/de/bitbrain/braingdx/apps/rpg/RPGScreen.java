@@ -17,13 +17,13 @@ import de.bitbrain.braingdx.behavior.movement.MovementController;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
 import de.bitbrain.braingdx.behavior.movement.RandomOrientationMovementController;
 import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
-import de.bitbrain.braingdx.graphics.animation.OrientationSpritesheetAnimator;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation;
+import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationSupplier;
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
-import de.bitbrain.braingdx.graphics.renderer.SpriteSheetAnimationRenderer;
+import de.bitbrain.braingdx.graphics.renderer.AnimationRenderer;
 import de.bitbrain.braingdx.input.OrientationMovementController;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Vignette;
@@ -35,7 +35,6 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
     private static final int BLOCK_SIZE = 16;
     private NPCFactory factory;
-    private Map<Integer, SpriteSheetAnimation> animations;
 
     public RPGScreen(RPGTest rpgTest) {
 	super(rpgTest);
@@ -58,7 +57,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	getLightingManager().setAmbientLight(new Color(0.1f, 0.05f, 0.3f, 0.4f));
 	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
 	SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
-	animations = createAnimations(sheet);
+	createAnimations(sheet);
 
 	factory = new NPCFactory(BLOCK_SIZE, getGameWorld());
 	GameObject player = spawnObject(10, 10, NPC.CITIZEN_MALE, new OrientationMovementController());
@@ -80,29 +79,32 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	RasteredMovementBehavior behavior = new RasteredMovementBehavior(controller).interval(0.2f)
 		.rasterSize(BLOCK_SIZE);
 	getBehaviorManager().apply(behavior, object);
-	OrientationSpritesheetAnimator spritesheetAnimator = new OrientationSpritesheetAnimator(behavior,
-		animations.get(type.ordinal()),
-		AnimationTypes.FORWARD_YOYO);
-	getBehaviorManager().apply(spritesheetAnimator, object);
 	return object;
     }
 
-    private Map<Integer, SpriteSheetAnimation> createAnimations(SpriteSheet sheet) {
+    private void createAnimations(SpriteSheet sheet) {
 	Map<Integer, Index> indices = createSpriteIndices();
 	NPCAnimationFactory animationFactory = new NPCAnimationFactory(sheet, indices);
 	Map<Integer, SpriteSheetAnimation> animations = new HashMap<Integer, SpriteSheetAnimation>();
 	for (int type : indices.keySet()) {
 	    SpriteSheetAnimation animation = animationFactory.create(type);
 	    animations.put(type, animation);
-	    getRenderManager()
-	       .register(type, 
-		   new SpriteSheetAnimationRenderer(animation)
-		      .map(Orientation.DOWN, 0)
-		      .map(Orientation.LEFT, 1)
-		      .map(Orientation.RIGHT, 2)
-		      .map(Orientation.UP, 3));
+	    SpriteSheetAnimationSupplier supplier = new SpriteSheetAnimationSupplier(
+			orientations(),
+			animation, 
+			AnimationTypes.FORWARD_YOYO);
+	    getBehaviorManager().apply(supplier);
+	    getRenderManager().register(type, new AnimationRenderer(supplier));
 	}
-	return animations;
+    }
+
+    private Map<Orientation, Integer> orientations() {
+	Map<Orientation, Integer> map = new HashMap<Orientation, Integer>();
+	map.put(Orientation.DOWN, 0);
+	map.put(Orientation.LEFT, 1);
+	map.put(Orientation.RIGHT, 2);
+	map.put(Orientation.UP, 3);
+	return map;
     }
 
     private Map<Integer, Index> createSpriteIndices() {

@@ -38,4 +38,9 @@ public interface Animation {
      * @param delta the current frame delta
      */
     void render(Batch batch, float x, float y, float width, float height, float delta);
+
+    /**
+     * Clones this animation.
+     */
+    Animation clone();
 }
