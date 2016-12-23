@@ -106,10 +106,6 @@ public class SpriteSheetAnimation implements Animation {
 	return this;
     }
 
-    public int getCurrentFrame() {
-	return currentFrame;
-    }
-
     @Override
     public void render(Batch batch, float x, float y, float width, float height, float delta) {
 	timer.update(delta);
