@@ -29,5 +29,4 @@ class ResetAnimationType implements AnimationType {
     public int updateCurrentFrame(int currentFrame, int totalFrames, int origin) {
 	return origin;
     }
-
 }

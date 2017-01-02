@@ -77,6 +77,7 @@ public class SpriteSheetAnimationSupplier extends BehaviorAdapter implements Ani
 	// } else
 	if (object.hasAttribute(Orientation.class)) {
 	    Orientation orientation = (Orientation) object.getAttribute(Orientation.class);
+	    animation.offset(orientations.get(orientation), orientations.get(orientation));
 	    switch (orientation) {
 		case DOWN:  case LEFT:
 		case RIGHT: case UP:

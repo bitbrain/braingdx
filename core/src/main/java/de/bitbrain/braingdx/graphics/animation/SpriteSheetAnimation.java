@@ -68,6 +68,7 @@ public class SpriteSheetAnimation implements Animation {
 	this.base = other.base;
 	this.direction = other.direction;
 	this.type = other.type;
+	this.totalFrames = other.totalFrames;
     }
 
     public SpriteSheetAnimation origin(int originX, int originY) {

@@ -92,7 +92,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	    SpriteSheetAnimationSupplier supplier = new SpriteSheetAnimationSupplier(
 			orientations(),
 			animation, 
-			AnimationTypes.FORWARD_YOYO);
+			AnimationTypes.FORWARD);
 	    getBehaviorManager().apply(supplier);
 	    getRenderManager().register(type, new AnimationRenderer(supplier));
 	}
