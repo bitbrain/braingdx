@@ -87,6 +87,7 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 	}
 	wasMoving = moving;
 	controller.update(this, delta);
+	source.setAttribute(Movement.class, this);
     }
 
     private boolean isReadyToMove() {

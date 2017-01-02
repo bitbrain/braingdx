@@ -38,9 +38,9 @@ public class NPCAnimationFactory {
 	return new SpriteSheetAnimation(sheet)
 		.origin(index.x, index.y)
 		.interval(0.15f)
-	         .direction(Direction.HORIZONTAL)
-		 .type(AnimationTypes.RESET)
-	         .base(1)
-	         .frames(3);
+	        .direction(Direction.HORIZONTAL)
+		.type(AnimationTypes.RESET)
+	        .base(1)
+	        .frames(3);
     }
 }

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
+import de.bitbrain.braingdx.behavior.movement.Movement;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.world.GameObject;
@@ -71,10 +72,13 @@ public class SpriteSheetAnimationSupplier extends BehaviorAdapter implements Ani
     }
 
     private void orientate(SpriteSheetAnimation animation, GameObject object) {
-	// TODO Find smarter way to specify movement
-	// if (!movement.isMoving()) {
-	// animation.type(stillType);
-	// } else
+	if (object.hasAttribute(Movement.class)) {
+	    Movement<?> movement = (Movement<?>) object.getAttribute(Movement.class);
+	    if (!movement.isMoving()) {
+		animation.type(stillType);
+		return;
+	    }
+	}
 	if (object.hasAttribute(Orientation.class)) {
 	    Orientation orientation = (Orientation) object.getAttribute(Orientation.class);
 	    animation.offset(orientations.get(orientation), orientations.get(orientation));
