@@ -62,7 +62,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	factory = new NPCFactory(BLOCK_SIZE, getGameWorld());
 	GameObject player = spawnObject(10, 10, NPC.CITIZEN_MALE, new OrientationMovementController());
 	getGameCamera().setTarget(player);
-	final int NPCS = 15;
+	final int NPCS = 25;
 
 	for (int i = 0; i < NPCS; ++i) {
 	    int randomX = (int) (Math.random() * 25);
@@ -92,7 +92,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	    SpriteSheetAnimationSupplier supplier = new SpriteSheetAnimationSupplier(
 			orientations(),
 			animation, 
-			AnimationTypes.FORWARD);
+			AnimationTypes.FORWARD_YOYO);
 	    getBehaviorManager().apply(supplier);
 	    getRenderManager().register(type, new AnimationRenderer(supplier));
 	}

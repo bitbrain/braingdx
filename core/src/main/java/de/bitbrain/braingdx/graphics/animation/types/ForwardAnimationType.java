@@ -26,7 +26,7 @@ import de.bitbrain.braingdx.graphics.animation.AnimationType;
 class ForwardAnimationType implements AnimationType {
 
     @Override
-    public int updateCurrentFrame(int currentFrame, int totalFrames, int origin) {
+    public int updateCurrentFrame(int lastFrame, int currentFrame, int totalFrames, int origin) {
 	currentFrame++;
 	if (currentFrame >= totalFrames) {
 	    currentFrame = 0;

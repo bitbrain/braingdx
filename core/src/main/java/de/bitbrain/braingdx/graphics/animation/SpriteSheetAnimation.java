@@ -42,6 +42,7 @@ public class SpriteSheetAnimation implements Animation {
     private int offsetY;
     private int totalFrames = 1;
     private int currentFrame;
+    private int lastFrame;
     private float interval;
     private int base = 0;
     private Direction direction = Direction.HORIZONTAL;
@@ -69,6 +70,7 @@ public class SpriteSheetAnimation implements Animation {
 	this.direction = other.direction;
 	this.type = other.type;
 	this.totalFrames = other.totalFrames;
+	this.lastFrame = other.lastFrame;
     }
 
     public SpriteSheetAnimation origin(int originX, int originY) {
@@ -128,7 +130,9 @@ public class SpriteSheetAnimation implements Animation {
     public void render(Batch batch, float x, float y, float width, float height, float delta) {
 	timer.update(delta);
 	if (timer.reached(interval)) {
-	    currentFrame = type.updateCurrentFrame(currentFrame, totalFrames, base);
+	    int currentLastFrame = currentFrame;
+	    currentFrame = type.updateCurrentFrame(lastFrame, currentFrame, totalFrames, base);
+	    lastFrame = currentLastFrame;
 	    timer.reset();
 	}
 	if (sheet != null) {

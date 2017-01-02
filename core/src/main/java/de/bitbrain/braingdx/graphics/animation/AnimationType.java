@@ -30,5 +30,5 @@ public interface AnimationType {
      * @param totalFrames number of total frames
      * @return the optionally modified current frame
      */
-    int updateCurrentFrame(int currentFrame, int totalFrames, int origin);
+    int updateCurrentFrame(int lastFrame, int currentFrame, int totalFrames, int origin);
 }

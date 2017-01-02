@@ -25,25 +25,25 @@ import de.bitbrain.braingdx.graphics.animation.AnimationType;
  */
 class ForwardYoyoAnimationType implements AnimationType {
 
-    private boolean bounce;
-
     @Override
-    public int updateCurrentFrame(int currentFrame, int totalFrames, int origin) {
-	if (bounce) {
+    public int updateCurrentFrame(int lastFrame, int currentFrame, int totalFrames, int origin) {
+	if (isBackwards(lastFrame, currentFrame)) {
 	    currentFrame--;
-	    if (currentFrame <= 0) {
-		bounce = false;
-		// Ensure that after type switch the frame is still valid
-		currentFrame = 0;
+	    if (currentFrame < 0) {
+		// Call recursively
+		return updateCurrentFrame(-1, 0, totalFrames, origin);
 	    }
 	} else {
 	    currentFrame++;
-	    if (currentFrame >= totalFrames - 1) {
-		bounce = true;
-		// Ensure that after type switch the frame is still valid
-		currentFrame = totalFrames - 1;
+	    if (currentFrame > totalFrames - 1) {
+		// Call recursively
+		return updateCurrentFrame(totalFrames, totalFrames - 1, totalFrames, origin);
 	    }
 	}
 	return currentFrame;
+    }
+
+    private boolean isBackwards(int lastFrame, int currentFrame) {
+	return currentFrame < lastFrame;
     }
 }
