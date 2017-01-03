@@ -57,7 +57,7 @@ public class GameObject implements Pool.Poolable {
 	offset = new Vector2();
 	scale = new Vector2(1f, 1f);
 	id = getClass().getCanonicalName() + "_" + String.valueOf(COUNTER++);
-	active = false;
+	active = true;
     }
 
     public void setType(int typeId) {
@@ -188,7 +188,7 @@ public class GameObject implements Pool.Poolable {
 	scale.set(1f, 1f);
 	color = Color.WHITE.cpy();
 	attributes.clear();
-	active = false;
+	active = true;
     }
 
     @Override

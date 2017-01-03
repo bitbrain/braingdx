@@ -131,17 +131,19 @@ public class GameWorld {
     public void update(float delta) {
 	Collections.sort(objects, comparator);
 	for (GameObject object : objects) {
-	    if (!bounds.isInBounds(object, camera)) {
+	    if (object.isActive() && !bounds.isInBounds(object, camera)) {
 		removals.add(object);
 		continue;
 	    }
 	    for (GameWorldListener l : listeners) {
 		l.onUpdate(object, delta);
 	    }
-	    for (GameObject other : objects) {
-		if (!object.getId().equals(other.getId())) {
-		    for (GameWorldListener l : listeners) {
-			l.onUpdate(object, other, delta);
+	    if (object.isActive()) {
+		for (GameObject other : objects) {
+		    if (other.isActive() && !object.getId().equals(other.getId())) {
+			for (GameWorldListener l : listeners) {
+			    l.onUpdate(object, other, delta);
+			}
 		    }
 		}
 	    }
