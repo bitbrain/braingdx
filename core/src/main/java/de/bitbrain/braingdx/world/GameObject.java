@@ -47,6 +47,8 @@ public class GameObject implements Pool.Poolable {
 
     private Map<Object, Object> attributes;
 
+    private boolean active;
+
     public GameObject() {
 	attributes = new HashMap<Object, Object>();
 	position = new Vector2();
@@ -55,6 +57,7 @@ public class GameObject implements Pool.Poolable {
 	offset = new Vector2();
 	scale = new Vector2(1f, 1f);
 	id = getClass().getCanonicalName() + "_" + String.valueOf(COUNTER++);
+	active = false;
     }
 
     public void setType(int typeId) {
@@ -162,6 +165,14 @@ public class GameObject implements Pool.Poolable {
 	return this.zIndex;
     }
 
+    public void setActive(boolean active) {
+	this.active = active;
+    }
+
+    public boolean isActive() {
+	return active;
+    }
+
     @Override
     public void reset() {
 	lastPosition.x = 0;
@@ -177,5 +188,32 @@ public class GameObject implements Pool.Poolable {
 	scale.set(1f, 1f);
 	color = Color.WHITE.cpy();
 	attributes.clear();
+	active = false;
     }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((id == null) ? 0 : id.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	GameObject other = (GameObject) obj;
+	if (id == null) {
+	    if (other.id != null)
+		return false;
+	} else if (!id.equals(other.id))
+	    return false;
+	return true;
+    }
+
 }
