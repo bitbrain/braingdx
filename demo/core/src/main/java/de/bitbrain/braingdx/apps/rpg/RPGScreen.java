@@ -11,7 +11,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.bitbrain.braingdx.apps.Assets;
-import de.bitbrain.braingdx.apps.rpg.NPCAnimationFactory.Index;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.behavior.movement.MovementController;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
@@ -19,7 +18,9 @@ import de.bitbrain.braingdx.behavior.movement.RandomOrientationMovementControlle
 import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation;
+import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationFactory;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationSupplier;
+import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationFactory.Index;
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
@@ -84,7 +85,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
     private void createAnimations(SpriteSheet sheet) {
 	Map<Integer, Index> indices = createSpriteIndices();
-	NPCAnimationFactory animationFactory = new NPCAnimationFactory(sheet, indices);
+	SpriteSheetAnimationFactory animationFactory = new SpriteSheetAnimationFactory(sheet, indices);
 	Map<Integer, SpriteSheetAnimation> animations = new HashMap<Integer, SpriteSheetAnimation>();
 	for (int type : indices.keySet()) {
 	    SpriteSheetAnimation animation = animationFactory.create(type);
