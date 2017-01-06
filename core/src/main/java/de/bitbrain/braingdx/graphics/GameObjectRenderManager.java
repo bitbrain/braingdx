@@ -53,6 +53,10 @@ public class GameObjectRenderManager {
 	}
     }
 
+    public void unregister(Integer gameObjectType) {
+	rendererMap.remove(gameObjectType);
+    }
+
     /**
      * Combines multiple renderers for a particular game object
      * 
