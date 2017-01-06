@@ -31,7 +31,7 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class GameObjectRenderManager {
 
-    private static Map<Integer, GameObjectRenderer> rendererMap = new HashMap<Integer, GameObjectRenderer>();
+    private static Map<Object, GameObjectRenderer> rendererMap = new HashMap<Object, GameObjectRenderer>();
 
     private final Batch batch;
 
@@ -46,14 +46,14 @@ public class GameObjectRenderManager {
 	}
     }
 
-    public void register(Integer gameObjectType, GameObjectRenderer renderer) {
+    public void register(Object gameObjectType, GameObjectRenderer renderer) {
 	if (!rendererMap.containsKey(gameObjectType)) {
 	    renderer.init();
 	    rendererMap.put(gameObjectType, renderer);
 	}
     }
 
-    public void unregister(Integer gameObjectType) {
+    public void unregister(Object gameObjectType) {
 	rendererMap.remove(gameObjectType);
     }
 

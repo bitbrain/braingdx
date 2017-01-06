@@ -37,7 +37,7 @@ public class GameObject implements Pool.Poolable {
 
     private String id;
 
-    private int type;
+    private Object type;
 
     private Color color = Color.WHITE.cpy();
 
@@ -64,7 +64,7 @@ public class GameObject implements Pool.Poolable {
 	this.type = typeId;
     }
 
-    public int getType() {
+    public Object getType() {
 	return type;
     }
 
