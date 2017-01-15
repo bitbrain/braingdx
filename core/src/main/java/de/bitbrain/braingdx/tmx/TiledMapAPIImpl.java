@@ -15,6 +15,8 @@
 
 package de.bitbrain.braingdx.tmx;
 
+import de.bitbrain.braingdx.world.GameObject;
+
 /**
  * Implementation of {@link TiledMapAPI}.
  *
@@ -22,6 +24,48 @@ package de.bitbrain.braingdx.tmx;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-class TiledMapAPIImpl {
+class TiledMapAPIImpl implements TiledMapAPI {
+
+    private final TiledMapState state;
+
+    public TiledMapAPIImpl(TiledMapState state) {
+	this.state = state;
+    }
+
+    @Override
+    public int highestZIndexAt(int tileX, int tileY) {
+	Integer[][] heightMap = state.getHeightMap();
+	if (verifyIndex(tileX, tileY) && heightMap != null) {
+	    return heightMap[tileX][tileY];
+	} else {
+	    return -1;
+	}
+    }
+
+    @Override
+    public int highestZIndexAt(float x, float y) {
+	// TODO Auto-generated method stub
+	return 0;
+    }
+
+    @Override
+    public int layerIndexOf(GameObject object) {
+	// TODO Auto-generated method stub
+	return 0;
+    }
+
+    @Override
+    public int getNumberOfRows() {
+	return state.getMapIndexHeight();
+    }
+
+    @Override
+    public int getNumberOfColumns() {
+	return state.getMapIndexWidth();
+    }
+
+    private boolean verifyIndex(int indexX, int indexY) {
+	return indexX < 0 || indexY < 0 || indexX >= state.getMapIndexWidth() || indexY >= state.getMapIndexHeight();
+    }
 
 }

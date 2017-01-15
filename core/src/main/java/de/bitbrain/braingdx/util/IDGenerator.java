@@ -13,27 +13,24 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tmx;
+package de.bitbrain.braingdx.util;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
-
-import de.bitbrain.braingdx.world.GameObject;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Provides extended operations on {@link TiledMap} objects.
- *
- * @since 1.0.0
- * @version 1.0.0
- * @author Miguel Gonzalez Sanchez
+ * Generates IDs.
  */
-public interface TiledMapAPI {
+public final class IDGenerator {
 
-    int highestZIndexAt(int tileX, int tileY);
-    int highestZIndexAt(float x, float y);
-    int layerIndexOf(GameObject object);
+    private static Map<Class<?>, Long> idStore = new HashMap<Class<?>, Long>();
 
-    int getNumberOfRows();
-
-    int getNumberOfColumns();
-
+    public static String generateNext(Class<?> clazz) {
+	Long counter = idStore.get(clazz);
+	if (counter == null) {
+	    counter = 0L;
+	}
+	idStore.put(clazz, ++counter);
+	return clazz.getCanonicalName() + "_" + String.valueOf(counter++);
+    }
 }

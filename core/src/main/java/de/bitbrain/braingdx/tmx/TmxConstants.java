@@ -15,25 +15,18 @@
 
 package de.bitbrain.braingdx.tmx;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
-
-import de.bitbrain.braingdx.world.GameObject;
-
 /**
- * Provides extended operations on {@link TiledMap} objects.
+ * Contains constants for TMX.
  *
  * @since 1.0.0
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public interface TiledMapAPI {
+public interface TmxConstants {
 
-    int highestZIndexAt(int tileX, int tileY);
-    int highestZIndexAt(float x, float y);
-    int layerIndexOf(GameObject object);
-
-    int getNumberOfRows();
-
-    int getNumberOfColumns();
-
+    String X = "x";
+    String Y = "y";
+    String WIDTH = "width";
+    String HEIGHT = "height";
+    String TYPE = "type";
 }

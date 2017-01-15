@@ -22,6 +22,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
 
+import de.bitbrain.braingdx.util.IDGenerator;
+
 /**
  * Simple game object implementation which can be pooled
  *
@@ -56,11 +58,11 @@ public class GameObject implements Pool.Poolable {
 	lastPosition = new Vector2();
 	offset = new Vector2();
 	scale = new Vector2(1f, 1f);
-	id = getClass().getCanonicalName() + "_" + String.valueOf(COUNTER++);
+	id = IDGenerator.generateNext(getClass());
 	active = true;
     }
 
-    public void setType(int typeId) {
+    public void setType(Object typeId) {
 	this.type = typeId;
     }
 
@@ -184,7 +186,7 @@ public class GameObject implements Pool.Poolable {
 	offset.x = 0;
 	offset.y = 0;
 	zIndex = 0;
-	id = getClass().getCanonicalName() + "_" + String.valueOf(COUNTER++);
+	id = IDGenerator.generateNext(getClass());
 	scale.set(1f, 1f);
 	color = Color.WHITE.cpy();
 	attributes.clear();
