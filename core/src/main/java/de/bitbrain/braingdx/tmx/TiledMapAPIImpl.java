@@ -26,9 +26,9 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 class TiledMapAPIImpl implements TiledMapAPI {
 
-    private final TiledMapState state;
+    private final State state;
 
-    public TiledMapAPIImpl(TiledMapState state) {
+    public TiledMapAPIImpl(State state) {
 	this.state = state;
     }
 

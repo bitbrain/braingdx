@@ -15,13 +15,6 @@
 
 package de.bitbrain.braingdx.tmx;
 
-/**
- * Listens to {@link TiledMap} events created by {@link TiledMapManagerImpl}.
- *
- * @since 1.0.0
- * @version 1.0.0
- * @author Miguel Gonzalez Sanchez
- */
-public interface TiledMapListener {
-
+public enum TiledMapType {
+    ORTHOGONAL;
 }

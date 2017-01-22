@@ -40,18 +40,18 @@ import de.bitbrain.braingdx.world.GameWorld;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-class TiledMapStatePopulator {
+class StatePopulator {
 
     private final GameObjectRenderManager renderManager;
 
     private final GameWorld gameWorld;
 
-    public TiledMapStatePopulator(GameObjectRenderManager renderManager, GameWorld gameWorld) {
+    public StatePopulator(GameObjectRenderManager renderManager, GameWorld gameWorld) {
 	this.renderManager = renderManager;
 	this.gameWorld = gameWorld;
     }
 
-    public void populate(TiledMap tiledMap, TiledMapState state, Camera camera) {
+    public void populate(TiledMap tiledMap, State state, Camera camera) {
 	MapLayers mapLayers = tiledMap.getLayers();
 	List<String> layerIds = new ArrayList<String>();
 	for (int i = 0; i < mapLayers.getCount(); ++i) {
@@ -73,9 +73,9 @@ class TiledMapStatePopulator {
 	    MapObject object = mapObjects.get(objectIndex);
 	    MapProperties objectProperties = object.getProperties();
 	    GameObject mapObject = gameWorld.addObject();
-	    float x = objectProperties.get(TmxConstants.X, Float.class);
-	    float y = objectProperties.get(TmxConstants.Y, Float.class);
-	    Object objectType = objectProperties.get(TmxConstants.TYPE);
+	    float x = objectProperties.get(Constants.X, Float.class);
+	    float y = objectProperties.get(Constants.Y, Float.class);
+	    Object objectType = objectProperties.get(Constants.TYPE);
 	    mapObject.setPosition(x, y);
 	    mapObject.setColor(object.getColor());
 	    mapObject.setType(objectType);
@@ -83,7 +83,7 @@ class TiledMapStatePopulator {
     }
 
     private String handleTiledMapTileLayer(MapLayer layer, int index, TiledMap tiledMap, Camera camera) {
-	final int numberOfRows = tiledMap.getProperties().get(TmxConstants.HEIGHT, Integer.class);
+	final int numberOfRows = tiledMap.getProperties().get(Constants.HEIGHT, Integer.class);
 	OrthogonalMapLayerRenderer renderer = new OrthogonalMapLayerRenderer(index, tiledMap,
 		(OrthographicCamera) camera);
 	String id = IDGenerator.generateNext(OrthogonalMapLayerRenderer.class);

@@ -26,7 +26,7 @@ import java.util.Map;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-class TiledMapState {
+class State {
 
     private List<String> layerIds = Collections.emptyList();
 

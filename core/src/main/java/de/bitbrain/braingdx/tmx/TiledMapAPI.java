@@ -29,6 +29,7 @@ import de.bitbrain.braingdx.world.GameObject;
 public interface TiledMapAPI {
 
     int highestZIndexAt(int tileX, int tileY);
+
     int highestZIndexAt(float x, float y);
     int layerIndexOf(GameObject object);
 

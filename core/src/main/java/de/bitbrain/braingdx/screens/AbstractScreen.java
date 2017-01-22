@@ -44,6 +44,7 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipelineFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
+import de.bitbrain.braingdx.tmx.TiledMapManagerImpl;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.world.GameWorld;
 
@@ -98,7 +99,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	particleManager = new ParticleManager();
 	stage = new Stage();
 	renderPipeline = getRenderPipelineFactory().create();
-	tiledMapManager = new TiledMapManager(behaviorManager, world, renderManager);
+	tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager);
 	wire();
     }
 

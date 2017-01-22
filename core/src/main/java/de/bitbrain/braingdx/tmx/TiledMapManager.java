@@ -15,16 +15,9 @@
 
 package de.bitbrain.braingdx.tmx;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Disposable;
-
-import de.bitbrain.braingdx.behavior.BehaviorManager;
-import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
-import de.bitbrain.braingdx.world.GameWorld;
 
 /**
  * This manager gives extended support for {@link TiledMap} objects. It features an API to query the
@@ -34,62 +27,10 @@ import de.bitbrain.braingdx.world.GameWorld;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public class TiledMapManager implements Disposable {
+public interface TiledMapManager extends Disposable {
 
-    public static enum TiledMapType {
-	ORTHOGONAL;
-    }
+    void addListener(TiledMapListener listener);
 
-    private final BehaviorManager behaviorManager;
-
-    private final GameWorld gameWorld;
-
-    private final List<TiledMapListener> listeners = new ArrayList<TiledMapListener>();
-
-    private final GameObjectRenderManager renderManager;
-
-    private final TiledMapAPIImpl api;
-
-    private final ZIndexUpdater zIndexUpdater;
-
-    private final TiledMapState state;
-
-    private TiledMapStatePopulator populator;
-
-    public TiledMapManager(BehaviorManager behaviorManager, GameWorld gameWorld,
-	    GameObjectRenderManager renderManager) {
-	this.behaviorManager = behaviorManager;
-	this.gameWorld = gameWorld;
-	this.renderManager = renderManager;
-	this.state = new TiledMapState();
-	this.populator = new TiledMapStatePopulator(renderManager, gameWorld);
-	this.api = new TiledMapAPIImpl(state);
-	this.zIndexUpdater = new ZIndexUpdater(api);
-    }
-
-    public void addListener(TiledMapListener listener) {
-	listeners.add(listener);
-    }
-
-    public void load(TiledMap tiledMap, Camera camera, TiledMapType type) {
-	clear();
-	behaviorManager.apply(zIndexUpdater);
-	populator.populate(tiledMap, state, camera);
-    }
-
-    @Override
-    public void dispose() {
-	clear();
-    }
-
-    private void clear() {
-	state.clear();
-	// Refresh zIndex calculation
-	behaviorManager.remove(zIndexUpdater);
-	gameWorld.clear();
-	for (String id : state.getLayerIds()) {
-	    renderManager.unregister(id);
-	}
-    }
-
+    void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config);
+    void load(TiledMap tiledMap, Camera camera, TiledMapType type);
 }

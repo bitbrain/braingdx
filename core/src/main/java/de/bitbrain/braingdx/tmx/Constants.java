@@ -16,12 +16,18 @@
 package de.bitbrain.braingdx.tmx;
 
 /**
- * Listens to {@link TiledMap} events created by {@link TiledMapManagerImpl}.
+ * Contains constants for TMX.
  *
  * @since 1.0.0
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public interface TiledMapListener {
+interface Constants {
 
+    String X = "x";
+    String Y = "y";
+    String WIDTH = "width";
+    String HEIGHT = "height";
+    String TYPE = "type";
+    String COLLISION = "collision";
 }

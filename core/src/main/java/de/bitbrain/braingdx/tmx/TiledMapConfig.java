@@ -12,21 +12,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package de.bitbrain.braingdx.tmx;
 
 /**
- * Contains constants for TMX.
+ * Contains naming configuration for TMX maps.
  *
  * @since 1.0.0
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public interface TmxConstants {
+public class TiledMapConfig {
 
-    String X = "x";
-    String Y = "y";
-    String WIDTH = "width";
-    String HEIGHT = "height";
-    String TYPE = "type";
+    private String collisionAttribute = Constants.COLLISION;
+    private String typeAttribute = Constants.TYPE;
+
+    public String getCollisionAttribute() {
+	return collisionAttribute;
+    }
+
+    public String getTypeAttribute() {
+	return typeAttribute;
+    }
+
+    public TiledMapConfig collisionAttribute(String attribute) {
+	if (attribute != null) {
+	    this.collisionAttribute = attribute;
+	}
+	return this;
+    }
+
+    public TiledMapConfig typeAttribute(String attribute) {
+	if (attribute != null) {
+	    this.typeAttribute = attribute;
+	}
+	return this;
+    }
 }
