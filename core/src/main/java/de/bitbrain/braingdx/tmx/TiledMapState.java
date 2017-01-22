@@ -38,6 +38,8 @@ class TiledMapState {
 
     private int mapIndexWidth;
 
+    private int cellSize = 1;
+
     public List<String> getLayerIds() {
 	return layerIds;
     }
@@ -58,6 +60,10 @@ class TiledMapState {
 	return mapIndexHeight;
     }
 
+    public int getCellSize() {
+	return cellSize;
+    }
+
     public void setLayerIds(List<String> layerIds) {
 	layerIds = Collections.unmodifiableList(layerIds);
     }
@@ -73,6 +79,10 @@ class TiledMapState {
     public void setIndexDimensions(int indexX, int indexY) {
 	this.mapIndexWidth = indexX;
 	this.mapIndexHeight = indexY;
+    }
+
+    public void setCellSize(int cellSize) {
+	this.cellSize = cellSize;
     }
 
     public void clear() {
