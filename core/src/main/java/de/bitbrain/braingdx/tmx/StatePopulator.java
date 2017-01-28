@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
@@ -29,6 +28,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
+import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.util.IDGenerator;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
@@ -51,13 +51,13 @@ class StatePopulator {
 	this.gameWorld = gameWorld;
     }
 
-    public void populate(TiledMap tiledMap, State state, Camera camera) {
+    public void populate(TiledMap tiledMap, State state, Camera camera, MapLayerRendererFactory rendererFactory) {
 	MapLayers mapLayers = tiledMap.getLayers();
 	List<String> layerIds = new ArrayList<String>();
 	for (int i = 0; i < mapLayers.getCount(); ++i) {
 	    MapLayer mapLayer = mapLayers.get(i);
 	    if (mapLayer instanceof TiledMapTileLayer) {
-		String layerId = handleTiledMapTileLayer(mapLayer, i, tiledMap, camera);
+		String layerId = handleTiledMapTileLayer(mapLayer, i, tiledMap, camera, rendererFactory);
 		layerIds.add(layerId);
 	    } else {
 		// Not a tiledlayer so consider it as an object layer
@@ -82,10 +82,10 @@ class StatePopulator {
 	}
     }
 
-    private String handleTiledMapTileLayer(MapLayer layer, int index, TiledMap tiledMap, Camera camera) {
+    private String handleTiledMapTileLayer(MapLayer layer, int index, TiledMap tiledMap, Camera camera,
+	    MapLayerRendererFactory rendererFactory) {
 	final int numberOfRows = tiledMap.getProperties().get(Constants.HEIGHT, Integer.class);
-	OrthogonalMapLayerRenderer renderer = new OrthogonalMapLayerRenderer(index, tiledMap,
-		(OrthographicCamera) camera);
+	GameObjectRenderer renderer = rendererFactory.create(index, tiledMap, camera);
 	String id = IDGenerator.generateNext(OrthogonalMapLayerRenderer.class);
 	renderManager.register(id, renderer);
 	GameObject layerObject = gameWorld.addObject();

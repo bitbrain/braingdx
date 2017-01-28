@@ -16,9 +16,12 @@
 package de.bitbrain.braingdx.tmx;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
 import de.bitbrain.braingdx.behavior.BehaviorManager;
@@ -42,9 +45,11 @@ public class TiledMapManagerImpl implements TiledMapManager {
     private final ZIndexUpdater zIndexUpdater;
     private final State state;
     private final StatePopulator populator;
+    private final Map<TiledMapType, MapLayerRendererFactory> factories;
 
-    public TiledMapManagerImpl(BehaviorManager behaviorManager, GameWorld gameWorld,
-	    GameObjectRenderManager renderManager) {
+    public TiledMapManagerImpl(BehaviorManager behaviorManager, 
+	                       GameWorld gameWorld,
+	                       GameObjectRenderManager renderManager) {
 	this.behaviorManager = behaviorManager;
 	this.gameWorld = gameWorld;
 	this.renderManager = renderManager;
@@ -52,6 +57,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
 	this.populator = new StatePopulator(renderManager, gameWorld);
 	this.api = new TiledMapAPIImpl(state);
 	this.zIndexUpdater = new ZIndexUpdater(api);
+	this.factories = createFactories();
     }
 
     @Override
@@ -60,14 +66,15 @@ public class TiledMapManagerImpl implements TiledMapManager {
     }
 
     @Override
-    public void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config) {
+    public void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config)  throws TiledMapLoadException {
+	validate(tiledMap);
 	clear();
 	behaviorManager.apply(zIndexUpdater);
-	populator.populate(tiledMap, state, camera);
+	populator.populate(tiledMap, state, camera, factories.get(type));
     }
 
     @Override
-    public void load(TiledMap tiledMap, Camera camera, TiledMapType type) {
+    public void load(TiledMap tiledMap, Camera camera, TiledMapType type)  throws TiledMapLoadException {
 	this.load(tiledMap, camera, type, new TiledMapConfig());
     }
 
@@ -83,6 +90,28 @@ public class TiledMapManagerImpl implements TiledMapManager {
 	gameWorld.clear();
 	for (String id : state.getLayerIds()) {
 	    renderManager.unregister(id);
+	}
+    }
+
+    protected Map<TiledMapType, MapLayerRendererFactory> createFactories() {
+	Map<TiledMapType, MapLayerRendererFactory> factories = new HashMap<TiledMapType, MapLayerRendererFactory>();
+	factories.put(TiledMapType.ORTHOGONAL, new OrthogonalMapLayerRendererFactory());
+	return factories;
+    }
+
+    private void validate(TiledMap map) throws TiledMapLoadException {
+	MapProperties properties = map.getProperties();
+	if (properties.get(Constants.WIDTH) == null) {
+	    throw new TiledMapLoadException("Map has no width specified");
+	}
+	if (properties.get(Constants.HEIGHT) == null) {
+	    throw new TiledMapLoadException("Map has no width specified");
+	}
+	if (properties.get(Constants.WIDTH, int.class) <= 0f) {
+	    throw new TiledMapLoadException("Map width must be larger than 0");
+	}
+	if (properties.get(Constants.HEIGHT, int.class) <= 0f) {
+	    throw new TiledMapLoadException("Map height must be larger than 0");
 	}
     }
 

@@ -15,28 +15,19 @@
 
 package de.bitbrain.braingdx.tmx;
 
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.utils.Disposable;
-
 /**
- * This manager gives extended support for {@link TiledMap} objects. It features an API to query the
- * map for details and provides an own rendering integration for braingdx.
+ * Is thrown when there is a problem loading a tiledmap into braingdx.
  *
  * @since 1.0.0
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public interface TiledMapManager extends Disposable {
+public class TiledMapLoadException extends Exception {
 
-    void addListener(TiledMapListener listener);
+    private static final long serialVersionUID = 1L;
 
-    void load(TiledMap tiledMap, 
-	      Camera camera, 
-	      TiledMapType type, 
-	      TiledMapConfig config) throws TiledMapLoadException;
+    public TiledMapLoadException(String message) {
+	super(message);
+    }
 
-    void load(TiledMap tiledMap, 
-	      Camera camera, 
-	      TiledMapType type) throws TiledMapLoadException;
 }
