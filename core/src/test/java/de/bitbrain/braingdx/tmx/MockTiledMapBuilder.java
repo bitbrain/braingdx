@@ -1,5 +1,6 @@
 package de.bitbrain.braingdx.tmx;
 
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -8,6 +9,7 @@ import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
 public class MockTiledMapBuilder {
 
@@ -24,7 +26,10 @@ public class MockTiledMapBuilder {
     }
 
     public MockTiledMapBuilder addLayer() {
-	layers.add(mock(TiledMapTileLayer.class));
+	TiledMapTileLayer layer = mock(TiledMapTileLayer.class);
+	Cell cell = mock(Cell.class);
+	when(layer.getCell(anyInt(), anyInt())).thenReturn(cell);
+	layers.add(layer);
 	return this;
     }
 

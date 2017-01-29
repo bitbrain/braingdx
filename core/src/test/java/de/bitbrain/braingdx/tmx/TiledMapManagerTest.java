@@ -156,5 +156,6 @@ public class TiledMapManagerTest {
 	assertThat(apiCaptor.getValue()).isNotNull();
 	assertThat(apiCaptor.getValue().getNumberOfColumns()).isEqualTo(1);
 	assertThat(apiCaptor.getValue().getNumberOfRows()).isEqualTo(1);
+	assertThat(apiCaptor.getValue().highestZIndexAt(0, 0)).isGreaterThan(2);
     }
 }

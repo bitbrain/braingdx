@@ -38,14 +38,18 @@ class ZIndexUpdater extends BehaviorAdapter {
     @Override
     public void update(GameObject object, float delta) {
 	if (object.isActive()) {
-	    object.setZIndex(calculateZIndex(object));
+	    updateZIndex(object, api);
 	}
     }
 
-    private int calculateZIndex(GameObject object) {
+    public static void updateZIndex(GameObject object, TiledMapAPI api) {
 	int currentLayerIndex = api.layerIndexOf(object);
 	int rows = api.getNumberOfRows();
 	int yIndex = (int) Math.round(Math.floor(object.getTop() / (float) rows));
+	object.setZIndex(calculateZIndex(rows, yIndex, currentLayerIndex));
+    }
+
+    public static int calculateZIndex(int rows, int yIndex, int currentLayerIndex) {
 	return (currentLayerIndex + 1) * rows + yIndex;
     }
 }

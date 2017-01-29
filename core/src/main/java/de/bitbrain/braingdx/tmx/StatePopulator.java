@@ -26,6 +26,7 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
@@ -62,11 +63,12 @@ class StatePopulator {
 	for (int i = 0; i < mapLayers.getCount(); ++i) {
 	    MapLayer mapLayer = mapLayers.get(i);
 	    if (mapLayer instanceof TiledMapTileLayer) {
-		String layerId = handleTiledMapTileLayer(mapLayer, i, tiledMap, camera, rendererFactory);
+		String layerId = handleTiledMapTileLayer((TiledMapTileLayer)mapLayer, i, tiledMap, camera, rendererFactory);
 		layerIds.add(layerId);
+		updateHeightMap(i, (TiledMapTileLayer) mapLayer, state);
 	    } else {
 		// Not a tiledlayer so consider it as an object layer
-		handleObjectLayer(mapLayer);
+		handleObjectLayer(i, mapLayer);
 	    }
 	}
 	state.setLayerIds(layerIds);
@@ -77,7 +79,7 @@ class StatePopulator {
 		                 properties.get(Constants.HEIGHT, Integer.class));
     }
 
-    private void handleObjectLayer(MapLayer layer) {
+    private void handleObjectLayer(int layerIndex, MapLayer layer) {
 	MapObjects mapObjects = layer.getObjects();
 	for (int objectIndex = 0; objectIndex < mapObjects.getCount(); ++objectIndex) {
 	    MapObject object = mapObjects.get(objectIndex);
@@ -89,13 +91,14 @@ class StatePopulator {
 	    mapObject.setPosition(x, y);
 	    mapObject.setColor(object.getColor());
 	    mapObject.setType(objectType);
+	    mapObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
 	    for (TiledMapListener listener : listeners) {
 		listener.onLoad(mapObject, api);
 	    }
 	}
     }
 
-    private String handleTiledMapTileLayer(MapLayer layer, int index, TiledMap tiledMap, Camera camera,
+    private String handleTiledMapTileLayer(TiledMapTileLayer layer, int index, TiledMap tiledMap, Camera camera,
 	    MapLayerRendererFactory rendererFactory) {
 	final int numberOfRows = tiledMap.getProperties().get(Constants.HEIGHT, Integer.class);
 	GameObjectRenderer renderer = rendererFactory.create(index, tiledMap, camera);
@@ -107,5 +110,21 @@ class StatePopulator {
 	int layerZIndex = (index + 1) * numberOfRows;
 	layerObject.setZIndex(layerZIndex);
 	return id;
+    }
+
+    private void updateHeightMap(int layerIndex, TiledMapTileLayer layer, State state) {
+	Integer[][] heightMap = state.getHeightMap();
+	if (heightMap == null) {
+	    heightMap = new Integer[state.getMapIndexWidth()][state.getMapIndexHeight()];
+	}
+	for (int x = 0; x < heightMap.length; ++x) {
+	    for (int y = 0; y < heightMap[x].length; ++y) {
+		Cell cell = layer.getCell(x, y);
+		if (cell != null) {
+		    heightMap[x][y] = ZIndexUpdater.calculateZIndex(state.getMapIndexHeight(), y, layerIndex);
+		}
+	    }
+	}
+	state.setHeightMap(heightMap);
     }
 }

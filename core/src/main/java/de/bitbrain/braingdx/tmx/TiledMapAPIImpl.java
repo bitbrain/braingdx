@@ -51,8 +51,11 @@ class TiledMapAPIImpl implements TiledMapAPI {
 
     @Override
     public int layerIndexOf(GameObject object) {
-	// TODO Auto-generated method stub
-	return 0;
+	if (object.hasAttribute(Constants.LAYER_INDEX)) {
+	    return (Integer) object.getAttribute(Constants.LAYER_INDEX);
+	} else {
+	    return -1;
+	}
     }
 
     @Override
@@ -66,7 +69,7 @@ class TiledMapAPIImpl implements TiledMapAPI {
     }
 
     private boolean verifyIndex(int indexX, int indexY) {
-	return indexX < 0 || indexY < 0 || indexX >= state.getMapIndexWidth() || indexY >= state.getMapIndexHeight();
+	return indexX >= 0 && indexY >= 0 && indexX < state.getMapIndexWidth() && indexY < state.getMapIndexHeight();
     }
 
 }
