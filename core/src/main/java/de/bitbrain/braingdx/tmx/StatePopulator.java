@@ -16,7 +16,9 @@
 package de.bitbrain.braingdx.tmx;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.MapLayer;
@@ -25,6 +27,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
@@ -42,6 +45,8 @@ import de.bitbrain.braingdx.world.GameWorld;
  * @author Miguel Gonzalez Sanchez
  */
 class StatePopulator {
+
+    private static final boolean DEFAULT_COLLISION = false;
 
     private final GameObjectRenderManager renderManager;
     private final GameWorld gameWorld;
@@ -65,7 +70,7 @@ class StatePopulator {
 	    if (mapLayer instanceof TiledMapTileLayer) {
 		String layerId = handleTiledMapTileLayer((TiledMapTileLayer)mapLayer, i, tiledMap, camera, rendererFactory);
 		layerIds.add(layerId);
-		updateHeightMap(i, (TiledMapTileLayer) mapLayer, state);
+		populateStaticMapData(i, (TiledMapTileLayer) mapLayer, state);
 	    } else {
 		// Not a tiledlayer so consider it as an object layer
 		handleObjectLayer(i, mapLayer);
@@ -82,18 +87,19 @@ class StatePopulator {
     private void handleObjectLayer(int layerIndex, MapLayer layer) {
 	MapObjects mapObjects = layer.getObjects();
 	for (int objectIndex = 0; objectIndex < mapObjects.getCount(); ++objectIndex) {
-	    MapObject object = mapObjects.get(objectIndex);
-	    MapProperties objectProperties = object.getProperties();
-	    GameObject mapObject = gameWorld.addObject();
+	    MapObject mapObject = mapObjects.get(objectIndex);
+	    MapProperties objectProperties = mapObject.getProperties();
+	    GameObject gameObject = gameWorld.addObject();
 	    float x = objectProperties.get(Constants.X, Float.class);
 	    float y = objectProperties.get(Constants.Y, Float.class);
 	    Object objectType = objectProperties.get(Constants.TYPE);
-	    mapObject.setPosition(x, y);
-	    mapObject.setColor(object.getColor());
-	    mapObject.setType(objectType);
-	    mapObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
+	    gameObject.setPosition(x, y);
+	    gameObject.setColor(mapObject.getColor());
+	    gameObject.setType(objectType);
+	    gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
+	    gameObject.setZIndex(ZIndexUpdater.calculateZIndex(gameObject, api, layerIndex));
 	    for (TiledMapListener listener : listeners) {
-		listener.onLoad(mapObject, api);
+		listener.onLoad(gameObject, api);
 	    }
 	}
     }
@@ -112,19 +118,58 @@ class StatePopulator {
 	return id;
     }
 
-    private void updateHeightMap(int layerIndex, TiledMapTileLayer layer, State state) {
+    private void populateStaticMapData(int layerIndex, TiledMapTileLayer layer, State state) {
 	Integer[][] heightMap = state.getHeightMap();
 	if (heightMap == null) {
 	    heightMap = new Integer[state.getMapIndexWidth()][state.getMapIndexHeight()];
 	}
 	for (int x = 0; x < heightMap.length; ++x) {
 	    for (int y = 0; y < heightMap[x].length; ++y) {
-		Cell cell = layer.getCell(x, y);
-		if (cell != null) {
-		    heightMap[x][y] = ZIndexUpdater.calculateZIndex(state.getMapIndexHeight(), y, layerIndex);
-		}
+		populateHeightMap(x, y, state, layerIndex, layer);
+		populateCollisions(x, y, state, layerIndex, layer);
 	    }
 	}
 	state.setHeightMap(heightMap);
+    }
+
+    private void populateHeightMap(int x, int y, State state, int layerIndex, TiledMapTileLayer layer) {
+	Cell cell = layer.getCell(x, y);
+	if (cell != null) {
+	    Integer[][] heightMap = state.getHeightMap();
+	    if (heightMap == null) {
+		heightMap = new Integer[state.getMapIndexWidth()][state.getMapIndexHeight()];
+	    }
+	    heightMap[x][y] = ZIndexUpdater.calculateZIndex(state.getMapIndexHeight(), y, layerIndex);
+	    state.setHeightMap(heightMap);
+	}
+    }
+
+    private void populateCollisions(int x, int y, State state, int layerIndex, TiledMapTileLayer layer) {
+	Cell cell = layer.getCell(x, y);
+	Map<Integer, Boolean[][]> collisionMap = state.getCollisions();
+	if (collisionMap.isEmpty()) {
+	    collisionMap = new HashMap<Integer, Boolean[][]>();
+	    state.setCollsions(collisionMap);
+	}
+	Boolean[][] collisions = collisionMap.get(layerIndex);
+	if (collisions == null) {
+	    collisions = new Boolean[state.getMapIndexWidth()][state.getMapIndexHeight()];
+	    collisionMap.put(layerIndex, collisions);
+	}
+	if (cell != null) {
+	    TiledMapTile tile = cell.getTile();
+	    if (tile != null) {
+		MapProperties properties = tile.getProperties();
+		if (properties.containsKey(Constants.COLLISION)) {
+		    collisions[x][y] = properties.get(Constants.COLLISION, Boolean.class);
+		} else {
+		    collisions[x][y] = DEFAULT_COLLISION;
+		}
+	    } else {
+		collisions[x][y] = true;
+	    }
+	} else {
+	    collisions[x][y] = true;
+	}
     }
 }

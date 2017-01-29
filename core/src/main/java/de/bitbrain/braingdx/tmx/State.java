@@ -48,8 +48,8 @@ class State {
 	return heightMap;
     }
 
-    public Boolean[][] getCollisions(int layerIndex) {
-	return collisions.get(layerIndex);
+    public Map<Integer, Boolean[][]> getCollisions() {
+	return collisions;
     }
 
     public int getMapIndexWidth() {
@@ -73,7 +73,7 @@ class State {
     }
 
     public void setCollsions(Map<Integer, Boolean[][]> collisions) {
-	this.collisions = Collections.unmodifiableMap(collisions);
+	this.collisions = collisions;
     }
 
     public void setIndexDimensions(int indexX, int indexY) {
