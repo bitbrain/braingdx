@@ -43,16 +43,21 @@ import de.bitbrain.braingdx.world.GameWorld;
 class StatePopulator {
 
     private final GameObjectRenderManager renderManager;
-
     private final GameWorld gameWorld;
+    private final TiledMapAPI api;
+    private final List<TiledMapListener> listeners;
 
-    public StatePopulator(GameObjectRenderManager renderManager, GameWorld gameWorld) {
+    public StatePopulator(GameObjectRenderManager renderManager, GameWorld gameWorld, TiledMapAPI api,
+	    List<TiledMapListener> listeners) {
 	this.renderManager = renderManager;
 	this.gameWorld = gameWorld;
+	this.api = api;
+	this.listeners = listeners;
     }
 
     public void populate(TiledMap tiledMap, State state, Camera camera, MapLayerRendererFactory rendererFactory) {
 	MapLayers mapLayers = tiledMap.getLayers();
+	handleMapProperties(tiledMap.getProperties(), state);
 	List<String> layerIds = new ArrayList<String>();
 	for (int i = 0; i < mapLayers.getCount(); ++i) {
 	    MapLayer mapLayer = mapLayers.get(i);
@@ -67,6 +72,11 @@ class StatePopulator {
 	state.setLayerIds(layerIds);
     }
 
+    private void handleMapProperties(MapProperties properties, State state) {
+	state.setIndexDimensions(properties.get(Constants.WIDTH, Integer.class), 
+		                 properties.get(Constants.HEIGHT, Integer.class));
+    }
+
     private void handleObjectLayer(MapLayer layer) {
 	MapObjects mapObjects = layer.getObjects();
 	for (int objectIndex = 0; objectIndex < mapObjects.getCount(); ++objectIndex) {
@@ -79,6 +89,9 @@ class StatePopulator {
 	    mapObject.setPosition(x, y);
 	    mapObject.setColor(object.getColor());
 	    mapObject.setType(objectType);
+	    for (TiledMapListener listener : listeners) {
+		listener.onLoad(mapObject, api);
+	    }
 	}
     }
 

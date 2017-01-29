@@ -15,6 +15,10 @@
 
 package de.bitbrain.braingdx.tmx;
 
+import com.badlogic.gdx.maps.tiled.TiledMap;
+
+import de.bitbrain.braingdx.world.GameObject;
+
 /**
  * Listens to {@link TiledMap} events created by {@link TiledMapManagerImpl}.
  *
@@ -24,4 +28,5 @@ package de.bitbrain.braingdx.tmx;
  */
 public interface TiledMapListener {
 
+    void onLoad(GameObject object, TiledMapAPI api);
 }

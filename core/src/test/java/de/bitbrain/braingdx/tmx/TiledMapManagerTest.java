@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.calls;
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,9 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,6 +39,7 @@ import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
+import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
 /**
@@ -115,17 +119,42 @@ public class TiledMapManagerTest {
 
     @Test
     public void load_withMapObjects() throws TiledMapLoadException {
+	final String type = "game_object";
 	TiledMap map = new MockTiledMapBuilder(1, 1, 1)
 		.addLayer()
 		.addLayer()
 		.addLayer(new MockObjectLayerBuilder()
-			.addObject(0, 0)
-			.addObject(0, 0)
+			.addObject(0, 0, type)
+			.addObject(0, 0, type)
 			.build())
 		.addLayer()
 		.build();
 	tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
 	assertThat(world.size()).isEqualTo(5);
 	inOrder(renderManager).verify(renderManager, calls(3)).register(any(), any(GameObjectRenderer.class));
+    }
+    
+    @Test
+    public void load_withMapObjectsValidAPI() throws TiledMapLoadException {
+	final String type = "game_object";
+	TiledMapListener listenerMock = mock(TiledMapListener.class);
+	ArgumentCaptor<GameObject> gameObjectCaptor = ArgumentCaptor.forClass(GameObject.class);
+	ArgumentCaptor<TiledMapAPI> apiCaptor = ArgumentCaptor.forClass(TiledMapAPI.class);
+	Mockito.doNothing().when(listenerMock).onLoad(gameObjectCaptor.capture(), apiCaptor.capture());
+	TiledMap map = new MockTiledMapBuilder(1, 1, 1)
+		.addLayer()
+		.addLayer()
+		.addLayer(new MockObjectLayerBuilder()
+			.addObject(0, 0, type)
+			.addObject(0, 0, type)
+			.build())
+		.addLayer()
+		.build();
+	tiledMapManager.addListener(listenerMock);
+	tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+	assertThat(gameObjectCaptor.getAllValues()).hasSize(2);
+	assertThat(apiCaptor.getValue()).isNotNull();
+	assertThat(apiCaptor.getValue().getNumberOfColumns()).isEqualTo(1);
+	assertThat(apiCaptor.getValue().getNumberOfRows()).isEqualTo(1);
     }
 }

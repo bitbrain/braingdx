@@ -12,11 +12,12 @@ public class MockObjectLayerBuilder {
 
     private MapObjects objects = new MapObjects();
 
-    MockObjectLayerBuilder addObject(float x, float y) {
+    MockObjectLayerBuilder addObject(float x, float y, Object type) {
 	MapObject object = new MapObject();
 	MapProperties properties = object.getProperties();
 	properties.put(Constants.X, x);
 	properties.put(Constants.Y, y);
+	properties.put(Constants.TYPE, type);
 	objects.add(object);
 	return this;
     }
