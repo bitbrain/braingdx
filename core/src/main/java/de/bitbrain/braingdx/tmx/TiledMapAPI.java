@@ -31,11 +31,16 @@ public interface TiledMapAPI {
     int highestZIndexAt(int tileX, int tileY);
 
     int highestZIndexAt(float x, float y);
+
     int layerIndexOf(GameObject object);
+
+    int lastLayerIndexOf(GameObject object);
 
     int getNumberOfRows();
 
     int getNumberOfColumns();
+
+    void setLayerIndex(GameObject object, int layerIndex);
 
     GameObject getGameObjectAt(int tileX, int tileY, int layer);
 

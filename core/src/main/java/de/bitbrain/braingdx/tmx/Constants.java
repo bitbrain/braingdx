@@ -31,4 +31,5 @@ interface Constants {
     String TYPE = "type";
     String COLLISION = "collision";
     String LAYER_INDEX = "tmx_layer_index";
+    String LAST_LAYER_INDEX = "tmx_last_layer_index";
 }

@@ -59,6 +59,20 @@ class TiledMapAPIImpl implements TiledMapAPI {
     }
 
     @Override
+    public int lastLayerIndexOf(GameObject object) {
+	if (object.hasAttribute(Constants.LAST_LAYER_INDEX)) {
+	    return (Integer) object.getAttribute(Constants.LAST_LAYER_INDEX);
+	} else {
+	    return layerIndexOf(object);
+	}
+    }
+
+    @Override
+    public void setLayerIndex(GameObject object, int layerIndex) {
+	object.setAttribute(Constants.LAYER_INDEX, layerIndex);
+    }
+
+    @Override
     public int getNumberOfRows() {
 	return state.getMapIndexHeight();
     }

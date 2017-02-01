@@ -45,6 +45,7 @@ class GameObjectUpdater extends BehaviorAdapter {
 	if (object.isActive()) {
 	    updateZIndex(object);
 	    updateCollision(object);
+	    updateLayerIndex(object);
 	}
     }
 
@@ -60,16 +61,24 @@ class GameObjectUpdater extends BehaviorAdapter {
 	currentPosition.set(object.getLeft(), object.getTop());
 	if (!lastPosition.equals(lastPosition)) {
 	    // Object has moved, now check if last position is already occupied
+	    int lastLayerIndex = api.lastLayerIndexOf(object);
 	    int currentLayerIndex = api.layerIndexOf(object);
 	    int lastTileX = IndexCalculator.calculateXIndex(lastPosition.x, api.getNumberOfColumns());
 	    int lastTileY = IndexCalculator.calculateYIndex(lastPosition.y, api.getNumberOfRows());
-	    GameObject occupant = api.getGameObjectAt(lastTileX, lastTileY, currentLayerIndex);
+	    GameObject occupant = api.getGameObjectAt(lastTileX, lastTileY, lastLayerIndex);
 	    if (occupant == null) {
 		// Last cell is empty, clear collision
-		CollisionCalculator.updateCollision(false, lastTileX, lastTileY, currentLayerIndex, state);
+		CollisionCalculator.updateCollision(false, lastTileX, lastTileY, lastLayerIndex, state);
 	    }
 	    // Update current collision
 	    CollisionCalculator.updateCollision(true, object, currentLayerIndex, state);
+	}
+    }
+
+    private void updateLayerIndex(GameObject object) {
+	if (object.hasAttribute(Constants.LAYER_INDEX)) {
+	    int layerIndex = (Integer) object.getAttribute(Constants.LAYER_INDEX);
+	    object.setAttribute(Constants.LAST_LAYER_INDEX, layerIndex);
 	}
     }
 }
