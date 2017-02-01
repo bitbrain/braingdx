@@ -120,6 +120,7 @@ class StatePopulator {
 	Integer[][] heightMap = state.getHeightMap();
 	if (heightMap == null) {
 	    heightMap = new Integer[state.getMapIndexWidth()][state.getMapIndexHeight()];
+	    state.setHeightMap(heightMap);
 	}
 	for (int x = 0; x < heightMap.length; ++x) {
 	    for (int y = 0; y < heightMap[x].length; ++y) {
@@ -127,18 +128,13 @@ class StatePopulator {
 		populateCollisions(x, y, state, layerIndex, layer);
 	    }
 	}
-	state.setHeightMap(heightMap);
     }
 
     private void populateHeightMap(int x, int y, State state, int layerIndex, TiledMapTileLayer layer) {
 	Cell cell = layer.getCell(x, y);
 	if (cell != null) {
 	    Integer[][] heightMap = state.getHeightMap();
-	    if (heightMap == null) {
-		heightMap = new Integer[state.getMapIndexWidth()][state.getMapIndexHeight()];
-	    }
 	    heightMap[x][y] = IndexCalculator.calculateZIndex(state.getMapIndexHeight(), y, layerIndex);
-	    state.setHeightMap(heightMap);
 	}
     }
 

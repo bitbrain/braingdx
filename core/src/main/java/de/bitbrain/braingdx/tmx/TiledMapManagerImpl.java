@@ -84,13 +84,12 @@ public class TiledMapManagerImpl implements TiledMapManager {
     }
 
     private void clear() {
-	state.clear();
-	// Refresh zIndex calculation
 	behaviorManager.remove(gameObjectUpdater);
 	gameWorld.clear();
 	for (String id : state.getLayerIds()) {
 	    renderManager.unregister(id);
 	}
+	state.clear();
     }
 
     protected Map<TiledMapType, MapLayerRendererFactory> createFactories() {
