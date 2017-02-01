@@ -16,9 +16,7 @@
 package de.bitbrain.braingdx.tmx;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.MapLayer;
@@ -73,7 +71,7 @@ class StatePopulator {
 		populateStaticMapData(i, (TiledMapTileLayer) mapLayer, state);
 	    } else {
 		// Not a tiledlayer so consider it as an object layer
-		handleObjectLayer(i, mapLayer);
+		handleObjectLayer(i, mapLayer, state);
 	    }
 	}
 	state.setLayerIds(layerIds);
@@ -84,7 +82,7 @@ class StatePopulator {
 		                 properties.get(Constants.HEIGHT, Integer.class));
     }
 
-    private void handleObjectLayer(int layerIndex, MapLayer layer) {
+    private void handleObjectLayer(int layerIndex, MapLayer layer, State state) {
 	MapObjects mapObjects = layer.getObjects();
 	for (int objectIndex = 0; objectIndex < mapObjects.getCount(); ++objectIndex) {
 	    MapObject mapObject = mapObjects.get(objectIndex);
@@ -97,7 +95,7 @@ class StatePopulator {
 	    gameObject.setColor(mapObject.getColor());
 	    gameObject.setType(objectType);
 	    gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
-	    gameObject.setZIndex(ZIndexUpdater.calculateZIndex(gameObject, api, layerIndex));
+	    CollisionCalculator.updateCollision(true, gameObject, layerIndex, state);
 	    for (TiledMapListener listener : listeners) {
 		listener.onLoad(gameObject, api);
 	    }
@@ -139,23 +137,14 @@ class StatePopulator {
 	    if (heightMap == null) {
 		heightMap = new Integer[state.getMapIndexWidth()][state.getMapIndexHeight()];
 	    }
-	    heightMap[x][y] = ZIndexUpdater.calculateZIndex(state.getMapIndexHeight(), y, layerIndex);
+	    heightMap[x][y] = IndexCalculator.calculateZIndex(state.getMapIndexHeight(), y, layerIndex);
 	    state.setHeightMap(heightMap);
 	}
     }
 
     private void populateCollisions(int x, int y, State state, int layerIndex, TiledMapTileLayer layer) {
 	Cell cell = layer.getCell(x, y);
-	Map<Integer, Boolean[][]> collisionMap = state.getCollisions();
-	if (collisionMap.isEmpty()) {
-	    collisionMap = new HashMap<Integer, Boolean[][]>();
-	    state.setCollsions(collisionMap);
-	}
-	Boolean[][] collisions = collisionMap.get(layerIndex);
-	if (collisions == null) {
-	    collisions = new Boolean[state.getMapIndexWidth()][state.getMapIndexHeight()];
-	    collisionMap.put(layerIndex, collisions);
-	}
+	Boolean[][] collisions = CollisionCalculator.getLayerCollisions(layerIndex, state);
 	if (cell != null) {
 	    TiledMapTile tile = cell.getTile();
 	    if (tile != null) {

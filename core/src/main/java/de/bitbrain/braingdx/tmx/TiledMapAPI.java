@@ -37,4 +37,8 @@ public interface TiledMapAPI {
 
     int getNumberOfColumns();
 
+    GameObject getGameObjectAt(int tileX, int tileY, int layer);
+
+    boolean isCollision(int tileX, int tileY, int layer);
+
 }

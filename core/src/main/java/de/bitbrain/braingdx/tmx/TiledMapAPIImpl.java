@@ -68,6 +68,18 @@ class TiledMapAPIImpl implements TiledMapAPI {
 	return state.getMapIndexWidth();
     }
 
+    @Override
+    public GameObject getGameObjectAt(int tileX, int tileY, int layer) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public boolean isCollision(int tileX, int tileY, int layer) {
+	// TODO Auto-generated method stub
+	return false;
+    }
+
     private boolean verifyIndex(int indexX, int indexY) {
 	return indexX >= 0 && indexY >= 0 && indexX < state.getMapIndexWidth() && indexY < state.getMapIndexHeight();
     }

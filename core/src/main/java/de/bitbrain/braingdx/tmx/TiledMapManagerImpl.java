@@ -42,7 +42,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
     private final List<TiledMapListener> listeners = new ArrayList<TiledMapListener>();
     private final GameObjectRenderManager renderManager;
     private final TiledMapAPIImpl api;
-    private final ZIndexUpdater zIndexUpdater;
+    private final GameObjectUpdater gameObjectUpdater;
     private final State state;
     private final StatePopulator populator;
     private final Map<TiledMapType, MapLayerRendererFactory> factories;
@@ -56,7 +56,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
 	this.state = new State();
 	this.api = new TiledMapAPIImpl(state);
 	this.populator = new StatePopulator(renderManager, gameWorld, api, listeners);
-	this.zIndexUpdater = new ZIndexUpdater(api);
+	this.gameObjectUpdater = new GameObjectUpdater(api, state);
 	this.factories = createFactories();
     }
 
@@ -69,7 +69,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
     public void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config)  throws TiledMapLoadException {
 	validate(tiledMap);
 	clear();
-	behaviorManager.apply(zIndexUpdater);
+	behaviorManager.apply(gameObjectUpdater);
 	populator.populate(tiledMap, state, camera, factories.get(type));
     }
 
@@ -86,7 +86,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
     private void clear() {
 	state.clear();
 	// Refresh zIndex calculation
-	behaviorManager.remove(zIndexUpdater);
+	behaviorManager.remove(gameObjectUpdater);
 	gameWorld.clear();
 	for (String id : state.getLayerIds()) {
 	    renderManager.unregister(id);

@@ -15,37 +15,42 @@
 
 package de.bitbrain.braingdx.tmx;
 
-import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
- * This component calculates the zIndex for active instances of type {@link GameObject}.
- * 
- * The zIndex is calculated depending on the given layer the {@link GameObject} is currently on.
+ * This component calculates the index for instances of type {@link GameObject}.
  *
  * @since 1.0.0
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-class ZIndexUpdater extends BehaviorAdapter {
+class IndexCalculator {
 
-    private final TiledMapAPI api;
-
-    public ZIndexUpdater(TiledMapAPI api) {
-	this.api = api;
+    public static int calculateXIndex(GameObject object, State state) {
+	return calculateXIndex(object.getLeft(), state.getMapIndexWidth());
     }
 
-    @Override
-    public void update(GameObject object, float delta) {
-	if (object.isActive()) {
-	    int currentLayerIndex = api.layerIndexOf(object);
-	    object.setZIndex(calculateZIndex(object, api, currentLayerIndex));
-	}
+    public static int calculateYIndex(GameObject object, State state) {
+	return calculateYIndex(object.getTop(), state.getMapIndexHeight());
+    }
+
+    public static int calculateXIndex(float x, int numberOfColumns) {
+	return (int) Math.round(Math.floor(x / (float) numberOfColumns));
+    }
+
+    public static int calculateYIndex(float y, int numberOfRows) {
+	return (int) Math.round(Math.floor(y / (float) numberOfRows));
     }
 
     public static int calculateZIndex(GameObject object, TiledMapAPI api, int currentLayerIndex) {
 	int rows = api.getNumberOfRows();
-	int yIndex = (int) Math.round(Math.floor(object.getTop() / (float) rows));
+	int yIndex = calculateYIndex(object.getTop(), rows);
+	return calculateZIndex(rows, yIndex, currentLayerIndex);
+    }
+
+    public static int calculateZIndex(GameObject object, State state, int currentLayerIndex) {
+	int rows = state.getMapIndexHeight();
+	int yIndex = calculateYIndex(object, state);
 	return calculateZIndex(rows, yIndex, currentLayerIndex);
     }
 
