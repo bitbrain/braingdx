@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.BrainGdxGame;
+import de.bitbrain.braingdx.GameContext;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
 import de.bitbrain.braingdx.graphics.GameCamera;
@@ -55,7 +56,7 @@ import de.bitbrain.braingdx.world.GameWorld;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
+public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, GameContext {
 
     private T game;
     private GameWorld world;
@@ -71,6 +72,8 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     private ParticleManager particleManager;
     private World boxWorld;
     private TiledMapManager tiledMapManager;
+    private TweenManager tweenManager = SharedTweenManager.getInstance();
+    private InputMultiplexer input;
 
     private boolean uiInitialized = false;
 
@@ -81,9 +84,6 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
     public T getGame() {
 	return game;
     }
-
-    protected TweenManager tweenManager = SharedTweenManager.getInstance();
-    private InputMultiplexer input;
 
     @Override
     public final void show() {
@@ -143,6 +143,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
     }
 
+    @Override
     public GameWorld getGameWorld() {
 	return world;
     }
@@ -151,46 +152,57 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	return backgroundColor;
     }
 
+    @Override
     public Stage getStage() {
 	return stage;
     }
 
+    @Override
     public RenderPipeline getRenderPipeline() {
 	return renderPipeline;
     }
 
-    public World getBoxWorld() {
+    @Override
+    public World getBox2DWorld() {
 	return boxWorld;
     }
 
+    @Override
     public ParticleManager getParticleManager() {
 	return particleManager;
     }
 
+    @Override
     public TweenManager getTweenManager() {
 	return tweenManager;
     }
 
+    @Override
     public BehaviorManager getBehaviorManager() {
 	return behaviorManager;
     }
 
+    @Override
     public GameObjectRenderManager getRenderManager() {
 	return renderManager;
     }
 
+    @Override
     public GameCamera getGameCamera() {
 	return gameCamera;
     }
 
+    @Override
     public LightingManager getLightingManager() {
 	return lightingManager;
     }
 
+    @Override
     public InputMultiplexer getInput() {
 	return input;
     }
 
+    @Override
     public TiledMapManager getTiledMapManager() {
 	return tiledMapManager;
     }
@@ -218,6 +230,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 	input.clear();
 	particleManager.dispose();
 	renderPipeline.dispose();
+	tweenManager.killAll();
     }
 
     public void setBackgroundColor(Color color) {

@@ -44,6 +44,8 @@ public interface TiledMapAPI {
 
     GameObject getGameObjectAt(int tileX, int tileY, int layer);
 
+    Object getPropertyAt(int tileX, int tileY, int layer);
+
     boolean isCollision(int tileX, int tileY, int layer);
 
 }

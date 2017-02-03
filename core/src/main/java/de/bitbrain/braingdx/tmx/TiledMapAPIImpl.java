@@ -98,4 +98,10 @@ class TiledMapAPIImpl implements TiledMapAPI {
 	return indexX >= 0 && indexY >= 0 && indexX < state.getMapIndexWidth() && indexY < state.getMapIndexHeight();
     }
 
+    @Override
+    public Object getPropertyAt(int tileX, int tileY, int layer) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
 }
