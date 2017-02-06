@@ -50,6 +50,12 @@ class State {
 	public void setProperties(MapProperties properties) {
 	    this.properties = properties;
 	}
+
+	@Override
+	public String toString() {
+	    return "CellState [collision=" + collision + ", properties=" + properties + "]";
+	}
+
     }
 
     private List<String> layerIds = Collections.emptyList();

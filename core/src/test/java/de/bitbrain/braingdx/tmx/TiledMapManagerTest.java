@@ -141,12 +141,12 @@ public class TiledMapManagerTest {
 	ArgumentCaptor<GameObject> gameObjectCaptor = ArgumentCaptor.forClass(GameObject.class);
 	ArgumentCaptor<TiledMapAPI> apiCaptor = ArgumentCaptor.forClass(TiledMapAPI.class);
 	Mockito.doNothing().when(listenerMock).onLoad(gameObjectCaptor.capture(), apiCaptor.capture());
-	TiledMap map = new MockTiledMapBuilder(1, 1, 1)
+	TiledMap map = new MockTiledMapBuilder(2, 2, 1)
 		.addLayer()
 		.addLayer()
 		.addLayer(new MockObjectLayerBuilder()
-			.addObject(0, 0, type)
-			.addObject(0, 0, type)
+			.addObject(0, 0, type, false)
+			.addObject(1, 1, type)
 			.build())
 		.addLayer()
 		.build();
@@ -154,8 +154,10 @@ public class TiledMapManagerTest {
 	tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
 	assertThat(gameObjectCaptor.getAllValues()).hasSize(2);
 	assertThat(apiCaptor.getValue()).isNotNull();
-	assertThat(apiCaptor.getValue().getNumberOfColumns()).isEqualTo(1);
-	assertThat(apiCaptor.getValue().getNumberOfRows()).isEqualTo(1);
+	assertThat(apiCaptor.getValue().getNumberOfColumns()).isEqualTo(2);
+	assertThat(apiCaptor.getValue().getNumberOfRows()).isEqualTo(2);
 	assertThat(apiCaptor.getValue().highestZIndexAt(0, 0)).isGreaterThan(2);
+	assertThat(apiCaptor.getValue().isCollision(0, 0, 2)).isFalse();
+	assertThat(apiCaptor.getValue().isCollision(1, 1, 2)).isTrue();
     }
 }

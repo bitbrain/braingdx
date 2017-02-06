@@ -92,11 +92,12 @@ class StatePopulator {
 	    float x = objectProperties.get(Constants.X, Float.class);
 	    float y = objectProperties.get(Constants.Y, Float.class);
 	    Object objectType = objectProperties.get(Constants.TYPE);
+	    boolean collision = objectProperties.get(Constants.COLLISION, true, Boolean.class);
 	    gameObject.setPosition(x, y);
 	    gameObject.setColor(mapObject.getColor());
 	    gameObject.setType(objectType);
 	    gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
-	    CollisionCalculator.updateCollision(true, gameObject, layerIndex, state);
+	    CollisionCalculator.updateCollision(collision, x, y, layerIndex, state);
 	    for (TiledMapListener listener : listeners) {
 		listener.onLoad(gameObject, api);
 	    }

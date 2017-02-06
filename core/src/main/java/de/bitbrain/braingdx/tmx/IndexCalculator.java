@@ -27,24 +27,20 @@ import de.bitbrain.braingdx.world.GameObject;
 class IndexCalculator {
 
     public static int calculateXIndex(GameObject object, State state) {
-	return calculateXIndex(object.getLeft(), state.getMapIndexWidth());
+	return calculateIndex(object.getLeft(), state.getCellSize());
     }
 
     public static int calculateYIndex(GameObject object, State state) {
-	return calculateYIndex(object.getTop(), state.getMapIndexHeight());
+	return calculateIndex(object.getTop(), state.getCellSize());
     }
 
-    public static int calculateXIndex(float x, int numberOfColumns) {
-	return (int) Math.round(Math.floor(x / (float) numberOfColumns));
-    }
-
-    public static int calculateYIndex(float y, int numberOfRows) {
-	return (int) Math.round(Math.floor(y / (float) numberOfRows));
+    public static int calculateIndex(float value, int cellSize) {
+	return (int) Math.round(Math.floor(value / (float) cellSize));
     }
 
     public static int calculateZIndex(GameObject object, TiledMapAPI api, int currentLayerIndex) {
 	int rows = api.getNumberOfRows();
-	int yIndex = calculateYIndex(object.getTop(), rows);
+	int yIndex = calculateIndex(object.getTop(), api.getCellSize());
 	return calculateZIndex(rows, yIndex, currentLayerIndex);
     }
 

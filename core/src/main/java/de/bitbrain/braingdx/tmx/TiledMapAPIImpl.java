@@ -101,19 +101,22 @@ class TiledMapAPIImpl implements TiledMapAPI {
     }
 
     @Override
-    public boolean isCollision(int tileX, int tileY, int layer) {
-	// TODO Auto-generated method stub
-	return false;
+    public int getCellSize() {
+	return state.getCellSize();
     }
 
-    private boolean verifyIndex(int indexX, int indexY) {
-	return indexX >= 0 && indexY >= 0 && indexX < state.getMapIndexWidth() && indexY < state.getMapIndexHeight();
+    @Override
+    public boolean isCollision(int tileX, int tileY, int layer) {
+	return state.getState(tileX, tileY, layer).isCollision();
     }
 
     @Override
     public MapProperties getPropertiesAt(int tileX, int tileY, int layer) {
-	// TODO Auto-generated method stub
-	return null;
+	return state.getState(tileX, tileY, layer).getProperties();
+    }
+
+    private boolean verifyIndex(int indexX, int indexY) {
+	return indexX >= 0 && indexY >= 0 && indexX < state.getMapIndexWidth() && indexY < state.getMapIndexHeight();
     }
 
 }
