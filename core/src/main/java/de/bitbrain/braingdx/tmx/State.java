@@ -16,8 +16,11 @@
 package de.bitbrain.braingdx.tmx;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.badlogic.gdx.maps.MapProperties;
 
 /**
  * Internal state for tiled map operations.
@@ -28,11 +31,32 @@ import java.util.Map;
  */
 class State {
 
+    public static class CellState {
+	private boolean collision;
+	private MapProperties properties;
+
+	public boolean isCollision() {
+	    return collision;
+	}
+
+	public void setCollision(boolean collision) {
+	    this.collision = collision;
+	}
+
+	public MapProperties getProperties() {
+	    return properties;
+	}
+
+	public void setProperties(MapProperties properties) {
+	    this.properties = properties;
+	}
+    }
+
     private List<String> layerIds = Collections.emptyList();
 
     private Integer[][] heightMap;
 
-    private Map<Integer, Boolean[][]> collisions = Collections.emptyMap();
+    private Map<Integer, CellState[][]> stateMap = Collections.emptyMap();
 
     private int mapIndexHeight;
 
@@ -46,10 +70,6 @@ class State {
 
     public Integer[][] getHeightMap() {
 	return heightMap;
-    }
-
-    public Map<Integer, Boolean[][]> getCollisions() {
-	return collisions;
     }
 
     public int getMapIndexWidth() {
@@ -72,8 +92,19 @@ class State {
 	this.heightMap = heightMap;
     }
 
-    public void setCollsions(Map<Integer, Boolean[][]> collisions) {
-	this.collisions = collisions;
+    public CellState getState(int tileX, int tileY, int layerIndex) {
+	if (stateMap.isEmpty()) {
+	    stateMap = new HashMap<Integer, CellState[][]>();
+	}
+	CellState[][] states = stateMap.get(layerIndex);
+	if (states == null) {
+	    states = new CellState[getMapIndexWidth()][getMapIndexHeight()];
+	    stateMap.put(layerIndex, states);
+	}
+	if (states[tileX][tileY] == null) {
+	    states[tileX][tileY] = new CellState();
+	}
+	return states[tileX][tileY];
     }
 
     public void setIndexDimensions(int indexX, int indexY) {
@@ -88,6 +119,7 @@ class State {
     public void clear() {
 	heightMap = null;
 	layerIds = Collections.emptyList();
-	collisions = Collections.emptyMap();
+	stateMap.clear();
+	stateMap = Collections.emptyMap();
     }
 }

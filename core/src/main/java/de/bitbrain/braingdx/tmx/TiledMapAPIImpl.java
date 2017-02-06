@@ -18,6 +18,7 @@ package de.bitbrain.braingdx.tmx;
 import com.badlogic.gdx.maps.MapProperties;
 
 import de.bitbrain.braingdx.world.GameObject;
+import de.bitbrain.braingdx.world.GameWorld;
 
 /**
  * Implementation of {@link TiledMapAPI}.
@@ -29,9 +30,11 @@ import de.bitbrain.braingdx.world.GameObject;
 class TiledMapAPIImpl implements TiledMapAPI {
 
     private final State state;
+    private final GameWorld gameWorld;
 
-    public TiledMapAPIImpl(State state) {
+    public TiledMapAPIImpl(State state, GameWorld gameWorld) {
 	this.state = state;
+	this.gameWorld = gameWorld;
     }
 
     @Override
@@ -86,7 +89,14 @@ class TiledMapAPIImpl implements TiledMapAPI {
 
     @Override
     public GameObject getGameObjectAt(int tileX, int tileY, int layer) {
-	// TODO Auto-generated method stub
+	for (GameObject worldObject : gameWorld) {
+	    int objectTileX = IndexCalculator.calculateXIndex(worldObject, state);
+	    int objectTileY = IndexCalculator.calculateYIndex(worldObject, state);
+	    int layerIndex = layerIndexOf(worldObject);
+	    if (objectTileX == tileX && objectTileY == tileY && layer == layerIndex) {
+		return worldObject;
+	    }
+	}
 	return null;
     }
 

@@ -31,6 +31,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
+import de.bitbrain.braingdx.tmx.State.CellState;
 import de.bitbrain.braingdx.util.IDGenerator;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
@@ -125,7 +126,7 @@ class StatePopulator {
 	for (int x = 0; x < heightMap.length; ++x) {
 	    for (int y = 0; y < heightMap[x].length; ++y) {
 		populateHeightMap(x, y, state, layerIndex, layer);
-		populateCollisions(x, y, state, layerIndex, layer);
+		populateStateMap(x, y, state, layerIndex, layer);
 	    }
 	}
     }
@@ -138,23 +139,24 @@ class StatePopulator {
 	}
     }
 
-    private void populateCollisions(int x, int y, State state, int layerIndex, TiledMapTileLayer layer) {
+    private void populateStateMap(int x, int y, State state, int layerIndex, TiledMapTileLayer layer) {
 	Cell cell = layer.getCell(x, y);
-	Boolean[][] collisions = CollisionCalculator.getLayerCollisions(layerIndex, state);
+	CellState cellState = state.getState(x, y, layerIndex);
 	if (cell != null) {
 	    TiledMapTile tile = cell.getTile();
 	    if (tile != null) {
 		MapProperties properties = tile.getProperties();
+		cellState.setProperties(properties);
 		if (properties.containsKey(Constants.COLLISION)) {
-		    collisions[x][y] = properties.get(Constants.COLLISION, Boolean.class);
+		    cellState.setCollision(properties.get(Constants.COLLISION, Boolean.class));
 		} else {
-		    collisions[x][y] = DEFAULT_COLLISION;
+		    cellState.setCollision(DEFAULT_COLLISION);
 		}
 	    } else {
-		collisions[x][y] = true;
+		cellState.setCollision(true);
 	    }
 	} else {
-	    collisions[x][y] = true;
+	    cellState.setCollision(true);
 	}
     }
 }
