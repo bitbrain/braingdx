@@ -15,6 +15,8 @@
 
 package de.bitbrain.braingdx.tmx;
 
+import com.badlogic.gdx.maps.MapProperties;
+
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -99,7 +101,7 @@ class TiledMapAPIImpl implements TiledMapAPI {
     }
 
     @Override
-    public Object getPropertyAt(int tileX, int tileY, int layer) {
+    public MapProperties getPropertiesAt(int tileX, int tileY, int layer) {
 	// TODO Auto-generated method stub
 	return null;
     }

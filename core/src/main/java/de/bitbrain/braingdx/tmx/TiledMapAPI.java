@@ -15,6 +15,7 @@
 
 package de.bitbrain.braingdx.tmx;
 
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
 import de.bitbrain.braingdx.world.GameObject;
@@ -44,7 +45,7 @@ public interface TiledMapAPI {
 
     GameObject getGameObjectAt(int tileX, int tileY, int layer);
 
-    Object getPropertyAt(int tileX, int tileY, int layer);
+    MapProperties getPropertiesAt(int tileX, int tileY, int layer);
 
     boolean isCollision(int tileX, int tileY, int layer);
 
