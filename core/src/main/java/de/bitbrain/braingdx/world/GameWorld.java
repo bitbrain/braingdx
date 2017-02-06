@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ import de.bitbrain.braingdx.util.ZIndexComparator;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public class GameWorld {
+public class GameWorld implements Iterable<GameObject> {
 
     /** the default cache size this world uses */
     public static final int DEFAULT_CACHE_SIZE = 100;
@@ -61,6 +62,8 @@ public class GameWorld {
 
     private final List<GameObject> objects = new ArrayList<GameObject>();
 
+    private final List<GameObject> unmodifiableObjects;
+
     private final Pool<GameObject> pool;
 
     private WorldBounds bounds = new WorldBounds() {
@@ -82,6 +85,7 @@ public class GameWorld {
     }
 
     public GameWorld(OrthographicCamera camera, int cacheSize) {
+	unmodifiableObjects = Collections.unmodifiableList(objects);
 	this.camera = camera;
 	this.pool = new Pool<GameObject>(cacheSize) {
 	    @Override
@@ -172,6 +176,11 @@ public class GameWorld {
 	for (GameWorldListener l : listeners) {
 	    l.onClear();
 	}
+    }
+
+    @Override
+    public Iterator<GameObject> iterator() {
+	return unmodifiableObjects.iterator();
     }
 
     /**
