@@ -83,6 +83,11 @@ public class TiledMapManagerImpl implements TiledMapManager {
 	clear();
     }
 
+    @Override
+    public TiledMapAPI getAPI() {
+	return api;
+    }
+
     private void clear() {
 	behaviorManager.remove(gameObjectUpdater);
 	gameWorld.clear();

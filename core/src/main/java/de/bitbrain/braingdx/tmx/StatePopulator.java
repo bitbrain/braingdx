@@ -71,7 +71,9 @@ class StatePopulator {
 		String layerId = handleTiledMapTileLayer((TiledMapTileLayer)mapLayer, i, tiledMap, camera, rendererFactory);
 		layerIds.add(layerId);
 		populateStaticMapData(i, (TiledMapTileLayer) mapLayer, state);
-		lastTileLayerIndex = i;
+		if (i > 0) {
+		    lastTileLayerIndex++;
+		}
 	    } else {
 		// Not a tiledlayer so consider it as an object layer
 		handleObjectLayer(lastTileLayerIndex, mapLayer, state);
@@ -96,6 +98,7 @@ class StatePopulator {
 	    Object objectType = objectProperties.get(Constants.TYPE);
 	    boolean collision = objectProperties.get(Constants.COLLISION, true, Boolean.class);
 	    gameObject.setPosition(x, y);
+	    gameObject.setLastPosition(x, y);
 	    gameObject.setColor(mapObject.getColor());
 	    gameObject.setType(objectType);
 	    gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);

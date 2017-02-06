@@ -39,4 +39,6 @@ public interface TiledMapManager extends Disposable {
     void load(TiledMap tiledMap, 
 	      Camera camera, 
 	      TiledMapType type) throws TiledMapLoadException;
+
+    TiledMapAPI getAPI();
 }

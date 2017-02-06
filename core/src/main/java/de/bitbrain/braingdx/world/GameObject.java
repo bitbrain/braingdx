@@ -80,10 +80,14 @@ public class GameObject implements Pool.Poolable {
     }
 
     public void setPosition(float x, float y) {
-	this.lastPosition.x = this.position.x;
-	this.lastPosition.y = this.position.y;
+	setLastPosition(this.position.x, this.position.y);
 	this.position.x = x;
 	this.position.y = y;
+    }
+
+    public void setLastPosition(float x, float y) {
+	this.lastPosition.x = this.position.x;
+	this.lastPosition.y = this.position.y;
     }
 
     public float getLeft() {

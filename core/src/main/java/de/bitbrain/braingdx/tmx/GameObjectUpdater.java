@@ -46,6 +46,8 @@ class GameObjectUpdater extends BehaviorAdapter {
 	    updateZIndex(object);
 	    updateCollision(object);
 	    updateLayerIndex(object);
+	    // Update object state
+	    object.setPosition(object.getLeft(), object.getTop());
 	}
     }
 
@@ -59,19 +61,21 @@ class GameObjectUpdater extends BehaviorAdapter {
 	// and last position is not occupied
 	Vector2 lastPosition = object.getLastPosition();
 	currentPosition.set(object.getLeft(), object.getTop());
-	if (!lastPosition.equals(lastPosition)) {
+	int lastLayerIndex = api.lastLayerIndexOf(object);
+	int currentLayerIndex = api.layerIndexOf(object);
+	if (lastLayerIndex != currentLayerIndex || !currentPosition.equals(lastPosition)) {
 	    // Object has moved, now check if last position is already occupied
-	    int lastLayerIndex = api.lastLayerIndexOf(object);
-	    int currentLayerIndex = api.layerIndexOf(object);
 	    int lastTileX = IndexCalculator.calculateIndex(lastPosition.x, api.getCellSize());
 	    int lastTileY = IndexCalculator.calculateIndex(lastPosition.y, api.getCellSize());
 	    GameObject occupant = api.getGameObjectAt(lastTileX, lastTileY, lastLayerIndex);
 	    if (occupant == null) {
 		// Last cell is empty, clear collision
-		CollisionCalculator.updateCollision(false, lastTileX, lastTileY, lastLayerIndex, state);
+		state.getState(lastTileX, lastTileY, lastLayerIndex).setCollision(false);
 	    }
 	    // Update current collision
-	    CollisionCalculator.updateCollision(true, object.getLeft(), object.getTop(), currentLayerIndex, state);
+	    if (!object.equals(occupant)) {
+		CollisionCalculator.updateCollision(true, object.getLeft(), object.getTop(), currentLayerIndex, state);
+	    }
 	}
     }
 
