@@ -34,11 +34,11 @@ public interface TiledMapManager extends Disposable {
     void load(TiledMap tiledMap, 
 	      Camera camera, 
 	      TiledMapType type, 
-	      TiledMapConfig config) throws TiledMapLoadException;
+	      TiledMapConfig config) throws TiledMapException;
 
     void load(TiledMap tiledMap, 
 	      Camera camera, 
-	      TiledMapType type) throws TiledMapLoadException;
+	      TiledMapType type) throws TiledMapException;
 
     TiledMapAPI getAPI();
 }

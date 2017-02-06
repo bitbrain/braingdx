@@ -81,36 +81,36 @@ public class TiledMapManagerTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void load_WithNullValues() throws TiledMapLoadException {
+    public void load_WithNullValues() throws TiledMapException {
 	tiledMapManager.load(null, null, null);
     }
 
-    @Test(expected = TiledMapLoadException.class)
-    public void load_withInvalidTiledMapWidth() throws TiledMapLoadException {
+    @Test(expected = TiledMapException.class)
+    public void load_withInvalidTiledMapWidth() throws TiledMapException {
 	TiledMap map = new MockTiledMapBuilder(0, 1, 1).addLayer().build();
 	tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
     }
 
-    @Test(expected = TiledMapLoadException.class)
-    public void load_withInvalidTiledMapHeight() throws TiledMapLoadException {
+    @Test(expected = TiledMapException.class)
+    public void load_withInvalidTiledMapHeight() throws TiledMapException {
 	TiledMap map = new MockTiledMapBuilder(1, 0, 1).addLayer().build();
 	tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
     }
 
-    @Test(expected = TiledMapLoadException.class)
-    public void load_withInvalidTiledMapDimensions() throws TiledMapLoadException {
+    @Test(expected = TiledMapException.class)
+    public void load_withInvalidTiledMapDimensions() throws TiledMapException {
 	TiledMap map = new MockTiledMapBuilder(0, 0, 1).addLayer().build();
 	tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
     }
 
-    @Test(expected = TiledMapLoadException.class)
-    public void load_withInvalidMapLayers() throws TiledMapLoadException {
+    @Test(expected = TiledMapException.class)
+    public void load_withInvalidMapLayers() throws TiledMapException {
 	TiledMap map = new MockTiledMapBuilder(1, 0, 1).build();
 	tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
     }
 
     @Test
-    public void load_withNoMapObjects() throws TiledMapLoadException {
+    public void load_withNoMapObjects() throws TiledMapException {
 	TiledMap map = new MockTiledMapBuilder(1, 1, 1).addLayer().build();
 	tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
 	assertThat(world.size()).isEqualTo(1);
@@ -118,7 +118,7 @@ public class TiledMapManagerTest {
     }
 
     @Test
-    public void load_withMapObjects() throws TiledMapLoadException {
+    public void load_withMapObjects() throws TiledMapException {
 	final String type = "game_object";
 	TiledMap map = new MockTiledMapBuilder(1, 1, 1)
 		.addLayer()
@@ -135,7 +135,7 @@ public class TiledMapManagerTest {
     }
     
     @Test
-    public void load_withMapObjectsValidAPI() throws TiledMapLoadException {
+    public void load_withMapObjectsValidAPI() throws TiledMapException {
 	final String type = "game_object";
 	TiledMapListener listenerMock = mock(TiledMapListener.class);
 	ArgumentCaptor<GameObject> gameObjectCaptor = ArgumentCaptor.forClass(GameObject.class);
@@ -163,7 +163,7 @@ public class TiledMapManagerTest {
     
 
     @Test
-    public void load_withSimple3x3Map_validCollisions() throws TiledMapLoadException {
+    public void load_withSimple3x3Map_validCollisions() throws TiledMapException {
 	final TiledMapAPI api = tiledMapManager.getAPI();
 	// Load game world
 	tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
@@ -191,7 +191,7 @@ public class TiledMapManagerTest {
     }
     
     @Test
-    public void load_withSimple3x3Map_validUpdatingAfterMovement() throws TiledMapLoadException {
+    public void load_withSimple3x3Map_validUpdatingAfterMovement() throws TiledMapException {
 	final TiledMapAPI api = tiledMapManager.getAPI();
 	tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
 	final GameObject objectA = api.getGameObjectAt(0, 1, 0);
@@ -202,7 +202,7 @@ public class TiledMapManagerTest {
     }
 
     @Test
-    public void load_withSimple3x3Map_validUpdatingAfterChangingLazers() throws TiledMapLoadException {
+    public void load_withSimple3x3Map_validUpdatingAfterChangingLayers() throws TiledMapException {
 	final TiledMapAPI api = tiledMapManager.getAPI();
 	tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
 	final GameObject objectA = api.getGameObjectAt(0, 1, 0);
@@ -215,6 +215,14 @@ public class TiledMapManagerTest {
 	assertThat(api.isCollision(1, 0, 0)).isFalse();
 	assertThat(api.isCollision(0, 1, 0)).isFalse();
 	assertThat(api.isCollision(0, 1, 0)).isFalse();
+    }
+
+    @Test(expected = TiledMapException.class)
+    public void load_withSimple3x3Map_invalidUpdatingAfterChangingLayers() throws TiledMapException {
+	final TiledMapAPI api = tiledMapManager.getAPI();
+	tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
+	final GameObject objectA = api.getGameObjectAt(0, 1, 0);
+	api.setLayerIndex(objectA, 2);
     }
 
     /**

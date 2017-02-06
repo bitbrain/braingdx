@@ -74,6 +74,9 @@ class TiledMapAPIImpl implements TiledMapAPI {
 
     @Override
     public void setLayerIndex(GameObject object, int layerIndex) {
+	if (layerIndex > state.getNumberOfLayers() - 1) {
+	    throw new TiledMapException("Layer index is too high: " + layerIndex);
+	}
 	object.setAttribute(Constants.LAYER_INDEX, layerIndex);
     }
 

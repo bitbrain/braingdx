@@ -66,7 +66,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
     }
 
     @Override
-    public void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config)  throws TiledMapLoadException {
+    public void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config)  throws TiledMapException {
 	validate(tiledMap);
 	clear();
 	behaviorManager.apply(gameObjectUpdater);
@@ -74,7 +74,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
     }
 
     @Override
-    public void load(TiledMap tiledMap, Camera camera, TiledMapType type)  throws TiledMapLoadException {
+    public void load(TiledMap tiledMap, Camera camera, TiledMapType type)  throws TiledMapException {
 	this.load(tiledMap, camera, type, new TiledMapConfig());
     }
 
@@ -103,19 +103,19 @@ public class TiledMapManagerImpl implements TiledMapManager {
 	return factories;
     }
 
-    private void validate(TiledMap map) throws TiledMapLoadException {
+    private void validate(TiledMap map) throws TiledMapException {
 	MapProperties properties = map.getProperties();
 	if (properties.get(Constants.WIDTH) == null) {
-	    throw new TiledMapLoadException("Map has no width specified");
+	    throw new TiledMapException("Map has no width specified");
 	}
 	if (properties.get(Constants.HEIGHT) == null) {
-	    throw new TiledMapLoadException("Map has no width specified");
+	    throw new TiledMapException("Map has no width specified");
 	}
 	if (properties.get(Constants.WIDTH, int.class) <= 0f) {
-	    throw new TiledMapLoadException("Map width must be larger than 0");
+	    throw new TiledMapException("Map width must be larger than 0");
 	}
 	if (properties.get(Constants.HEIGHT, int.class) <= 0f) {
-	    throw new TiledMapLoadException("Map height must be larger than 0");
+	    throw new TiledMapException("Map height must be larger than 0");
 	}
     }
 

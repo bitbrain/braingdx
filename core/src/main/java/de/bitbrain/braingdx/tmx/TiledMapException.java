@@ -16,17 +16,17 @@
 package de.bitbrain.braingdx.tmx;
 
 /**
- * Is thrown when there is a problem loading a tiledmap into braingdx.
+ * Is thrown when there is a problem with a tiledmap in braingdx.
  *
  * @since 1.0.0
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public class TiledMapLoadException extends Exception {
+public class TiledMapException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public TiledMapLoadException(String message) {
+    public TiledMapException(String message) {
 	super(message);
     }
 

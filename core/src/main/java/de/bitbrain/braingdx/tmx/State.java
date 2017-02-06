@@ -128,4 +128,8 @@ class State {
 	stateMap.clear();
 	stateMap = Collections.emptyMap();
     }
+
+    public int getNumberOfLayers() {
+	return stateMap.keySet().size();
+    }
 }

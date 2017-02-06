@@ -68,12 +68,12 @@ class StatePopulator {
 	for (int i = 0; i < mapLayers.getCount(); ++i) {
 	    MapLayer mapLayer = mapLayers.get(i);
 	    if (mapLayer instanceof TiledMapTileLayer) {
-		String layerId = handleTiledMapTileLayer((TiledMapTileLayer)mapLayer, i, tiledMap, camera, rendererFactory);
-		layerIds.add(layerId);
-		populateStaticMapData(i, (TiledMapTileLayer) mapLayer, state);
 		if (i > 0) {
 		    lastTileLayerIndex++;
 		}
+		String layerId = handleTiledMapTileLayer((TiledMapTileLayer) mapLayer, i, tiledMap, camera, rendererFactory);
+		layerIds.add(layerId);
+		populateStaticMapData(lastTileLayerIndex, (TiledMapTileLayer) mapLayer, state);
 	    } else {
 		// Not a tiledlayer so consider it as an object layer
 		handleObjectLayer(lastTileLayerIndex, mapLayer, state);
