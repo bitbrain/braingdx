@@ -15,6 +15,7 @@ public class MockTiledMapBuilder {
 
     private TiledMap map;
     private MapLayers layers;
+    private float size;
 
     public MockTiledMapBuilder(int xTiles, int yTiles, int tileSize) {
 	map = mock(TiledMap.class);
@@ -23,18 +24,25 @@ public class MockTiledMapBuilder {
 	properties.put(Constants.WIDTH, xTiles);
 	properties.put(Constants.HEIGHT, yTiles);
 	when(map.getProperties()).thenReturn(properties);
+	this.size = tileSize;
     }
 
     public MockTiledMapBuilder addLayer() {
 	TiledMapTileLayer layer = mock(TiledMapTileLayer.class);
 	Cell cell = mock(Cell.class);
 	when(layer.getCell(anyInt(), anyInt())).thenReturn(cell);
+	when(layer.getTileWidth()).thenReturn(size);
+	when(layer.getTileHeight()).thenReturn(size);
 	layers.add(layer);
 	return this;
     }
 
     public MockTiledMapBuilder addLayer(MapLayer layer) {
 	layers.add(layer);
+	if (layer instanceof TiledMapTileLayer) {
+	    when(((TiledMapTileLayer) layer).getTileWidth()).thenReturn(size);
+	    when(((TiledMapTileLayer) layer).getTileHeight()).thenReturn(size);
+	}
 	return this;
     }
 

@@ -119,17 +119,34 @@ public class TiledMapManagerTest {
 
     @Test
     public void load_withMapObjects() throws TiledMapException {
-	final String type = "game_object";
-	TiledMap map = new MockTiledMapBuilder(1, 1, 1)
+	final String typeA = "typeA";
+	final String typeB = "typeB";
+	TiledMap map = new MockTiledMapBuilder(5, 5, 5)
 		.addLayer()
 		.addLayer()
 		.addLayer(new MockObjectLayerBuilder()
-			.addObject(0, 0, type)
-			.addObject(0, 0, type)
+			.addObject(0, 0, 2, typeA)
+			.addObject(0, 0, 6, typeB)
 			.build())
 		.addLayer()
 		.build();
 	tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+	GameObject objectA = null;
+	GameObject objectB = null;
+
+	for (GameObject object : world) {
+	    if (object.getType().equals(typeA)) {
+		objectA = object;
+	    } else if (object.getType().equals(typeB)) {
+		objectB = object;
+	    }
+	}
+	assertThat(objectA).isNotNull();
+	assertThat(objectB).isNotNull();
+	assertThat(objectA.getWidth()).isEqualTo(5f);
+	assertThat(objectA.getHeight()).isEqualTo(5f);
+	assertThat(objectB.getWidth()).isEqualTo(10f);
+	assertThat(objectB.getHeight()).isEqualTo(10f);
 	assertThat(world.size()).isEqualTo(5);
 	inOrder(renderManager).verify(renderManager, calls(3)).register(any(), any(GameObjectRenderer.class));
     }

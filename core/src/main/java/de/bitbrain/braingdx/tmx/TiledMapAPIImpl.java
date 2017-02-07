@@ -49,8 +49,8 @@ class TiledMapAPIImpl implements TiledMapAPI {
 
     @Override
     public int highestZIndexAt(float x, float y) {
-	int tileX = (int) Math.floor(x / (float) state.getCellSize());
-	int tileY = (int) Math.floor(y / (float) state.getCellSize());
+	int tileX = (int) Math.floor(x / (float) state.getCellWidth());
+	int tileY = (int) Math.floor(y / (float) state.getCellWidth());
 	return highestZIndexAt(tileX, tileY);
     }
 
@@ -104,8 +104,13 @@ class TiledMapAPIImpl implements TiledMapAPI {
     }
 
     @Override
-    public int getCellSize() {
-	return state.getCellSize();
+    public float getCellWidth() {
+	return state.getCellWidth();
+    }
+
+    @Override
+    public float getCellHeight() {
+	return state.getCellHeight();
     }
 
     @Override

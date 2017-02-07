@@ -65,8 +65,8 @@ class GameObjectUpdater extends BehaviorAdapter {
 	int currentLayerIndex = api.layerIndexOf(object);
 	if (lastLayerIndex != currentLayerIndex || !currentPosition.equals(lastPosition)) {
 	    // Object has moved, now check if last position is already occupied
-	    int lastTileX = IndexCalculator.calculateIndex(lastPosition.x, api.getCellSize());
-	    int lastTileY = IndexCalculator.calculateIndex(lastPosition.y, api.getCellSize());
+	    int lastTileX = IndexCalculator.calculateIndex(lastPosition.x, api.getCellWidth());
+	    int lastTileY = IndexCalculator.calculateIndex(lastPosition.y, api.getCellHeight());
 	    GameObject occupant = api.getGameObjectAt(lastTileX, lastTileY, lastLayerIndex);
 	    if (occupant == null) {
 		// Last cell is empty, clear collision

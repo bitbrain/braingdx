@@ -68,7 +68,8 @@ class State {
 
     private int mapIndexWidth;
 
-    private int cellSize = 1;
+    private float cellWidth = 1f;
+    private float cellHeight = 1f;
 
     public List<String> getLayerIds() {
 	return layerIds;
@@ -86,8 +87,12 @@ class State {
 	return mapIndexHeight;
     }
 
-    public int getCellSize() {
-	return cellSize;
+    public float getCellWidth() {
+	return cellWidth;
+    }
+    
+    public float getCellHeight() {
+	return cellHeight;
     }
 
     public void setLayerIds(List<String> layerIds) {
@@ -118,8 +123,16 @@ class State {
 	this.mapIndexHeight = indexY;
     }
 
-    public void setCellSize(int cellSize) {
-	this.cellSize = cellSize;
+    public void setCellWidth(float width) {
+	if (width > 0) {
+	    this.cellWidth = width;
+	}
+    }
+    
+    public void setCellHeight(float height) {
+	if (height > 0) {
+	    this.cellHeight = height;
+	}
     }
 
     public void clear() {

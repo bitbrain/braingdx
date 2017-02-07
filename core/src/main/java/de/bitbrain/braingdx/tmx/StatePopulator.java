@@ -93,16 +93,22 @@ class StatePopulator {
 	    MapObject mapObject = mapObjects.get(objectIndex);
 	    MapProperties objectProperties = mapObject.getProperties();
 	    GameObject gameObject = gameWorld.addObject();
-	    float x = objectProperties.get(Constants.X, Float.class);
-	    float y = objectProperties.get(Constants.Y, Float.class);
+	    final float x = objectProperties.get(Constants.X, Float.class);
+	    final float y = objectProperties.get(Constants.Y, Float.class);
+	    final float w = objectProperties.get(Constants.WIDTH, Float.class);
+	    final float h = objectProperties.get(Constants.HEIGHT, Float.class);
+	    final float cellWidth = state.getCellWidth();
+	    final float cellHeight = state.getCellHeight();
 	    Object objectType = objectProperties.get(Constants.TYPE);
 	    boolean collision = objectProperties.get(Constants.COLLISION, true, Boolean.class);
 	    gameObject.setPosition(x, y);
+	    gameObject.setDimensions(IndexCalculator.calculateIndexedDimension(w, cellWidth), IndexCalculator.calculateIndexedDimension(h, cellHeight));
 	    gameObject.setLastPosition(x, y);
 	    gameObject.setColor(mapObject.getColor());
 	    gameObject.setType(objectType);
 	    gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
 	    CollisionCalculator.updateCollision(collision, x, y, layerIndex, state);
+	    IndexCalculator.calculateZIndex(gameObject, state, layerIndex);
 	    for (TiledMapListener listener : listeners) {
 		listener.onLoad(gameObject, api);
 	    }
@@ -129,6 +135,8 @@ class StatePopulator {
 	    heightMap = new Integer[state.getMapIndexWidth()][state.getMapIndexHeight()];
 	    state.setHeightMap(heightMap);
 	}
+	state.setCellWidth(layer.getTileWidth());
+	state.setCellHeight(layer.getTileHeight());
 	for (int x = 0; x < heightMap.length; ++x) {
 	    for (int y = 0; y < heightMap[x].length; ++y) {
 		populateHeightMap(x, y, state, layerIndex, layer);

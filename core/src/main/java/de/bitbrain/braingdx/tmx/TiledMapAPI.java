@@ -49,6 +49,8 @@ public interface TiledMapAPI {
 
     boolean isCollision(int tileX, int tileY, int layer);
 
-    int getCellSize();
+    float getCellWidth();
+
+    float getCellHeight();
 
 }
