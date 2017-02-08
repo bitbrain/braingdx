@@ -1,20 +1,18 @@
-package de.bitbrain.braingdx.apps.rpg;
+package de.bitbrain.braingdx.apps.tmxgame;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.bitbrain.braingdx.apps.Assets;
+import de.bitbrain.braingdx.apps.rpg.NPC;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
-import de.bitbrain.braingdx.behavior.movement.MovementController;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
-import de.bitbrain.braingdx.behavior.movement.RandomOrientationMovementController;
 import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation;
@@ -22,6 +20,7 @@ import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationFactory;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationFactory.Index;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationSupplier;
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
+import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.renderer.AnimationRenderer;
@@ -29,58 +28,50 @@ import de.bitbrain.braingdx.input.OrientationMovementController;
 import de.bitbrain.braingdx.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.postprocessing.effects.Vignette;
 import de.bitbrain.braingdx.screens.AbstractScreen;
-import de.bitbrain.braingdx.tmx.TiledMapRenderer;
+import de.bitbrain.braingdx.tmx.TiledMapManager;
+import de.bitbrain.braingdx.tmx.TiledMapType;
 import de.bitbrain.braingdx.world.GameObject;
 
-public class RPGScreen extends AbstractScreen<RPGTest> {
+public class TmxScreen extends AbstractScreen<TmxTest> {
 
-    private static final int BLOCK_SIZE = 16;
-    private NPCFactory factory;
+    private GameObject player;
 
-    public RPGScreen(RPGTest rpgTest) {
-	super(rpgTest);
+    public TmxScreen(TmxTest game) {
+	super(game);
     }
 
     @Override
     protected void onCreateStage(Stage stage, int width, int height) {
-	getGameCamera().setBaseZoom(0.25f);
+	setupShaders();
+	getGameCamera().setBaseZoom(0.15f);
 	getGameCamera().setSpeed(1.6f);
 	getGameCamera().setZoomScale(0.001f);
-	prepareResources();
-	setupShaders();
 
-    }
+	TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_2, TiledMap.class);
+	TiledMapManager tiledMapManager = getTiledMapManager();
+	getLightingManager().setAmbientLight(new Color(0.7f, 0.6f, 1f, 0.7f));
+	tiledMapManager.load(map, getGameCamera().getInternal(), TiledMapType.ORTHOGONAL);
 
-    private void prepareResources() {
-	TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_1, TiledMap.class);
-	getRenderPipeline().add(RenderPipeIds.BACKGROUND,
-		new TiledMapRenderer(map, (OrthographicCamera) getGameCamera().getInternal()));
-	getLightingManager().setAmbientLight(new Color(0.1f, 0.05f, 0.3f, 0.4f));
+	player = null;
+	for (GameObject o : getGameWorld()) {
+	    if (o.getType().equals("player")) {
+		player = o;
+		break;
+	    }
+	}
+	player.setType(NPC.PRIEST_MALE.ordinal());
+	getGameCamera().setTarget(player);
+	getBehaviorManager().apply(new PointLightBehavior(new Color(1f, 0.7f, 0.7f, 1f), 160f, getLightingManager()),
+		player);
+
 	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
 	SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
 	createAnimations(sheet);
 
-	factory = new NPCFactory(BLOCK_SIZE, getGameWorld());
-	GameObject player = spawnObject(10, 10, NPC.CITIZEN_MALE, new OrientationMovementController());
-	getGameCamera().setTarget(player);
-	final int NPCS = 25;
-
-	for (int i = 0; i < NPCS; ++i) {
-	    int randomX = (int) (Math.random() * 25);
-	    int randomY = (int) (Math.random() * 25);
-	    spawnObject(randomX, randomY, NPC.random(), new RandomOrientationMovementController());
-	}
-
-	getLightingManager().addPointLight("lantern", 200, 200, 500, Color.valueOf("ff9955ff"));
-    }
-
-    private GameObject spawnObject(int indexX, int indexY, NPC type,
-	    MovementController<Orientation> controller) {
-	GameObject object = factory.spawn(indexX, indexY, type.ordinal(), controller);
+	OrientationMovementController controller = new OrientationMovementController();
 	RasteredMovementBehavior behavior = new RasteredMovementBehavior(controller).interval(0.3f)
-		.rasterSize(BLOCK_SIZE);
-	getBehaviorManager().apply(behavior, object);
-	return object;
+		.rasterSize((int) tiledMapManager.getAPI().getCellWidth());
+	getBehaviorManager().apply(behavior, player);
     }
 
     private void createAnimations(SpriteSheet sheet) {
@@ -90,12 +81,10 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	for (int type : indices.keySet()) {
 	    SpriteSheetAnimation animation = animationFactory.create(type);
 	    animations.put(type, animation);
-	    SpriteSheetAnimationSupplier supplier = new SpriteSheetAnimationSupplier(
-			orientations(),
-			animation, 
-			AnimationTypes.FORWARD_YOYO);
+	    SpriteSheetAnimationSupplier supplier = new SpriteSheetAnimationSupplier(orientations(), animation,
+		    AnimationTypes.FORWARD_YOYO);
 	    getBehaviorManager().apply(supplier);
-	    getRenderManager().register(type, new AnimationRenderer(supplier));
+	    getRenderManager().register(type, new AnimationRenderer(supplier).scale(1f, 1.3f));
 	}
     }
 
@@ -123,10 +112,10 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
     private void setupShaders() {
 	RenderPipe worldPipe = getRenderPipeline().getPipe(RenderPipeIds.WORLD);
-	Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 3.5f),
-		Math.round(Gdx.graphics.getHeight() / 3.5f));
-	bloom.setBlurAmount(0.1f);
-	bloom.setBloomIntesity(1.2f);
+	Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 1.5f),
+		Math.round(Gdx.graphics.getHeight() / 1.5f));
+	bloom.setBlurAmount(0.5f);
+	bloom.setBloomIntesity(0.7f);
 	bloom.setBlurPasses(5);
 	Vignette vignette = new Vignette(Math.round(Gdx.graphics.getWidth() / 1.5f),
 		Math.round(Gdx.graphics.getHeight() / 1.5f), false);
@@ -134,4 +123,5 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	worldPipe.addEffects(vignette);
 	worldPipe.addEffects(bloom);
     }
+
 }

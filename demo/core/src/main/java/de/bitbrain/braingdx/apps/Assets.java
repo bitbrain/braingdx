@@ -14,6 +14,7 @@ public interface Assets {
 	String BACKGROUND = "wall.jpg";
 	String FLAME = "flame.p";
 	String MAP_1 = "rpg/map.tmx";
+	String MAP_2 = "rpg/minimap.tmx";
     }
 
 }

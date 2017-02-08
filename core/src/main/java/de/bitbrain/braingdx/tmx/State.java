@@ -104,6 +104,17 @@ class State {
     }
 
     public CellState getState(int tileX, int tileY, int layerIndex) {
+	if (tileX >= getMapIndexWidth()) {
+	    tileX = getMapIndexWidth() - 1;
+	} else if (tileX < 0) {
+	    tileX = 0;
+	}
+	if (tileY >= getMapIndexHeight()) {
+	    tileY = getMapIndexHeight() - 1;
+	} else if (tileY < 0) {
+	    tileY = 0;
+	}
+
 	if (stateMap.isEmpty()) {
 	    stateMap = new HashMap<Integer, CellState[][]>();
 	}

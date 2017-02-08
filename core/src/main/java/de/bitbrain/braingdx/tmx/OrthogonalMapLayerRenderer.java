@@ -33,16 +33,15 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 class OrthogonalMapLayerRenderer implements GameObjectRenderer {
 
-    private final OrthogonalTiledMapRenderer renderer;
-
+    private OrthogonalTiledMapRenderer renderer;
     private final TiledMapTileLayer layer;
-
     private final OrthographicCamera camera;
+    private final TiledMap map;
 
     OrthogonalMapLayerRenderer(int layerIndex, TiledMap map, OrthographicCamera camera) {
-	renderer = new OrthogonalTiledMapRenderer(map);
 	layer = (TiledMapTileLayer) map.getLayers().get(layerIndex);
 	this.camera = camera;
+	this.map = map;
     }
 
     @Override
@@ -52,6 +51,9 @@ class OrthogonalMapLayerRenderer implements GameObjectRenderer {
 
     @Override
     public void render(GameObject object, Batch batch, float delta) {
+	if (renderer == null) {
+	    renderer = new OrthogonalTiledMapRenderer(map, batch);
+	}
 	renderer.setView(camera);
 	renderer.renderTileLayer(layer);
     }

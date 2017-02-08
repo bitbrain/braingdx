@@ -71,7 +71,8 @@ class StatePopulator {
 		if (i > 0) {
 		    lastTileLayerIndex++;
 		}
-		String layerId = handleTiledMapTileLayer((TiledMapTileLayer) mapLayer, i, tiledMap, camera, rendererFactory);
+		String layerId = handleTiledMapTileLayer((TiledMapTileLayer) mapLayer, i, tiledMap, camera,
+			rendererFactory);
 		layerIds.add(layerId);
 		populateStaticMapData(lastTileLayerIndex, (TiledMapTileLayer) mapLayer, state);
 	    } else {
@@ -124,8 +125,7 @@ class StatePopulator {
 	GameObject layerObject = gameWorld.addObject();
 	layerObject.setActive(false);
 	layerObject.setType(id);
-	int layerZIndex = (index + 1) * numberOfRows;
-	layerObject.setZIndex(layerZIndex);
+	layerObject.setZIndex(IndexCalculator.calculateZIndex(numberOfRows, 0, index));
 	return id;
     }
 
@@ -162,7 +162,8 @@ class StatePopulator {
 		MapProperties properties = tile.getProperties();
 		cellState.setProperties(properties);
 		if (properties.containsKey(Constants.COLLISION)) {
-		    cellState.setCollision(properties.get(Constants.COLLISION, Boolean.class));
+		    boolean collision = Boolean.valueOf(properties.get(Constants.COLLISION, String.class));
+		    cellState.setCollision(collision);
 		} else {
 		    cellState.setCollision(DEFAULT_COLLISION);
 		}

@@ -152,6 +152,7 @@ public class GameWorld implements Iterable<GameObject> {
 		}
 	    }
 	}
+
 	for (final GameObject removal : removals)
 	    remove(removal);
 	removals.clear();
