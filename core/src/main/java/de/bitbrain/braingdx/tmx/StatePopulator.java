@@ -29,6 +29,10 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 
+import de.bitbrain.braingdx.behavior.BehaviorManager;
+import de.bitbrain.braingdx.behavior.movement.MovementController;
+import de.bitbrain.braingdx.behavior.movement.Orientation;
+import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.tmx.State.CellState;
@@ -51,12 +55,15 @@ class StatePopulator {
     private final GameWorld gameWorld;
     private final TiledMapAPI api;
     private final List<TiledMapListener> listeners;
+    private final BehaviorManager behaviorManager;
 
     public StatePopulator(GameObjectRenderManager renderManager, GameWorld gameWorld, TiledMapAPI api,
+	    BehaviorManager behaviorManager,
 	    List<TiledMapListener> listeners) {
 	this.renderManager = renderManager;
 	this.gameWorld = gameWorld;
 	this.api = api;
+	this.behaviorManager = behaviorManager;
 	this.listeners = listeners;
     }
 
@@ -108,11 +115,36 @@ class StatePopulator {
 	    gameObject.setColor(mapObject.getColor());
 	    gameObject.setType(objectType);
 	    gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
+	    if (objectProperties.containsKey(Constants.MOVEMENT)) {
+		String className = objectProperties.get(Constants.MOVEMENT, String.class);
+		RasteredMovementBehavior behavior = createMovementBehavior(className);
+		if (behavior != null) {
+		    behaviorManager.apply(behavior, gameObject);
+		}
+	    }
 	    CollisionCalculator.updateCollision(collision, x, y, layerIndex, state);
 	    IndexCalculator.calculateZIndex(gameObject, state, layerIndex);
 	    for (TiledMapListener listener : listeners) {
 		listener.onLoad(gameObject, api);
 	    }
+	}
+    }
+
+    private RasteredMovementBehavior createMovementBehavior(String className) {
+	try {
+	    Class<?> movementClass = Class.forName(className, true, getClass().getClassLoader());
+	    @SuppressWarnings("unchecked")
+	    MovementController<Orientation> controller = (MovementController<Orientation>) movementClass.newInstance();
+	    return new RasteredMovementBehavior(controller, api);
+	} catch (InstantiationException e) {
+	    e.printStackTrace();
+	    return null;
+	} catch (IllegalAccessException e) {
+	    e.printStackTrace();
+	    return null;
+	} catch (ClassNotFoundException e) {
+	    e.printStackTrace();
+	    return null;
 	}
     }
 

@@ -39,7 +39,7 @@ public class RandomOrientationMovementController implements MovementController<O
 
     private void changeDirection() {
 	int size = Orientation.values().length;
-	orientation = Orientation.values()[(int) Math.floor(random.nextFloat() * (size - 1))];
+	orientation = Orientation.values()[(int) Math.floor(random.nextFloat() * size)];
     }
 
     private void changeInterval() {

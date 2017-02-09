@@ -55,7 +55,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
 	this.renderManager = renderManager;
 	this.state = new State();
 	this.api = new TiledMapAPIImpl(state, gameWorld);
-	this.populator = new StatePopulator(renderManager, gameWorld, api, listeners);
+	this.populator = new StatePopulator(renderManager, gameWorld, api, behaviorManager, listeners);
 	this.gameObjectUpdater = new GameObjectUpdater(api, state);
 	this.factories = createFactories();
     }

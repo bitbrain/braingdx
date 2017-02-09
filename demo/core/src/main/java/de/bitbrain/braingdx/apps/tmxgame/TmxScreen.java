@@ -3,7 +3,6 @@ package de.bitbrain.braingdx.apps.tmxgame;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -21,12 +20,8 @@ import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationFactory.Index
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationSupplier;
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
-import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
-import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.renderer.AnimationRenderer;
 import de.bitbrain.braingdx.input.OrientationMovementController;
-import de.bitbrain.braingdx.postprocessing.effects.Bloom;
-import de.bitbrain.braingdx.postprocessing.effects.Vignette;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
 import de.bitbrain.braingdx.tmx.TiledMapType;
@@ -42,27 +37,23 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
 
     @Override
     protected void onCreateStage(Stage stage, int width, int height) {
-	setupShaders();
 	getGameCamera().setBaseZoom(0.15f);
 	getGameCamera().setSpeed(3.6f);
 	getGameCamera().setZoomScale(0.001f);
-
 	TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_2, TiledMap.class);
 	TiledMapManager tiledMapManager = getTiledMapManager();
-	getLightingManager().setAmbientLight(new Color(0.7f, 0.6f, 1f, 0.7f));
+	getLightingManager().setAmbientLight(new Color(0.2f, 0.3f, 0.6f, 0.4f));
 	tiledMapManager.load(map, getGameCamera().getInternal(), TiledMapType.ORTHOGONAL);
 
 	player = null;
 	for (GameObject o : getGameWorld()) {
-	    if (o.getType().equals("player")) {
+	    getBehaviorManager()
+		    .apply(new PointLightBehavior(new Color(1f, 0.7f, 0.7f, 1f), 190f, getLightingManager()), o);
+	    if (o.getType().equals("CLERIC_MALE")) {
 		player = o;
-		break;
 	    }
 	}
-	player.setType(NPC.PRIEST_MALE.name());
 	getGameCamera().setTarget(player);
-	getBehaviorManager().apply(new PointLightBehavior(new Color(1f, 0.7f, 0.7f, 1f), 160f, getLightingManager()),
-		player);
 
 	Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
 	SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
@@ -109,20 +100,6 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
 	indices.put(NPC.EXPLORER_MALE.ordinal(), new Index(6, 4));
 	indices.put(NPC.EXPLORER_FEMALE.ordinal(), new Index(9, 4));
 	return indices;
-    }
-
-    private void setupShaders() {
-	RenderPipe worldPipe = getRenderPipeline().getPipe(RenderPipeIds.WORLD);
-	Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 1.5f),
-		Math.round(Gdx.graphics.getHeight() / 1.5f));
-	bloom.setBlurAmount(0.5f);
-	bloom.setBloomIntesity(0.7f);
-	bloom.setBlurPasses(5);
-	Vignette vignette = new Vignette(Math.round(Gdx.graphics.getWidth() / 1.5f),
-		Math.round(Gdx.graphics.getHeight() / 1.5f), false);
-	vignette.setIntensity(0.8f);
-	worldPipe.addEffects(vignette);
-	worldPipe.addEffects(bloom);
     }
 
 }
