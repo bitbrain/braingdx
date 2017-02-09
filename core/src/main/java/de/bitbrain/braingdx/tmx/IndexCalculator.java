@@ -55,6 +55,6 @@ class IndexCalculator {
     }
 
     public static int calculateZIndex(int rows, int yIndex, int currentLayerIndex) {
-	return (currentLayerIndex + 1) * rows + yIndex;
+	return (currentLayerIndex + 1) * rows - yIndex;
     }
 }

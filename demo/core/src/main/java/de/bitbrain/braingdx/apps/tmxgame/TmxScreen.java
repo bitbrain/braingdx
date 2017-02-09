@@ -59,7 +59,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
 		break;
 	    }
 	}
-	player.setType(NPC.PRIEST_MALE.ordinal());
+	player.setType(NPC.PRIEST_MALE.name());
 	getGameCamera().setTarget(player);
 	getBehaviorManager().apply(new PointLightBehavior(new Color(1f, 0.7f, 0.7f, 1f), 160f, getLightingManager()),
 		player);
@@ -85,7 +85,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
 	    SpriteSheetAnimationSupplier supplier = new SpriteSheetAnimationSupplier(orientations(), animation,
 		    AnimationTypes.FORWARD_YOYO);
 	    getBehaviorManager().apply(supplier);
-	    getRenderManager().register(type, new AnimationRenderer(supplier).scale(1f, 1.3f));
+	    getRenderManager().register(NPC.values()[type].name(), new AnimationRenderer(supplier).scale(1f, 1.3f));
 	}
     }
 
