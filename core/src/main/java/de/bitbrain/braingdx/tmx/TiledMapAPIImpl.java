@@ -115,7 +115,25 @@ class TiledMapAPIImpl implements TiledMapAPI {
 
     @Override
     public boolean isCollision(int tileX, int tileY, int layer) {
+	if (!verifyIndex(tileX, tileY)) {
+	    return true;
+	}
 	return state.getState(tileX, tileY, layer).isCollision();
+    }
+
+    @Override
+    public boolean isCollision(float x, float y, int layer) {
+	int tileX = IndexCalculator.calculateIndex(x, state.getCellWidth());
+	int tileY = IndexCalculator.calculateIndex(y, state.getCellHeight());
+	return isCollision(tileX, tileY, layer);
+    }
+
+    @Override
+    public boolean isCollision(GameObject object, int tileOffsetX, int tileOffsetY) {
+	int layer = layerIndexOf(object);
+	int tileX = IndexCalculator.calculateXIndex(object, state) + tileOffsetX;
+	int tileY = IndexCalculator.calculateYIndex(object, state) + tileOffsetY;
+	return isCollision(tileX, tileY, layer);
     }
 
     @Override

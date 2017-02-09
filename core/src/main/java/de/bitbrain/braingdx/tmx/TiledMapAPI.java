@@ -18,6 +18,7 @@ package de.bitbrain.braingdx.tmx;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
+import de.bitbrain.braingdx.behavior.movement.TiledCollisionResolver;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -27,7 +28,7 @@ import de.bitbrain.braingdx.world.GameObject;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public interface TiledMapAPI {
+public interface TiledMapAPI extends TiledCollisionResolver {
 
     int highestZIndexAt(int tileX, int tileY);
 
@@ -46,8 +47,6 @@ public interface TiledMapAPI {
     GameObject getGameObjectAt(int tileX, int tileY, int layer);
 
     MapProperties getPropertiesAt(int tileX, int tileY, int layer);
-
-    boolean isCollision(int tileX, int tileY, int layer);
 
     float getCellWidth();
 

@@ -168,10 +168,10 @@ class StatePopulator {
 		    cellState.setCollision(DEFAULT_COLLISION);
 		}
 	    } else {
-		cellState.setCollision(true);
+		cellState.setCollision(DEFAULT_COLLISION);
 	    }
 	} else {
-	    cellState.setCollision(true);
+	    cellState.setCollision(DEFAULT_COLLISION);
 	}
     }
 }

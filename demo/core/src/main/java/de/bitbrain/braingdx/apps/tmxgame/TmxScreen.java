@@ -44,7 +44,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
     protected void onCreateStage(Stage stage, int width, int height) {
 	setupShaders();
 	getGameCamera().setBaseZoom(0.15f);
-	getGameCamera().setSpeed(1.6f);
+	getGameCamera().setSpeed(3.6f);
 	getGameCamera().setZoomScale(0.001f);
 
 	TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_2, TiledMap.class);
