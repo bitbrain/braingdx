@@ -29,6 +29,23 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
     public static final int DEFAULT_RASTER_SIZE = 32;
     public static final float DEFAULT_INTERVAL = 1f;
     public static final Orientation DEFAULT_DIRECTION = Orientation.DOWN;
+    public static final TiledCollisionResolver EMPTY_COLLISION_RESOLVER = new TiledCollisionResolver() {
+
+	@Override
+	public boolean isCollision(GameObject object, int tileOffsetX, int tileOffsetY) {
+	    return false;
+	}
+
+	@Override
+	public boolean isCollision(float x, float y, int layer) {
+	    return false;
+	}
+
+	@Override
+	public boolean isCollision(int tileX, int tileY, int layer) {
+	    return false;
+	}
+    };
 
     private int rasterSize = DEFAULT_RASTER_SIZE;
     private float interval = DEFAULT_INTERVAL;
@@ -40,9 +57,16 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
     private final TweenManager tweenManager = SharedTweenManager.getInstance();
     private final DeltaTimer timer = new DeltaTimer(DEFAULT_INTERVAL);
     private final MovementController<Orientation> controller;
+    private final TiledCollisionResolver collisionResolver;
+
+    public RasteredMovementBehavior(MovementController<Orientation> controller,
+	    TiledCollisionResolver collisionResolver) {
+	this.controller = controller;
+	this.collisionResolver = collisionResolver;
+    }
 
     public RasteredMovementBehavior(MovementController<Orientation> controller) {
-	this.controller = controller;
+	this(controller, EMPTY_COLLISION_RESOLVER);
     }
 
     public RasteredMovementBehavior rasterSize(int size) {
@@ -63,21 +87,23 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
     @Override
     public void move(Orientation direction) {
 	if (isReadyToMove() && source != null) {
-	    moving = true;
-	    timer.reset();
 	    source.setAttribute(Orientation.class, direction);
-	    float moveX = direction.getXFactor() * rasterSize;
-	    float moveY = direction.getYFactor() * rasterSize;
-	    source.move(moveX, moveY);
-	    source.setOffset(-moveX, -moveY);
-	    Tween.to(source, GameObjectTween.OFFSET_X, interval)
-	         .target(0f)
-	         .ease(TweenEquations.easeNone)
-	         .start(tweenManager);
-	    Tween.to(source, GameObjectTween.OFFSET_Y, interval)
-	         .target(0f)
-	         .ease(TweenEquations.easeNone)
-	         .start(tweenManager);
+	    if (canMove(direction)) {
+        	float moveX = direction.getXFactor() * rasterSize;
+        	float moveY = direction.getYFactor() * rasterSize;
+        	moving = true;
+        	timer.reset();
+        	source.move(moveX, moveY);
+        	source.setOffset(-moveX, -moveY);
+        	Tween.to(source, GameObjectTween.OFFSET_X, interval)
+        	     .target(0f)
+        	     .ease(TweenEquations.easeNone)
+        	     .start(tweenManager);
+        	Tween.to(source, GameObjectTween.OFFSET_Y, interval)
+                     .target(0f)
+                     .ease(TweenEquations.easeNone)
+                     .start(tweenManager);
+	    }
 	}
     }
 
@@ -103,6 +129,10 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 	wasMoving = moving;
 	controller.update(this, delta);
 	source.setAttribute(Movement.class, this);
+    }
+
+    private boolean canMove(Orientation orientation) {
+	return !collisionResolver.isCollision(source, orientation.getXFactor(), orientation.getYFactor());
     }
 
     private boolean isReadyToMove() {

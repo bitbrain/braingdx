@@ -72,20 +72,14 @@ public class SpriteSheetAnimationSupplier extends BehaviorAdapter implements Ani
     }
 
     private void orientate(SpriteSheetAnimation animation, GameObject object) {
-	if (object.hasAttribute(Movement.class)) {
+	if (object.hasAttribute(Movement.class) && object.hasAttribute(Orientation.class)) {
 	    Movement<?> movement = (Movement<?>) object.getAttribute(Movement.class);
-	    if (!movement.isMoving()) {
-		animation.type(stillType);
-		return;
-	    }
-	}
-	if (object.hasAttribute(Orientation.class)) {
 	    Orientation orientation = (Orientation) object.getAttribute(Orientation.class);
 	    animation.offset(orientations.get(orientation), orientations.get(orientation));
-	    switch (orientation) {
-		case DOWN:  case LEFT:
-		case RIGHT: case UP:
-		    animation.type(movingType);
+	    if (!movement.isMoving()) {
+		animation.type(stillType);
+	    } else {
+		animation.type(movingType);
 	    }
 	}
     }

@@ -35,11 +35,11 @@ public enum Orientation {
 	direction = new Vector2(x, y);
     }
 
-    public float getXFactor() {
-	return direction.x;
+    public int getXFactor() {
+	return (int) direction.x;
     }
 
-    public float getYFactor() {
-	return direction.y;
+    public int getYFactor() {
+	return (int) direction.y;
     }
 }
