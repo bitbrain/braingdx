@@ -198,6 +198,13 @@ public class GameObject implements Pool.Poolable {
     }
 
     @Override
+    public String toString() {
+	return "GameObject [position=" + position + ", dimensions=" + dimensions + ", lastPosition=" + lastPosition
+		+ ", offset=" + offset + ", id=" + id + ", type=" + type + ", color=" + color + ", scale=" + scale
+		+ ", zIndex=" + zIndex + "]";
+    }
+
+    @Override
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;

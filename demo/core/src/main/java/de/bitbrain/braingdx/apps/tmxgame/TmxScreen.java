@@ -62,7 +62,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
 	OrientationMovementController controller = new OrientationMovementController();
 	RasteredMovementBehavior behavior = new RasteredMovementBehavior(controller, tiledMapManager.getAPI())
 		.interval(0.3f)
-		.rasterSize((int) tiledMapManager.getAPI().getCellWidth());
+		.rasterSize(tiledMapManager.getAPI().getCellWidth(), tiledMapManager.getAPI().getCellHeight());
 	getBehaviorManager().apply(behavior, player);
     }
 

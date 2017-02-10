@@ -78,7 +78,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 	    MovementController<Orientation> controller) {
 	GameObject object = factory.spawn(indexX, indexY, type.ordinal(), controller);
 	RasteredMovementBehavior behavior = new RasteredMovementBehavior(controller).interval(0.3f)
-		.rasterSize(BLOCK_SIZE);
+		.rasterSize(BLOCK_SIZE, BLOCK_SIZE);
 	getBehaviorManager().apply(behavior, object);
 	return object;
     }

@@ -47,7 +47,8 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 	}
     };
 
-    private int rasterSize = DEFAULT_RASTER_SIZE;
+    private float rasterWidth = DEFAULT_RASTER_SIZE;
+    private float rasterHeight = DEFAULT_RASTER_SIZE;
     private float interval = DEFAULT_INTERVAL;
 
     private boolean moving = false;
@@ -69,8 +70,9 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 	this(controller, EMPTY_COLLISION_RESOLVER);
     }
 
-    public RasteredMovementBehavior rasterSize(int size) {
-	this.rasterSize = Math.max(size, 1);
+    public RasteredMovementBehavior rasterSize(float width, float height) {
+	this.rasterWidth = Math.max(width, 1);
+	this.rasterHeight = Math.max(height, 1);
 	return this;
     }
 
@@ -89,8 +91,8 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 	if (isReadyToMove() && source != null) {
 	    source.setAttribute(Orientation.class, direction);
 	    if (canMove(direction)) {
-        	float moveX = direction.getXFactor() * rasterSize;
-        	float moveY = direction.getYFactor() * rasterSize;
+		float moveX = direction.getXFactor() * rasterWidth;
+		float moveY = direction.getYFactor() * rasterHeight;
         	moving = true;
         	timer.reset();
         	source.move(moveX, moveY);

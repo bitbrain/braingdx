@@ -135,7 +135,7 @@ class StatePopulator {
 	    Class<?> movementClass = Class.forName(className, true, getClass().getClassLoader());
 	    @SuppressWarnings("unchecked")
 	    MovementController<Orientation> controller = (MovementController<Orientation>) movementClass.newInstance();
-	    return new RasteredMovementBehavior(controller, api);
+	    return new RasteredMovementBehavior(controller, api).rasterSize(api.getCellWidth(), api.getCellHeight());
 	} catch (InstantiationException e) {
 	    e.printStackTrace();
 	    return null;
