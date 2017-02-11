@@ -203,8 +203,8 @@ public class TiledMapManagerTest {
 	assertThat(api.isCollision(1, 1, 0)).isTrue();
 	assertThat(api.isCollision(0, 0, 1)).isTrue();
 	assertThat(api.isCollision(1, 0, 1)).isFalse();
-	assertThat(api.isCollision(0, 1, 1)).isFalse();
-	assertThat(api.isCollision(1, 1, 1)).isFalse();
+	assertThat(api.isCollision(0, 1, 1)).isTrue();
+	assertThat(api.isCollision(1, 1, 1)).isTrue();
     }
     
     @Test

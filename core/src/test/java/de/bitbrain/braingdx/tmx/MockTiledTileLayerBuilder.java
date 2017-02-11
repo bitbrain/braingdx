@@ -14,10 +14,12 @@ public class MockTiledTileLayerBuilder {
     MockTiledTileLayerBuilder addCell(int x, int y) {
 	Cell cell = Mockito.mock(Cell.class);
 	TiledMapTile tile = Mockito.mock(TiledMapTile.class);
+	MapProperties layerProperties = new MapProperties();
 	MapProperties properties = new MapProperties();
 	Mockito.when(tile.getProperties()).thenReturn(properties);
 	Mockito.when(cell.getTile()).thenReturn(tile);
 	Mockito.when(layer.getCell(x, y)).thenReturn(cell);
+	Mockito.when(layer.getProperties()).thenReturn(layerProperties);
 	return this;
     }
 

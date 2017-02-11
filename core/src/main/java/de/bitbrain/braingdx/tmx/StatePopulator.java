@@ -187,8 +187,14 @@ class StatePopulator {
 
     private void populateStateMap(int x, int y, State state, int layerIndex, TiledMapTileLayer layer) {
 	Cell cell = layer.getCell(x, y);
+	MapProperties layerProperties = layer.getProperties();
+	boolean collisionLayer = Boolean.valueOf(layerProperties.get(Constants.COLLISION, "false", String.class));
 	CellState cellState = state.getState(x, y, layerIndex);
-	if (cell != null) {
+	// Inherit the collision from the previous layer, if and only if
+	// the current layer is non-collision by default
+	if (layerIndex > 0 && !collisionLayer && state.getState(x, y, layerIndex - 1).isCollision()) {
+	    cellState.setCollision(true);
+	} else if (cell != null) {
 	    TiledMapTile tile = cell.getTile();
 	    if (tile != null) {
 		MapProperties properties = tile.getProperties();

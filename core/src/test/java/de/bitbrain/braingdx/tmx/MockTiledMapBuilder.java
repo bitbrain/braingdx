@@ -4,6 +4,8 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.mockito.Mockito;
+
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapProperties;
@@ -30,9 +32,11 @@ public class MockTiledMapBuilder {
     public MockTiledMapBuilder addLayer() {
 	TiledMapTileLayer layer = mock(TiledMapTileLayer.class);
 	Cell cell = mock(Cell.class);
+	MapProperties properties = new MapProperties();
 	when(layer.getCell(anyInt(), anyInt())).thenReturn(cell);
 	when(layer.getTileWidth()).thenReturn(size);
 	when(layer.getTileHeight()).thenReturn(size);
+	Mockito.when(layer.getProperties()).thenReturn(properties);
 	layers.add(layer);
 	return this;
     }
