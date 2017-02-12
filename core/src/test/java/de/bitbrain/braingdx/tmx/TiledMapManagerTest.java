@@ -157,7 +157,7 @@ public class TiledMapManagerTest {
 	TiledMapListener listenerMock = mock(TiledMapListener.class);
 	ArgumentCaptor<GameObject> gameObjectCaptor = ArgumentCaptor.forClass(GameObject.class);
 	ArgumentCaptor<TiledMapAPI> apiCaptor = ArgumentCaptor.forClass(TiledMapAPI.class);
-	Mockito.doNothing().when(listenerMock).onLoad(gameObjectCaptor.capture(), apiCaptor.capture());
+	Mockito.doNothing().when(listenerMock).onLoadGameObject(gameObjectCaptor.capture(), apiCaptor.capture());
 	TiledMap map = new MockTiledMapBuilder(2, 2, 1)
 		.addLayer()
 		.addLayer()

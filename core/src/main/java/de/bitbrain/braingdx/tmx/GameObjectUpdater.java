@@ -15,6 +15,8 @@
 
 package de.bitbrain.braingdx.tmx;
 
+import java.util.List;
+
 import com.badlogic.gdx.math.Vector2;
 
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
@@ -35,9 +37,12 @@ class GameObjectUpdater extends BehaviorAdapter {
 
     private final Vector2 currentPosition = new Vector2();
 
-    public GameObjectUpdater(TiledMapAPI api, State state) {
+    private final List<TiledMapListener> listeners;
+
+    public GameObjectUpdater(TiledMapAPI api, State state, List<TiledMapListener> listeners) {
 	this.api = api;
 	this.state = state;
+	this.listeners = listeners;
     }
 
     @Override
@@ -48,6 +53,7 @@ class GameObjectUpdater extends BehaviorAdapter {
 	    updateLayerIndex(object);
 	    // Update object state
 	    object.setPosition(object.getLeft(), object.getTop());
+	    object.setAttribute(Constants.LAST_LAYER_INDEX, api.lastLayerIndexOf(object));
 	}
     }
 
@@ -63,6 +69,16 @@ class GameObjectUpdater extends BehaviorAdapter {
 	currentPosition.set(object.getLeft(), object.getTop());
 	int lastLayerIndex = api.lastLayerIndexOf(object);
 	int currentLayerIndex = api.layerIndexOf(object);
+	for (TiledMapListener listener : listeners) {
+	    if (lastLayerIndex != currentLayerIndex) {
+		listener.onLayerChange(lastLayerIndex, currentLayerIndex, object, api);
+	    }
+	    if (!currentPosition.equals(lastPosition)) {
+		int xIndex = IndexCalculator.calculateIndex(currentPosition.x, api.getCellWidth());
+		int yIndex = IndexCalculator.calculateIndex(currentPosition.y, api.getCellHeight());
+		listener.onEnterCell(xIndex, yIndex, object, api);
+	    }
+	}
 	if (lastLayerIndex != currentLayerIndex || !currentPosition.equals(lastPosition)) {
 	    // Object has moved, now check if last position is already occupied
 	    int lastTileX = IndexCalculator.calculateIndex(lastPosition.x, api.getCellWidth());

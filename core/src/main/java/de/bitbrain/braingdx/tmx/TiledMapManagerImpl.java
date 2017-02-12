@@ -56,7 +56,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
 	this.state = new State();
 	this.api = new TiledMapAPIImpl(state, gameWorld);
 	this.populator = new StatePopulator(renderManager, gameWorld, api, behaviorManager, listeners);
-	this.gameObjectUpdater = new GameObjectUpdater(api, state);
+	this.gameObjectUpdater = new GameObjectUpdater(api, state, listeners);
 	this.factories = createFactories();
     }
 
@@ -69,8 +69,14 @@ public class TiledMapManagerImpl implements TiledMapManager {
     public void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config)  throws TiledMapException {
 	validate(tiledMap);
 	clear();
+	for (TiledMapListener listener : listeners) {
+	    listener.beforeLoad(tiledMap);
+	}
 	behaviorManager.apply(gameObjectUpdater);
 	populator.populate(tiledMap, state, camera, factories.get(type), config);
+	for (TiledMapListener listener : listeners) {
+	    listener.afterLoad(tiledMap, api);
+	}
     }
 
     @Override
@@ -89,12 +95,18 @@ public class TiledMapManagerImpl implements TiledMapManager {
     }
 
     private void clear() {
+	for (TiledMapListener listener : listeners) {
+	    listener.beforeUnload(api);
+	}
 	behaviorManager.remove(gameObjectUpdater);
 	gameWorld.clear();
 	for (String id : state.getLayerIds()) {
 	    renderManager.unregister(id);
 	}
 	state.clear();
+	for (TiledMapListener listener : listeners) {
+	    listener.afterUnload();
+	}
     }
 
     protected Map<TiledMapType, MapLayerRendererFactory> createFactories() {

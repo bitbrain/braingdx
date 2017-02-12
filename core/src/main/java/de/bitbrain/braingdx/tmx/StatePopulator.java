@@ -115,6 +115,7 @@ class StatePopulator {
 	    gameObject.setColor(mapObject.getColor());
 	    gameObject.setType(objectType);
 	    gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
+	    gameObject.setAttribute(MapProperties.class, objectProperties);
 	    if (objectProperties.containsKey(config.get(Constants.MOVEMENT))) {
 		String className = objectProperties.get(config.get(Constants.MOVEMENT), String.class);
 		RasteredMovementBehavior behavior = createMovementBehavior(className);
@@ -125,7 +126,7 @@ class StatePopulator {
 	    CollisionCalculator.updateCollision(collision, x, y, layerIndex, state);
 	    IndexCalculator.calculateZIndex(gameObject, state, layerIndex);
 	    for (TiledMapListener listener : listeners) {
-		listener.onLoad(gameObject, api);
+		listener.onLoadGameObject(gameObject, api);
 	    }
 	}
     }

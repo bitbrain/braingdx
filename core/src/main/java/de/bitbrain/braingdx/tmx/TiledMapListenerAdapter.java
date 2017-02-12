@@ -20,18 +20,39 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
- * Listens to {@link TiledMap} events created by {@link TiledMapManagerImpl}.
+ * Adapter implementation of {@link TiledMapListener}
  *
  * @since 1.0.0
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public interface TiledMapListener {
-    void onLoadGameObject(GameObject object, TiledMapAPI api);
-    void beforeLoad(TiledMap map);
-    void afterLoad(TiledMap map, TiledMapAPI api);
-    void beforeUnload(TiledMapAPI api);
-    void afterUnload();
-    void onEnterCell(int xIndex, int yIndex, GameObject object, TiledMapAPI api);
-    void onLayerChange(int previousLayer, int newLayer, GameObject object, TiledMapAPI api);
+public class TiledMapListenerAdapter implements TiledMapListener {
+
+    @Override
+    public void onLoadGameObject(GameObject object, TiledMapAPI api) {
+    }
+
+    @Override
+    public void beforeLoad(TiledMap map) {
+    }
+
+    @Override
+    public void afterLoad(TiledMap map, TiledMapAPI api) {
+    }
+
+    @Override
+    public void beforeUnload(TiledMapAPI api) {
+    }
+
+    @Override
+    public void afterUnload() {
+    }
+
+    @Override
+    public void onEnterCell(int xIndex, int yIndex, GameObject object, TiledMapAPI api) {
+    }
+
+    @Override
+    public void onLayerChange(int previousLayer, int newLayer, GameObject object, TiledMapAPI api) {
+    }
 }
