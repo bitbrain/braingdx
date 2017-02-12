@@ -14,6 +14,9 @@
  */
 package de.bitbrain.braingdx.tmx;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Contains naming configuration for TMX maps.
  *
@@ -23,28 +26,15 @@ package de.bitbrain.braingdx.tmx;
  */
 public class TiledMapConfig {
 
-    private String collisionAttribute = Constants.COLLISION;
-    private String typeAttribute = Constants.TYPE;
+    private final Map<String, String> translations = new HashMap<String, String>();
 
-    public String getCollisionAttribute() {
-	return collisionAttribute;
-    }
-
-    public String getTypeAttribute() {
-	return typeAttribute;
-    }
-
-    public TiledMapConfig collisionAttribute(String attribute) {
-	if (attribute != null) {
-	    this.collisionAttribute = attribute;
-	}
+    public TiledMapConfig translate(String key, String newKey) {
+	translations.put(key, newKey);
 	return this;
     }
 
-    public TiledMapConfig typeAttribute(String attribute) {
-	if (attribute != null) {
-	    this.typeAttribute = attribute;
-	}
-	return this;
+    public String get(String key) {
+	String newKey = translations.get(key);
+	return newKey != null ? newKey : key;
     }
 }

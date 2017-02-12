@@ -70,7 +70,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
 	validate(tiledMap);
 	clear();
 	behaviorManager.apply(gameObjectUpdater);
-	populator.populate(tiledMap, state, camera, factories.get(type));
+	populator.populate(tiledMap, state, camera, factories.get(type), config);
     }
 
     @Override

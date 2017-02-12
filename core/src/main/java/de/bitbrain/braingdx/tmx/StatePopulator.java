@@ -67,9 +67,9 @@ class StatePopulator {
 	this.listeners = listeners;
     }
 
-    public void populate(TiledMap tiledMap, State state, Camera camera, MapLayerRendererFactory rendererFactory) {
+    public void populate(TiledMap tiledMap, State state, Camera camera, MapLayerRendererFactory rendererFactory, TiledMapConfig config) {
 	MapLayers mapLayers = tiledMap.getLayers();
-	handleMapProperties(tiledMap.getProperties(), state);
+	handleMapProperties(tiledMap.getProperties(), state, config);
 	List<String> layerIds = new ArrayList<String>();
 	int lastTileLayerIndex = 0;
 	for (int i = 0; i < mapLayers.getCount(); ++i) {
@@ -79,44 +79,44 @@ class StatePopulator {
 		    lastTileLayerIndex++;
 		}
 		String layerId = handleTiledMapTileLayer((TiledMapTileLayer) mapLayer, i, tiledMap, camera,
-			rendererFactory);
+			rendererFactory, config);
 		layerIds.add(layerId);
-		populateStaticMapData(lastTileLayerIndex, (TiledMapTileLayer) mapLayer, state);
+		populateStaticMapData(lastTileLayerIndex, (TiledMapTileLayer) mapLayer, state, config);
 	    } else {
 		// Not a tiledlayer so consider it as an object layer
-		handleObjectLayer(lastTileLayerIndex, mapLayer, state);
+		handleObjectLayer(lastTileLayerIndex, mapLayer, state, config);
 	    }
 	}
 	state.setLayerIds(layerIds);
     }
 
-    private void handleMapProperties(MapProperties properties, State state) {
-	state.setIndexDimensions(properties.get(Constants.WIDTH, Integer.class), 
-		                 properties.get(Constants.HEIGHT, Integer.class));
+    private void handleMapProperties(MapProperties properties, State state, TiledMapConfig config) {
+	state.setIndexDimensions(properties.get(config.get(Constants.WIDTH), Integer.class), 
+		                 properties.get(config.get(Constants.HEIGHT), Integer.class));
     }
 
-    private void handleObjectLayer(int layerIndex, MapLayer layer, State state) {
+    private void handleObjectLayer(int layerIndex, MapLayer layer, State state, TiledMapConfig config) {
 	MapObjects mapObjects = layer.getObjects();
 	for (int objectIndex = 0; objectIndex < mapObjects.getCount(); ++objectIndex) {
 	    MapObject mapObject = mapObjects.get(objectIndex);
 	    MapProperties objectProperties = mapObject.getProperties();
 	    GameObject gameObject = gameWorld.addObject();
-	    final float x = objectProperties.get(Constants.X, Float.class);
-	    final float y = objectProperties.get(Constants.Y, Float.class);
-	    final float w = objectProperties.get(Constants.WIDTH, Float.class);
-	    final float h = objectProperties.get(Constants.HEIGHT, Float.class);
+	    final float x = objectProperties.get(config.get(Constants.X), Float.class);
+	    final float y = objectProperties.get(config.get(Constants.Y), Float.class);
+	    final float w = objectProperties.get(config.get(Constants.WIDTH), Float.class);
+	    final float h = objectProperties.get(config.get(Constants.HEIGHT), Float.class);
 	    final float cellWidth = state.getCellWidth();
 	    final float cellHeight = state.getCellHeight();
-	    Object objectType = objectProperties.get(Constants.TYPE);
-	    boolean collision = objectProperties.get(Constants.COLLISION, true, Boolean.class);
+	    Object objectType = objectProperties.get(config.get(Constants.TYPE));
+	    boolean collision = objectProperties.get(config.get(Constants.COLLISION), true, Boolean.class);
 	    gameObject.setPosition(x, y);
 	    gameObject.setDimensions(IndexCalculator.calculateIndexedDimension(w, cellWidth), IndexCalculator.calculateIndexedDimension(h, cellHeight));
 	    gameObject.setLastPosition(x, y);
 	    gameObject.setColor(mapObject.getColor());
 	    gameObject.setType(objectType);
 	    gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
-	    if (objectProperties.containsKey(Constants.MOVEMENT)) {
-		String className = objectProperties.get(Constants.MOVEMENT, String.class);
+	    if (objectProperties.containsKey(config.get(Constants.MOVEMENT))) {
+		String className = objectProperties.get(config.get(Constants.MOVEMENT), String.class);
 		RasteredMovementBehavior behavior = createMovementBehavior(className);
 		if (behavior != null) {
 		    behaviorManager.apply(behavior, gameObject);
@@ -149,8 +149,8 @@ class StatePopulator {
     }
 
     private String handleTiledMapTileLayer(TiledMapTileLayer layer, int index, TiledMap tiledMap, Camera camera,
-	    MapLayerRendererFactory rendererFactory) {
-	final int numberOfRows = tiledMap.getProperties().get(Constants.HEIGHT, Integer.class);
+	    MapLayerRendererFactory rendererFactory, TiledMapConfig config) {
+	final int numberOfRows = tiledMap.getProperties().get(config.get(Constants.HEIGHT), Integer.class);
 	GameObjectRenderer renderer = rendererFactory.create(index, tiledMap, camera);
 	String id = IDGenerator.generateNext(OrthogonalMapLayerRenderer.class);
 	renderManager.register(id, renderer);
@@ -161,7 +161,7 @@ class StatePopulator {
 	return id;
     }
 
-    private void populateStaticMapData(int layerIndex, TiledMapTileLayer layer, State state) {
+    private void populateStaticMapData(int layerIndex, TiledMapTileLayer layer, State state, TiledMapConfig config) {
 	Integer[][] heightMap = state.getHeightMap();
 	if (heightMap == null) {
 	    heightMap = new Integer[state.getMapIndexWidth()][state.getMapIndexHeight()];
@@ -172,7 +172,7 @@ class StatePopulator {
 	for (int x = 0; x < heightMap.length; ++x) {
 	    for (int y = 0; y < heightMap[x].length; ++y) {
 		populateHeightMap(x, y, state, layerIndex, layer);
-		populateStateMap(x, y, state, layerIndex, layer);
+		populateStateMap(x, y, state, layerIndex, layer, config);
 	    }
 	}
     }
@@ -185,10 +185,10 @@ class StatePopulator {
 	}
     }
 
-    private void populateStateMap(int x, int y, State state, int layerIndex, TiledMapTileLayer layer) {
+    private void populateStateMap(int x, int y, State state, int layerIndex, TiledMapTileLayer layer, TiledMapConfig config) {
 	Cell cell = layer.getCell(x, y);
 	MapProperties layerProperties = layer.getProperties();
-	boolean collisionLayer = Boolean.valueOf(layerProperties.get(Constants.COLLISION, "false", String.class));
+	boolean collisionLayer = Boolean.valueOf(layerProperties.get(config.get(Constants.COLLISION), "false", String.class));
 	CellState cellState = state.getState(x, y, layerIndex);
 	// Inherit the collision from the previous layer, if and only if
 	// the current layer is non-collision by default
