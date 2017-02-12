@@ -208,6 +208,34 @@ public class TiledMapManagerTest {
     }
     
     @Test
+    public void load_withSimple3x3Map_validCollisionsWithCollisionLayer() throws TiledMapException {
+	final TiledMapAPI api = tiledMapManager.getAPI();
+	// Load game world
+	tiledMapManager.load(createSimple3x3Map(true), camera, TiledMapType.ORTHOGONAL);
+	final GameObject objectA = api.getGameObjectAt(0, 1, 0);
+	final GameObject objectB = api.getGameObjectAt(1, 1, 0);
+	final GameObject objectC = api.getGameObjectAt(0, 0, 1);
+
+	// Update the world
+	world.update(0f);
+
+	// Validate state
+	assertThat(objectA).isNotNull();
+	assertThat(objectB).isNotNull();
+	assertThat(objectC).isNotNull();
+
+	// Validate collisions
+	assertThat(api.isCollision(0, 0, 0)).isFalse();
+	assertThat(api.isCollision(1, 0, 0)).isFalse();
+	assertThat(api.isCollision(0, 1, 0)).isTrue();
+	assertThat(api.isCollision(1, 1, 0)).isTrue();
+	assertThat(api.isCollision(0, 0, 1)).isTrue();
+	assertThat(api.isCollision(1, 0, 1)).isFalse();
+	assertThat(api.isCollision(0, 1, 1)).isFalse();
+	assertThat(api.isCollision(1, 1, 1)).isFalse();
+    }
+
+    @Test
     public void load_withSimple3x3Map_validUpdatingAfterMovement() throws TiledMapException {
 	final TiledMapAPI api = tiledMapManager.getAPI();
 	tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
@@ -254,7 +282,7 @@ public class TiledMapManagerTest {
      * x x x x
      * </pre>
      */
-    private TiledMap createSimple3x3Map() {
+    private TiledMap createSimple3x3Map(boolean collision) {
 	// Initialization
 	final String typeA = "a";
 	final String typeB = "b";
@@ -275,10 +303,15 @@ public class TiledMapManagerTest {
 			.addCell(0, 1)
 			.addCell(1, 0)
 			.addCell(1, 1)
+			.collision(collision)
 			.build())
 		.addLayer(new MockObjectLayerBuilder()
 			.addObject(0, 0, typeC)
 			.build())
 		.build();
+    }
+
+    private TiledMap createSimple3x3Map() {
+	return createSimple3x3Map(false);
     }
 }

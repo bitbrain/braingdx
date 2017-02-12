@@ -23,6 +23,11 @@ public class MockTiledTileLayerBuilder {
 	return this;
     }
 
+    public MockTiledTileLayerBuilder collision(boolean collision) {
+	layer.getProperties().put(Constants.COLLISION, collision ? "true" : "false");
+	return this;
+    }
+
     public TiledMapTileLayer build() {
 	return layer;
     }
