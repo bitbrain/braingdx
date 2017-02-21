@@ -71,9 +71,13 @@ public class LayeredRenderPipeline implements RenderPipeline {
    }
 
    @Override
-   public void add(String id, RenderLayer layer, PostProcessorEffect... effects) {
+   public void set(String id, RenderLayer layer, PostProcessorEffect... effects) {
       LayeredRenderPipe pipe = new LayeredRenderPipe(layer, processor, bufferFactory, effects);
-      pipes.put(id, pipe);
+      if (pipes.containsKey(id)) {
+         pipes.replace(id, pipe);
+      } else {
+         pipes.put(id, pipe);
+      }
    }
 
    @Override

@@ -40,9 +40,11 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManagerAdapter;
 import de.bitbrain.braingdx.graphics.VectorGameCamera;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
 import de.bitbrain.braingdx.graphics.particles.ParticleManager;
+import de.bitbrain.braingdx.graphics.pipeline.ColoredRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipelineFactory;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipelineFactory;
+import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
 import de.bitbrain.braingdx.tmx.TiledMapManagerImpl;
@@ -74,6 +76,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
    private TiledMapManager tiledMapManager;
    private TweenManager tweenManager = SharedTweenManager.getInstance();
    private InputMultiplexer input;
+   private ColoredRenderLayer coloredRenderLayer;
 
    private boolean uiInitialized = false;
 
@@ -87,6 +90,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
 
    @Override
    public final void show() {
+      coloredRenderLayer = new ColoredRenderLayer();
       camera = new OrthographicCamera();
       world = new GameWorld(camera);
       behaviorManager = new BehaviorManager();
@@ -235,6 +239,8 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
 
    public void setBackgroundColor(Color color) {
       this.backgroundColor = color;
+      coloredRenderLayer.setColor(color);
+      this.getRenderPipeline().set(RenderPipeIds.BACKGROUND, coloredRenderLayer);
    }
 
    private void wire() {

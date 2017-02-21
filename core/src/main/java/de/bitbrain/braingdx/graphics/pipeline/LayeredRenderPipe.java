@@ -87,6 +87,9 @@ class LayeredRenderPipe implements RenderPipe, Disposable, Resizeable {
    @Override
    public void dispose() {
       buffer.dispose();
+      if (renderLayer instanceof Disposable) {
+         ((Disposable) renderLayer).dispose();
+      }
    }
 
    private void renderOntoBuffer(Batch batch, float delta) {

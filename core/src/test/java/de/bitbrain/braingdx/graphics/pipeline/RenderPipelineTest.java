@@ -50,7 +50,7 @@ public class RenderPipelineTest {
    @Test
    public void testAddLayer() {
       final String id = "my-id";
-      pipeline.add(id, mock(RenderLayer.class));
+      pipeline.set(id, mock(RenderLayer.class));
       assertThat(pipeline.getPipe(id)).isNotNull();
    }
 
@@ -60,9 +60,9 @@ public class RenderPipelineTest {
       RenderLayer layerB = mock(RenderLayer.class);
       RenderLayer layerC = mock(RenderLayer.class);
       Batch batch = mock(Batch.class);
-      pipeline.add("my-id-a", layerA);
-      pipeline.add("my-id-b", layerB);
-      pipeline.add("my-id-c", layerC);
+      pipeline.set("my-id-a", layerA);
+      pipeline.set("my-id-b", layerB);
+      pipeline.set("my-id-c", layerC);
       pipeline.resize(0, 0);
       pipeline.render(batch, 0f);
       InOrder order = Mockito.inOrder(layerA, layerB, layerC);
@@ -73,19 +73,19 @@ public class RenderPipelineTest {
 
    @Test
    public void testGetPipeIds() {
-      pipeline.add("a", mock(RenderLayer.class));
-      pipeline.add("b", mock(RenderLayer.class));
-      pipeline.add("c", mock(RenderLayer.class));
+      pipeline.set("a", mock(RenderLayer.class));
+      pipeline.set("b", mock(RenderLayer.class));
+      pipeline.set("c", mock(RenderLayer.class));
       assertThat(pipeline.getPipeIds()).hasSize(3);
    }
 
    @Test
    public void testGetPipeIdsDuplicates() {
-      pipeline.add("a", mock(RenderLayer.class));
-      pipeline.add("b", mock(RenderLayer.class));
-      pipeline.add("b", mock(RenderLayer.class));
-      pipeline.add("c", mock(RenderLayer.class));
-      pipeline.add("c", mock(RenderLayer.class));
+      pipeline.set("a", mock(RenderLayer.class));
+      pipeline.set("b", mock(RenderLayer.class));
+      pipeline.set("b", mock(RenderLayer.class));
+      pipeline.set("c", mock(RenderLayer.class));
+      pipeline.set("c", mock(RenderLayer.class));
       assertThat(pipeline.getPipeIds()).hasSize(3);
 
    }

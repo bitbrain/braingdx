@@ -53,7 +53,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
    private void prepareResources() {
       TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_1, TiledMap.class);
-      getRenderPipeline().add(RenderPipeIds.BACKGROUND,
+      getRenderPipeline().set(RenderPipeIds.BACKGROUND,
             new TiledMapRenderer(map, (OrthographicCamera) getGameCamera().getInternal()));
       getLightingManager().setAmbientLight(new Color(0.1f, 0.05f, 0.3f, 0.4f));
       Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
