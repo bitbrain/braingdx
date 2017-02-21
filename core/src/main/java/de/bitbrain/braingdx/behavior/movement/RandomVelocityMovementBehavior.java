@@ -32,38 +32,38 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class RandomVelocityMovementBehavior extends BehaviorAdapter {
 
-    private float interval = 1f;
+   private float interval = 1f;
 
-    private DeltaTimer timer = new DeltaTimer();
+   private DeltaTimer timer = new DeltaTimer();
 
-    private Vector2 direction = new Vector2(1f, 0f);
+   private Vector2 direction = new Vector2(1f, 0f);
 
-    private Vector2 velocity = new Vector2(100f, 100f);
+   private Vector2 velocity = new Vector2(100f, 100f);
 
-    private Random random = new Random();
+   private Random random = new Random();
 
-    public RandomVelocityMovementBehavior() {
-	changeInterval();
-	timer = new DeltaTimer(interval);
-    }
+   public RandomVelocityMovementBehavior() {
+      changeInterval();
+      timer = new DeltaTimer(interval);
+   }
 
-    @Override
-    public void update(GameObject source, float delta) {
-	timer.update(delta);
-	if (timer.reached(interval)) {
-	    timer.reset();
-	    changeDirection();
-	    changeInterval();
-	}
-	source.move(direction.x * velocity.x * delta, direction.y * velocity.y * delta);
-    }
+   @Override
+   public void update(GameObject source, float delta) {
+      timer.update(delta);
+      if (timer.reached(interval)) {
+         timer.reset();
+         changeDirection();
+         changeInterval();
+      }
+      source.move(direction.x * velocity.x * delta, direction.y * velocity.y * delta);
+   }
 
-    private void changeDirection() {
-	direction.setAngle(random.nextFloat() * 360f);
-    }
+   private void changeDirection() {
+      direction.setAngle(random.nextFloat() * 360f);
+   }
 
-    private void changeInterval() {
-	interval = 0.2f + random.nextFloat() * 0.5f;
-    }
+   private void changeInterval() {
+      interval = 0.2f + random.nextFloat() * 0.5f;
+   }
 
 }

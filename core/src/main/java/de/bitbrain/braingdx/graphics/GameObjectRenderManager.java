@@ -31,70 +31,70 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class GameObjectRenderManager {
 
-    private static Map<Object, GameObjectRenderer> rendererMap = new HashMap<Object, GameObjectRenderer>();
+   private static Map<Object, GameObjectRenderer> rendererMap = new HashMap<Object, GameObjectRenderer>();
 
-    private final Batch batch;
+   private final Batch batch;
 
-    public GameObjectRenderManager(Batch batch) {
-	this.batch = batch;
-    }
+   public GameObjectRenderManager(Batch batch) {
+      this.batch = batch;
+   }
 
-    public void render(GameObject object, float delta) {
-	final GameObjectRenderer renderer = rendererMap.get(object.getType());
-	if (renderer != null) {
-	    renderer.render(object, batch, delta);
-	}
-    }
+   public void render(GameObject object, float delta) {
+      final GameObjectRenderer renderer = rendererMap.get(object.getType());
+      if (renderer != null) {
+         renderer.render(object, batch, delta);
+      }
+   }
 
-    public void register(Object gameObjectType, GameObjectRenderer renderer) {
-	if (!rendererMap.containsKey(gameObjectType)) {
-	    renderer.init();
-	    rendererMap.put(gameObjectType, renderer);
-	}
-    }
+   public void register(Object gameObjectType, GameObjectRenderer renderer) {
+      if (!rendererMap.containsKey(gameObjectType)) {
+         renderer.init();
+         rendererMap.put(gameObjectType, renderer);
+      }
+   }
 
-    public void unregister(Object gameObjectType) {
-	rendererMap.remove(gameObjectType);
-    }
+   public void unregister(Object gameObjectType) {
+      rendererMap.remove(gameObjectType);
+   }
 
-    /**
-     * Combines multiple renderers for a particular game object
-     * 
-     * @param gameObjectRenderers renderers
-     * @return a new combined {@link GameObjectRenderer}
-     */
-    public static GameObjectRenderer combine(GameObjectRenderer... gameObjectRenderers) {
-	return new CombinedGameObjectRenderer(gameObjectRenderers);
-    }
+   /**
+    * Combines multiple renderers for a particular game object
+    * 
+    * @param gameObjectRenderers renderers
+    * @return a new combined {@link GameObjectRenderer}
+    */
+   public static GameObjectRenderer combine(GameObjectRenderer... gameObjectRenderers) {
+      return new CombinedGameObjectRenderer(gameObjectRenderers);
+   }
 
-    public static interface GameObjectRenderer {
+   public static interface GameObjectRenderer {
 
-	void init();
+      void init();
 
-	void render(GameObject object, Batch batch, float delta);
-    }
+      void render(GameObject object, Batch batch, float delta);
+   }
 
-    static class CombinedGameObjectRenderer implements GameObjectRenderer {
+   static class CombinedGameObjectRenderer implements GameObjectRenderer {
 
-	private final GameObjectRenderer[] renderers;
+      private final GameObjectRenderer[] renderers;
 
-	public CombinedGameObjectRenderer(GameObjectRenderer... gameObjectRenderers) {
-	    this.renderers = gameObjectRenderers;
-	}
+      public CombinedGameObjectRenderer(GameObjectRenderer... gameObjectRenderers) {
+         this.renderers = gameObjectRenderers;
+      }
 
-	@Override
-	public void init() {
-	    for (GameObjectRenderer renderer : renderers) {
-		renderer.init();
-	    }
-	}
+      @Override
+      public void init() {
+         for (GameObjectRenderer renderer : renderers) {
+            renderer.init();
+         }
+      }
 
-	@Override
-	public void render(GameObject object, Batch batch, float delta) {
-	    for (GameObjectRenderer renderer : renderers) {
-		renderer.render(object, batch, delta);
-	    }
-	}
+      @Override
+      public void render(GameObject object, Batch batch, float delta) {
+         for (GameObjectRenderer renderer : renderers) {
+            renderer.render(object, batch, delta);
+         }
+      }
 
-    }
+   }
 }

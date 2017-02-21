@@ -26,35 +26,35 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 class IndexCalculator {
 
-    public static int calculateXIndex(GameObject object, State state) {
-	return calculateIndex(object.getLeft(), state.getCellWidth());
-    }
+   public static int calculateXIndex(GameObject object, State state) {
+      return calculateIndex(object.getLeft(), state.getCellWidth());
+   }
 
-    public static int calculateYIndex(GameObject object, State state) {
-	return calculateIndex(object.getTop(), state.getCellHeight());
-    }
+   public static int calculateYIndex(GameObject object, State state) {
+      return calculateIndex(object.getTop(), state.getCellHeight());
+   }
 
-    public static int calculateIndex(float value, float cellSize) {
-	return (int) Math.round(Math.floor(value / (float) cellSize));
-    }
+   public static int calculateIndex(float value, float cellSize) {
+      return (int) Math.round(Math.floor(value / (float) cellSize));
+   }
 
-    public static float calculateIndexedDimension(float size, float cellSize) {
-	return (float) (Math.ceil(size / cellSize) * cellSize);
-    }
+   public static float calculateIndexedDimension(float size, float cellSize) {
+      return (float) (Math.ceil(size / cellSize) * cellSize);
+   }
 
-    public static int calculateZIndex(GameObject object, TiledMapAPI api, int currentLayerIndex) {
-	int rows = api.getNumberOfRows();
-	int yIndex = calculateIndex(object.getTop(), api.getCellHeight());
-	return calculateZIndex(rows, yIndex, currentLayerIndex);
-    }
+   public static int calculateZIndex(GameObject object, TiledMapAPI api, int currentLayerIndex) {
+      int rows = api.getNumberOfRows();
+      int yIndex = calculateIndex(object.getTop(), api.getCellHeight());
+      return calculateZIndex(rows, yIndex, currentLayerIndex);
+   }
 
-    public static int calculateZIndex(GameObject object, State state, int currentLayerIndex) {
-	int rows = state.getMapIndexHeight();
-	int yIndex = calculateYIndex(object, state);
-	return calculateZIndex(rows, yIndex, currentLayerIndex);
-    }
+   public static int calculateZIndex(GameObject object, State state, int currentLayerIndex) {
+      int rows = state.getMapIndexHeight();
+      int yIndex = calculateYIndex(object, state);
+      return calculateZIndex(rows, yIndex, currentLayerIndex);
+   }
 
-    public static int calculateZIndex(int rows, int yIndex, int currentLayerIndex) {
-	return (currentLayerIndex + 1) * rows - yIndex;
-    }
+   public static int calculateZIndex(int rows, int yIndex, int currentLayerIndex) {
+      return (currentLayerIndex + 1) * rows - yIndex;
+   }
 }

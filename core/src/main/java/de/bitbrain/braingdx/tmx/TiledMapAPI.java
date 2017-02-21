@@ -30,26 +30,26 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public interface TiledMapAPI extends TiledCollisionResolver {
 
-    int highestZIndexAt(int tileX, int tileY);
+   int highestZIndexAt(int tileX, int tileY);
 
-    int highestZIndexAt(float x, float y);
+   int highestZIndexAt(float x, float y);
 
-    int layerIndexOf(GameObject object);
+   int layerIndexOf(GameObject object);
 
-    int lastLayerIndexOf(GameObject object);
+   int lastLayerIndexOf(GameObject object);
 
-    int getNumberOfRows();
+   int getNumberOfRows();
 
-    int getNumberOfColumns();
+   int getNumberOfColumns();
 
-    void setLayerIndex(GameObject object, int layerIndex);
+   void setLayerIndex(GameObject object, int layerIndex);
 
-    GameObject getGameObjectAt(int tileX, int tileY, int layer);
+   GameObject getGameObjectAt(int tileX, int tileY, int layer);
 
-    MapProperties getPropertiesAt(int tileX, int tileY, int layer);
+   MapProperties getPropertiesAt(int tileX, int tileY, int layer);
 
-    float getCellWidth();
+   float getCellWidth();
 
-    float getCellHeight();
+   float getCellHeight();
 
 }

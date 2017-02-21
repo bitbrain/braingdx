@@ -13,40 +13,40 @@ import de.bitbrain.braingdx.world.GameWorld;
 
 public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
 
-    private final ShaderConfig config;
+   private final ShaderConfig config;
 
-    private final GameWorld world;
+   private final GameWorld world;
 
-    private final LightingManager lightingManager;
+   private final LightingManager lightingManager;
 
-    private final Stage stage;
+   private final Stage stage;
 
-    public CombinedRenderPipelineFactory(ShaderConfig config, GameWorld world, LightingManager lightingManager,
-	    Stage stage) {
-	this.config = config;
-	this.world = world;
-	this.lightingManager = lightingManager;
-	this.stage = stage;
-    }
+   public CombinedRenderPipelineFactory(ShaderConfig config, GameWorld world, LightingManager lightingManager,
+         Stage stage) {
+      this.config = config;
+      this.world = world;
+      this.lightingManager = lightingManager;
+      this.stage = stage;
+   }
 
-    @Override
-    public RenderPipeline create() {
-	RenderPipeline pipeline = new CombinedRenderPipeline(config);
-	pipeline.add(RenderPipeIds.BACKGROUND, new AbstractRenderLayer() {
-	    @Override
-	    public void render(Batch batch, float delta) {
-	    }
-	});
-	pipeline.add(RenderPipeIds.FOREGROUND, new AbstractRenderLayer() {
-	    @Override
-	    public void render(Batch batch, float delta) {
-		// noOp
-	    }
-	});
-	pipeline.add(RenderPipeIds.WORLD, new WorldRenderLayer(world));
-	pipeline.add(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(lightingManager));
-	pipeline.add(RenderPipeIds.UI, new StageRenderLayer(stage));
-	return pipeline;
-    }
+   @Override
+   public RenderPipeline create() {
+      RenderPipeline pipeline = new CombinedRenderPipeline(config);
+      pipeline.add(RenderPipeIds.BACKGROUND, new AbstractRenderLayer() {
+         @Override
+         public void render(Batch batch, float delta) {
+         }
+      });
+      pipeline.add(RenderPipeIds.FOREGROUND, new AbstractRenderLayer() {
+         @Override
+         public void render(Batch batch, float delta) {
+            // noOp
+         }
+      });
+      pipeline.add(RenderPipeIds.WORLD, new WorldRenderLayer(world));
+      pipeline.add(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(lightingManager));
+      pipeline.add(RenderPipeIds.UI, new StageRenderLayer(stage));
+      return pipeline;
+   }
 
 }

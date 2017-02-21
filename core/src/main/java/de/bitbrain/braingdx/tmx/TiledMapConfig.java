@@ -26,15 +26,15 @@ import java.util.Map;
  */
 public class TiledMapConfig {
 
-    private final Map<String, String> translations = new HashMap<String, String>();
+   private final Map<String, String> translations = new HashMap<String, String>();
 
-    public TiledMapConfig translate(String key, String newKey) {
-	translations.put(key, newKey);
-	return this;
-    }
+   public TiledMapConfig translate(String key, String newKey) {
+      translations.put(key, newKey);
+      return this;
+   }
 
-    public String get(String key) {
-	String newKey = translations.get(key);
-	return newKey != null ? newKey : key;
-    }
+   public String get(String key) {
+      String newKey = translations.get(key);
+      return newKey != null ? newKey : key;
+   }
 }

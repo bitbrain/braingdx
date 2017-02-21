@@ -25,8 +25,8 @@ import de.bitbrain.braingdx.graphics.animation.AnimationType;
  */
 class ResetAnimationType implements AnimationType {
 
-    @Override
-    public int updateCurrentFrame(int lastFrame, int currentFrame, int totalFrames, int origin) {
-	return origin;
-    }
+   @Override
+   public int updateCurrentFrame(int lastFrame, int currentFrame, int totalFrames, int origin) {
+      return origin;
+   }
 }

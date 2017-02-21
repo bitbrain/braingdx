@@ -27,66 +27,66 @@ import de.bitbrain.braingdx.util.Resizeable;
 
 class CombinedRenderPipe implements RenderPipe, Resizeable {
 
-    private final RenderLayer layer;
+   private final RenderLayer layer;
 
-    private final ShaderManager shaderManager;
+   private final ShaderManager shaderManager;
 
-    private boolean enabled = true;
+   private boolean enabled = true;
 
-    private final OrthographicCamera camera;
+   private final OrthographicCamera camera;
 
-    private final SpriteBatch batch;
+   private final SpriteBatch batch;
 
-    public CombinedRenderPipe(RenderLayer layer, PostProcessor processor, OrthographicCamera camera, SpriteBatch batch,
-	    PostProcessorEffect... effects) {
-	this.layer = layer;
-	this.shaderManager = new ShaderManager(processor, effects);
-	this.camera = camera;
-	this.batch = batch;
-    }
+   public CombinedRenderPipe(RenderLayer layer, PostProcessor processor, OrthographicCamera camera, SpriteBatch batch,
+         PostProcessorEffect... effects) {
+      this.layer = layer;
+      this.shaderManager = new ShaderManager(processor, effects);
+      this.camera = camera;
+      this.batch = batch;
+   }
 
-    @Override
-    public boolean isEnabled() {
-	return enabled;
-    }
+   @Override
+   public boolean isEnabled() {
+      return enabled;
+   }
 
-    @Override
-    public void setEnabled(boolean enabled) {
-	this.enabled = enabled;
-    }
+   @Override
+   public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+   }
 
-    @Override
-    public void addEffects(PostProcessorEffect... effects) {
-	shaderManager.addEffects(effects);
-    }
+   @Override
+   public void addEffects(PostProcessorEffect... effects) {
+      shaderManager.addEffects(effects);
+   }
 
-    public void render(Batch batch, float delta, FrameBuffer buffer) {
-	if (isEnabled()) {
-	    if (shaderManager.hasEffects()) {
-		shaderManager.begin();
-		this.batch.setProjectionMatrix(camera.combined);
-		this.batch.begin();
-		this.batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
-		this.batch.end();
-		layer.render(batch, delta);
-		shaderManager.end(buffer);
-	    } else {
-		buffer.begin();
-		layer.render(batch, delta);
-		buffer.end();
-	    }
-	}
-    }
+   public void render(Batch batch, float delta, FrameBuffer buffer) {
+      if (isEnabled()) {
+         if (shaderManager.hasEffects()) {
+            shaderManager.begin();
+            this.batch.setProjectionMatrix(camera.combined);
+            this.batch.begin();
+            this.batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
+            this.batch.end();
+            layer.render(batch, delta);
+            shaderManager.end(buffer);
+         } else {
+            buffer.begin();
+            layer.render(batch, delta);
+            buffer.end();
+         }
+      }
+   }
 
-    public void beforeRender() {
-	layer.beforeRender();
-    }
+   public void beforeRender() {
+      layer.beforeRender();
+   }
 
-    @Override
-    public void resize(int width, int height) {
-	camera.setToOrtho(true, width, height);
-	if (layer instanceof Resizeable) {
-	    ((Resizeable) layer).resize(width, height);
-	}
-    }
+   @Override
+   public void resize(int width, int height) {
+      camera.setToOrtho(true, width, height);
+      if (layer instanceof Resizeable) {
+         ((Resizeable) layer).resize(width, height);
+      }
+   }
 }

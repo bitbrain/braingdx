@@ -27,20 +27,20 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
  */
 public interface Animation {
 
-    /**
-     * Renders this animation at the given position with specified dimensions.
-     * 
-     * @param batch the batch to use in order to render this animation
-     * @param x the horizontal position of this animation on the screen
-     * @param y the vertical position of this animation on the screen
-     * @param width the width in pixel of this animation
-     * @param height the height in pixel of this animation
-     * @param delta the current frame delta
-     */
-    void render(Batch batch, float x, float y, float width, float height, float delta);
+   /**
+    * Renders this animation at the given position with specified dimensions.
+    * 
+    * @param batch the batch to use in order to render this animation
+    * @param x the horizontal position of this animation on the screen
+    * @param y the vertical position of this animation on the screen
+    * @param width the width in pixel of this animation
+    * @param height the height in pixel of this animation
+    * @param delta the current frame delta
+    */
+   void render(Batch batch, float x, float y, float width, float height, float delta);
 
-    /**
-     * Clones this animation.
-     */
-    Animation clone();
+   /**
+    * Clones this animation.
+    */
+   Animation clone();
 }

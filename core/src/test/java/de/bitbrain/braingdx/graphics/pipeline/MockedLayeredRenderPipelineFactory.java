@@ -13,14 +13,14 @@ import de.bitbrain.braingdx.postprocessing.PostProcessor;
 
 public class MockedLayeredRenderPipelineFactory implements RenderPipelineFactory {
 
-    @Override
-    public RenderPipeline create() {
-	ShaderConfig config = mock(ShaderConfig.class);
-	PostProcessor processorMock = mock(PostProcessor.class);
-	FrameBufferFactory factory = mock(FrameBufferFactory.class);
-	FrameBuffer buffer = mock(FrameBuffer.class);
-	when(factory.create(Mockito.anyInt(), Mockito.anyInt())).thenReturn(buffer);
-	return new LayeredRenderPipeline(config, processorMock, factory);
-    }
+   @Override
+   public RenderPipeline create() {
+      ShaderConfig config = mock(ShaderConfig.class);
+      PostProcessor processorMock = mock(PostProcessor.class);
+      FrameBufferFactory factory = mock(FrameBufferFactory.class);
+      FrameBuffer buffer = mock(FrameBuffer.class);
+      when(factory.create(Mockito.anyInt(), Mockito.anyInt())).thenReturn(buffer);
+      return new LayeredRenderPipeline(config, processorMock, factory);
+   }
 
 }

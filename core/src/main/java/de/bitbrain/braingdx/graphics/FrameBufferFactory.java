@@ -10,5 +10,5 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
  */
 public interface FrameBufferFactory {
 
-    FrameBuffer create(int width, int height);
+   FrameBuffer create(int width, int height);
 }

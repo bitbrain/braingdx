@@ -24,9 +24,9 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 
 public class MockMapLayerRendererFactory implements MapLayerRendererFactory {
 
-    @Override
-    public GameObjectRenderer create(int index, TiledMap tiledMap, Camera camera) {
-	return mock(GameObjectRenderer.class);
-    }
+   @Override
+   public GameObjectRenderer create(int index, TiledMap tiledMap, Camera camera) {
+      return mock(GameObjectRenderer.class);
+   }
 
 }

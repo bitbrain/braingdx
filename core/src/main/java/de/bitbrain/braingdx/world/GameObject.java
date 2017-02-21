@@ -33,200 +33,200 @@ import de.bitbrain.braingdx.util.IDGenerator;
  */
 public class GameObject implements Pool.Poolable {
 
-    private static int COUNTER = 0;
+   private static int COUNTER = 0;
 
-    private final Vector2 position, dimensions, lastPosition, offset;
+   private final Vector2 position, dimensions, lastPosition, offset;
 
-    private String id;
+   private String id;
 
-    private Object type;
+   private Object type;
 
-    private Color color = Color.WHITE.cpy();
+   private Color color = Color.WHITE.cpy();
 
-    private final Vector2 scale;
+   private final Vector2 scale;
 
-    private float zIndex;
+   private float zIndex;
 
-    private Map<Object, Object> attributes;
+   private Map<Object, Object> attributes;
 
-    private boolean active;
+   private boolean active;
 
-    public GameObject() {
-	attributes = new HashMap<Object, Object>();
-	position = new Vector2();
-	dimensions = new Vector2();
-	lastPosition = new Vector2();
-	offset = new Vector2();
-	scale = new Vector2(1f, 1f);
-	id = IDGenerator.generateNext(getClass());
-	active = true;
-    }
+   public GameObject() {
+      attributes = new HashMap<Object, Object>();
+      position = new Vector2();
+      dimensions = new Vector2();
+      lastPosition = new Vector2();
+      offset = new Vector2();
+      scale = new Vector2(1f, 1f);
+      id = IDGenerator.generateNext(getClass());
+      active = true;
+   }
 
-    public void setType(Object typeId) {
-	this.type = typeId;
-    }
+   public void setType(Object typeId) {
+      this.type = typeId;
+   }
 
-    public Object getType() {
-	return type;
-    }
+   public Object getType() {
+      return type;
+   }
 
-    public void setDimensions(float width, float height) {
-	this.dimensions.x = width;
-	this.dimensions.y = height;
-    }
+   public void setDimensions(float width, float height) {
+      this.dimensions.x = width;
+      this.dimensions.y = height;
+   }
 
-    public void move(float x, float y) {
-	setPosition(this.position.x + x, this.position.y + y);
-    }
+   public void move(float x, float y) {
+      setPosition(this.position.x + x, this.position.y + y);
+   }
 
-    public void setPosition(float x, float y) {
-	setLastPosition(this.position.x, this.position.y);
-	this.position.x = x;
-	this.position.y = y;
-    }
+   public void setPosition(float x, float y) {
+      setLastPosition(this.position.x, this.position.y);
+      this.position.x = x;
+      this.position.y = y;
+   }
 
-    public void setLastPosition(float x, float y) {
-	this.lastPosition.x = this.position.x;
-	this.lastPosition.y = this.position.y;
-    }
+   public void setLastPosition(float x, float y) {
+      this.lastPosition.x = this.position.x;
+      this.lastPosition.y = this.position.y;
+   }
 
-    public float getLeft() {
-	return this.position.x;
-    }
+   public float getLeft() {
+      return this.position.x;
+   }
 
-    public float getTop() {
-	return this.position.y;
-    }
+   public float getTop() {
+      return this.position.y;
+   }
 
-    public float getRight() {
-	return getLeft() + getWidth();
-    }
+   public float getRight() {
+      return getLeft() + getWidth();
+   }
 
-    public float getBottom() {
-	return getTop() + getHeight();
-    }
+   public float getBottom() {
+      return getTop() + getHeight();
+   }
 
-    public float getWidth() {
-	return this.dimensions.x;
-    }
+   public float getWidth() {
+      return this.dimensions.x;
+   }
 
-    public float getHeight() {
-	return this.dimensions.y;
-    }
+   public float getHeight() {
+      return this.dimensions.y;
+   }
 
-    public Vector2 getLastPosition() {
-	return lastPosition;
-    }
+   public Vector2 getLastPosition() {
+      return lastPosition;
+   }
 
-    public void setId(String id) {
-	this.id = id;
-    }
+   public void setId(String id) {
+      this.id = id;
+   }
 
-    public String getId() {
-	return id;
-    }
+   public String getId() {
+      return id;
+   }
 
-    public Color getColor() {
-	return color;
-    }
+   public Color getColor() {
+      return color;
+   }
 
-    public void setColor(Color color) {
-	setColor(color.r, color.g, color.b, color.a);
-    }
+   public void setColor(Color color) {
+      setColor(color.r, color.g, color.b, color.a);
+   }
 
-    public void setColor(float r, float g, float b, float a) {
-	color.set(r, g, b, a);
-    }
+   public void setColor(float r, float g, float b, float a) {
+      color.set(r, g, b, a);
+   }
 
-    public Vector2 getScale() {
-	return scale;
-    }
+   public Vector2 getScale() {
+      return scale;
+   }
 
-    public Vector2 getOffset() {
-	return offset;
-    }
+   public Vector2 getOffset() {
+      return offset;
+   }
 
-    public void setOffset(float x, float y) {
-	offset.x = x;
-	offset.y = y;
-    }
+   public void setOffset(float x, float y) {
+      offset.x = x;
+      offset.y = y;
+   }
 
-    public void setAttribute(Object key, Object attribute) {
-	attributes.put(key, attribute);
-    }
+   public void setAttribute(Object key, Object attribute) {
+      attributes.put(key, attribute);
+   }
 
-    public boolean hasAttribute(Object key) {
-	return attributes.containsKey(key);
-    }
+   public boolean hasAttribute(Object key) {
+      return attributes.containsKey(key);
+   }
 
-    public Object getAttribute(Object key) {
-	return attributes.get(key);
-    }
+   public Object getAttribute(Object key) {
+      return attributes.get(key);
+   }
 
-    public void setZIndex(float zIndex) {
-	this.zIndex = zIndex;
-    }
+   public void setZIndex(float zIndex) {
+      this.zIndex = zIndex;
+   }
 
-    public float getZIndex() {
-	return this.zIndex;
-    }
+   public float getZIndex() {
+      return this.zIndex;
+   }
 
-    public void setActive(boolean active) {
-	this.active = active;
-    }
+   public void setActive(boolean active) {
+      this.active = active;
+   }
 
-    public boolean isActive() {
-	return active;
-    }
+   public boolean isActive() {
+      return active;
+   }
 
-    @Override
-    public void reset() {
-	lastPosition.x = 0;
-	lastPosition.y = 0;
-	position.x = 0;
-	position.y = 0;
-	dimensions.x = 0;
-	dimensions.y = 0;
-	offset.x = 0;
-	offset.y = 0;
-	zIndex = 0;
-	id = IDGenerator.generateNext(getClass());
-	scale.set(1f, 1f);
-	color = Color.WHITE.cpy();
-	attributes.clear();
-	active = true;
-    }
+   @Override
+   public void reset() {
+      lastPosition.x = 0;
+      lastPosition.y = 0;
+      position.x = 0;
+      position.y = 0;
+      dimensions.x = 0;
+      dimensions.y = 0;
+      offset.x = 0;
+      offset.y = 0;
+      zIndex = 0;
+      id = IDGenerator.generateNext(getClass());
+      scale.set(1f, 1f);
+      color = Color.WHITE.cpy();
+      attributes.clear();
+      active = true;
+   }
 
-    @Override
-    public String toString() {
-	return "GameObject [position=" + position + ", dimensions=" + dimensions + ", lastPosition=" + lastPosition
-		+ ", offset=" + offset + ", id=" + id + ", type=" + type + ", color=" + color + ", scale=" + scale
-		+ ", zIndex=" + zIndex + "]";
-    }
+   @Override
+   public String toString() {
+      return "GameObject [position=" + position + ", dimensions=" + dimensions + ", lastPosition=" + lastPosition
+            + ", offset=" + offset + ", id=" + id + ", type=" + type + ", color=" + color + ", scale=" + scale
+            + ", zIndex=" + zIndex + "]";
+   }
 
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result + ((id == null) ? 0 : id.hashCode());
-	return result;
-    }
+   @Override
+   public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((id == null) ? 0 : id.hashCode());
+      return result;
+   }
 
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	GameObject other = (GameObject) obj;
-	if (id == null) {
-	    if (other.id != null)
-		return false;
-	} else if (!id.equals(other.id))
-	    return false;
-	return true;
-    }
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (obj == null)
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      GameObject other = (GameObject) obj;
+      if (id == null) {
+         if (other.id != null)
+            return false;
+      } else if (!id.equals(other.id))
+         return false;
+      return true;
+   }
 
 }

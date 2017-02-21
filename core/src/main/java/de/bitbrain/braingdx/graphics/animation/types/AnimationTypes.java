@@ -25,7 +25,7 @@ import de.bitbrain.braingdx.graphics.animation.AnimationType;
  */
 public interface AnimationTypes {
 
-    AnimationType RESET = new ResetAnimationType();
-    AnimationType FORWARD = new ForwardAnimationType();
-    AnimationType FORWARD_YOYO = new ForwardYoyoAnimationType();
+   AnimationType RESET = new ResetAnimationType();
+   AnimationType FORWARD = new ForwardAnimationType();
+   AnimationType FORWARD_YOYO = new ForwardYoyoAnimationType();
 }

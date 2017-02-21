@@ -33,33 +33,33 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class SpriteRenderer implements GameObjectRenderManager.GameObjectRenderer {
 
-    protected Sprite sprite;
-    private final AssetManager assets = SharedAssetManager.getInstance();
-    private String textureId;
-    private Texture texture;
+   protected Sprite sprite;
+   private final AssetManager assets = SharedAssetManager.getInstance();
+   private String textureId;
+   private Texture texture;
 
-    public SpriteRenderer(String textureId) {
-	this.textureId = textureId;
-    }
+   public SpriteRenderer(String textureId) {
+      this.textureId = textureId;
+   }
 
-    public SpriteRenderer(Texture texture) {
-	this.texture = texture;
-    }
+   public SpriteRenderer(Texture texture) {
+      this.texture = texture;
+   }
 
-    @Override
-    public void init() {
-	if (textureId != null) {
-	    texture = assets.get(textureId, Texture.class);
-	}
-	sprite = new Sprite(texture);
-    }
+   @Override
+   public void init() {
+      if (textureId != null) {
+         texture = assets.get(textureId, Texture.class);
+      }
+      sprite = new Sprite(texture);
+   }
 
-    @Override
-    public void render(GameObject object, Batch batch, float delta) {
-	sprite.setPosition(object.getLeft() + object.getOffset().x, object.getTop() + object.getOffset().y);
-	sprite.setSize(object.getWidth(), object.getHeight());
-	sprite.setColor(object.getColor());
-	sprite.setScale(object.getScale().x, object.getScale().y);
-	sprite.draw(batch, 1f);
-    }
+   @Override
+   public void render(GameObject object, Batch batch, float delta) {
+      sprite.setPosition(object.getLeft() + object.getOffset().x, object.getTop() + object.getOffset().y);
+      sprite.setSize(object.getWidth(), object.getHeight());
+      sprite.setColor(object.getColor());
+      sprite.setScale(object.getScale().x, object.getScale().y);
+      sprite.draw(batch, 1f);
+   }
 }

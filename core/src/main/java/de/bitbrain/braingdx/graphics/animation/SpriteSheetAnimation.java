@@ -28,129 +28,129 @@ import de.bitbrain.braingdx.util.DeltaTimer;
  */
 public class SpriteSheetAnimation implements Animation {
 
-    public enum Direction {
-	HORIZONTAL, VERTICAL
-    }
+   public enum Direction {
+      HORIZONTAL, VERTICAL
+   }
 
-    public static final float DEFAULT_INTERVAL = 0.2f;
+   public static final float DEFAULT_INTERVAL = 0.2f;
 
-    private SpriteSheet sheet;
+   private SpriteSheet sheet;
 
-    private int originX;
-    private int originY;
-    private int offsetX;
-    private int offsetY;
-    private int totalFrames = 1;
-    private int currentFrame;
-    private int lastFrame;
-    private float interval;
-    private int base = 0;
-    private Direction direction = Direction.HORIZONTAL;
+   private int originX;
+   private int originY;
+   private int offsetX;
+   private int offsetY;
+   private int totalFrames = 1;
+   private int currentFrame;
+   private int lastFrame;
+   private float interval;
+   private int base = 0;
+   private Direction direction = Direction.HORIZONTAL;
 
-    private AnimationType type = AnimationTypes.FORWARD;
+   private AnimationType type = AnimationTypes.FORWARD;
 
-    private DeltaTimer timer = new DeltaTimer();
+   private DeltaTimer timer = new DeltaTimer();
 
-    public SpriteSheetAnimation() {
-	this((SpriteSheet) null);
-    }
+   public SpriteSheetAnimation() {
+      this((SpriteSheet) null);
+   }
 
-    public SpriteSheetAnimation(SpriteSheet sheet) {
-	this.sheet = sheet;
-    }
+   public SpriteSheetAnimation(SpriteSheet sheet) {
+      this.sheet = sheet;
+   }
 
-    private SpriteSheetAnimation(SpriteSheetAnimation other) {
-	this(other.sheet);
-	this.originX = other.originX;
-	this.originY = other.originY;
-	this.offsetX = other.offsetX;
-	this.offsetY = other.offsetY;
-	this.interval = other.interval;
-	this.base = other.base;
-	this.direction = other.direction;
-	this.type = other.type;
-	this.totalFrames = other.totalFrames;
-	this.lastFrame = other.lastFrame;
-    }
+   private SpriteSheetAnimation(SpriteSheetAnimation other) {
+      this(other.sheet);
+      this.originX = other.originX;
+      this.originY = other.originY;
+      this.offsetX = other.offsetX;
+      this.offsetY = other.offsetY;
+      this.interval = other.interval;
+      this.base = other.base;
+      this.direction = other.direction;
+      this.type = other.type;
+      this.totalFrames = other.totalFrames;
+      this.lastFrame = other.lastFrame;
+   }
 
-    public SpriteSheetAnimation origin(int originX, int originY) {
-	this.originX = Math.abs(originX);
-	this.originY = Math.abs(originY);
-	return this;
-    }
+   public SpriteSheetAnimation origin(int originX, int originY) {
+      this.originX = Math.abs(originX);
+      this.originY = Math.abs(originY);
+      return this;
+   }
 
-    public SpriteSheetAnimation offset(int offsetX, int offsetY) {
-	this.offsetX = Math.abs(offsetX);
-	this.offsetY = Math.abs(offsetY);
-	return this;
-    }
+   public SpriteSheetAnimation offset(int offsetX, int offsetY) {
+      this.offsetX = Math.abs(offsetX);
+      this.offsetY = Math.abs(offsetY);
+      return this;
+   }
 
-    public SpriteSheetAnimation interval(float interval) {
-	this.interval = Math.abs(interval);
-	return this;
-    }
+   public SpriteSheetAnimation interval(float interval) {
+      this.interval = Math.abs(interval);
+      return this;
+   }
 
-    public SpriteSheetAnimation frames(int frames) {
-	this.totalFrames = Math.max(frames, 1);
-	return this;
-    }
+   public SpriteSheetAnimation frames(int frames) {
+      this.totalFrames = Math.max(frames, 1);
+      return this;
+   }
 
-    public SpriteSheetAnimation source(SpriteSheet source) {
-	if (source != null) {
-	    this.sheet = source;
-	}
-	return this;
-    }
+   public SpriteSheetAnimation source(SpriteSheet source) {
+      if (source != null) {
+         this.sheet = source;
+      }
+      return this;
+   }
 
-    public SpriteSheetAnimation type(AnimationType type) {
-	if (type != null) {
-	    this.type = type;
-	}
-	return this;
-    }
+   public SpriteSheetAnimation type(AnimationType type) {
+      if (type != null) {
+         this.type = type;
+      }
+      return this;
+   }
 
-    public SpriteSheetAnimation direction(Direction direction) {
-	if (direction != null) {
-	    this.direction = direction;
-	}
-	return this;
-    }
+   public SpriteSheetAnimation direction(Direction direction) {
+      if (direction != null) {
+         this.direction = direction;
+      }
+      return this;
+   }
 
-    public SpriteSheetAnimation base(int base) {
-	this.base = Math.abs(base);
-	return this;
-    }
+   public SpriteSheetAnimation base(int base) {
+      this.base = Math.abs(base);
+      return this;
+   }
 
-    @Override
-    public SpriteSheetAnimation clone() {
-	return new SpriteSheetAnimation(this);
-    }
+   @Override
+   public SpriteSheetAnimation clone() {
+      return new SpriteSheetAnimation(this);
+   }
 
-    @Override
-    public void render(Batch batch, float x, float y, float width, float height, float delta) {
-	timer.update(delta);
-	if (timer.reached(interval)) {
-	    int currentLastFrame = currentFrame;
-	    currentFrame = type.updateCurrentFrame(lastFrame, currentFrame, totalFrames, base);
-	    lastFrame = currentLastFrame;
-	    timer.reset();
-	}
-	if (sheet != null) {
-	    sheet.draw(batch, getDirectionalOffsetX(), getDirectionalOffsetY(), x, y, width, height);
-	}
-    }
+   @Override
+   public void render(Batch batch, float x, float y, float width, float height, float delta) {
+      timer.update(delta);
+      if (timer.reached(interval)) {
+         int currentLastFrame = currentFrame;
+         currentFrame = type.updateCurrentFrame(lastFrame, currentFrame, totalFrames, base);
+         lastFrame = currentLastFrame;
+         timer.reset();
+      }
+      if (sheet != null) {
+         sheet.draw(batch, getDirectionalOffsetX(), getDirectionalOffsetY(), x, y, width, height);
+      }
+   }
 
-    private int getDirectionalOffsetX() {
-	if (Direction.HORIZONTAL.equals(direction)) {
-	    return originX + currentFrame;
-	}
-	return originX + offsetX;
-    }
+   private int getDirectionalOffsetX() {
+      if (Direction.HORIZONTAL.equals(direction)) {
+         return originX + currentFrame;
+      }
+      return originX + offsetX;
+   }
 
-    private int getDirectionalOffsetY() {
-	if (Direction.VERTICAL.equals(direction)) {
-	    return originY + currentFrame;
-	}
-	return originY + offsetY;
-    }
+   private int getDirectionalOffsetY() {
+      if (Direction.VERTICAL.equals(direction)) {
+         return originY + currentFrame;
+      }
+      return originY + offsetY;
+   }
 }

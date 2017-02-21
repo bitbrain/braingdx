@@ -23,7 +23,7 @@ import de.bitbrain.braingdx.postprocessing.utils.PingPongBuffer;
  * more single-pass filters, promoting composition over inheritance.
  */
 public abstract class MultipassFilter {
-    public abstract void rebind();
+   public abstract void rebind();
 
-    public abstract void render(PingPongBuffer srcdest);
+   public abstract void render(PingPongBuffer srcdest);
 }

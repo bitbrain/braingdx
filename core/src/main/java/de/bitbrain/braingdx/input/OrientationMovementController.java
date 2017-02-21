@@ -31,16 +31,16 @@ import de.bitbrain.braingdx.behavior.movement.Orientation;
  */
 public class OrientationMovementController implements MovementController<Orientation> {
 
-    @Override
-    public void update(Movement<Orientation> movement, float delta) {
-	if (Gdx.input.isKeyPressed(Keys.W)) {
-	    movement.move(Orientation.UP);
-	} else if (Gdx.input.isKeyPressed(Keys.A)) {
-	    movement.move(Orientation.LEFT);
-	} else if (Gdx.input.isKeyPressed(Keys.S)) {
-	    movement.move(Orientation.DOWN);
-	} else if (Gdx.input.isKeyPressed(Keys.D)) {
-	    movement.move(Orientation.RIGHT);
-	}
-    }
+   @Override
+   public void update(Movement<Orientation> movement, float delta) {
+      if (Gdx.input.isKeyPressed(Keys.W)) {
+         movement.move(Orientation.UP);
+      } else if (Gdx.input.isKeyPressed(Keys.A)) {
+         movement.move(Orientation.LEFT);
+      } else if (Gdx.input.isKeyPressed(Keys.S)) {
+         movement.move(Orientation.DOWN);
+      } else if (Gdx.input.isKeyPressed(Keys.D)) {
+         movement.move(Orientation.RIGHT);
+      }
+   }
 }

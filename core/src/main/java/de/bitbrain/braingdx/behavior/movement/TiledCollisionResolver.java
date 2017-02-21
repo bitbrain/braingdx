@@ -19,9 +19,9 @@ import de.bitbrain.braingdx.world.GameObject;
 
 public interface TiledCollisionResolver {
 
-    boolean isCollision(int tileX, int tileY, int layer);
+   boolean isCollision(int tileX, int tileY, int layer);
 
-    boolean isCollision(float x, float y, int layer);
+   boolean isCollision(float x, float y, int layer);
 
-    boolean isCollision(GameObject object, int tileOffsetX, int tileOffsetY);
+   boolean isCollision(GameObject object, int tileOffsetX, int tileOffsetY);
 }

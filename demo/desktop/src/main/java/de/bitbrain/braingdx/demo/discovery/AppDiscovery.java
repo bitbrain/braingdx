@@ -15,19 +15,18 @@ import de.bitbrain.braingdx.BrainGdxGame;
 
 public class AppDiscovery {
 
-    private static final String APP_PACKAGE = "de.bitbrain.braingdx.apps";
+   private static final String APP_PACKAGE = "de.bitbrain.braingdx.apps";
 
-    public Collection<Class<? extends BrainGdxGame>> discover() {
-	List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
-	classLoadersList.add(ClasspathHelper.contextClassLoader());
-	classLoadersList.add(ClasspathHelper.staticClassLoader());
- 
-	Reflections reflections = new Reflections(new ConfigurationBuilder()
-		.setScanners(new SubTypesScanner(
-			false /* don't exclude Object.class */), new ResourcesScanner())
-		.setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
-		.filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(APP_PACKAGE))));
-	return reflections.getSubTypesOf(BrainGdxGame.class);
-    }
+   public Collection<Class<? extends BrainGdxGame>> discover() {
+      List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
+      classLoadersList.add(ClasspathHelper.contextClassLoader());
+      classLoadersList.add(ClasspathHelper.staticClassLoader());
+
+      Reflections reflections = new Reflections(new ConfigurationBuilder()
+            .setScanners(new SubTypesScanner(false /* don't exclude Object.class */), new ResourcesScanner())
+            .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0])))
+            .filterInputsBy(new FilterBuilder().include(FilterBuilder.prefix(APP_PACKAGE))));
+      return reflections.getSubTypesOf(BrainGdxGame.class);
+   }
 
 }

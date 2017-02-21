@@ -41,73 +41,73 @@ import de.bitbrain.braingdx.util.ShaderLoader;
  */
 public class LayeredRenderPipeline implements RenderPipeline {
 
-    private static final boolean isDesktop = (Gdx.app.getType() == Application.ApplicationType.Desktop);
+   private static final boolean isDesktop = (Gdx.app.getType() == Application.ApplicationType.Desktop);
 
-    private final Map<String, LayeredRenderPipe> pipes = new LinkedHashMap<String, LayeredRenderPipe>();
+   private final Map<String, LayeredRenderPipe> pipes = new LinkedHashMap<String, LayeredRenderPipe>();
 
-    private final ShaderConfig config;
+   private final ShaderConfig config;
 
-    private final PostProcessor processor;
+   private final PostProcessor processor;
 
-    private final FrameBufferFactory bufferFactory;
+   private final FrameBufferFactory bufferFactory;
 
-    public LayeredRenderPipeline(ShaderConfig config) {
-	this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
+   public LayeredRenderPipeline(ShaderConfig config) {
+      this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
-	    @Override
-	    public FrameBuffer create(int width, int height) {
-		return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-	    }
+         @Override
+         public FrameBuffer create(int width, int height) {
+            return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+         }
 
-	});
-    }
+      });
+   }
 
-    LayeredRenderPipeline(ShaderConfig config, PostProcessor processor, FrameBufferFactory factory) {
-	this.config = config;
-	ShaderLoader.BasePath = this.config.basePath;
-	ShaderLoader.PathResolver = this.config.pathResolver;
-	this.processor = processor;
-	this.bufferFactory = factory;
-    }
+   LayeredRenderPipeline(ShaderConfig config, PostProcessor processor, FrameBufferFactory factory) {
+      this.config = config;
+      ShaderLoader.BasePath = this.config.basePath;
+      ShaderLoader.PathResolver = this.config.pathResolver;
+      this.processor = processor;
+      this.bufferFactory = factory;
+   }
 
-    @Override
-    public void add(String id, RenderLayer layer, PostProcessorEffect... effects) {
-	LayeredRenderPipe pipe = new LayeredRenderPipe(layer, processor, bufferFactory, effects);
-	pipes.put(id, pipe);
-    }
+   @Override
+   public void add(String id, RenderLayer layer, PostProcessorEffect... effects) {
+      LayeredRenderPipe pipe = new LayeredRenderPipe(layer, processor, bufferFactory, effects);
+      pipes.put(id, pipe);
+   }
 
-    @Override
-    public RenderPipe getPipe(String id) {
-	return pipes.get(id);
-    }
+   @Override
+   public RenderPipe getPipe(String id) {
+      return pipes.get(id);
+   }
 
-    @Override
-    public Collection<String> getPipeIds() {
-	return pipes.keySet();
-    }
+   @Override
+   public Collection<String> getPipeIds() {
+      return pipes.keySet();
+   }
 
-    @Override
-    public void render(Batch batch, float delta) {
-	for (LayeredRenderPipe pipe : pipes.values()) {
-	    if (pipe.isEnabled()) {
-		pipe.render(batch, delta);
-	    }
-	}
-    }
+   @Override
+   public void render(Batch batch, float delta) {
+      for (LayeredRenderPipe pipe : pipes.values()) {
+         if (pipe.isEnabled()) {
+            pipe.render(batch, delta);
+         }
+      }
+   }
 
-    @Override
-    public void resize(int width, int height) {
-	processor.setViewport(new Rectangle(0f, 0f, width, height));
-	for (LayeredRenderPipe pipe : pipes.values()) {
-	    pipe.resize(width, height);
-	}
-    }
+   @Override
+   public void resize(int width, int height) {
+      processor.setViewport(new Rectangle(0f, 0f, width, height));
+      for (LayeredRenderPipe pipe : pipes.values()) {
+         pipe.resize(width, height);
+      }
+   }
 
-    @Override
-    public void dispose() {
-	for (LayeredRenderPipe pipe : pipes.values()) {
-	    pipe.dispose();
-	}
-	processor.dispose();
-    }
+   @Override
+   public void dispose() {
+      for (LayeredRenderPipe pipe : pipes.values()) {
+         pipe.dispose();
+      }
+      processor.dispose();
+   }
 }

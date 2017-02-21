@@ -23,11 +23,11 @@ package de.bitbrain.braingdx.util;
  */
 public interface Resizeable {
 
-    /**
-     * Is called whenever this element gets resized.
-     * 
-     * @param width new width to size to
-     * @param height new heigtht to size to
-     */
-    void resize(int width, int height);
+   /**
+    * Is called whenever this element gets resized.
+    * 
+    * @param width new width to size to
+    * @param height new heigtht to size to
+    */
+   void resize(int width, int height);
 }

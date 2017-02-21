@@ -26,67 +26,67 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 @RunWith(Parameterized.class)
 public class RenderPipelineTest {
 
-    @Parameter
-    public RenderPipelineFactory pipelineFactory;
+   @Parameter
+   public RenderPipelineFactory pipelineFactory;
 
-    private RenderPipeline pipeline;
-    
-    @Parameters
-    public static Collection<RenderPipelineFactory[]> getParams() {
-	List<RenderPipelineFactory[]> params = new ArrayList<RenderPipelineFactory[]>();
-	Gdx.app = mock(Application.class);
-	Gdx.gl = mock(GL20.class);
-	when(Gdx.app.getType()).thenReturn(ApplicationType.Desktop);
-	params.add(new RenderPipelineFactory[] { new MockedLayeredRenderPipelineFactory() });
-	params.add(new RenderPipelineFactory[] { new MockedCombinedRenderPipelineFactory() });
-	return params;
-    }
+   private RenderPipeline pipeline;
 
-    @Before
-    public void beforeTest() {
-	pipeline = pipelineFactory.create();
-    }
+   @Parameters
+   public static Collection<RenderPipelineFactory[]> getParams() {
+      List<RenderPipelineFactory[]> params = new ArrayList<RenderPipelineFactory[]>();
+      Gdx.app = mock(Application.class);
+      Gdx.gl = mock(GL20.class);
+      when(Gdx.app.getType()).thenReturn(ApplicationType.Desktop);
+      params.add(new RenderPipelineFactory[] { new MockedLayeredRenderPipelineFactory() });
+      params.add(new RenderPipelineFactory[] { new MockedCombinedRenderPipelineFactory() });
+      return params;
+   }
 
-    @Test
-    public void testAddLayer() {
-	final String id = "my-id";
-	pipeline.add(id, mock(RenderLayer.class));
-	assertThat(pipeline.getPipe(id)).isNotNull();
-    }
+   @Before
+   public void beforeTest() {
+      pipeline = pipelineFactory.create();
+   }
 
-    @Test
-    public void testRender() {
-	RenderLayer layerA = mock(RenderLayer.class);
-	RenderLayer layerB = mock(RenderLayer.class);
-	RenderLayer layerC = mock(RenderLayer.class);
-	Batch batch = mock(Batch.class);
-	pipeline.add("my-id-a", layerA);
-	pipeline.add("my-id-b", layerB);
-	pipeline.add("my-id-c", layerC);
-	pipeline.resize(0, 0);
-	pipeline.render(batch, 0f);
-	InOrder order = Mockito.inOrder(layerA, layerB, layerC);
-	order.verify(layerA, Mockito.calls(1)).render(batch, 0f);
-	order.verify(layerB, Mockito.calls(1)).render(batch, 0f);
-	order.verify(layerC, Mockito.calls(1)).render(batch, 0f);
-    }
+   @Test
+   public void testAddLayer() {
+      final String id = "my-id";
+      pipeline.add(id, mock(RenderLayer.class));
+      assertThat(pipeline.getPipe(id)).isNotNull();
+   }
 
-    @Test
-    public void testGetPipeIds() {
-	pipeline.add("a", mock(RenderLayer.class));
-	pipeline.add("b", mock(RenderLayer.class));
-	pipeline.add("c", mock(RenderLayer.class));
-	assertThat(pipeline.getPipeIds()).hasSize(3);
-    }
+   @Test
+   public void testRender() {
+      RenderLayer layerA = mock(RenderLayer.class);
+      RenderLayer layerB = mock(RenderLayer.class);
+      RenderLayer layerC = mock(RenderLayer.class);
+      Batch batch = mock(Batch.class);
+      pipeline.add("my-id-a", layerA);
+      pipeline.add("my-id-b", layerB);
+      pipeline.add("my-id-c", layerC);
+      pipeline.resize(0, 0);
+      pipeline.render(batch, 0f);
+      InOrder order = Mockito.inOrder(layerA, layerB, layerC);
+      order.verify(layerA, Mockito.calls(1)).render(batch, 0f);
+      order.verify(layerB, Mockito.calls(1)).render(batch, 0f);
+      order.verify(layerC, Mockito.calls(1)).render(batch, 0f);
+   }
 
-    @Test
-    public void testGetPipeIdsDuplicates() {
-	pipeline.add("a", mock(RenderLayer.class));
-	pipeline.add("b", mock(RenderLayer.class));
-	pipeline.add("b", mock(RenderLayer.class));
-	pipeline.add("c", mock(RenderLayer.class));
-	pipeline.add("c", mock(RenderLayer.class));
-	assertThat(pipeline.getPipeIds()).hasSize(3);
+   @Test
+   public void testGetPipeIds() {
+      pipeline.add("a", mock(RenderLayer.class));
+      pipeline.add("b", mock(RenderLayer.class));
+      pipeline.add("c", mock(RenderLayer.class));
+      assertThat(pipeline.getPipeIds()).hasSize(3);
+   }
 
-    }
+   @Test
+   public void testGetPipeIdsDuplicates() {
+      pipeline.add("a", mock(RenderLayer.class));
+      pipeline.add("b", mock(RenderLayer.class));
+      pipeline.add("b", mock(RenderLayer.class));
+      pipeline.add("c", mock(RenderLayer.class));
+      pipeline.add("c", mock(RenderLayer.class));
+      assertThat(pipeline.getPipeIds()).hasSize(3);
+
+   }
 }

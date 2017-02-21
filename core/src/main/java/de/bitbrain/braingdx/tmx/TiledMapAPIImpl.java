@@ -29,120 +29,120 @@ import de.bitbrain.braingdx.world.GameWorld;
  */
 class TiledMapAPIImpl implements TiledMapAPI {
 
-    private final State state;
-    private final GameWorld gameWorld;
+   private final State state;
+   private final GameWorld gameWorld;
 
-    public TiledMapAPIImpl(State state, GameWorld gameWorld) {
-	this.state = state;
-	this.gameWorld = gameWorld;
-    }
+   public TiledMapAPIImpl(State state, GameWorld gameWorld) {
+      this.state = state;
+      this.gameWorld = gameWorld;
+   }
 
-    @Override
-    public int highestZIndexAt(int tileX, int tileY) {
-	Integer[][] heightMap = state.getHeightMap();
-	if (verifyIndex(tileX, tileY) && heightMap != null) {
-	    return heightMap[tileX][tileY];
-	} else {
-	    return -1;
-	}
-    }
+   @Override
+   public int highestZIndexAt(int tileX, int tileY) {
+      Integer[][] heightMap = state.getHeightMap();
+      if (verifyIndex(tileX, tileY) && heightMap != null) {
+         return heightMap[tileX][tileY];
+      } else {
+         return -1;
+      }
+   }
 
-    @Override
-    public int highestZIndexAt(float x, float y) {
-	int tileX = (int) Math.floor(x / (float) state.getCellWidth());
-	int tileY = (int) Math.floor(y / (float) state.getCellWidth());
-	return highestZIndexAt(tileX, tileY);
-    }
+   @Override
+   public int highestZIndexAt(float x, float y) {
+      int tileX = (int) Math.floor(x / (float) state.getCellWidth());
+      int tileY = (int) Math.floor(y / (float) state.getCellWidth());
+      return highestZIndexAt(tileX, tileY);
+   }
 
-    @Override
-    public int layerIndexOf(GameObject object) {
-	if (object.hasAttribute(Constants.LAYER_INDEX)) {
-	    return (Integer) object.getAttribute(Constants.LAYER_INDEX);
-	} else {
-	    return -1;
-	}
-    }
+   @Override
+   public int layerIndexOf(GameObject object) {
+      if (object.hasAttribute(Constants.LAYER_INDEX)) {
+         return (Integer) object.getAttribute(Constants.LAYER_INDEX);
+      } else {
+         return -1;
+      }
+   }
 
-    @Override
-    public int lastLayerIndexOf(GameObject object) {
-	if (object.hasAttribute(Constants.LAST_LAYER_INDEX)) {
-	    return (Integer) object.getAttribute(Constants.LAST_LAYER_INDEX);
-	} else {
-	    return layerIndexOf(object);
-	}
-    }
+   @Override
+   public int lastLayerIndexOf(GameObject object) {
+      if (object.hasAttribute(Constants.LAST_LAYER_INDEX)) {
+         return (Integer) object.getAttribute(Constants.LAST_LAYER_INDEX);
+      } else {
+         return layerIndexOf(object);
+      }
+   }
 
-    @Override
-    public void setLayerIndex(GameObject object, int layerIndex) {
-	if (layerIndex > state.getNumberOfLayers() - 1) {
-	    throw new TiledMapException("Layer index is too high: " + layerIndex);
-	}
-	object.setAttribute(Constants.LAYER_INDEX, layerIndex);
-    }
+   @Override
+   public void setLayerIndex(GameObject object, int layerIndex) {
+      if (layerIndex > state.getNumberOfLayers() - 1) {
+         throw new TiledMapException("Layer index is too high: " + layerIndex);
+      }
+      object.setAttribute(Constants.LAYER_INDEX, layerIndex);
+   }
 
-    @Override
-    public int getNumberOfRows() {
-	return state.getMapIndexHeight();
-    }
+   @Override
+   public int getNumberOfRows() {
+      return state.getMapIndexHeight();
+   }
 
-    @Override
-    public int getNumberOfColumns() {
-	return state.getMapIndexWidth();
-    }
+   @Override
+   public int getNumberOfColumns() {
+      return state.getMapIndexWidth();
+   }
 
-    @Override
-    public GameObject getGameObjectAt(int tileX, int tileY, int layer) {
-	for (GameObject worldObject : gameWorld) {
-	    int objectTileX = IndexCalculator.calculateXIndex(worldObject, state);
-	    int objectTileY = IndexCalculator.calculateYIndex(worldObject, state);
-	    int layerIndex = layerIndexOf(worldObject);
-	    if (objectTileX == tileX && objectTileY == tileY && layer == layerIndex) {
-		return worldObject;
-	    }
-	}
-	return null;
-    }
+   @Override
+   public GameObject getGameObjectAt(int tileX, int tileY, int layer) {
+      for (GameObject worldObject : gameWorld) {
+         int objectTileX = IndexCalculator.calculateXIndex(worldObject, state);
+         int objectTileY = IndexCalculator.calculateYIndex(worldObject, state);
+         int layerIndex = layerIndexOf(worldObject);
+         if (objectTileX == tileX && objectTileY == tileY && layer == layerIndex) {
+            return worldObject;
+         }
+      }
+      return null;
+   }
 
-    @Override
-    public float getCellWidth() {
-	return state.getCellWidth();
-    }
+   @Override
+   public float getCellWidth() {
+      return state.getCellWidth();
+   }
 
-    @Override
-    public float getCellHeight() {
-	return state.getCellHeight();
-    }
+   @Override
+   public float getCellHeight() {
+      return state.getCellHeight();
+   }
 
-    @Override
-    public boolean isCollision(int tileX, int tileY, int layer) {
-	if (!verifyIndex(tileX, tileY)) {
-	    return true;
-	}
-	return state.getState(tileX, tileY, layer).isCollision();
-    }
+   @Override
+   public boolean isCollision(int tileX, int tileY, int layer) {
+      if (!verifyIndex(tileX, tileY)) {
+         return true;
+      }
+      return state.getState(tileX, tileY, layer).isCollision();
+   }
 
-    @Override
-    public boolean isCollision(float x, float y, int layer) {
-	int tileX = IndexCalculator.calculateIndex(x, state.getCellWidth());
-	int tileY = IndexCalculator.calculateIndex(y, state.getCellHeight());
-	return isCollision(tileX, tileY, layer);
-    }
+   @Override
+   public boolean isCollision(float x, float y, int layer) {
+      int tileX = IndexCalculator.calculateIndex(x, state.getCellWidth());
+      int tileY = IndexCalculator.calculateIndex(y, state.getCellHeight());
+      return isCollision(tileX, tileY, layer);
+   }
 
-    @Override
-    public boolean isCollision(GameObject object, int tileOffsetX, int tileOffsetY) {
-	int layer = layerIndexOf(object);
-	int tileX = IndexCalculator.calculateXIndex(object, state) + tileOffsetX;
-	int tileY = IndexCalculator.calculateYIndex(object, state) + tileOffsetY;
-	return isCollision(tileX, tileY, layer);
-    }
+   @Override
+   public boolean isCollision(GameObject object, int tileOffsetX, int tileOffsetY) {
+      int layer = layerIndexOf(object);
+      int tileX = IndexCalculator.calculateXIndex(object, state) + tileOffsetX;
+      int tileY = IndexCalculator.calculateYIndex(object, state) + tileOffsetY;
+      return isCollision(tileX, tileY, layer);
+   }
 
-    @Override
-    public MapProperties getPropertiesAt(int tileX, int tileY, int layer) {
-	return state.getState(tileX, tileY, layer).getProperties();
-    }
+   @Override
+   public MapProperties getPropertiesAt(int tileX, int tileY, int layer) {
+      return state.getState(tileX, tileY, layer).getProperties();
+   }
 
-    private boolean verifyIndex(int indexX, int indexY) {
-	return indexX >= 0 && indexY >= 0 && indexX < state.getMapIndexWidth() && indexY < state.getMapIndexHeight();
-    }
+   private boolean verifyIndex(int indexX, int indexY) {
+      return indexX >= 0 && indexY >= 0 && indexX < state.getMapIndexWidth() && indexY < state.getMapIndexHeight();
+   }
 
 }

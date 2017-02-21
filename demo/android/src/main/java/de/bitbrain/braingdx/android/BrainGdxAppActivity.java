@@ -8,10 +8,10 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 public class BrainGdxAppActivity extends AndroidApplication {
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-	initialize(new BrainGdxTest(), config);
-    }
+   @Override
+   public void onCreate(Bundle savedInstanceState) {
+      super.onCreate(savedInstanceState);
+      AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+      initialize(new BrainGdxTest(), config);
+   }
 }

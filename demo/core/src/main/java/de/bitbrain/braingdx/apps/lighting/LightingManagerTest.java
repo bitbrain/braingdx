@@ -6,14 +6,14 @@ import de.bitbrain.braingdx.screens.AbstractScreen;
 
 public class LightingManagerTest extends BrainGdxGame {
 
-    @Override
-    protected GameAssetLoader getAssetLoader() {
-	return new AppGameAssetLoader();
-    }
+   @Override
+   protected GameAssetLoader getAssetLoader() {
+      return new AppGameAssetLoader();
+   }
 
-    @Override
-    protected AbstractScreen<?> getInitialScreen() {
-	return new LightingManagerScreen(this);
-    }
+   @Override
+   protected AbstractScreen<?> getInitialScreen() {
+      return new LightingManagerScreen(this);
+   }
 
 }

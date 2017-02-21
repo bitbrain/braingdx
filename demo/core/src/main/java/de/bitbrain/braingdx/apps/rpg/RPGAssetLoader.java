@@ -11,12 +11,12 @@ import de.bitbrain.braingdx.assets.GameAssetLoader;
 
 public class RPGAssetLoader implements GameAssetLoader {
 
-    @Override
-    public void put(Map<String, Class<?>> assets) {
-	assets.put(Assets.RPG.CHARACTER_TILESET, Texture.class);
-	assets.put(Assets.RPG.TORCH, Texture.class);
-	assets.put(Assets.RPG.MAP_1, TiledMap.class);
-	assets.put(Assets.RPG.FLAME, ParticleEffect.class);
-    }
+   @Override
+   public void put(Map<String, Class<?>> assets) {
+      assets.put(Assets.RPG.CHARACTER_TILESET, Texture.class);
+      assets.put(Assets.RPG.TORCH, Texture.class);
+      assets.put(Assets.RPG.MAP_1, TiledMap.class);
+      assets.put(Assets.RPG.FLAME, ParticleEffect.class);
+   }
 
 }

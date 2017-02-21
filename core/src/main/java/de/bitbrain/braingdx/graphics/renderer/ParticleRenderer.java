@@ -33,43 +33,43 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class ParticleRenderer extends BehaviorAdapter implements GameObjectRenderer {
 
-    private final ParticleManager particleManager;
+   private final ParticleManager particleManager;
 
-    private final BehaviorManager behaviorManager;
+   private final BehaviorManager behaviorManager;
 
-    private final String effectPath;
+   private final String effectPath;
 
-    private ManagedParticleEffect effect;
+   private ManagedParticleEffect effect;
 
-    private boolean attached = false;
+   private boolean attached = false;
 
-    public ParticleRenderer(ParticleManager particleManager, BehaviorManager behaviorManager, String effectPath) {
-	this.particleManager = particleManager;
-	this.effectPath = effectPath;
-	this.behaviorManager = behaviorManager;
-    }
+   public ParticleRenderer(ParticleManager particleManager, BehaviorManager behaviorManager, String effectPath) {
+      this.particleManager = particleManager;
+      this.effectPath = effectPath;
+      this.behaviorManager = behaviorManager;
+   }
 
-    @Override
-    public void init() {
-	effect = particleManager.create(effectPath);
-    }
+   @Override
+   public void init() {
+      effect = particleManager.create(effectPath);
+   }
 
-    @Override
-    public void onAttach(GameObject source) {
-	attached = true;
-    }
+   @Override
+   public void onAttach(GameObject source) {
+      attached = true;
+   }
 
-    @Override
-    public void onDetach(GameObject source) {
-	particleManager.free(effect);
-    }
+   @Override
+   public void onDetach(GameObject source) {
+      particleManager.free(effect);
+   }
 
-    @Override
-    public void render(GameObject object, Batch batch, float delta) {
-	if (!attached) {
-	    behaviorManager.apply(this, object);
-	}
-	effect.render(object.getLeft() + object.getOffset().x + object.getWidth() / 2f,
-		object.getTop() + object.getOffset().y + object.getHeight() / 2f, batch, delta);
-    }
+   @Override
+   public void render(GameObject object, Batch batch, float delta) {
+      if (!attached) {
+         behaviorManager.apply(this, object);
+      }
+      effect.render(object.getLeft() + object.getOffset().x + object.getWidth() / 2f,
+            object.getTop() + object.getOffset().y + object.getHeight() / 2f, batch, delta);
+   }
 }

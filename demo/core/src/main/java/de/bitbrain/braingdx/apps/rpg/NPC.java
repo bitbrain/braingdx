@@ -1,18 +1,11 @@
 package de.bitbrain.braingdx.apps.rpg;
 
 public enum NPC {
-    PRIEST_MALE,
-    SAGE_FEMALE,
-    CLERIC_MALE,
-    DANCER_FEMALE,
-    CITIZEN_MALE,
-    DANCER_FEMALE_ALT,
-    EXPLORER_MALE,
-    EXPLORER_FEMALE;
+   PRIEST_MALE, SAGE_FEMALE, CLERIC_MALE, DANCER_FEMALE, CITIZEN_MALE, DANCER_FEMALE_ALT, EXPLORER_MALE, EXPLORER_FEMALE;
 
-    public static NPC random() {
-	NPC[] values = values();
-	int size = values.length;
-	return values[(int) (size * Math.random())];
-    }
+   public static NPC random() {
+      NPC[] values = values();
+      int size = values.length;
+      return values[(int) (size * Math.random())];
+   }
 }

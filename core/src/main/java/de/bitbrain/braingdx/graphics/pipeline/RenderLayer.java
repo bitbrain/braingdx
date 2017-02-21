@@ -24,13 +24,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
  */
 public interface RenderLayer {
 
-    void beforeRender();
+   void beforeRender();
 
-    /**
-     * Renders the layer with the given batch and delta.
-     * 
-     * @param batch provided batch
-     * @param delta frame delta
-     */
-    void render(Batch batch, float delta);
+   /**
+    * Renders the layer with the given batch and delta.
+    * 
+    * @param batch provided batch
+    * @param delta frame delta
+    */
+   void render(Batch batch, float delta);
 }

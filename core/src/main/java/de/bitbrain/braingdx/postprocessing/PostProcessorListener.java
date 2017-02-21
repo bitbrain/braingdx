@@ -17,5 +17,5 @@
 package de.bitbrain.braingdx.postprocessing;
 
 public interface PostProcessorListener {
-    void beforeRenderToScreen();
+   void beforeRenderToScreen();
 }

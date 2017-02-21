@@ -33,56 +33,53 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class SpriteSheetAnimationSupplier extends BehaviorAdapter implements AnimationSupplier<GameObject> {
 
-    private final Map<GameObject, SpriteSheetAnimation> animations = new HashMap<GameObject, SpriteSheetAnimation>();
+   private final Map<GameObject, SpriteSheetAnimation> animations = new HashMap<GameObject, SpriteSheetAnimation>();
 
-    private final SpriteSheetAnimation template;
-    private final Map<Orientation, Integer> orientations;
-    private final AnimationType movingType;
-    private final AnimationType stillType;
+   private final SpriteSheetAnimation template;
+   private final Map<Orientation, Integer> orientations;
+   private final AnimationType movingType;
+   private final AnimationType stillType;
 
-    public SpriteSheetAnimationSupplier(Map<Orientation, Integer> orientations,
-	    SpriteSheetAnimation template,
-	    AnimationType movingType) {
-	this(orientations, template, movingType, AnimationTypes.RESET);
-    }
+   public SpriteSheetAnimationSupplier(Map<Orientation, Integer> orientations, SpriteSheetAnimation template,
+         AnimationType movingType) {
+      this(orientations, template, movingType, AnimationTypes.RESET);
+   }
 
-    public SpriteSheetAnimationSupplier(Map<Orientation, Integer> orientations,
-	    SpriteSheetAnimation template,
-	    AnimationType movingType, AnimationType stillType) {
-	this.orientations = orientations;
-	this.template = template;
-	this.movingType = movingType;
-	this.stillType = stillType;
-    }
+   public SpriteSheetAnimationSupplier(Map<Orientation, Integer> orientations, SpriteSheetAnimation template,
+         AnimationType movingType, AnimationType stillType) {
+      this.orientations = orientations;
+      this.template = template;
+      this.movingType = movingType;
+      this.stillType = stillType;
+   }
 
-    @Override
-    public void onDetach(GameObject source) {
-	animations.remove(source);
-    }
+   @Override
+   public void onDetach(GameObject source) {
+      animations.remove(source);
+   }
 
-    @Override
-    public SpriteSheetAnimation supplyFor(GameObject object) {
-	SpriteSheetAnimation animation = animations.get(object);
-	if (animation == null) {
-	    animation = template.clone();
-	    animations.put(object, animation);
-	}
-	orientate(animation, object);
-	return animation;
-    }
+   @Override
+   public SpriteSheetAnimation supplyFor(GameObject object) {
+      SpriteSheetAnimation animation = animations.get(object);
+      if (animation == null) {
+         animation = template.clone();
+         animations.put(object, animation);
+      }
+      orientate(animation, object);
+      return animation;
+   }
 
-    private void orientate(SpriteSheetAnimation animation, GameObject object) {
-	if (object.hasAttribute(Movement.class) && object.hasAttribute(Orientation.class)) {
-	    Movement<?> movement = (Movement<?>) object.getAttribute(Movement.class);
-	    Orientation orientation = (Orientation) object.getAttribute(Orientation.class);
-	    animation.offset(orientations.get(orientation), orientations.get(orientation));
-	    if (!movement.isMoving()) {
-		animation.type(stillType);
-	    } else {
-		animation.type(movingType);
-	    }
-	}
-    }
-
+   private void orientate(SpriteSheetAnimation animation, GameObject object) {
+      if (object.hasAttribute(Movement.class) && object.hasAttribute(Orientation.class)) {
+         Movement<?> movement = (Movement<?>) object.getAttribute(Movement.class);
+         Orientation orientation = (Orientation) object.getAttribute(Orientation.class);
+         animation.offset(orientations.get(orientation), orientations.get(orientation));
+         if (!movement.isMoving()) {
+            animation.type(stillType);
+         } else {
+            animation.type(movingType);
+         }
+      }
+   }
 
 }

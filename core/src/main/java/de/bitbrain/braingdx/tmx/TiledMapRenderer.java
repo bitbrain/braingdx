@@ -24,25 +24,25 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 
 public class TiledMapRenderer implements RenderLayer {
 
-    private final OrthogonalTiledMapRenderer mapRenderer;
+   private final OrthogonalTiledMapRenderer mapRenderer;
 
-    private final OrthographicCamera camera;
+   private final OrthographicCamera camera;
 
-    public TiledMapRenderer(TiledMap map, OrthographicCamera camera) {
-	this.camera = camera;
-	mapRenderer = new OrthogonalTiledMapRenderer(map);
-    }
+   public TiledMapRenderer(TiledMap map, OrthographicCamera camera) {
+      this.camera = camera;
+      mapRenderer = new OrthogonalTiledMapRenderer(map);
+   }
 
-    @Override
-    public void beforeRender() {
-	// TODO Auto-generated method stub
+   @Override
+   public void beforeRender() {
+      // TODO Auto-generated method stub
 
-    }
+   }
 
-    @Override
-    public void render(Batch batch, float delta) {
-	mapRenderer.setView(camera);
-	mapRenderer.render();
-    }
+   @Override
+   public void render(Batch batch, float delta) {
+      mapRenderer.setView(camera);
+      mapRenderer.render();
+   }
 
 }

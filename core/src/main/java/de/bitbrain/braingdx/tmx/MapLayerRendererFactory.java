@@ -29,5 +29,5 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
  */
 public interface MapLayerRendererFactory {
 
-    GameObjectRenderer create(int index, TiledMap tiledMap, Camera camera);
+   GameObjectRenderer create(int index, TiledMap tiledMap, Camera camera);
 }

@@ -23,23 +23,20 @@ import com.badlogic.gdx.math.Vector2;
  * @author Miguel Gonzalez Sanchez
  */
 public enum Orientation {
-    
-    LEFT(-1, 0), 
-    RIGHT(1, 0), 
-    DOWN(0, -1), 
-    UP(0, 1);
 
-    private Vector2 direction;
+   LEFT(-1, 0), RIGHT(1, 0), DOWN(0, -1), UP(0, 1);
 
-    Orientation(float x, float y) {
-	direction = new Vector2(x, y);
-    }
+   private Vector2 direction;
 
-    public int getXFactor() {
-	return (int) direction.x;
-    }
+   Orientation(float x, float y) {
+      direction = new Vector2(x, y);
+   }
 
-    public int getYFactor() {
-	return (int) direction.y;
-    }
+   public int getXFactor() {
+      return (int) direction.x;
+   }
+
+   public int getYFactor() {
+      return (int) direction.y;
+   }
 }

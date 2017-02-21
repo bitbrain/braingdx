@@ -27,37 +27,37 @@ import de.bitbrain.braingdx.postprocessing.filters.NfaaFilter;
  * @author Toni Sagrista
  */
 public final class Nfaa extends Antialiasing {
-    private NfaaFilter nfaaFilter = null;
+   private NfaaFilter nfaaFilter = null;
 
-    /** Create a NFAA with the viewport size */
-    public Nfaa(int viewportWidth, int viewportHeight) {
-	setup(viewportWidth, viewportHeight);
-    }
+   /** Create a NFAA with the viewport size */
+   public Nfaa(int viewportWidth, int viewportHeight) {
+      setup(viewportWidth, viewportHeight);
+   }
 
-    private void setup(int viewportWidth, int viewportHeight) {
-	nfaaFilter = new NfaaFilter(viewportWidth, viewportHeight);
-    }
+   private void setup(int viewportWidth, int viewportHeight) {
+      nfaaFilter = new NfaaFilter(viewportWidth, viewportHeight);
+   }
 
-    public void setViewportSize(int width, int height) {
-	nfaaFilter.setViewportSize(width, height);
-    }
+   public void setViewportSize(int width, int height) {
+      nfaaFilter.setViewportSize(width, height);
+   }
 
-    @Override
-    public void dispose() {
-	if (nfaaFilter != null) {
-	    nfaaFilter.dispose();
-	    nfaaFilter = null;
-	}
-    }
+   @Override
+   public void dispose() {
+      if (nfaaFilter != null) {
+         nfaaFilter.dispose();
+         nfaaFilter = null;
+      }
+   }
 
-    @Override
-    public void rebind() {
-	nfaaFilter.rebind();
-    }
+   @Override
+   public void rebind() {
+      nfaaFilter.rebind();
+   }
 
-    @Override
-    public void render(FrameBuffer src, FrameBuffer dest) {
-	restoreViewport(dest);
-	nfaaFilter.setInput(src).setOutput(dest).render();
-    }
+   @Override
+   public void render(FrameBuffer src, FrameBuffer dest) {
+      restoreViewport(dest);
+      nfaaFilter.setInput(src).setOutput(dest).render();
+   }
 }

@@ -10,13 +10,13 @@ import de.bitbrain.braingdx.assets.GameAssetLoader;
 
 public class AppGameAssetLoader implements GameAssetLoader {
 
-    @Override
-    public void put(Map<String, Class<?>> assets) {
-	assets.put(Assets.BUTTON_DEFAULT, Texture.class);
-	assets.put(Assets.FONT_BYOM_32, BitmapFont.class);
-	assets.put(Assets.TEX_BACKGROUND, Texture.class);
-	assets.put(Assets.SOLDIER, Texture.class);
-	assets.put(Assets.WALL, Texture.class);
-    }
+   @Override
+   public void put(Map<String, Class<?>> assets) {
+      assets.put(Assets.BUTTON_DEFAULT, Texture.class);
+      assets.put(Assets.FONT_BYOM_32, BitmapFont.class);
+      assets.put(Assets.TEX_BACKGROUND, Texture.class);
+      assets.put(Assets.SOLDIER, Texture.class);
+      assets.put(Assets.WALL, Texture.class);
+   }
 
 }

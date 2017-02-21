@@ -27,21 +27,21 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class SpriteSheet {
 
-    private final TextureRegion[][] sprites;
+   private final TextureRegion[][] sprites;
 
-    private float flip = 1;
+   private float flip = 1;
 
-    public SpriteSheet(Texture texture, int spritesHorizontal, int spritesVertical) {
-	sprites = TextureRegion.split(texture, texture.getWidth() / spritesHorizontal,
-		texture.getHeight() / spritesVertical);
-    }
+   public SpriteSheet(Texture texture, int spritesHorizontal, int spritesVertical) {
+      sprites = TextureRegion.split(texture, texture.getWidth() / spritesHorizontal,
+            texture.getHeight() / spritesVertical);
+   }
 
-    public SpriteSheet flipped(boolean flipped) {
-	flip = flipped ? -1 : 1;
-	return this;
-    }
+   public SpriteSheet flipped(boolean flipped) {
+      flip = flipped ? -1 : 1;
+      return this;
+   }
 
-    public void draw(Batch batch, int indexX, int indexY, float x, float y, float width, float height) {
-	batch.draw(sprites[indexY][indexX], x, flip == -1 ? y + height : y, width, flip * height);
-    }
+   public void draw(Batch batch, int indexX, int indexY, float x, float y, float width, float height) {
+      batch.draw(sprites[indexY][indexX], x, flip == -1 ? y + height : y, width, flip * height);
+   }
 }

@@ -28,31 +28,31 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class TiledMapListenerAdapter implements TiledMapListener {
 
-    @Override
-    public void onLoadGameObject(GameObject object, TiledMapAPI api) {
-    }
+   @Override
+   public void onLoadGameObject(GameObject object, TiledMapAPI api) {
+   }
 
-    @Override
-    public void beforeLoad(TiledMap map) {
-    }
+   @Override
+   public void beforeLoad(TiledMap map) {
+   }
 
-    @Override
-    public void afterLoad(TiledMap map, TiledMapAPI api) {
-    }
+   @Override
+   public void afterLoad(TiledMap map, TiledMapAPI api) {
+   }
 
-    @Override
-    public void beforeUnload(TiledMapAPI api) {
-    }
+   @Override
+   public void beforeUnload(TiledMapAPI api) {
+   }
 
-    @Override
-    public void afterUnload() {
-    }
+   @Override
+   public void afterUnload() {
+   }
 
-    @Override
-    public void onEnterCell(int xIndex, int yIndex, GameObject object, TiledMapAPI api) {
-    }
+   @Override
+   public void onEnterCell(int xIndex, int yIndex, GameObject object, TiledMapAPI api) {
+   }
 
-    @Override
-    public void onLayerChange(int previousLayer, int newLayer, GameObject object, TiledMapAPI api) {
-    }
+   @Override
+   public void onLayerChange(int previousLayer, int newLayer, GameObject object, TiledMapAPI api) {
+   }
 }

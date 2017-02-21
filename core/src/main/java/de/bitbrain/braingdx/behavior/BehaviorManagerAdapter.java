@@ -5,30 +5,30 @@ import de.bitbrain.braingdx.world.GameWorld.GameWorldListener;
 
 public class BehaviorManagerAdapter extends GameWorldListener {
 
-    private BehaviorManager behaviorManager;
+   private BehaviorManager behaviorManager;
 
-    public BehaviorManagerAdapter(BehaviorManager behaviorManager) {
-	this.behaviorManager = behaviorManager;
-    }
+   public BehaviorManagerAdapter(BehaviorManager behaviorManager) {
+      this.behaviorManager = behaviorManager;
+   }
 
-    @Override
-    public void onUpdate(GameObject object, float delta) {
-	behaviorManager.updateGlobally(object, delta);
-	behaviorManager.updateLocally(object, delta);
-    }
+   @Override
+   public void onUpdate(GameObject object, float delta) {
+      behaviorManager.updateGlobally(object, delta);
+      behaviorManager.updateLocally(object, delta);
+   }
 
-    @Override
-    public void onUpdate(GameObject object, GameObject other, float delta) {
-	behaviorManager.updateLocallyCompared(object, other, delta);
-    }
+   @Override
+   public void onUpdate(GameObject object, GameObject other, float delta) {
+      behaviorManager.updateLocallyCompared(object, other, delta);
+   }
 
-    @Override
-    public void onRemove(GameObject object) {
-	behaviorManager.remove(object);
-    }
+   @Override
+   public void onRemove(GameObject object) {
+      behaviorManager.remove(object);
+   }
 
-    @Override
-    public void onClear() {
-	behaviorManager.clear();
-    }
+   @Override
+   public void onClear() {
+      behaviorManager.clear();
+   }
 }

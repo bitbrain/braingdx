@@ -10,19 +10,19 @@ import de.bitbrain.braingdx.graphics.pipeline.AbstractRenderLayer;
 
 public class ColorRenderLayer extends AbstractRenderLayer {
 
-    private final ShapeRenderer renderer = new ShapeRenderer();
+   private final ShapeRenderer renderer = new ShapeRenderer();
 
-    private Color color;
+   private Color color;
 
-    public ColorRenderLayer(Color color) {
-	this.color = color;
-    }
+   public ColorRenderLayer(Color color) {
+      this.color = color;
+   }
 
-    @Override
-    public void render(Batch batch, float delta) {
-	renderer.begin(ShapeType.Filled);
-	renderer.setColor(color);
-	renderer.rect(0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-	renderer.end();
-    }
+   @Override
+   public void render(Batch batch, float delta) {
+      renderer.begin(ShapeType.Filled);
+      renderer.setColor(color);
+      renderer.rect(0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      renderer.end();
+   }
 }

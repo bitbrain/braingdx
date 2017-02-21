@@ -24,13 +24,13 @@ package de.bitbrain.braingdx.util;
  */
 public class ValueProvider {
 
-    private float value;
+   private float value;
 
-    public float getValue() {
-	return value;
-    }
+   public float getValue() {
+      return value;
+   }
 
-    public void setValue(float value) {
-	this.value = value;
-    }
+   public void setValue(float value) {
+      this.value = value;
+   }
 }

@@ -34,79 +34,79 @@ import de.bitbrain.braingdx.util.Resizeable;
  * @author Miguel Gonzalez Sanchez
  */
 class LayeredRenderPipe implements RenderPipe, Disposable, Resizeable {
-    private RenderLayer renderLayer;
+   private RenderLayer renderLayer;
 
-    private ShaderManager shaderManager;
+   private ShaderManager shaderManager;
 
-    private FrameBuffer buffer;
+   private FrameBuffer buffer;
 
-    private final FrameBufferFactory bufferFactory;
+   private final FrameBufferFactory bufferFactory;
 
-    private boolean enabled;
+   private boolean enabled;
 
-    LayeredRenderPipe(RenderLayer layer, PostProcessor processor, FrameBufferFactory factory,
-	    PostProcessorEffect... effects) {
-	this.renderLayer = layer;
-	this.shaderManager = new ShaderManager(processor, effects);
-	this.bufferFactory = factory;
-	this.setEnabled(true);
-    }
+   LayeredRenderPipe(RenderLayer layer, PostProcessor processor, FrameBufferFactory factory,
+         PostProcessorEffect... effects) {
+      this.renderLayer = layer;
+      this.shaderManager = new ShaderManager(processor, effects);
+      this.bufferFactory = factory;
+      this.setEnabled(true);
+   }
 
-    @Override
-    public boolean isEnabled() {
-	return enabled;
-    }
+   @Override
+   public boolean isEnabled() {
+      return enabled;
+   }
 
-    @Override
-    public void setEnabled(boolean enabled) {
-	this.enabled = enabled;
-    }
+   @Override
+   public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
+   }
 
-    public void render(Batch batch, float delta) {
-	if (shaderManager.hasEffects() && buffer != null) {
-	    renderOntoBuffer(batch, delta);
-	} else {
-	    draw(batch, delta);
-	}
-	blendAndDraw(batch);
-    }
+   public void render(Batch batch, float delta) {
+      if (shaderManager.hasEffects() && buffer != null) {
+         renderOntoBuffer(batch, delta);
+      } else {
+         draw(batch, delta);
+      }
+      blendAndDraw(batch);
+   }
 
-    @Override
-    public void resize(int width, int height) {
-	if (buffer != null) {
-	    buffer.dispose();
-	}
-	this.buffer = bufferFactory.create(width, height);
-    }
+   @Override
+   public void resize(int width, int height) {
+      if (buffer != null) {
+         buffer.dispose();
+      }
+      this.buffer = bufferFactory.create(width, height);
+   }
 
-    @Override
-    public void addEffects(PostProcessorEffect... effects) {
-	shaderManager.addEffects(effects);
-    }
+   @Override
+   public void addEffects(PostProcessorEffect... effects) {
+      shaderManager.addEffects(effects);
+   }
 
-    @Override
-    public void dispose() {
-	buffer.dispose();
-    }
+   @Override
+   public void dispose() {
+      buffer.dispose();
+   }
 
-    private void renderOntoBuffer(Batch batch, float delta) {
-	shaderManager.begin();
-	renderLayer.render(batch, delta);
-	shaderManager.end(buffer);
-    }
+   private void renderOntoBuffer(Batch batch, float delta) {
+      shaderManager.begin();
+      renderLayer.render(batch, delta);
+      shaderManager.end(buffer);
+   }
 
-    private void blendAndDraw(Batch batch) {
-	int srcFunc = batch.getBlendSrcFunc();
-	int dstFunc = batch.getBlendDstFunc();
-	batch.begin();
-	batch.setColor(Color.WHITE);
-	batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
-	batch.end();
-	batch.setBlendFunction(srcFunc, dstFunc);
-    }
+   private void blendAndDraw(Batch batch) {
+      int srcFunc = batch.getBlendSrcFunc();
+      int dstFunc = batch.getBlendDstFunc();
+      batch.begin();
+      batch.setColor(Color.WHITE);
+      batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
+      batch.end();
+      batch.setBlendFunction(srcFunc, dstFunc);
+   }
 
-    private void draw(Batch batch, float delta) {
-	batch.setColor(Color.WHITE);
-	renderLayer.render(batch, delta);
-    }
+   private void draw(Batch batch, float delta) {
+      batch.setColor(Color.WHITE);
+      renderLayer.render(batch, delta);
+   }
 }

@@ -6,13 +6,13 @@ import de.bitbrain.braingdx.screens.AbstractScreen;
 
 public class TmxTest extends BrainGdxGame {
 
-    @Override
-    protected GameAssetLoader getAssetLoader() {
-	return new TmxAssetLoader();
-    }
+   @Override
+   protected GameAssetLoader getAssetLoader() {
+      return new TmxAssetLoader();
+   }
 
-    @Override
-    protected AbstractScreen<?> getInitialScreen() {
-	return new TmxScreen(this);
-    }
+   @Override
+   protected AbstractScreen<?> getInitialScreen() {
+      return new TmxScreen(this);
+   }
 }

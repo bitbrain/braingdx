@@ -33,79 +33,79 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class BehaviorManager {
 
-    private Set<Behavior> globalBehaviors;
+   private Set<Behavior> globalBehaviors;
 
-    private Map<GameObject, List<Behavior>> localBehaviors;
+   private Map<GameObject, List<Behavior>> localBehaviors;
 
-    public BehaviorManager() {
-	globalBehaviors = new HashSet<Behavior>();
-	localBehaviors = new HashMap<GameObject, List<Behavior>>();
-    }
+   public BehaviorManager() {
+      globalBehaviors = new HashSet<Behavior>();
+      localBehaviors = new HashMap<GameObject, List<Behavior>>();
+   }
 
-    public void apply(Behavior behavior, GameObject source) {
-	List<Behavior> behaviors = localBehaviors.get(source);
-	if (behaviors == null) {
-	    behaviors = new ArrayList<Behavior>();
-	    localBehaviors.put(source, behaviors);
-	}
-	behaviors.add(behavior);
-	behavior.onAttach(source);
-	for (Behavior globalBehavior : globalBehaviors) {
-	    globalBehavior.onAttach(source);
-	}
-    }
+   public void apply(Behavior behavior, GameObject source) {
+      List<Behavior> behaviors = localBehaviors.get(source);
+      if (behaviors == null) {
+         behaviors = new ArrayList<Behavior>();
+         localBehaviors.put(source, behaviors);
+      }
+      behaviors.add(behavior);
+      behavior.onAttach(source);
+      for (Behavior globalBehavior : globalBehaviors) {
+         globalBehavior.onAttach(source);
+      }
+   }
 
-    public void apply(Behavior behavior) {
-	globalBehaviors.add(behavior);
-    }
+   public void apply(Behavior behavior) {
+      globalBehaviors.add(behavior);
+   }
 
-    public void remove(Behavior behavior) {
-	globalBehaviors.remove(behavior);
-    }
+   public void remove(Behavior behavior) {
+      globalBehaviors.remove(behavior);
+   }
 
-    public void remove(GameObject source) {
-	List<Behavior> behaviors = localBehaviors.remove(source);
-	if (behaviors != null) {
-	    for (Behavior behavior : behaviors) {
-		behavior.onDetach(source);
-	    }
-	}
-	for (Behavior globalBehavior : globalBehaviors) {
-	    globalBehavior.onDetach(source);
-	}
-    }
+   public void remove(GameObject source) {
+      List<Behavior> behaviors = localBehaviors.remove(source);
+      if (behaviors != null) {
+         for (Behavior behavior : behaviors) {
+            behavior.onDetach(source);
+         }
+      }
+      for (Behavior globalBehavior : globalBehaviors) {
+         globalBehavior.onDetach(source);
+      }
+   }
 
-    public void updateGlobally(GameObject source, float delta) {
-	for (Behavior behavior : globalBehaviors) {
-	    behavior.update(source, delta);
-	}
-    }
+   public void updateGlobally(GameObject source, float delta) {
+      for (Behavior behavior : globalBehaviors) {
+         behavior.update(source, delta);
+      }
+   }
 
-    public void updateLocally(GameObject source, float delta) {
-	List<Behavior> behaviors = localBehaviors.get(source);
-	if (behaviors != null) {
-	    for (Behavior behavior : behaviors) {
-		behavior.update(source, delta);
-	    }
-	}
-    }
+   public void updateLocally(GameObject source, float delta) {
+      List<Behavior> behaviors = localBehaviors.get(source);
+      if (behaviors != null) {
+         for (Behavior behavior : behaviors) {
+            behavior.update(source, delta);
+         }
+      }
+   }
 
-    public void updateLocallyCompared(GameObject source, GameObject target, float delta) {
-	List<Behavior> behaviors = localBehaviors.get(source);
-	if (behaviors != null) {
-	    for (Behavior behavior : behaviors) {
-		behavior.update(source, target, delta);
-	    }
-	}
-    }
+   public void updateLocallyCompared(GameObject source, GameObject target, float delta) {
+      List<Behavior> behaviors = localBehaviors.get(source);
+      if (behaviors != null) {
+         for (Behavior behavior : behaviors) {
+            behavior.update(source, target, delta);
+         }
+      }
+   }
 
-    public void clear() {
-	for (Entry<GameObject, List<Behavior>> behaviors : localBehaviors.entrySet()) {
-	    for (Behavior behavior : behaviors.getValue()) {
-		behavior.onDetach(behaviors.getKey());
-	    }
-	}
-	localBehaviors.clear();
-	globalBehaviors.clear();
-    }
+   public void clear() {
+      for (Entry<GameObject, List<Behavior>> behaviors : localBehaviors.entrySet()) {
+         for (Behavior behavior : behaviors.getValue()) {
+            behavior.onDetach(behaviors.getKey());
+         }
+      }
+      localBehaviors.clear();
+      globalBehaviors.clear();
+   }
 }

@@ -28,52 +28,52 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class ManagedParticleEffect {
 
-    private final PooledEffect effect;
+   private final PooledEffect effect;
 
-    private final String path;
+   private final String path;
 
-    private Vector2 offset = new Vector2();
+   private Vector2 offset = new Vector2();
 
-    private boolean started = false;
+   private boolean started = false;
 
-    ManagedParticleEffect(PooledEffect effect, String path) {
-	this.effect = effect;
-	this.path = path;
-    }
+   ManagedParticleEffect(PooledEffect effect, String path) {
+      this.effect = effect;
+      this.path = path;
+   }
 
-    public String getPath() {
-	return path;
-    }
+   public String getPath() {
+      return path;
+   }
 
-    PooledEffect getEffect() {
-	return effect;
-    }
+   PooledEffect getEffect() {
+      return effect;
+   }
 
-    public ManagedParticleEffect offset(float x, float y) {
-	this.offset.x = x;
-	this.offset.y = y;
-	return this;
-    }
+   public ManagedParticleEffect offset(float x, float y) {
+      this.offset.x = x;
+      this.offset.y = y;
+      return this;
+   }
 
-    public ManagedParticleEffect scale(float scale) {
-	effect.scaleEffect(scale);
-	return this;
-    }
+   public ManagedParticleEffect scale(float scale) {
+      effect.scaleEffect(scale);
+      return this;
+   }
 
-    public ManagedParticleEffect attached(boolean attached) {
-	for (ParticleEmitter emitter : effect.getEmitters()) {
-	    emitter.setAttached(attached);
-	}
-	return this;
-    }
+   public ManagedParticleEffect attached(boolean attached) {
+      for (ParticleEmitter emitter : effect.getEmitters()) {
+         emitter.setAttached(attached);
+      }
+      return this;
+   }
 
-    public void render(float x, float y, Batch batch, float delta) {
-	if (!started) {
-	    effect.start();
-	    started = true;
-	}
-	effect.setPosition(x + offset.x, y + offset.y);
-	effect.draw(batch, delta);
-    }
+   public void render(float x, float y, Batch batch, float delta) {
+      if (!started) {
+         effect.start();
+         started = true;
+      }
+      effect.setPosition(x + offset.x, y + offset.y);
+      effect.draw(batch, delta);
+   }
 
 }

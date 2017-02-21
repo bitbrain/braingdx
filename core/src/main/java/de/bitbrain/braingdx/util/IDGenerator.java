@@ -23,14 +23,14 @@ import java.util.Map;
  */
 public final class IDGenerator {
 
-    private static Map<Class<?>, Long> idStore = new HashMap<Class<?>, Long>();
+   private static Map<Class<?>, Long> idStore = new HashMap<Class<?>, Long>();
 
-    public static String generateNext(Class<?> clazz) {
-	Long counter = idStore.get(clazz);
-	if (counter == null) {
-	    counter = 0L;
-	}
-	idStore.put(clazz, ++counter);
-	return clazz.getCanonicalName() + "_" + String.valueOf(counter++);
-    }
+   public static String generateNext(Class<?> clazz) {
+      Long counter = idStore.get(clazz);
+      if (counter == null) {
+         counter = 0L;
+      }
+      idStore.put(clazz, ++counter);
+      return clazz.getCanonicalName() + "_" + String.valueOf(counter++);
+   }
 }

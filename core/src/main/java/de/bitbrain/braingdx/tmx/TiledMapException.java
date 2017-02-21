@@ -24,10 +24,10 @@ package de.bitbrain.braingdx.tmx;
  */
 public class TiledMapException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 1L;
 
-    public TiledMapException(String message) {
-	super(message);
-    }
+   public TiledMapException(String message) {
+      super(message);
+   }
 
 }

@@ -22,16 +22,27 @@ import de.bitbrain.braingdx.world.GameWorld;
  * @author Miguel Gonzalez Sanchez
  */
 public interface GameContext {
-    GameWorld getGameWorld();
-    Stage getStage();
-    World getBox2DWorld();
-    ParticleManager getParticleManager();
-    TweenManager getTweenManager();
-    BehaviorManager getBehaviorManager();
-    GameObjectRenderManager getRenderManager();
-    RenderPipeline getRenderPipeline();
-    GameCamera getGameCamera();
-    LightingManager getLightingManager();
-    InputMultiplexer getInput();
-    TiledMapManager getTiledMapManager();
+   GameWorld getGameWorld();
+
+   Stage getStage();
+
+   World getBox2DWorld();
+
+   ParticleManager getParticleManager();
+
+   TweenManager getTweenManager();
+
+   BehaviorManager getBehaviorManager();
+
+   GameObjectRenderManager getRenderManager();
+
+   RenderPipeline getRenderPipeline();
+
+   GameCamera getGameCamera();
+
+   LightingManager getLightingManager();
+
+   InputMultiplexer getInput();
+
+   TiledMapManager getTiledMapManager();
 }

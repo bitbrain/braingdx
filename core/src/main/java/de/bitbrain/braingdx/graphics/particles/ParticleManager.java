@@ -32,48 +32,48 @@ import de.bitbrain.braingdx.assets.SharedAssetManager;
  * @version 1.0.0
  */
 public class ParticleManager implements Disposable {
-    
-    public static final int DEFAULT_INITIAL_CAPACITY = 25;
-    public static final int DEFAULT_MAXIMUM_EFFECTS = 500;
 
-    private final Map<String, ParticleEffectPool> pools = new HashMap<String, ParticleEffectPool>();
+   public static final int DEFAULT_INITIAL_CAPACITY = 25;
+   public static final int DEFAULT_MAXIMUM_EFFECTS = 500;
 
-    private final int initialCapacity;
+   private final Map<String, ParticleEffectPool> pools = new HashMap<String, ParticleEffectPool>();
 
-    private final int maximalEffects;
+   private final int initialCapacity;
 
-    public ParticleManager() {
-	this(DEFAULT_INITIAL_CAPACITY, DEFAULT_MAXIMUM_EFFECTS);
-    }
+   private final int maximalEffects;
 
-    public ParticleManager(int initialCapacity, int maximalEffects) {
-	this.initialCapacity = initialCapacity;
-	this.maximalEffects = maximalEffects;
-    }
+   public ParticleManager() {
+      this(DEFAULT_INITIAL_CAPACITY, DEFAULT_MAXIMUM_EFFECTS);
+   }
 
-    public ManagedParticleEffect create(String particleFile) {
-	ParticleEffectPool pool = pools.get(particleFile);
-	if (!pools.containsKey(particleFile)) {
-	    ParticleEffect effect = SharedAssetManager.getInstance().get(particleFile, ParticleEffect.class);
-	    pool = new ParticleEffectPool(effect, initialCapacity, maximalEffects);
-	    pools.put(particleFile, pool);
-	}
-	PooledEffect effect = pool.obtain();
-	return new ManagedParticleEffect(effect, particleFile);
-    }
+   public ParticleManager(int initialCapacity, int maximalEffects) {
+      this.initialCapacity = initialCapacity;
+      this.maximalEffects = maximalEffects;
+   }
 
-    public void free(ManagedParticleEffect renderer) {
-	renderer.getEffect().free();
-	ParticleEffectPool pool = pools.get(renderer.getPath());
-	pool.free(renderer.getEffect());
-    }
+   public ManagedParticleEffect create(String particleFile) {
+      ParticleEffectPool pool = pools.get(particleFile);
+      if (!pools.containsKey(particleFile)) {
+         ParticleEffect effect = SharedAssetManager.getInstance().get(particleFile, ParticleEffect.class);
+         pool = new ParticleEffectPool(effect, initialCapacity, maximalEffects);
+         pools.put(particleFile, pool);
+      }
+      PooledEffect effect = pool.obtain();
+      return new ManagedParticleEffect(effect, particleFile);
+   }
 
-    @Override
-    public void dispose() {
-	for (ParticleEffectPool pool : pools.values()) {
-	    pool.clear();
-	}
-	pools.clear();
-    }
+   public void free(ManagedParticleEffect renderer) {
+      renderer.getEffect().free();
+      ParticleEffectPool pool = pools.get(renderer.getPath());
+      pool.free(renderer.getEffect());
+   }
+
+   @Override
+   public void dispose() {
+      for (ParticleEffectPool pool : pools.values()) {
+         pool.clear();
+      }
+      pools.clear();
+   }
 
 }

@@ -29,16 +29,11 @@ import com.badlogic.gdx.utils.Disposable;
  */
 public interface TiledMapManager extends Disposable {
 
-    void addListener(TiledMapListener listener);
+   void addListener(TiledMapListener listener);
 
-    void load(TiledMap tiledMap, 
-	      Camera camera, 
-	      TiledMapType type, 
-	      TiledMapConfig config) throws TiledMapException;
+   void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config) throws TiledMapException;
 
-    void load(TiledMap tiledMap, 
-	      Camera camera, 
-	      TiledMapType type) throws TiledMapException;
+   void load(TiledMap tiledMap, Camera camera, TiledMapType type) throws TiledMapException;
 
-    TiledMapAPI getAPI();
+   TiledMapAPI getAPI();
 }

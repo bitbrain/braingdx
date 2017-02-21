@@ -33,37 +33,37 @@ import de.bitbrain.braingdx.assets.loader.ParticleLoader;
  */
 public class SharedAssetManager extends AssetManager {
 
-    private static AssetManager instance = null;
+   private static AssetManager instance = null;
 
-    private SharedAssetManager() {
-    }
+   private SharedAssetManager() {
+   }
 
-    /**
-     * Provides the internal asset manager instance
-     */
-    public static AssetManager getInstance() {
+   /**
+    * Provides the internal asset manager instance
+    */
+   public static AssetManager getInstance() {
 
-	if (instance == null)
-	    loadInternal();
+      if (instance == null)
+         loadInternal();
 
-	return instance;
-    }
+      return instance;
+   }
 
-    public static void reload() {
-	instance.dispose();
-	loadInternal();
-    }
+   public static void reload() {
+      instance.dispose();
+      loadInternal();
+   }
 
-    private static void loadInternal() {
+   private static void loadInternal() {
 
-	if (Gdx.files == null)
-	    throw new RuntimeException("LibGDX is not initialized yet!");
+      if (Gdx.files == null)
+         throw new RuntimeException("LibGDX is not initialized yet!");
 
-	if (Gdx.files.isLocalStorageAvailable()) {
-	    instance = new AssetManager();
-	    instance.setLoader(ParticleEffect.class, new ParticleLoader(new InternalFileHandleResolver()));
-	    instance.setLoader(TiledMap.class, new TmxMapLoader());
-	}
+      if (Gdx.files.isLocalStorageAvailable()) {
+         instance = new AssetManager();
+         instance.setLoader(ParticleEffect.class, new ParticleLoader(new InternalFileHandleResolver()));
+         instance.setLoader(TiledMap.class, new TmxMapLoader());
+      }
 
-    }
+   }
 }

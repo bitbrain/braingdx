@@ -26,13 +26,13 @@ import aurelienribon.tweenengine.TweenManager;
  */
 public class SharedTweenManager {
 
-    private static TweenManager instance = new TweenManager();
+   private static TweenManager instance = new TweenManager();
 
-    private SharedTweenManager() {
+   private SharedTweenManager() {
 
-    }
+   }
 
-    public static TweenManager getInstance() {
-	return instance;
-    }
+   public static TweenManager getInstance() {
+      return instance;
+   }
 }

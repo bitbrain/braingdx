@@ -13,47 +13,47 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 @RunWith(MockitoJUnitRunner.class)
 public class GameWorldTest {
 
-    @Mock
-    private OrthographicCamera camera;
+   @Mock
+   private OrthographicCamera camera;
 
-    private GameWorld world;
+   private GameWorld world;
 
-    @Before
-    public void beforeTest() {
-	world = new GameWorld(camera);
-    }
+   @Before
+   public void beforeTest() {
+      world = new GameWorld(camera);
+   }
 
-    @Test
-    public void testSize() {
-	final int size = 5;
-	for (int i = 0; i < size; ++i) {
-	    world.addObject();
-	}
-	assertThat(world.size()).isEqualTo(size);
-    }
+   @Test
+   public void testSize() {
+      final int size = 5;
+      for (int i = 0; i < size; ++i) {
+         world.addObject();
+      }
+      assertThat(world.size()).isEqualTo(size);
+   }
 
-    @Test
-    public void testAddObject() {
-	GameObject object = world.addObject();
-	assertThat(object).isNotNull();
-	assertThat(world.size()).isEqualTo(1);
-	assertThat(object.getId()).isNotNull().isNotEmpty();
-    }
+   @Test
+   public void testAddObject() {
+      GameObject object = world.addObject();
+      assertThat(object).isNotNull();
+      assertThat(world.size()).isEqualTo(1);
+      assertThat(object.getId()).isNotNull().isNotEmpty();
+   }
 
-    @Test
-    public void testRemoveObject() {
-	GameObject object = world.addObject();
-	world.remove(object);
-	world.update(0f);
-	assertThat(world.size()).isEqualTo(0);
-    }
+   @Test
+   public void testRemoveObject() {
+      GameObject object = world.addObject();
+      world.remove(object);
+      world.update(0f);
+      assertThat(world.size()).isEqualTo(0);
+   }
 
-    @Test
-    public void testUpdateWithListener() {
-	GameObject object = world.addObject();
-	FakeIdSupplier fakeIdSupplier = new FakeIdSupplier();
-	world.addListener(fakeIdSupplier);
-	world.update(0f);
-	assertThat(object.getId()).isEqualTo(fakeIdSupplier.getCurrentId());
-    }
+   @Test
+   public void testUpdateWithListener() {
+      GameObject object = world.addObject();
+      FakeIdSupplier fakeIdSupplier = new FakeIdSupplier();
+      world.addListener(fakeIdSupplier);
+      world.update(0f);
+      assertThat(object.getId()).isEqualTo(fakeIdSupplier.getCurrentId());
+   }
 }

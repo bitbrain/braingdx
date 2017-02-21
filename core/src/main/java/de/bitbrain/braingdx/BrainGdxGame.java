@@ -45,35 +45,35 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public abstract class BrainGdxGame extends Game {
 
-    @Override
-    public final void create() {
-	loadAssets();
-	initTweens();
-	setScreen(getInitialScreen());
-    }
+   @Override
+   public final void create() {
+      loadAssets();
+      initTweens();
+      setScreen(getInitialScreen());
+   }
 
-    protected abstract GameAssetLoader getAssetLoader();
+   protected abstract GameAssetLoader getAssetLoader();
 
-    protected abstract AbstractScreen<?> getInitialScreen();
+   protected abstract AbstractScreen<?> getInitialScreen();
 
-    private void loadAssets() {
-	final AssetManager assetManager = SharedAssetManager.getInstance();
-	final GameAssetLoader loader = getAssetLoader();
-	if (loader == null)
-	    throw new RuntimeException("No asset loader has been specified.");
-	final HashMap<String, Class<?>> mapping = new HashMap<String, Class<?>>();
-	loader.put(mapping);
-	for (final Map.Entry<String, Class<?>> entry : mapping.entrySet()) {
-	    assetManager.load(entry.getKey(), entry.getValue());
-	}
-	assetManager.finishLoading();
-    }
+   private void loadAssets() {
+      final AssetManager assetManager = SharedAssetManager.getInstance();
+      final GameAssetLoader loader = getAssetLoader();
+      if (loader == null)
+         throw new RuntimeException("No asset loader has been specified.");
+      final HashMap<String, Class<?>> mapping = new HashMap<String, Class<?>>();
+      loader.put(mapping);
+      for (final Map.Entry<String, Class<?>> entry : mapping.entrySet()) {
+         assetManager.load(entry.getKey(), entry.getValue());
+      }
+      assetManager.finishLoading();
+   }
 
-    private void initTweens() {
-	Tween.registerAccessor(Actor.class, new ActorTween());
-	Tween.registerAccessor(Color.class, new ColorTween());
-	Tween.registerAccessor(Sprite.class, new SpriteTween());
-	Tween.registerAccessor(Vector2.class, new VectorTween());
-	Tween.registerAccessor(GameObject.class, new GameObjectTween());
-    }
+   private void initTweens() {
+      Tween.registerAccessor(Actor.class, new ActorTween());
+      Tween.registerAccessor(Color.class, new ColorTween());
+      Tween.registerAccessor(Sprite.class, new SpriteTween());
+      Tween.registerAccessor(Vector2.class, new VectorTween());
+      Tween.registerAccessor(GameObject.class, new GameObjectTween());
+   }
 }

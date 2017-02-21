@@ -26,10 +26,10 @@ import java.util.Map;
  */
 public interface GameAssetLoader {
 
-    /**
-     * Puts asset information into the assets map
-     *
-     * @param assets the asset map to fill
-     */
-    void put(Map<String, Class<?>> assets);
+   /**
+    * Puts asset information into the assets map
+    *
+    * @param assets the asset map to fill
+    */
+   void put(Map<String, Class<?>> assets);
 }

@@ -29,44 +29,39 @@ import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
  */
 public class SpriteSheetAnimationFactory {
 
-    private static final float DEFAULT_INTERVAL = 0.15f;
-    private static final int DEFAULT_BASE = 1;
-    private static final int DEFAULT_FRAMES = 3;
-    private static final Direction DEFAULT_DIRECTION = Direction.HORIZONTAL;
-    private static final AnimationType DEFAULT_TYPE = AnimationTypes.RESET;
+   private static final float DEFAULT_INTERVAL = 0.15f;
+   private static final int DEFAULT_BASE = 1;
+   private static final int DEFAULT_FRAMES = 3;
+   private static final Direction DEFAULT_DIRECTION = Direction.HORIZONTAL;
+   private static final AnimationType DEFAULT_TYPE = AnimationTypes.RESET;
 
-    public static class Index {
-	public final int x;
-	public final int y;
+   public static class Index {
+      public final int x;
+      public final int y;
 
-	public Index(int x, int y) {
-	    this.x = x;
-	    this.y = y;
-	}
-    }
+      public Index(int x, int y) {
+         this.x = x;
+         this.y = y;
+      }
+   }
 
-    private static final Index DEFAULT_INDEX = new Index(0, 0);
+   private static final Index DEFAULT_INDEX = new Index(0, 0);
 
-    private final Map<Integer, Index> indices;
+   private final Map<Integer, Index> indices;
 
-    private final SpriteSheet sheet;
+   private final SpriteSheet sheet;
 
-    public SpriteSheetAnimationFactory(SpriteSheet sheet, Map<Integer, Index> indices) {
-	this.sheet = sheet;
-	this.indices = indices;
-    }
+   public SpriteSheetAnimationFactory(SpriteSheet sheet, Map<Integer, Index> indices) {
+      this.sheet = sheet;
+      this.indices = indices;
+   }
 
-    public SpriteSheetAnimation create(int type) {
-	Index index = indices.get(type);
-	if (sheet == null) {
-	    index = DEFAULT_INDEX;
-	}
-	return new SpriteSheetAnimation(sheet)
-		.origin(index.x, index.y)
-		.interval(DEFAULT_INTERVAL)
-	        .direction(DEFAULT_DIRECTION)
-		.type(DEFAULT_TYPE)
-	        .base(DEFAULT_BASE)
-	        .frames(DEFAULT_FRAMES);
-    }
+   public SpriteSheetAnimation create(int type) {
+      Index index = indices.get(type);
+      if (sheet == null) {
+         index = DEFAULT_INDEX;
+      }
+      return new SpriteSheetAnimation(sheet).origin(index.x, index.y).interval(DEFAULT_INTERVAL)
+            .direction(DEFAULT_DIRECTION).type(DEFAULT_TYPE).base(DEFAULT_BASE).frames(DEFAULT_FRAMES);
+   }
 }

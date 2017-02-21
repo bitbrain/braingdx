@@ -32,29 +32,29 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class AnimationRenderer implements GameObjectRenderer {
 
-    private final AnimationSupplier<GameObject> supplier;
+   private final AnimationSupplier<GameObject> supplier;
 
-    private final Vector2 scale = new Vector2(1f, 1f);
+   private final Vector2 scale = new Vector2(1f, 1f);
 
-    public AnimationRenderer(AnimationSupplier<GameObject> supplier) {
-	this.supplier = supplier;
-    }
+   public AnimationRenderer(AnimationSupplier<GameObject> supplier) {
+      this.supplier = supplier;
+   }
 
-    public AnimationRenderer scale(float x, float y) {
-	this.scale.set(x, y);
-	return this;
-    }
+   public AnimationRenderer scale(float x, float y) {
+      this.scale.set(x, y);
+      return this;
+   }
 
-    @Override
-    public void init() {
-	// noOp
-    }
+   @Override
+   public void init() {
+      // noOp
+   }
 
-    @Override
-    public void render(GameObject object, Batch batch, float delta) {
-	Animation animation = supplier.supplyFor(object);
+   @Override
+   public void render(GameObject object, Batch batch, float delta) {
+      Animation animation = supplier.supplyFor(object);
 
-	animation.render(batch, object.getLeft() + object.getOffset().x, object.getTop() + object.getOffset().y,
-		object.getWidth() * scale.x, object.getHeight() * scale.y, delta);
-    }
+      animation.render(batch, object.getLeft() + object.getOffset().x, object.getTop() + object.getOffset().y,
+            object.getWidth() * scale.x, object.getHeight() * scale.y, delta);
+   }
 }

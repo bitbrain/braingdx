@@ -27,11 +27,17 @@ import de.bitbrain.braingdx.world.GameObject;
  * @author Miguel Gonzalez Sanchez
  */
 public interface TiledMapListener {
-    void onLoadGameObject(GameObject object, TiledMapAPI api);
-    void beforeLoad(TiledMap map);
-    void afterLoad(TiledMap map, TiledMapAPI api);
-    void beforeUnload(TiledMapAPI api);
-    void afterUnload();
-    void onEnterCell(int xIndex, int yIndex, GameObject object, TiledMapAPI api);
-    void onLayerChange(int previousLayer, int newLayer, GameObject object, TiledMapAPI api);
+   void onLoadGameObject(GameObject object, TiledMapAPI api);
+
+   void beforeLoad(TiledMap map);
+
+   void afterLoad(TiledMap map, TiledMapAPI api);
+
+   void beforeUnload(TiledMapAPI api);
+
+   void afterUnload();
+
+   void onEnterCell(int xIndex, int yIndex, GameObject object, TiledMapAPI api);
+
+   void onLayerChange(int previousLayer, int newLayer, GameObject object, TiledMapAPI api);
 }

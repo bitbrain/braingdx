@@ -13,51 +13,51 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public interface GameCamera {
 
-    /**
-     * Updates the tracker in a frame step
-     *
-     * @param delta the frame delta
-     */
-    void update(float delta);
+   /**
+    * Updates the tracker in a frame step
+    *
+    * @param delta the frame delta
+    */
+   void update(float delta);
 
-    /**
-     * Sets a new speed value
-     *
-     * @param speed
-     */
-    void setSpeed(float speed);
+   /**
+    * Sets a new speed value
+    *
+    * @param speed
+    */
+   void setSpeed(float speed);
 
-    /**
-     * Sets a new zoom scale factor
-     *
-     * @param zoomScale
-     */
-    void setZoomScale(float zoomScale);
+   /**
+    * Sets a new zoom scale factor
+    *
+    * @param zoomScale
+    */
+   void setZoomScale(float zoomScale);
 
-    /**
-     * Sets the base zoom
-     * 
-     * @param zoom baseZoom
-     */
-    void setBaseZoom(float zoom);
+   /**
+    * Sets the base zoom
+    * 
+    * @param zoom baseZoom
+    */
+   void setBaseZoom(float zoom);
 
-    /**
-     * Focuses directly on the target
-     */
-    void focus();
+   /**
+    * Focuses directly on the target
+    */
+   void focus();
 
-    /**
-     * Sets a new target
-     *
-     * @param target the target
-     */
-    void setTarget(GameObject target);
+   /**
+    * Sets a new target
+    *
+    * @param target the target
+    */
+   void setTarget(GameObject target);
 
-    /**
-     * Provides the internal camera
-     * 
-     * @return the internal camera object
-     */
-    Camera getInternal();
+   /**
+    * Provides the internal camera
+    * 
+    * @return the internal camera object
+    */
+   Camera getInternal();
 
 }

@@ -37,98 +37,98 @@ import de.bitbrain.braingdx.world.GameWorld;
  */
 public class TiledMapManagerImpl implements TiledMapManager {
 
-    private final BehaviorManager behaviorManager;
-    private final GameWorld gameWorld;
-    private final List<TiledMapListener> listeners = new ArrayList<TiledMapListener>();
-    private final GameObjectRenderManager renderManager;
-    private final TiledMapAPIImpl api;
-    private final GameObjectUpdater gameObjectUpdater;
-    private final State state;
-    private final StatePopulator populator;
-    private final Map<TiledMapType, MapLayerRendererFactory> factories;
+   private final BehaviorManager behaviorManager;
+   private final GameWorld gameWorld;
+   private final List<TiledMapListener> listeners = new ArrayList<TiledMapListener>();
+   private final GameObjectRenderManager renderManager;
+   private final TiledMapAPIImpl api;
+   private final GameObjectUpdater gameObjectUpdater;
+   private final State state;
+   private final StatePopulator populator;
+   private final Map<TiledMapType, MapLayerRendererFactory> factories;
 
-    public TiledMapManagerImpl(BehaviorManager behaviorManager, 
-	                       GameWorld gameWorld,
-	                       GameObjectRenderManager renderManager) {
-	this.behaviorManager = behaviorManager;
-	this.gameWorld = gameWorld;
-	this.renderManager = renderManager;
-	this.state = new State();
-	this.api = new TiledMapAPIImpl(state, gameWorld);
-	this.populator = new StatePopulator(renderManager, gameWorld, api, behaviorManager, listeners);
-	this.gameObjectUpdater = new GameObjectUpdater(api, state, listeners);
-	this.factories = createFactories();
-    }
+   public TiledMapManagerImpl(BehaviorManager behaviorManager, GameWorld gameWorld,
+         GameObjectRenderManager renderManager) {
+      this.behaviorManager = behaviorManager;
+      this.gameWorld = gameWorld;
+      this.renderManager = renderManager;
+      this.state = new State();
+      this.api = new TiledMapAPIImpl(state, gameWorld);
+      this.populator = new StatePopulator(renderManager, gameWorld, api, behaviorManager, listeners);
+      this.gameObjectUpdater = new GameObjectUpdater(api, state, listeners);
+      this.factories = createFactories();
+   }
 
-    @Override
-    public void addListener(TiledMapListener listener) {
-	listeners.add(listener);
-    }
+   @Override
+   public void addListener(TiledMapListener listener) {
+      listeners.add(listener);
+   }
 
-    @Override
-    public void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config)  throws TiledMapException {
-	validate(tiledMap);
-	clear();
-	for (TiledMapListener listener : listeners) {
-	    listener.beforeLoad(tiledMap);
-	}
-	behaviorManager.apply(gameObjectUpdater);
-	populator.populate(tiledMap, state, camera, factories.get(type), config);
-	for (TiledMapListener listener : listeners) {
-	    listener.afterLoad(tiledMap, api);
-	}
-    }
+   @Override
+   public void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config)
+         throws TiledMapException {
+      validate(tiledMap);
+      clear();
+      for (TiledMapListener listener : listeners) {
+         listener.beforeLoad(tiledMap);
+      }
+      behaviorManager.apply(gameObjectUpdater);
+      populator.populate(tiledMap, state, camera, factories.get(type), config);
+      for (TiledMapListener listener : listeners) {
+         listener.afterLoad(tiledMap, api);
+      }
+   }
 
-    @Override
-    public void load(TiledMap tiledMap, Camera camera, TiledMapType type)  throws TiledMapException {
-	this.load(tiledMap, camera, type, new TiledMapConfig());
-    }
+   @Override
+   public void load(TiledMap tiledMap, Camera camera, TiledMapType type) throws TiledMapException {
+      this.load(tiledMap, camera, type, new TiledMapConfig());
+   }
 
-    @Override
-    public void dispose() {
-	clear();
-    }
+   @Override
+   public void dispose() {
+      clear();
+   }
 
-    @Override
-    public TiledMapAPI getAPI() {
-	return api;
-    }
+   @Override
+   public TiledMapAPI getAPI() {
+      return api;
+   }
 
-    private void clear() {
-	for (TiledMapListener listener : listeners) {
-	    listener.beforeUnload(api);
-	}
-	behaviorManager.remove(gameObjectUpdater);
-	gameWorld.clear();
-	for (String id : state.getLayerIds()) {
-	    renderManager.unregister(id);
-	}
-	state.clear();
-	for (TiledMapListener listener : listeners) {
-	    listener.afterUnload();
-	}
-    }
+   private void clear() {
+      for (TiledMapListener listener : listeners) {
+         listener.beforeUnload(api);
+      }
+      behaviorManager.remove(gameObjectUpdater);
+      gameWorld.clear();
+      for (String id : state.getLayerIds()) {
+         renderManager.unregister(id);
+      }
+      state.clear();
+      for (TiledMapListener listener : listeners) {
+         listener.afterUnload();
+      }
+   }
 
-    protected Map<TiledMapType, MapLayerRendererFactory> createFactories() {
-	Map<TiledMapType, MapLayerRendererFactory> factories = new HashMap<TiledMapType, MapLayerRendererFactory>();
-	factories.put(TiledMapType.ORTHOGONAL, new OrthogonalMapLayerRendererFactory());
-	return factories;
-    }
+   protected Map<TiledMapType, MapLayerRendererFactory> createFactories() {
+      Map<TiledMapType, MapLayerRendererFactory> factories = new HashMap<TiledMapType, MapLayerRendererFactory>();
+      factories.put(TiledMapType.ORTHOGONAL, new OrthogonalMapLayerRendererFactory());
+      return factories;
+   }
 
-    private void validate(TiledMap map) throws TiledMapException {
-	MapProperties properties = map.getProperties();
-	if (properties.get(Constants.WIDTH) == null) {
-	    throw new TiledMapException("Map has no width specified");
-	}
-	if (properties.get(Constants.HEIGHT) == null) {
-	    throw new TiledMapException("Map has no width specified");
-	}
-	if (properties.get(Constants.WIDTH, int.class) <= 0f) {
-	    throw new TiledMapException("Map width must be larger than 0");
-	}
-	if (properties.get(Constants.HEIGHT, int.class) <= 0f) {
-	    throw new TiledMapException("Map height must be larger than 0");
-	}
-    }
+   private void validate(TiledMap map) throws TiledMapException {
+      MapProperties properties = map.getProperties();
+      if (properties.get(Constants.WIDTH) == null) {
+         throw new TiledMapException("Map has no width specified");
+      }
+      if (properties.get(Constants.HEIGHT) == null) {
+         throw new TiledMapException("Map has no width specified");
+      }
+      if (properties.get(Constants.WIDTH, int.class) <= 0f) {
+         throw new TiledMapException("Map width must be larger than 0");
+      }
+      if (properties.get(Constants.HEIGHT, int.class) <= 0f) {
+         throw new TiledMapException("Map height must be larger than 0");
+      }
+   }
 
 }

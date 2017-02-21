@@ -6,10 +6,9 @@ import de.bitbrain.braingdx.screens.AbstractScreen;
 
 public class BrainGdxWelcomeScreen extends AbstractScreen<BrainGdxTest> {
 
-    public BrainGdxWelcomeScreen(BrainGdxTest game) {
-	super(game);
-	setBackgroundColor(Color.WHITE);
-    }
-
+   public BrainGdxWelcomeScreen(BrainGdxTest game) {
+      super(game);
+      setBackgroundColor(Color.WHITE);
+   }
 
 }

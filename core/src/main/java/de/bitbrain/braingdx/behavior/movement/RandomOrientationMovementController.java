@@ -21,29 +21,29 @@ import de.bitbrain.braingdx.util.DeltaTimer;
 
 public class RandomOrientationMovementController implements MovementController<Orientation> {
 
-    private float interval;
-    private Orientation orientation;
-    private Random random = new Random();
-    private DeltaTimer timer = new DeltaTimer();
+   private float interval;
+   private Orientation orientation;
+   private Random random = new Random();
+   private DeltaTimer timer = new DeltaTimer();
 
-    @Override
-    public void update(Movement<Orientation> movement, float delta) {
-	timer.update(delta);
-	if (timer.reached(interval)) {
-	    timer.reset();
-	    changeDirection();
-	    changeInterval();
-	    movement.move(orientation);
-	}
-    }
+   @Override
+   public void update(Movement<Orientation> movement, float delta) {
+      timer.update(delta);
+      if (timer.reached(interval)) {
+         timer.reset();
+         changeDirection();
+         changeInterval();
+         movement.move(orientation);
+      }
+   }
 
-    private void changeDirection() {
-	int size = Orientation.values().length;
-	orientation = Orientation.values()[(int) Math.floor(random.nextFloat() * size)];
-    }
+   private void changeDirection() {
+      int size = Orientation.values().length;
+      orientation = Orientation.values()[(int) Math.floor(random.nextFloat() * size)];
+   }
 
-    private void changeInterval() {
-	interval = 1.2f + random.nextFloat() * 1.5f;
-    }
+   private void changeInterval() {
+      interval = 1.2f + random.nextFloat() * 1.5f;
+   }
 
 }

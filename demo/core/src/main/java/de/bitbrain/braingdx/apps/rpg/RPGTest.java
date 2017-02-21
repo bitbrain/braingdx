@@ -6,14 +6,14 @@ import de.bitbrain.braingdx.screens.AbstractScreen;
 
 public class RPGTest extends BrainGdxGame {
 
-    @Override
-    protected GameAssetLoader getAssetLoader() {
-	return new RPGAssetLoader();
-    }
+   @Override
+   protected GameAssetLoader getAssetLoader() {
+      return new RPGAssetLoader();
+   }
 
-    @Override
-    protected AbstractScreen<?> getInitialScreen() {
-	return new RPGScreen(this);
-    }
+   @Override
+   protected AbstractScreen<?> getInitialScreen() {
+      return new RPGScreen(this);
+   }
 
 }

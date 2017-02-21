@@ -7,17 +7,17 @@ import de.bitbrain.braingdx.world.GameWorld;
 
 public class WorldRenderLayer extends AbstractRenderLayer {
 
-    private final GameWorld world;
+   private final GameWorld world;
 
-    public WorldRenderLayer(GameWorld world) {
-	this.world = world;
-    }
+   public WorldRenderLayer(GameWorld world) {
+      this.world = world;
+   }
 
-    @Override
-    public void render(Batch batch, float delta) {
-	batch.begin();
-	world.update(delta);
-	batch.end();
-    }
+   @Override
+   public void render(Batch batch, float delta) {
+      batch.begin();
+      world.update(delta);
+      batch.end();
+   }
 
 }

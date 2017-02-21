@@ -26,12 +26,12 @@ package de.bitbrain.braingdx.behavior.movement;
  */
 public interface MovementController<T> {
 
-    /**
-     * Updates the movement.
-     * 
-     * @param movement the movement
-     * @param delta current frame delta
-     */
-    void update(Movement<T> movement, float delta);
+   /**
+    * Updates the movement.
+    * 
+    * @param movement the movement
+    * @param delta current frame delta
+    */
+   void update(Movement<T> movement, float delta);
 
 }

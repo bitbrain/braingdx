@@ -7,18 +7,18 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import de.bitbrain.braingdx.graphics.pipeline.AbstractRenderLayer;
 
 public class TextureRenderLayer extends AbstractRenderLayer {
-    
-    private Texture texture;
 
-    public TextureRenderLayer(Texture texture) {
-	this.texture = texture;
-    }
+   private Texture texture;
 
-    @Override
-    public void render(Batch batch, float delta) {
-	batch.begin();
-	batch.draw(texture, 0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-	batch.end();
-    }
+   public TextureRenderLayer(Texture texture) {
+      this.texture = texture;
+   }
+
+   @Override
+   public void render(Batch batch, float delta) {
+      batch.begin();
+      batch.draw(texture, 0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      batch.end();
+   }
 
 }

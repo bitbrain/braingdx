@@ -7,13 +7,13 @@ import de.bitbrain.braingdx.screens.AbstractScreen;
 
 public class BrainGdxTest extends BrainGdxGame {
 
-    @Override
-    protected GameAssetLoader getAssetLoader() {
-	return new AppGameAssetLoader();
-    }
+   @Override
+   protected GameAssetLoader getAssetLoader() {
+      return new AppGameAssetLoader();
+   }
 
-    @Override
-    protected AbstractScreen<?> getInitialScreen() {
-	return new BrainGdxWelcomeScreen(this);
-    }
+   @Override
+   protected AbstractScreen<?> getInitialScreen() {
+      return new BrainGdxWelcomeScreen(this);
+   }
 }

@@ -25,25 +25,25 @@ import de.bitbrain.braingdx.graphics.animation.AnimationType;
  */
 class ForwardYoyoAnimationType implements AnimationType {
 
-    @Override
-    public int updateCurrentFrame(int lastFrame, int currentFrame, int totalFrames, int origin) {
-	if (isBackwards(lastFrame, currentFrame)) {
-	    currentFrame--;
-	    if (currentFrame < 0) {
-		// Call recursively
-		return updateCurrentFrame(-1, 0, totalFrames, origin);
-	    }
-	} else {
-	    currentFrame++;
-	    if (currentFrame > totalFrames - 1) {
-		// Call recursively
-		return updateCurrentFrame(totalFrames, totalFrames - 1, totalFrames, origin);
-	    }
-	}
-	return currentFrame;
-    }
+   @Override
+   public int updateCurrentFrame(int lastFrame, int currentFrame, int totalFrames, int origin) {
+      if (isBackwards(lastFrame, currentFrame)) {
+         currentFrame--;
+         if (currentFrame < 0) {
+            // Call recursively
+            return updateCurrentFrame(-1, 0, totalFrames, origin);
+         }
+      } else {
+         currentFrame++;
+         if (currentFrame > totalFrames - 1) {
+            // Call recursively
+            return updateCurrentFrame(totalFrames, totalFrames - 1, totalFrames, origin);
+         }
+      }
+      return currentFrame;
+   }
 
-    private boolean isBackwards(int lastFrame, int currentFrame) {
-	return currentFrame < lastFrame;
-    }
+   private boolean isBackwards(int lastFrame, int currentFrame) {
+      return currentFrame < lastFrame;
+   }
 }

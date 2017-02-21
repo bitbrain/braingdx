@@ -26,119 +26,115 @@ import de.bitbrain.braingdx.world.GameObject;
 
 public class RasteredMovementBehavior extends BehaviorAdapter implements Movement<Orientation> {
 
-    public static final int DEFAULT_RASTER_SIZE = 32;
-    public static final float DEFAULT_INTERVAL = 1f;
-    public static final Orientation DEFAULT_DIRECTION = Orientation.DOWN;
-    public static final TiledCollisionResolver EMPTY_COLLISION_RESOLVER = new TiledCollisionResolver() {
+   public static final int DEFAULT_RASTER_SIZE = 32;
+   public static final float DEFAULT_INTERVAL = 1f;
+   public static final Orientation DEFAULT_DIRECTION = Orientation.DOWN;
+   public static final TiledCollisionResolver EMPTY_COLLISION_RESOLVER = new TiledCollisionResolver() {
 
-	@Override
-	public boolean isCollision(GameObject object, int tileOffsetX, int tileOffsetY) {
-	    return false;
-	}
+      @Override
+      public boolean isCollision(GameObject object, int tileOffsetX, int tileOffsetY) {
+         return false;
+      }
 
-	@Override
-	public boolean isCollision(float x, float y, int layer) {
-	    return false;
-	}
+      @Override
+      public boolean isCollision(float x, float y, int layer) {
+         return false;
+      }
 
-	@Override
-	public boolean isCollision(int tileX, int tileY, int layer) {
-	    return false;
-	}
-    };
+      @Override
+      public boolean isCollision(int tileX, int tileY, int layer) {
+         return false;
+      }
+   };
 
-    private float rasterWidth = DEFAULT_RASTER_SIZE;
-    private float rasterHeight = DEFAULT_RASTER_SIZE;
-    private float interval = DEFAULT_INTERVAL;
+   private float rasterWidth = DEFAULT_RASTER_SIZE;
+   private float rasterHeight = DEFAULT_RASTER_SIZE;
+   private float interval = DEFAULT_INTERVAL;
 
-    private boolean moving = false;
-    private boolean wasMoving = false;
-    private GameObject source;
+   private boolean moving = false;
+   private boolean wasMoving = false;
+   private GameObject source;
 
-    private final TweenManager tweenManager = SharedTweenManager.getInstance();
-    private final DeltaTimer timer = new DeltaTimer(DEFAULT_INTERVAL);
-    private final MovementController<Orientation> controller;
-    private final TiledCollisionResolver collisionResolver;
+   private final TweenManager tweenManager = SharedTweenManager.getInstance();
+   private final DeltaTimer timer = new DeltaTimer(DEFAULT_INTERVAL);
+   private final MovementController<Orientation> controller;
+   private final TiledCollisionResolver collisionResolver;
 
-    public RasteredMovementBehavior(MovementController<Orientation> controller,
-	    TiledCollisionResolver collisionResolver) {
-	this.controller = controller;
-	this.collisionResolver = collisionResolver;
-    }
+   public RasteredMovementBehavior(MovementController<Orientation> controller,
+         TiledCollisionResolver collisionResolver) {
+      this.controller = controller;
+      this.collisionResolver = collisionResolver;
+   }
 
-    public RasteredMovementBehavior(MovementController<Orientation> controller) {
-	this(controller, EMPTY_COLLISION_RESOLVER);
-    }
+   public RasteredMovementBehavior(MovementController<Orientation> controller) {
+      this(controller, EMPTY_COLLISION_RESOLVER);
+   }
 
-    public RasteredMovementBehavior rasterSize(float width, float height) {
-	this.rasterWidth = Math.max(width, 1);
-	this.rasterHeight = Math.max(height, 1);
-	return this;
-    }
+   public RasteredMovementBehavior rasterSize(float width, float height) {
+      this.rasterWidth = Math.max(width, 1);
+      this.rasterHeight = Math.max(height, 1);
+      return this;
+   }
 
-    public RasteredMovementBehavior interval(float interval) {
-	this.interval = interval;
-	timer.update(interval);
-	return this;
-    }
+   public RasteredMovementBehavior interval(float interval) {
+      this.interval = interval;
+      timer.update(interval);
+      return this;
+   }
 
-    public boolean isMoving() {
-	return moving;
-    }
+   public boolean isMoving() {
+      return moving;
+   }
 
-    @Override
-    public void move(Orientation direction) {
-	if (isReadyToMove() && source != null) {
-	    source.setAttribute(Orientation.class, direction);
-	    if (canMove(direction)) {
-		float moveX = direction.getXFactor() * rasterWidth;
-		float moveY = direction.getYFactor() * rasterHeight;
-        	moving = true;
-        	timer.reset();
-        	source.move(moveX, moveY);
-        	source.setOffset(-moveX, -moveY);
-        	Tween.to(source, GameObjectTween.OFFSET_X, interval)
-        	     .target(0f)
-        	     .ease(TweenEquations.easeNone)
-        	     .start(tweenManager);
-        	Tween.to(source, GameObjectTween.OFFSET_Y, interval)
-                     .target(0f)
-                     .ease(TweenEquations.easeNone)
-                     .start(tweenManager);
-	    }
-	}
-    }
+   @Override
+   public void move(Orientation direction) {
+      if (isReadyToMove() && source != null) {
+         source.setAttribute(Orientation.class, direction);
+         if (canMove(direction)) {
+            float moveX = direction.getXFactor() * rasterWidth;
+            float moveY = direction.getYFactor() * rasterHeight;
+            moving = true;
+            timer.reset();
+            source.move(moveX, moveY);
+            source.setOffset(-moveX, -moveY);
+            Tween.to(source, GameObjectTween.OFFSET_X, interval).target(0f).ease(TweenEquations.easeNone)
+                  .start(tweenManager);
+            Tween.to(source, GameObjectTween.OFFSET_Y, interval).target(0f).ease(TweenEquations.easeNone)
+                  .start(tweenManager);
+         }
+      }
+   }
 
-    @Override
-    public void onAttach(GameObject source) {
-	this.source = source;
-	source.setAttribute(Orientation.class, DEFAULT_DIRECTION);
-    }
+   @Override
+   public void onAttach(GameObject source) {
+      this.source = source;
+      source.setAttribute(Orientation.class, DEFAULT_DIRECTION);
+   }
 
-    @Override
-    public void onDetach(GameObject source) {
-	tweenManager.killTarget(source, GameObjectTween.OFFSET_X);
-	tweenManager.killTarget(source, GameObjectTween.OFFSET_Y);
-    }
+   @Override
+   public void onDetach(GameObject source) {
+      tweenManager.killTarget(source, GameObjectTween.OFFSET_X);
+      tweenManager.killTarget(source, GameObjectTween.OFFSET_Y);
+   }
 
-    @Override
-    public void update(GameObject source, float delta) {
-	this.source = source;
-	timer.update(delta);
-	if (wasMoving && moving && isReadyToMove()) {
-	    moving = false;
-	}
-	wasMoving = moving;
-	controller.update(this, delta);
-	source.setAttribute(Movement.class, this);
-    }
+   @Override
+   public void update(GameObject source, float delta) {
+      this.source = source;
+      timer.update(delta);
+      if (wasMoving && moving && isReadyToMove()) {
+         moving = false;
+      }
+      wasMoving = moving;
+      controller.update(this, delta);
+      source.setAttribute(Movement.class, this);
+   }
 
-    private boolean canMove(Orientation orientation) {
-	return !collisionResolver.isCollision(source, orientation.getXFactor(), orientation.getYFactor());
-    }
+   private boolean canMove(Orientation orientation) {
+      return !collisionResolver.isCollision(source, orientation.getXFactor(), orientation.getYFactor());
+   }
 
-    private boolean isReadyToMove() {
-	return timer.reached(interval);
-    }
+   private boolean isReadyToMove() {
+      return timer.reached(interval);
+   }
 
 }

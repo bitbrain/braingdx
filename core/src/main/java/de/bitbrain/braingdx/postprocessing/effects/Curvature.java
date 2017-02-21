@@ -22,42 +22,42 @@ import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.postprocessing.filters.RadialDistortion;
 
 public final class Curvature extends PostProcessorEffect {
-    private RadialDistortion distort;
+   private RadialDistortion distort;
 
-    public Curvature() {
-	distort = new RadialDistortion();
-    }
+   public Curvature() {
+      distort = new RadialDistortion();
+   }
 
-    @Override
-    public void dispose() {
-	distort.dispose();
-    }
+   @Override
+   public void dispose() {
+      distort.dispose();
+   }
 
-    public void setDistortion(float distortion) {
-	distort.setDistortion(distortion);
-    }
+   public void setDistortion(float distortion) {
+      distort.setDistortion(distortion);
+   }
 
-    public void setZoom(float zoom) {
-	distort.setZoom(zoom);
-    }
+   public void setZoom(float zoom) {
+      distort.setZoom(zoom);
+   }
 
-    public float getDistortion() {
-	return distort.getDistortion();
-    }
+   public float getDistortion() {
+      return distort.getDistortion();
+   }
 
-    public float getZoom() {
-	return distort.getZoom();
-    }
+   public float getZoom() {
+      return distort.getZoom();
+   }
 
-    @Override
-    public void rebind() {
-	distort.rebind();
-    }
+   @Override
+   public void rebind() {
+      distort.rebind();
+   }
 
-    @Override
-    public void render(FrameBuffer src, FrameBuffer dest) {
-	restoreViewport(dest);
-	distort.setInput(src).setOutput(dest).render();
-    };
+   @Override
+   public void render(FrameBuffer src, FrameBuffer dest) {
+      restoreViewport(dest);
+      distort.setInput(src).setOutput(dest).render();
+   };
 
 }

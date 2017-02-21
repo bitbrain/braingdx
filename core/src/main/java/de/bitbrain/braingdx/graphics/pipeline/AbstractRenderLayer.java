@@ -20,8 +20,8 @@ package de.bitbrain.braingdx.graphics.pipeline;
  */
 public abstract class AbstractRenderLayer implements RenderLayer {
 
-    @Override
-    public void beforeRender() {
-	// noOp
-    }
+   @Override
+   public void beforeRender() {
+      // noOp
+   }
 }

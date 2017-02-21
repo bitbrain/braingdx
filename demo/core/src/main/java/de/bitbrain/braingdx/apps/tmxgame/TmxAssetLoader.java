@@ -10,10 +10,10 @@ import de.bitbrain.braingdx.assets.GameAssetLoader;
 
 public class TmxAssetLoader implements GameAssetLoader {
 
-    @Override
-    public void put(Map<String, Class<?>> assets) {
-	assets.put(Assets.RPG.CHARACTER_TILESET, Texture.class);
-	assets.put(Assets.RPG.MAP_2, TiledMap.class);
-    }
+   @Override
+   public void put(Map<String, Class<?>> assets) {
+      assets.put(Assets.RPG.CHARACTER_TILESET, Texture.class);
+      assets.put(Assets.RPG.MAP_2, TiledMap.class);
+   }
 
 }

@@ -24,18 +24,18 @@ package de.bitbrain.braingdx.behavior.movement;
  */
 public interface Movement<T> {
 
-    /**
-     * Moves into the direction provided.
-     * 
-     * @param influencer the influencer of the movement
-     */
-    void move(T influencer);
+   /**
+    * Moves into the direction provided.
+    * 
+    * @param influencer the influencer of the movement
+    */
+   void move(T influencer);
 
-    /**
-     * Determines if currently moving
-     * 
-     * @return true if moving
-     */
-    boolean isMoving();
+   /**
+    * Determines if currently moving
+    * 
+    * @return true if moving
+    */
+   boolean isMoving();
 
 }

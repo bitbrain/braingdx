@@ -58,193 +58,191 @@ import de.bitbrain.braingdx.world.GameWorld;
  */
 public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, GameContext {
 
-    private T game;
-    private GameWorld world;
-    private BehaviorManager behaviorManager;
-    private GameObjectRenderManager renderManager;
-    private GameCamera gameCamera;
-    private OrthographicCamera camera;
-    private Color backgroundColor = Color.BLACK.cpy();
-    private Batch batch;
-    private Stage stage;
-    private RenderPipeline renderPipeline;
-    private LightingManager lightingManager;
-    private ParticleManager particleManager;
-    private World boxWorld;
-    private TiledMapManager tiledMapManager;
-    private TweenManager tweenManager = SharedTweenManager.getInstance();
-    private InputMultiplexer input;
+   private T game;
+   private GameWorld world;
+   private BehaviorManager behaviorManager;
+   private GameObjectRenderManager renderManager;
+   private GameCamera gameCamera;
+   private OrthographicCamera camera;
+   private Color backgroundColor = Color.BLACK.cpy();
+   private Batch batch;
+   private Stage stage;
+   private RenderPipeline renderPipeline;
+   private LightingManager lightingManager;
+   private ParticleManager particleManager;
+   private World boxWorld;
+   private TiledMapManager tiledMapManager;
+   private TweenManager tweenManager = SharedTweenManager.getInstance();
+   private InputMultiplexer input;
 
-    private boolean uiInitialized = false;
+   private boolean uiInitialized = false;
 
-    public AbstractScreen(T game) {
-	this.game = game;
-    }
+   public AbstractScreen(T game) {
+      this.game = game;
+   }
 
-    public T getGame() {
-	return game;
-    }
+   public T getGame() {
+      return game;
+   }
 
-    @Override
-    public final void show() {
-	camera = new OrthographicCamera();
-	world = new GameWorld(camera);
-	behaviorManager = new BehaviorManager();
-	batch = new SpriteBatch();
-	input = new InputMultiplexer();
-	boxWorld = new World(Vector2.Zero, false);
-	lightingManager = new LightingManager(boxWorld, camera);
-	renderManager = new GameObjectRenderManager(batch);
-	gameCamera = new VectorGameCamera(camera);
-	particleManager = new ParticleManager();
-	stage = new Stage();
-	renderPipeline = getRenderPipelineFactory().create();
-	tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager);
-	wire();
-    }
+   @Override
+   public final void show() {
+      camera = new OrthographicCamera();
+      world = new GameWorld(camera);
+      behaviorManager = new BehaviorManager();
+      batch = new SpriteBatch();
+      input = new InputMultiplexer();
+      boxWorld = new World(Vector2.Zero, false);
+      lightingManager = new LightingManager(boxWorld, camera);
+      renderManager = new GameObjectRenderManager(batch);
+      gameCamera = new VectorGameCamera(camera);
+      particleManager = new ParticleManager();
+      stage = new Stage();
+      renderPipeline = getRenderPipelineFactory().create();
+      tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager);
+      wire();
+   }
 
-    @Override
-    public final void render(float delta) {
-	Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
-	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-	onUpdate(delta);
-	tweenManager.update(delta);
-	gameCamera.update(delta);
-	stage.act(delta);
-	batch.setProjectionMatrix(camera.combined);
-	renderPipeline.render(batch, delta);
-    }
+   @Override
+   public final void render(float delta) {
+      Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+      onUpdate(delta);
+      tweenManager.update(delta);
+      gameCamera.update(delta);
+      stage.act(delta);
+      batch.setProjectionMatrix(camera.combined);
+      renderPipeline.render(batch, delta);
+   }
 
-    @Override
-    public final void resize(int width, int height) {
-	if (!uiInitialized) {
-	    input.addProcessor(stage);
-	    onCreateStage(stage, width, height);
-	    Gdx.input.setInputProcessor(input);
-	    uiInitialized = true;
-	}
-	stage.getViewport().update(width, height);
-	renderPipeline.resize(width, height);
-	camera.setToOrtho(false, width, height);
-    }
+   @Override
+   public final void resize(int width, int height) {
+      if (!uiInitialized) {
+         input.addProcessor(stage);
+         onCreateStage(stage, width, height);
+         Gdx.input.setInputProcessor(input);
+         uiInitialized = true;
+      }
+      stage.getViewport().update(width, height);
+      renderPipeline.resize(width, height);
+      camera.setToOrtho(false, width, height);
+   }
 
-    @Override
-    public void pause() {
+   @Override
+   public void pause() {
 
-    }
+   }
 
-    @Override
-    public void resume() {
+   @Override
+   public void resume() {
 
-    }
+   }
 
-    @Override
-    public void hide() {
+   @Override
+   public void hide() {
 
-    }
+   }
 
-    @Override
-    public GameWorld getGameWorld() {
-	return world;
-    }
+   @Override
+   public GameWorld getGameWorld() {
+      return world;
+   }
 
-    public Color getBackgroundColor() {
-	return backgroundColor;
-    }
+   public Color getBackgroundColor() {
+      return backgroundColor;
+   }
 
-    @Override
-    public Stage getStage() {
-	return stage;
-    }
+   @Override
+   public Stage getStage() {
+      return stage;
+   }
 
-    @Override
-    public RenderPipeline getRenderPipeline() {
-	return renderPipeline;
-    }
+   @Override
+   public RenderPipeline getRenderPipeline() {
+      return renderPipeline;
+   }
 
-    @Override
-    public World getBox2DWorld() {
-	return boxWorld;
-    }
+   @Override
+   public World getBox2DWorld() {
+      return boxWorld;
+   }
 
-    @Override
-    public ParticleManager getParticleManager() {
-	return particleManager;
-    }
+   @Override
+   public ParticleManager getParticleManager() {
+      return particleManager;
+   }
 
-    @Override
-    public TweenManager getTweenManager() {
-	return tweenManager;
-    }
+   @Override
+   public TweenManager getTweenManager() {
+      return tweenManager;
+   }
 
-    @Override
-    public BehaviorManager getBehaviorManager() {
-	return behaviorManager;
-    }
+   @Override
+   public BehaviorManager getBehaviorManager() {
+      return behaviorManager;
+   }
 
-    @Override
-    public GameObjectRenderManager getRenderManager() {
-	return renderManager;
-    }
+   @Override
+   public GameObjectRenderManager getRenderManager() {
+      return renderManager;
+   }
 
-    @Override
-    public GameCamera getGameCamera() {
-	return gameCamera;
-    }
+   @Override
+   public GameCamera getGameCamera() {
+      return gameCamera;
+   }
 
-    @Override
-    public LightingManager getLightingManager() {
-	return lightingManager;
-    }
+   @Override
+   public LightingManager getLightingManager() {
+      return lightingManager;
+   }
 
-    @Override
-    public InputMultiplexer getInput() {
-	return input;
-    }
+   @Override
+   public InputMultiplexer getInput() {
+      return input;
+   }
 
-    @Override
-    public TiledMapManager getTiledMapManager() {
-	return tiledMapManager;
-    }
+   @Override
+   public TiledMapManager getTiledMapManager() {
+      return tiledMapManager;
+   }
 
-    protected void onCreateStage(Stage stage, int width, int height) {
+   protected void onCreateStage(Stage stage, int width, int height) {
 
-    }
+   }
 
-    protected void onUpdate(float delta) {
+   protected void onUpdate(float delta) {
 
-    }
+   }
 
-    protected ShaderConfig getShaderConfig() {
-	return new ShaderConfig();
-    }
+   protected ShaderConfig getShaderConfig() {
+      return new ShaderConfig();
+   }
 
-    protected Viewport getViewport(int width, int height) {
-	return new ScreenViewport();
-    }
+   protected Viewport getViewport(int width, int height) {
+      return new ScreenViewport();
+   }
 
-    @Override
-    public void dispose() {
-	world.clear();
-	stage.dispose();
-	input.clear();
-	particleManager.dispose();
-	renderPipeline.dispose();
-	tweenManager.killAll();
-    }
+   @Override
+   public void dispose() {
+      world.clear();
+      stage.dispose();
+      input.clear();
+      particleManager.dispose();
+      renderPipeline.dispose();
+      tweenManager.killAll();
+   }
 
-    public void setBackgroundColor(Color color) {
-	this.backgroundColor = color;
-    }
-    
+   public void setBackgroundColor(Color color) {
+      this.backgroundColor = color;
+   }
 
+   private void wire() {
+      world.addListener(new BehaviorManagerAdapter(behaviorManager));
+      world.addListener(new GameObjectRenderManagerAdapter(renderManager));
+   }
 
-    private void wire() {
-	world.addListener(new BehaviorManagerAdapter(behaviorManager));
-	world.addListener(new GameObjectRenderManagerAdapter(renderManager));
-    }
-
-    protected RenderPipelineFactory getRenderPipelineFactory() {
-	return new CombinedRenderPipelineFactory(getShaderConfig(), world, lightingManager, stage);
-    }
+   protected RenderPipelineFactory getRenderPipelineFactory() {
+      return new CombinedRenderPipelineFactory(getShaderConfig(), world, lightingManager, stage);
+   }
 }

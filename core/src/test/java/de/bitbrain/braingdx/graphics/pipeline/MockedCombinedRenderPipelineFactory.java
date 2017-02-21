@@ -16,17 +16,17 @@ import de.bitbrain.braingdx.postprocessing.PostProcessor;
 
 public class MockedCombinedRenderPipelineFactory implements RenderPipelineFactory {
 
-    @Override
-    public RenderPipeline create() {
-	ShaderConfig config = mock(ShaderConfig.class);
-	PostProcessor processorMock = mock(PostProcessor.class);
-	FrameBufferFactory factory = mock(FrameBufferFactory.class);
-	FrameBuffer buffer = mock(FrameBuffer.class);
-	Texture mockTexture = mock(Texture.class);
-	when(factory.create(Mockito.anyInt(), Mockito.anyInt())).thenReturn(buffer);
-	when(buffer.getColorBufferTexture()).thenReturn(mockTexture);
-	return new CombinedRenderPipeline(config, processorMock, factory, mock(SpriteBatch.class),
-		mock(OrthographicCamera.class));
-    }
+   @Override
+   public RenderPipeline create() {
+      ShaderConfig config = mock(ShaderConfig.class);
+      PostProcessor processorMock = mock(PostProcessor.class);
+      FrameBufferFactory factory = mock(FrameBufferFactory.class);
+      FrameBuffer buffer = mock(FrameBuffer.class);
+      Texture mockTexture = mock(Texture.class);
+      when(factory.create(Mockito.anyInt(), Mockito.anyInt())).thenReturn(buffer);
+      when(buffer.getColorBufferTexture()).thenReturn(mockTexture);
+      return new CombinedRenderPipeline(config, processorMock, factory, mock(SpriteBatch.class),
+            mock(OrthographicCamera.class));
+   }
 
 }

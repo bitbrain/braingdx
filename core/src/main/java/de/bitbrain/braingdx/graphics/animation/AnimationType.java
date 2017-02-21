@@ -23,12 +23,12 @@ package de.bitbrain.braingdx.graphics.animation;
  */
 public interface AnimationType {
 
-    /**
-     * Updates the given frame and returns it. This operation is immutable.
-     * 
-     * @param currentFrame the current frame
-     * @param totalFrames number of total frames
-     * @return the optionally modified current frame
-     */
-    int updateCurrentFrame(int lastFrame, int currentFrame, int totalFrames, int origin);
+   /**
+    * Updates the given frame and returns it. This operation is immutable.
+    * 
+    * @param currentFrame the current frame
+    * @param totalFrames number of total frames
+    * @return the optionally modified current frame
+    */
+   int updateCurrentFrame(int lastFrame, int currentFrame, int totalFrames, int origin);
 }

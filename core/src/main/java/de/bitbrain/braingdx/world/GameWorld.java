@@ -37,168 +37,177 @@ import de.bitbrain.braingdx.util.ZIndexComparator;
  */
 public class GameWorld implements Iterable<GameObject> {
 
-    /** the default cache size this world uses */
-    public static final int DEFAULT_CACHE_SIZE = 100;
+   /** the default cache size this world uses */
+   public static final int DEFAULT_CACHE_SIZE = 100;
 
-    /**
-     * Listens to GameWorld events.
-     */
-    public static class GameWorldListener {
-	public void onAdd(GameObject object) { }
-	public void onRemove(GameObject object) { }
-	public void onUpdate(GameObject object, float delta) { }
-	public void onUpdate(GameObject object, GameObject other, float delta) { }
-	public void onClear() { }
-    }
+   /**
+    * Listens to GameWorld events.
+    */
+   public static class GameWorldListener {
+      public void onAdd(GameObject object) {
+      }
 
-    /**
-     * Describes when a game object is in bounds.
-     */
-    public static interface WorldBounds {
-	boolean isInBounds(GameObject object, OrthographicCamera camera);
-    }
+      public void onRemove(GameObject object) {
+      }
 
-    private final List<GameObject> removals = new ArrayList<GameObject>();
+      public void onUpdate(GameObject object, float delta) {
+      }
 
-    private final List<GameObject> objects = new ArrayList<GameObject>();
+      public void onUpdate(GameObject object, GameObject other, float delta) {
+      }
 
-    private final List<GameObject> unmodifiableObjects;
+      public void onClear() {
+      }
+   }
 
-    private final Pool<GameObject> pool;
+   /**
+    * Describes when a game object is in bounds.
+    */
+   public static interface WorldBounds {
+      boolean isInBounds(GameObject object, OrthographicCamera camera);
+   }
 
-    private WorldBounds bounds = new WorldBounds() {
+   private final List<GameObject> removals = new ArrayList<GameObject>();
 
-	@Override
-	public boolean isInBounds(GameObject object, OrthographicCamera camera) {
-	    return true;
-	}
-    };
+   private final List<GameObject> objects = new ArrayList<GameObject>();
 
-    private OrthographicCamera camera;
+   private final List<GameObject> unmodifiableObjects;
 
-    private final Comparator<GameObject> comparator = new ZIndexComparator();
+   private final Pool<GameObject> pool;
 
-    private final Set<GameWorldListener> listeners = new HashSet<GameWorldListener>();
+   private WorldBounds bounds = new WorldBounds() {
 
-    public GameWorld(OrthographicCamera camera) {
-	this(camera, DEFAULT_CACHE_SIZE);
-    }
+      @Override
+      public boolean isInBounds(GameObject object, OrthographicCamera camera) {
+         return true;
+      }
+   };
 
-    public GameWorld(OrthographicCamera camera, int cacheSize) {
-	unmodifiableObjects = Collections.unmodifiableList(objects);
-	this.camera = camera;
-	this.pool = new Pool<GameObject>(cacheSize) {
-	    @Override
-	    protected GameObject newObject() {
-		return new GameObject();
-	    }
-	};
-    }
+   private OrthographicCamera camera;
 
-    public void addListener(GameWorldListener listener) {
-	listeners.add(listener);
-    }
+   private final Comparator<GameObject> comparator = new ZIndexComparator();
 
-    public void removeListener(GameWorldListener listener) {
-	listeners.remove(listener);
-    }
+   private final Set<GameWorldListener> listeners = new HashSet<GameWorldListener>();
 
-    /**
-     * Sets the bounds of the world. By default, everything is in bounds.
-     *
-     * @param bounds the new bounds implementation
-     */
-    public void setBounds(WorldBounds bounds) {
-	this.bounds = bounds;
-    }
+   public GameWorld(OrthographicCamera camera) {
+      this(camera, DEFAULT_CACHE_SIZE);
+   }
 
-    /**
-     * Adds a new game object to the game world and provides it.
-     *
-     * @return newly created game object
-     */
-    public GameObject addObject() {
-	final GameObject object = pool.obtain();
-	objects.add(object);
-	for (GameWorldListener l : listeners) {
-	    l.onAdd(object);
-	}
-	return object;
-    }
+   public GameWorld(OrthographicCamera camera, int cacheSize) {
+      unmodifiableObjects = Collections.unmodifiableList(objects);
+      this.camera = camera;
+      this.pool = new Pool<GameObject>(cacheSize) {
+         @Override
+         protected GameObject newObject() {
+            return new GameObject();
+         }
+      };
+   }
 
-    /**
-     * Updates and renders this world
-     *
-     * @param batch the batch
-     * @param delta frame delta
-     */
-    public void update(float delta) {
-	Collections.sort(objects, comparator);
-	for (GameObject object : objects) {
-	    if (object.isActive() && !bounds.isInBounds(object, camera)) {
-		removals.add(object);
-		continue;
-	    }
-	    for (GameWorldListener l : listeners) {
-		l.onUpdate(object, delta);
-	    }
-	    if (object.isActive()) {
-		for (GameObject other : objects) {
-		    if (other.isActive() && !object.getId().equals(other.getId())) {
-			for (GameWorldListener l : listeners) {
-			    l.onUpdate(object, other, delta);
-			}
-		    }
-		}
-	    }
-	}
+   public void addListener(GameWorldListener listener) {
+      listeners.add(listener);
+   }
 
-	for (final GameObject removal : removals)
-	    remove(removal);
-	removals.clear();
-    }
+   public void removeListener(GameWorldListener listener) {
+      listeners.remove(listener);
+   }
 
-    /**
-     * Number of active objects in the world
-     *
-     * @return
-     */
-    public int size() {
-	return objects.size();
-    }
+   /**
+    * Sets the bounds of the world. By default, everything is in bounds.
+    *
+    * @param bounds the new bounds implementation
+    */
+   public void setBounds(WorldBounds bounds) {
+      this.bounds = bounds;
+   }
 
-    /**
-     * Resets this world object
-     */
-    public void clear() {
-	pool.clear();
-	objects.clear();
-	removals.clear();
-	for (GameWorldListener l : listeners) {
-	    l.onClear();
-	}
-    }
+   /**
+    * Adds a new game object to the game world and provides it.
+    *
+    * @return newly created game object
+    */
+   public GameObject addObject() {
+      final GameObject object = pool.obtain();
+      objects.add(object);
+      for (GameWorldListener l : listeners) {
+         l.onAdd(object);
+      }
+      return object;
+   }
 
-    @Override
-    public Iterator<GameObject> iterator() {
-	return unmodifiableObjects.iterator();
-    }
+   /**
+    * Updates and renders this world
+    *
+    * @param batch the batch
+    * @param delta frame delta
+    */
+   public void update(float delta) {
+      Collections.sort(objects, comparator);
+      for (GameObject object : objects) {
+         if (object.isActive() && !bounds.isInBounds(object, camera)) {
+            removals.add(object);
+            continue;
+         }
+         for (GameWorldListener l : listeners) {
+            l.onUpdate(object, delta);
+         }
+         if (object.isActive()) {
+            for (GameObject other : objects) {
+               if (other.isActive() && !object.getId().equals(other.getId())) {
+                  for (GameWorldListener l : listeners) {
+                     l.onUpdate(object, other, delta);
+                  }
+               }
+            }
+         }
+      }
 
-    /**
-     * Removes the given game objects from this world
-     *
-     * @param objects
-     */
-    public void remove(GameObject... objects) {
-	for (final GameObject object : objects)
-	    removals.add(object);
-    }
+      for (final GameObject removal : removals)
+         remove(removal);
+      removals.clear();
+   }
 
-    private void remove(GameObject object) {
-	pool.free(object);
-	objects.remove(object);
-	for (GameWorldListener l : listeners) {
-	    l.onRemove(object);
-	}
-    }
+   /**
+    * Number of active objects in the world
+    *
+    * @return
+    */
+   public int size() {
+      return objects.size();
+   }
+
+   /**
+    * Resets this world object
+    */
+   public void clear() {
+      pool.clear();
+      objects.clear();
+      removals.clear();
+      for (GameWorldListener l : listeners) {
+         l.onClear();
+      }
+   }
+
+   @Override
+   public Iterator<GameObject> iterator() {
+      return unmodifiableObjects.iterator();
+   }
+
+   /**
+    * Removes the given game objects from this world
+    *
+    * @param objects
+    */
+   public void remove(GameObject... objects) {
+      for (final GameObject object : objects)
+         removals.add(object);
+   }
+
+   private void remove(GameObject object) {
+      pool.free(object);
+      objects.remove(object);
+      for (GameWorldListener l : listeners) {
+         l.onRemove(object);
+      }
+   }
 }

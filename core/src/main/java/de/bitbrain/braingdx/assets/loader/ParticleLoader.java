@@ -33,25 +33,25 @@ import com.badlogic.gdx.utils.Array;
  */
 public class ParticleLoader extends SynchronousAssetLoader<ParticleEffect, ParticleLoader.ParticleParameter> {
 
-    public ParticleLoader(FileHandleResolver resolver) {
-	super(resolver);
-    }
+   public ParticleLoader(FileHandleResolver resolver) {
+      super(resolver);
+   }
 
-    static public class ParticleParameter extends AssetLoaderParameters<ParticleEffect> {
-	// do nothing here
-    }
+   static public class ParticleParameter extends AssetLoaderParameters<ParticleEffect> {
+      // do nothing here
+   }
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, ParticleParameter parameter) {
-	return null;
-    }
+   @SuppressWarnings("rawtypes")
+   @Override
+   public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, ParticleParameter parameter) {
+      return null;
+   }
 
-    @Override
-    public ParticleEffect load(AssetManager assetManager, String fileName, FileHandle file,
-	    ParticleParameter parameter) {
-	final ParticleEffect effect = new ParticleEffect();
-	effect.load(file, resolve(""));
-	return effect;
-    }
+   @Override
+   public ParticleEffect load(AssetManager assetManager, String fileName, FileHandle file,
+         ParticleParameter parameter) {
+      final ParticleEffect effect = new ParticleEffect();
+      effect.load(file, resolve(""));
+      return effect;
+   }
 }

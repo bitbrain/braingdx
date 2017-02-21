@@ -27,16 +27,16 @@ import de.bitbrain.braingdx.graphics.particles.ParticleManager;
  */
 public class ParticleRendererFactory {
 
-    private final ParticleManager particleManager;
+   private final ParticleManager particleManager;
 
-    private final BehaviorManager behaviorManager;
+   private final BehaviorManager behaviorManager;
 
-    public ParticleRendererFactory(ParticleManager particleManager, BehaviorManager behaviorManager) {
-	this.particleManager = particleManager;
-	this.behaviorManager = behaviorManager;
-    }
+   public ParticleRendererFactory(ParticleManager particleManager, BehaviorManager behaviorManager) {
+      this.particleManager = particleManager;
+      this.behaviorManager = behaviorManager;
+   }
 
-    public ParticleRenderer create(String effectPath) {
-	return new ParticleRenderer(particleManager, behaviorManager, effectPath);
-    }
+   public ParticleRenderer create(String effectPath) {
+      return new ParticleRenderer(particleManager, behaviorManager, effectPath);
+   }
 }
