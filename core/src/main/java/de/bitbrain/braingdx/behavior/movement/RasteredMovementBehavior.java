@@ -15,7 +15,13 @@
 
 package de.bitbrain.braingdx.behavior.movement;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.TweenEquation;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
@@ -25,6 +31,11 @@ import de.bitbrain.braingdx.util.DeltaTimer;
 import de.bitbrain.braingdx.world.GameObject;
 
 public class RasteredMovementBehavior extends BehaviorAdapter implements Movement<Orientation> {
+
+   public static interface RasteredMovementListener {
+      void moveBefore(GameObject object, float moveX, float moveY, float duration);
+      void moveAfter(GameObject object);
+   }
 
    public static final int DEFAULT_RASTER_SIZE = 32;
    public static final float DEFAULT_INTERVAL = 1f;
@@ -54,11 +65,13 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
    private boolean moving = false;
    private boolean wasMoving = false;
    private GameObject source;
+   private TweenEquation ease = TweenEquations.easeNone;
 
    private final TweenManager tweenManager = SharedTweenManager.getInstance();
    private final DeltaTimer timer = new DeltaTimer(DEFAULT_INTERVAL);
    private final MovementController<Orientation> controller;
    private final TiledCollisionResolver collisionResolver;
+   private final List<RasteredMovementListener> listeners = new ArrayList<RasteredMovementListener>();
 
    public RasteredMovementBehavior(MovementController<Orientation> controller,
          TiledCollisionResolver collisionResolver) {
@@ -82,6 +95,15 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
       return this;
    }
 
+   public RasteredMovementBehavior ease(TweenEquation ease) {
+      this.ease = ease;
+      return this;
+   }
+
+   public void addListener(RasteredMovementListener listener) {
+      listeners.add(listener);
+   }
+
    public boolean isMoving() {
       return moving;
    }
@@ -93,14 +115,37 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
          if (canMove(direction)) {
             float moveX = direction.getXFactor() * rasterWidth;
             float moveY = direction.getYFactor() * rasterHeight;
+
             moving = true;
+
+            for (RasteredMovementListener listener : listeners) {
+               listener.moveBefore(source, moveX, moveY, interval);
+            }
             timer.reset();
             source.move(moveX, moveY);
             source.setOffset(-moveX, -moveY);
-            Tween.to(source, GameObjectTween.OFFSET_X, interval).target(0f).ease(TweenEquations.easeNone)
-                  .start(tweenManager);
-            Tween.to(source, GameObjectTween.OFFSET_Y, interval).target(0f).ease(TweenEquations.easeNone)
-                  .start(tweenManager);
+            if (moveX != 0) {
+               Tween.to(source, GameObjectTween.OFFSET_X, interval).target(0f).ease(ease)
+                  .setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
+                     @Override
+                     public void onEvent(int arg0, BaseTween<?> arg1) {
+                        for (RasteredMovementListener listener : listeners) {
+                           listener.moveAfter(source);
+                        }
+                     }
+                  }).start(tweenManager);
+            }
+            if (moveY != 0) {
+               Tween.to(source, GameObjectTween.OFFSET_Y, interval).target(0f).ease(ease)
+                     .setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
+                        @Override
+                        public void onEvent(int arg0, BaseTween<?> arg1) {
+                           for (RasteredMovementListener listener : listeners) {
+                              listener.moveAfter(source);
+                           }
+                        }
+                     }).start(tweenManager);
+            }
          }
       }
    }
