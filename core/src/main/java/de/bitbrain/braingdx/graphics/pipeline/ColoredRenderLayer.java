@@ -2,10 +2,12 @@ package de.bitbrain.braingdx.graphics.pipeline;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 
 public class ColoredRenderLayer extends AbstractRenderLayer implements Disposable {
@@ -14,7 +16,15 @@ public class ColoredRenderLayer extends AbstractRenderLayer implements Disposabl
 
    private Texture texture;
 
+   private SpriteBatch batch;
+
+   private OrthographicCamera camera;
+
    public ColoredRenderLayer() {
+      batch = new SpriteBatch();
+      camera = new OrthographicCamera();
+      camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      camera.update();
       Pixmap pixmap = new Pixmap(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), Format.RGB888);
       pixmap.setColor(Color.WHITE);
       pixmap.fill();
@@ -28,8 +38,11 @@ public class ColoredRenderLayer extends AbstractRenderLayer implements Disposabl
 
    @Override
    public void render(Batch batch, float delta) {
-      batch.setColor(color);
-      batch.draw(texture, 0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      this.batch.setColor(color);
+      this.batch.setProjectionMatrix(camera.combined);
+      this.batch.begin();
+      this.batch.draw(texture, 0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      this.batch.end();
    }
 
    @Override
