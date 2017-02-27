@@ -50,7 +50,7 @@ public class RandomVelocityMovementBehavior extends BehaviorAdapter {
    @Override
    public void update(GameObject source, float delta) {
       timer.update(delta);
-      if (timer.reached(interval)) {
+      if (timer.reached(interval) && source.isActive()) {
          timer.reset();
          changeDirection();
          changeInterval();

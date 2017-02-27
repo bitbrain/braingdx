@@ -110,7 +110,7 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 
    @Override
    public void move(Orientation direction) {
-      if (isReadyToMove() && source != null) {
+      if (source.isActive() && isReadyToMove() && source != null) {
          source.setAttribute(Orientation.class, direction);
          if (canMove(direction)) {
             float moveX = direction.getXFactor() * rasterWidth;
