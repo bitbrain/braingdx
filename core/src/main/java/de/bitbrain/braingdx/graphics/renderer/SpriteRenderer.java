@@ -19,6 +19,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
@@ -37,6 +38,7 @@ public class SpriteRenderer implements GameObjectRenderManager.GameObjectRendere
    private final AssetManager assets = SharedAssetManager.getInstance();
    private String textureId;
    private Texture texture;
+   private final Vector2 offset = new Vector2();
 
    public SpriteRenderer(String textureId) {
       this.textureId = textureId;
@@ -54,9 +56,18 @@ public class SpriteRenderer implements GameObjectRenderManager.GameObjectRendere
       sprite = new Sprite(texture);
    }
 
+   public void setOffset(float x, float y) {
+      offset.set(x, y);
+   }
+
+   public Vector2 getOffset() {
+      return offset;
+   }
+
    @Override
    public void render(GameObject object, Batch batch, float delta) {
-      sprite.setPosition(object.getLeft() + object.getOffset().x, object.getTop() + object.getOffset().y);
+      sprite.setPosition(object.getLeft() + object.getOffset().x + offset.x,
+            object.getTop() + object.getOffset().y + offset.y);
       sprite.setSize(object.getWidth(), object.getHeight());
       sprite.setColor(object.getColor());
       sprite.setScale(object.getScale().x, object.getScale().y);
