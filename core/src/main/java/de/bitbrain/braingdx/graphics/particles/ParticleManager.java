@@ -62,10 +62,18 @@ public class ParticleManager implements Disposable {
       return new ManagedParticleEffect(effect, particleFile);
    }
 
-   public void free(ManagedParticleEffect renderer) {
-      renderer.getEffect().free();
-      ParticleEffectPool pool = pools.get(renderer.getPath());
-      pool.free(renderer.getEffect());
+   public boolean free(ManagedParticleEffect effect, boolean force) {
+      if (force || effect.getEffect().isComplete()) {
+         effect.getEffect().free();
+         ParticleEffectPool pool = pools.get(effect.getPath());
+         pool.free(effect.getEffect());
+         return true;
+      }
+      return false;
+   }
+
+   public boolean free(ManagedParticleEffect effect) {
+      return free(effect, true);
    }
 
    @Override
