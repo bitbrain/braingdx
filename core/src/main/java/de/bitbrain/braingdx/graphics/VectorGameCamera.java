@@ -50,8 +50,15 @@ public class VectorGameCamera implements GameCamera {
 
    @Override
    public void setTarget(GameObject target) {
+      setTarget(target, true);
+   }
+
+   @Override
+   public void setTarget(GameObject target, boolean focus) {
       this.target = target;
-      focus();
+      if (focus) {
+         focus();
+      }
    }
 
    @Override

@@ -47,11 +47,19 @@ public interface GameCamera {
    void focus();
 
    /**
-    * Sets a new target
+    * Sets a new target. Focuses by default.
     *
     * @param target the target
     */
    void setTarget(GameObject target);
+
+   /**
+    * Sets a new target and determines if focus or not.
+    * 
+    * @param target the target
+    * @param focus focus target on attach
+    */
+   void setTarget(GameObject target, boolean focus);
 
    /**
     * Provides the internal camera
