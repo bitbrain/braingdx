@@ -122,6 +122,7 @@ public class AudioManager {
 
    public void playMusic(String path) {
       lastMusic = ASSET_MANAGER.get(path, Music.class);
+      lastMusic.setVolume(1f);
       lastMusic.play();
    }
 
