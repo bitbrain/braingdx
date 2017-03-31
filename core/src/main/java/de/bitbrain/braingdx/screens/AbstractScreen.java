@@ -235,6 +235,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
       particleManager.dispose();
       renderPipeline.dispose();
       tweenManager.killAll();
+      renderManager.dispose();
    }
 
    public void setBackgroundColor(Color color) {

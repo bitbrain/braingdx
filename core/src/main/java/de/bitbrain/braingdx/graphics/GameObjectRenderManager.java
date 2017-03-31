@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Disposable;
 
 import de.bitbrain.braingdx.world.GameObject;
 
@@ -29,7 +30,7 @@ import de.bitbrain.braingdx.world.GameObject;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public class GameObjectRenderManager {
+public class GameObjectRenderManager implements Disposable {
 
    private static Map<Object, GameObjectRenderer> rendererMap = new HashMap<Object, GameObjectRenderer>();
 
@@ -55,6 +56,15 @@ public class GameObjectRenderManager {
 
    public void unregister(Object gameObjectType) {
       rendererMap.remove(gameObjectType);
+   }
+
+   @Override
+   public void dispose() {
+      for (GameObjectRenderer renderer : rendererMap.values()) {
+         if (renderer instanceof Disposable) {
+            ((Disposable) renderer).dispose();
+         }
+      }
    }
 
    /**
@@ -97,4 +107,5 @@ public class GameObjectRenderManager {
       }
 
    }
+
 }
