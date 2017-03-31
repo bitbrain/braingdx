@@ -32,6 +32,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.GameContext;
+import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
 import de.bitbrain.braingdx.graphics.GameCamera;
@@ -215,6 +216,11 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
    @Override
    public ScreenTransitions getScreenTransitions() {
       return ScreenTransitions.getInstance();
+   }
+
+   @Override
+   public AudioManager getAudioManager() {
+      return AudioManager.getInstance();
    }
 
    protected void onCreateStage(Stage stage, int width, int height) {

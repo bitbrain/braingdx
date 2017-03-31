@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import aurelienribon.tweenengine.TweenManager;
+import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
@@ -48,4 +49,6 @@ public interface GameContext {
    TiledMapManager getTiledMapManager();
 
    ScreenTransitions getScreenTransitions();
+
+   AudioManager getAudioManager();
 }
