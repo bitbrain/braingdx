@@ -24,13 +24,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 
-import aurelienribon.tweenengine.BaseTween;
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenCallback;
-import aurelienribon.tweenengine.TweenEquations;
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 import de.bitbrain.braingdx.tweens.ColorTween;
-import de.bitbrain.braingdx.tweens.SharedTweenManager;
 
 /**
  * Implementation which fades a texture.
@@ -39,7 +34,7 @@ import de.bitbrain.braingdx.tweens.SharedTweenManager;
  * @version 1.0
  * @since 1.0
  */
-public class ColorTransition implements RenderLayer, Disposable, Transitionable {
+public class ColorTransition extends AbstractTransitionable implements RenderLayer, Disposable {
 
    public static interface ScreenFadeCallback {
       void afterFade();
@@ -68,86 +63,6 @@ public class ColorTransition implements RenderLayer, Disposable, Transitionable 
    }
 
    @Override
-   public void in() {
-      in(null, DEFAULT_DURATION);
-   }
-
-   @Override
-   public void out() {
-      out(null, DEFAULT_DURATION);
-   }
-
-   @Override
-   public void outIn() {
-      outIn(null, DEFAULT_DURATION);
-   }
-
-   @Override
-   public void in(final TransitionCallback callback, float durationInMs) {
-      SharedTweenManager.getInstance().killTarget(color);
-      color.a = 1f;
-      Tween tween = Tween.to(color, ColorTween.A, durationInMs)
-           .target(0f)
-           .ease(TweenEquations.easeInCubic);
-      if (callback != null) {
-         callback.beforeTransition();
-         tween.setCallbackTriggers(TweenCallback.COMPLETE)
-              .setCallback(new TweenCallback() {
-                  @Override
-                  public void onEvent(int arg0, BaseTween<?> arg1) {
-                  }              
-           });
-      };
-      tween.start(SharedTweenManager.getInstance());
-   }
-
-   @Override
-   public void out(final TransitionCallback callback, float durationInMs) {
-      SharedTweenManager.getInstance().killTarget(color);
-      Tween tween = Tween.to(color, ColorTween.A, durationInMs)
-            .target(1f)
-            .ease(TweenEquations.easeInCubic);
-       if (callback != null) {
-          callback.beforeTransition();
-       tween.setCallbackTriggers(TweenCallback.COMPLETE)
-            .setCallback(new TweenCallback() {
-                @Override
-                public void onEvent(int arg0, BaseTween<?> arg1) {
-                   callback.afterTransition();
-                }              
-            });
-       };
-       tween.start(SharedTweenManager.getInstance());
-   }
-
-   @Override
-   public void outIn(final TransitionCallback callback, final float durationInMs) {
-      out(new TransitionCallback() {
-         @Override
-         public void beforeTransition() {
-            if (callback != null) {
-               callback.beforeTransition();
-            }
-         }
-         @Override
-         public void afterTransition() {
-            in(new TransitionCallback() {
-               @Override
-               public void beforeTransition() {
-                  // noOp
-               }
-               @Override
-               public void afterTransition() {
-                  if (callback != null) {
-                     callback.afterTransition();
-                  }
-               }               
-            }, durationInMs / 2f);
-         }
-      }, durationInMs / 2f);
-   }
-
-   @Override
    public void render(Batch batch, float delta) {
       if (texture == null) {
          initTexture();
@@ -171,6 +86,21 @@ public class ColorTransition implements RenderLayer, Disposable, Transitionable 
       map.fill();
       texture = new Texture(map);
       map.dispose();
+   }
+
+   @Override
+   protected void resetTarget() {
+      color.a = 1f;
+   }
+
+   @Override
+   protected Object getTarget() {
+      return color;
+   }
+
+   @Override
+   protected int getTweenType() {
+      return ColorTween.A;
    }
 
 }
