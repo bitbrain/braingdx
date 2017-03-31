@@ -11,6 +11,7 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
 import de.bitbrain.braingdx.graphics.particles.ParticleManager;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
+import de.bitbrain.braingdx.screens.ScreenTransitions;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
 import de.bitbrain.braingdx.world.GameWorld;
 
@@ -45,4 +46,6 @@ public interface GameContext {
    InputMultiplexer getInput();
 
    TiledMapManager getTiledMapManager();
+
+   ScreenTransitions getScreenTransitions();
 }

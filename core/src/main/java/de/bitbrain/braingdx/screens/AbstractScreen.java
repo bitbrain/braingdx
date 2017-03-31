@@ -104,6 +104,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
       stage = new Stage();
       renderPipeline = getRenderPipelineFactory().create();
       tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager);
+      ScreenTransitions.init(game, renderPipeline, this);
       wire();
    }
 
@@ -209,6 +210,11 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
    @Override
    public TiledMapManager getTiledMapManager() {
       return tiledMapManager;
+   }
+
+   @Override
+   public ScreenTransitions getScreenTransitions() {
+      return ScreenTransitions.getInstance();
    }
 
    protected void onCreateStage(Stage stage, int width, int height) {
