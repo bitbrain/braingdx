@@ -65,6 +65,7 @@ public class GameObjectRenderManager implements Disposable {
             ((Disposable) renderer).dispose();
          }
       }
+      rendererMap.clear();
    }
 
    /**
