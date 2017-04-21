@@ -38,6 +38,7 @@ import de.bitbrain.braingdx.tweens.SharedTweenManager;
 public class AudioManager {
 
    private final static float DEFAULT_DURATION = 1f;
+   private final static float DEFAULT_VOLUME = 1f;
    private final static AudioManager INSTANCE = new AudioManager();
    private final static TweenManager TWEEN_MANAGER = SharedTweenManager.getInstance();
    private final static AssetManager ASSET_MANAGER = SharedAssetManager.getInstance();
@@ -45,6 +46,8 @@ public class AudioManager {
    private Music lastMusic = null;
 
    private MusicClassWrapper wrapper;
+
+   private float volume = DEFAULT_VOLUME;
 
    public AudioManager() {
       Tween.registerAccessor(MusicClassWrapper.class, new MusicTween());
@@ -54,6 +57,10 @@ public class AudioManager {
       return INSTANCE;
    }
    
+   public void setVolume(float volume) {
+      this.volume = volume;
+   }
+
    public void crossFadeMusic(String path) {
       crossFadeMusic(path, DEFAULT_DURATION);
    }
@@ -115,14 +122,14 @@ public class AudioManager {
       wrapper.setVolume(0f);
       wrapper.play();
       Tween.to(wrapper, MusicTween.VOLUME, duration)
-           .target(1f)
+           .target(volume)
            .ease(TweenEquations.easeNone)
            .start(TWEEN_MANAGER);
    }
 
    public void playMusic(String path) {
       lastMusic = ASSET_MANAGER.get(path, Music.class);
-      lastMusic.setVolume(1f);
+      lastMusic.setVolume(volume);
       lastMusic.play();
    }
 
