@@ -120,16 +120,12 @@ public class CombinedRenderPipeline implements RenderPipeline {
    @Override
    public void set(String id, RenderLayer layer, PostProcessorEffect... effects) {
       CombinedRenderPipe pipe = new CombinedRenderPipe(layer, processor, camera, internalBatch, effects);
-      if (pipes.containsKey(id)) {
-         pipes.replace(id, pipe);
-      } else {
-         pipes.put(id, pipe);
-      }
+      pipes.put(id, pipe);
    }
 
    @Override
    public RenderPipe getPipe(String id) {
-      return pipes.getOrDefault(id, null);
+      return pipes.containsKey(id) ? pipes.get(id) : null;
    }
 
    @Override
