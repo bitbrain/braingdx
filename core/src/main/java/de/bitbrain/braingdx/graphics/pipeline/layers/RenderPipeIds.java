@@ -1,0 +1,10 @@
+package de.bitbrain.braingdx.graphics.pipeline.layers;
+
+public interface RenderPipeIds {
+
+   String BACKGROUND = "background";
+   String FOREGROUND = "foreground";
+   String WORLD = "world";
+   String LIGHTING = "lighting";
+   String UI = "ui";
+}

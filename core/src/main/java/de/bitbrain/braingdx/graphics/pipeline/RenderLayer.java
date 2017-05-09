@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
  */
 public interface RenderLayer {
 
-    /**
-     * Renders the layer with the given batch and delta.
-     * 
-     * @param batch provided batch
-     * @param delta frame delta
-     */
-    void render(Batch batch, float delta);
+   void beforeRender();
+
+   /**
+    * Renders the layer with the given batch and delta.
+    * 
+    * @param batch provided batch
+    * @param delta frame delta
+    */
+   void render(Batch batch, float delta);
 }

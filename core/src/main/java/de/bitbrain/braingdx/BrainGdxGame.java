@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import aurelienribon.tweenengine.Tween;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.tweens.ActorTween;
 import de.bitbrain.braingdx.tweens.ColorTween;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SpriteTween;
 import de.bitbrain.braingdx.tweens.VectorTween;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Base implementation of a brainGdx driven game
@@ -43,35 +45,35 @@ import de.bitbrain.braingdx.tweens.VectorTween;
  */
 public abstract class BrainGdxGame extends Game {
 
-    @Override
-    public final void create() {
-	loadAssets();
-	initTweens();
-	setScreen(getInitialScreen());
-    }
+   @Override
+   public final void create() {
+      loadAssets();
+      initTweens();
+      setScreen(getInitialScreen());
+   }
 
-    protected abstract GameAssetLoader getAssetLoader();
+   protected abstract GameAssetLoader getAssetLoader();
 
-    protected abstract AbstractScreen<?> getInitialScreen();
+   protected abstract AbstractScreen<?> getInitialScreen();
 
-    private void loadAssets() {
-	final AssetManager assetManager = SharedAssetManager.getInstance();
-	final GameAssetLoader loader = getAssetLoader();
-	if (loader == null)
-	    throw new RuntimeException("No asset loader has been specified.");
-	final HashMap<String, Class<?>> mapping = new HashMap<String, Class<?>>();
-	loader.put(mapping);
-	for (final Map.Entry<String, Class<?>> entry : mapping.entrySet()) {
-	    assetManager.load(entry.getKey(), entry.getValue());
-	}
-	assetManager.finishLoading();
-    }
+   private void loadAssets() {
+      final AssetManager assetManager = SharedAssetManager.getInstance();
+      final GameAssetLoader loader = getAssetLoader();
+      if (loader == null)
+         throw new RuntimeException("No asset loader has been specified.");
+      final HashMap<String, Class<?>> mapping = new HashMap<String, Class<?>>();
+      loader.put(mapping);
+      for (final Map.Entry<String, Class<?>> entry : mapping.entrySet()) {
+         assetManager.load(entry.getKey(), entry.getValue());
+      }
+      assetManager.finishLoading();
+   }
 
-    private void initTweens() {
-	Tween.registerAccessor(Actor.class, new ActorTween());
-	Tween.registerAccessor(Color.class, new ColorTween());
-	Tween.registerAccessor(Sprite.class, new SpriteTween());
-	Tween.registerAccessor(Vector2.class, new VectorTween());
-	Tween.registerAccessor(GameObject.class, new GameObjectTween());
-    }
+   private void initTweens() {
+      Tween.registerAccessor(Actor.class, new ActorTween());
+      Tween.registerAccessor(Color.class, new ColorTween());
+      Tween.registerAccessor(Sprite.class, new SpriteTween());
+      Tween.registerAccessor(Vector2.class, new VectorTween());
+      Tween.registerAccessor(GameObject.class, new GameObjectTween());
+   }
 }

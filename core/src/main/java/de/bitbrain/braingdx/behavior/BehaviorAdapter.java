@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 
 package de.bitbrain.braingdx.behavior;
 
-import de.bitbrain.braingdx.GameObject;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Adapter for behaviors
@@ -26,19 +26,24 @@ import de.bitbrain.braingdx.GameObject;
  */
 public abstract class BehaviorAdapter implements Behavior {
 
-    @Override
-    public void onRemove(GameObject source) {
-	// noOp
-    }
+   @Override
+   public void onAttach(GameObject source) {
+      // noOp
+   }
 
-    @Override
-    public void update(GameObject source, float delta) {
-	// noOp
-    }
+   @Override
+   public void onDetach(GameObject source) {
+      // noOp
+   }
 
-    @Override
-    public void update(GameObject source, GameObject target, float delta) {
-	// noOp
-    }
+   @Override
+   public void update(GameObject source, float delta) {
+      // noOp
+   }
+
+   @Override
+   public void update(GameObject source, GameObject target, float delta) {
+      // noOp
+   }
 
 }

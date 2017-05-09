@@ -12,63 +12,63 @@ import de.bitbrain.braingdx.util.ShaderLoader;
  */
 public class MotionFilter extends Filter<MotionFilter> {
 
-    private float blurOpacity = 0.5f;
-    private Texture lastFrameTex;
+   private float blurOpacity = 0.5f;
+   private Texture lastFrameTex;
 
-    public enum Param implements Parameter {
-	// @formatter:off
-	Texture("u_texture0", 0), LastFrame("u_texture1", 0), BlurOpacity("u_blurOpacity", 0);
-	// @formatter:on
+   public enum Param implements Parameter {
+      // @formatter:off
+      Texture("u_texture0", 0), LastFrame("u_texture1", 0), BlurOpacity("u_blurOpacity", 0);
+      // @formatter:on
 
-	private String mnemonic;
-	private int elementSize;
+      private String mnemonic;
+      private int elementSize;
 
-	private Param(String mnemonic, int arrayElementSize) {
-	    this.mnemonic = mnemonic;
-	    this.elementSize = arrayElementSize;
-	}
+      private Param(String mnemonic, int arrayElementSize) {
+         this.mnemonic = mnemonic;
+         this.elementSize = arrayElementSize;
+      }
 
-	@Override
-	public String mnemonic() {
-	    return this.mnemonic;
-	}
+      @Override
+      public String mnemonic() {
+         return this.mnemonic;
+      }
 
-	@Override
-	public int arrayElementSize() {
-	    return this.elementSize;
-	}
-    }
+      @Override
+      public int arrayElementSize() {
+         return this.elementSize;
+      }
+   }
 
-    public MotionFilter() {
-	super(ShaderLoader.fromFile("screenspace", "motionblur"));
-	rebind();
-    }
+   public MotionFilter() {
+      super(ShaderLoader.fromFile("screenspace", "motionblur"));
+      rebind();
+   }
 
-    public void setBlurOpacity(float blurOpacity) {
-	this.blurOpacity = blurOpacity;
-	setParam(Param.BlurOpacity, this.blurOpacity);
-    }
+   public void setBlurOpacity(float blurOpacity) {
+      this.blurOpacity = blurOpacity;
+      setParam(Param.BlurOpacity, this.blurOpacity);
+   }
 
-    public void setLastFrameTexture(Texture tex) {
-	this.lastFrameTex = tex;
-	if (lastFrameTex != null)
-	    setParam(Param.LastFrame, u_texture1);
-    }
+   public void setLastFrameTexture(Texture tex) {
+      this.lastFrameTex = tex;
+      if (lastFrameTex != null)
+         setParam(Param.LastFrame, u_texture1);
+   }
 
-    @Override
-    public void rebind() {
-	setParams(Param.Texture, u_texture0);
-	if (lastFrameTex != null)
-	    setParams(Param.LastFrame, u_texture1);
-	setParams(Param.BlurOpacity, this.blurOpacity);
-	endParams();
-    }
+   @Override
+   public void rebind() {
+      setParams(Param.Texture, u_texture0);
+      if (lastFrameTex != null)
+         setParams(Param.LastFrame, u_texture1);
+      setParams(Param.BlurOpacity, this.blurOpacity);
+      endParams();
+   }
 
-    @Override
-    protected void onBeforeRender() {
-	inputTexture.bind(u_texture0);
-	if (lastFrameTex != null)
-	    lastFrameTex.bind(u_texture1);
-    }
+   @Override
+   protected void onBeforeRender() {
+      inputTexture.bind(u_texture0);
+      if (lastFrameTex != null)
+         lastFrameTex.bind(u_texture1);
+   }
 
 }

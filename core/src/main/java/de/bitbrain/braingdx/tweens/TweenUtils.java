@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,43 +31,43 @@ import aurelienribon.tweenengine.TweenManager;
  */
 public final class TweenUtils {
 
-    private static TweenManager tweenManager = SharedTweenManager.getInstance();
+   private static TweenManager tweenManager = SharedTweenManager.getInstance();
 
-    /**
-     * Fades the source color object into the target color in the given time
-     *
-     * @param sourceColor the source color
-     * @param targetColor the target color
-     * @param time given decimal time (in seconds)
-     * @param equation tween equation
-     */
-    public static void toColor(Color sourceColor, Color targetColor, float time, TweenEquation equation) {
-	tweenManager.killTarget(sourceColor, ColorTween.R);
-	tweenManager.killTarget(sourceColor, ColorTween.G);
-	tweenManager.killTarget(sourceColor, ColorTween.B);
-	Tween.to(sourceColor, ColorTween.R, time).ease(equation).target(targetColor.r).start(tweenManager);
-	Tween.to(sourceColor, ColorTween.G, time).ease(equation).target(targetColor.g).start(tweenManager);
-	Tween.to(sourceColor, ColorTween.B, time).ease(equation).target(targetColor.b).start(tweenManager);
-    }
+   /**
+    * Fades the source color object into the target color in the given time
+    *
+    * @param sourceColor the source color
+    * @param targetColor the target color
+    * @param time given decimal time (in seconds)
+    * @param equation tween equation
+    */
+   public static void toColor(Color sourceColor, Color targetColor, float time, TweenEquation equation) {
+      tweenManager.killTarget(sourceColor, ColorTween.R);
+      tweenManager.killTarget(sourceColor, ColorTween.G);
+      tweenManager.killTarget(sourceColor, ColorTween.B);
+      Tween.to(sourceColor, ColorTween.R, time).ease(equation).target(targetColor.r).start(tweenManager);
+      Tween.to(sourceColor, ColorTween.G, time).ease(equation).target(targetColor.g).start(tweenManager);
+      Tween.to(sourceColor, ColorTween.B, time).ease(equation).target(targetColor.b).start(tweenManager);
+   }
 
-    /**
-     * Fades the source color object into the target color in the given time
-     *
-     * @param sourceColor the source color
-     * @param targetColor the target color
-     * @param time given decimal time (in seconds)
-     */
-    public static void toColor(Color sourceColor, Color targetColor, float time) {
-	toColor(sourceColor, targetColor, time, TweenEquations.easeNone);
-    }
+   /**
+    * Fades the source color object into the target color in the given time
+    *
+    * @param sourceColor the source color
+    * @param targetColor the target color
+    * @param time given decimal time (in seconds)
+    */
+   public static void toColor(Color sourceColor, Color targetColor, float time) {
+      toColor(sourceColor, targetColor, time, TweenEquations.easeNone);
+   }
 
-    /**
-     * Fades the source color object into the target color in 1 second
-     *
-     * @param sourceColor the source color
-     * @param targetColor the target color
-     */
-    public static void toColor(Color sourceColor, Color targetColor) {
-	toColor(sourceColor, targetColor, 1f, TweenEquations.easeNone);
-    }
+   /**
+    * Fades the source color object into the target color in 1 second
+    *
+    * @param sourceColor the source color
+    * @param targetColor the target color
+    */
+   public static void toColor(Color sourceColor, Color targetColor) {
+      toColor(sourceColor, targetColor, 1f, TweenEquations.easeNone);
+   }
 }

@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,25 +33,25 @@ import com.badlogic.gdx.utils.Array;
  */
 public class ParticleLoader extends SynchronousAssetLoader<ParticleEffect, ParticleLoader.ParticleParameter> {
 
-    public ParticleLoader(FileHandleResolver resolver) {
-	super(resolver);
-    }
+   public ParticleLoader(FileHandleResolver resolver) {
+      super(resolver);
+   }
 
-    static public class ParticleParameter extends AssetLoaderParameters<ParticleEffect> {
-	// do nothing here
-    }
+   static public class ParticleParameter extends AssetLoaderParameters<ParticleEffect> {
+      // do nothing here
+   }
 
-    @SuppressWarnings("rawtypes")
-    @Override
-    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, ParticleParameter parameter) {
-	return null;
-    }
+   @SuppressWarnings("rawtypes")
+   @Override
+   public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, ParticleParameter parameter) {
+      return null;
+   }
 
-    @Override
-    public ParticleEffect load(AssetManager assetManager, String fileName, FileHandle file,
-	    ParticleParameter parameter) {
-	final ParticleEffect effect = new ParticleEffect();
-	effect.load(file, resolve("particles/"));
-	return effect;
-    }
+   @Override
+   public ParticleEffect load(AssetManager assetManager, String fileName, FileHandle file,
+         ParticleParameter parameter) {
+      final ParticleEffect effect = new ParticleEffect();
+      effect.load(file, resolve(""));
+      return effect;
+   }
 }

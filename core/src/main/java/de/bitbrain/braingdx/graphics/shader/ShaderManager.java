@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,52 +33,52 @@ import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
  */
 public class ShaderManager {
 
-    private PostProcessor processor;
+   private PostProcessor processor;
 
-    private List<PostProcessorEffect> effects;
+   private List<PostProcessorEffect> effects;
 
-    public ShaderManager(PostProcessor processor, PostProcessorEffect... effects) {
-	this.processor = processor;
-	this.effects = new ArrayList<PostProcessorEffect>();
-	addEffects(effects);
-    }
+   public ShaderManager(PostProcessor processor, PostProcessorEffect... effects) {
+      this.processor = processor;
+      this.effects = new ArrayList<PostProcessorEffect>();
+      addEffects(effects);
+   }
 
-    public void addEffects(PostProcessorEffect... effects) {
-	for (PostProcessorEffect effect : effects) {
-	    this.effects.add(effect);
-	    processor.addEffect(effect);
-	    effect.setEnabled(false);
-	}
-    }
+   public void addEffects(PostProcessorEffect... effects) {
+      for (PostProcessorEffect effect : effects) {
+         this.effects.add(effect);
+         processor.addEffect(effect);
+         effect.setEnabled(false);
+      }
+   }
 
-    public void begin() {
-	setEffectsEnabled(true);
-	processor.setClearColor(0f, 0f, 0f, 1f);
-	processor.setClearBits(GL20.GL_COLOR_BUFFER_BIT);
-	processor.capture();
-    }
+   public void begin() {
+      setEffectsEnabled(true);
+      processor.setClearColor(0f, 0f, 0f, 0f);
+      processor.setClearBits(GL20.GL_COLOR_BUFFER_BIT);
+      processor.capture();
+   }
 
-    public void end(FrameBuffer buffer) {
-	processor.render(buffer);
-	setEffectsEnabled(false);
-    }
+   public void end(FrameBuffer buffer) {
+      processor.render(buffer);
+      setEffectsEnabled(false);
+   }
 
-    public boolean hasEffects() {
-	return !effects.isEmpty();
-    }
+   public boolean hasEffects() {
+      return !effects.isEmpty();
+   }
 
-    public void end() {
-	processor.render();
-	setEffectsEnabled(false);
-    }
+   public void end() {
+      processor.render();
+      setEffectsEnabled(false);
+   }
 
-    public void resume() {
-	processor.rebind();
-    }
+   public void resume() {
+      processor.rebind();
+   }
 
-    private void setEffectsEnabled(boolean enabled) {
-	for (PostProcessorEffect effect : effects) {
-	    effect.setEnabled(enabled);
-	}
-    }
+   private void setEffectsEnabled(boolean enabled) {
+      for (PostProcessorEffect effect : effects) {
+         effect.setEnabled(enabled);
+      }
+   }
 }

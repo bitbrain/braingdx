@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 
 package de.bitbrain.braingdx.behavior;
 
-import de.bitbrain.braingdx.GameObject;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Behavior which is executed every single frame
@@ -26,27 +26,34 @@ import de.bitbrain.braingdx.GameObject;
  */
 public interface Behavior {
 
-    /**
-     * Callback which is called whenever this behavior gets detached from the source provided.
-     * 
-     * @param source the source where this behavior gets detached from
-     */
-    void onRemove(GameObject source);
+   /**
+    * Callback which is called whenever this behavior gets attached to the source provided.
+    * 
+    * @param source the source where this behavior gets attached to
+    */
+   void onAttach(GameObject source);
 
-    /**
-     * Updates the behavior for a given source object.
-     * 
-     * @param source the game object to apply the behavior to
-     * @param delta current frame delta
-     */
-    void update(GameObject source, float delta);
+   /**
+    * Callback which is called whenever this behavior gets detached from the source provided.
+    * 
+    * @param source the source where this behavior gets detached from
+    */
+   void onDetach(GameObject source);
 
-    /**
-     * Updates the behavior for a given source and a related target object.
-     * 
-     * @param source the game object to apply the behavior to
-     * @param target the game object to get information from
-     * @param delta current frame delta
-     */
-    void update(GameObject source, GameObject target, float delta);
+   /**
+    * Updates the behavior for a given source object.
+    * 
+    * @param source the game object to apply the behavior to
+    * @param delta current frame delta
+    */
+   void update(GameObject source, float delta);
+
+   /**
+    * Updates the behavior for a given source and a related target object.
+    * 
+    * @param source the game object to apply the behavior to
+    * @param target the game object to get information from
+    * @param delta current frame delta
+    */
+   void update(GameObject source, GameObject target, float delta);
 }

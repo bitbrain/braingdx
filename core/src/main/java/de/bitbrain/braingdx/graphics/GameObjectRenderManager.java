@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Disposable;
 
-import de.bitbrain.braingdx.GameObject;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Handles rendering of game objects
@@ -29,27 +30,83 @@ import de.bitbrain.braingdx.GameObject;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public class GameObjectRenderManager {
+public class GameObjectRenderManager implements Disposable {
 
-    private static Map<Integer, GameObjectRenderer> rendererMap = new HashMap<Integer, GameObjectRenderer>();
+   private static Map<Object, GameObjectRenderer> rendererMap = new HashMap<Object, GameObjectRenderer>();
 
-    public void render(GameObject object, Batch batch, float delta) {
-	final GameObjectRenderer renderer = rendererMap.get(object.getType());
-	if (renderer != null)
-	    renderer.render(object, batch, delta);
-    }
+   private final Batch batch;
 
-    public void register(Integer gameObjectType, GameObjectRenderer renderer) {
-	if (!rendererMap.containsKey(gameObjectType)) {
-	    renderer.init();
-	    rendererMap.put(gameObjectType, renderer);
-	}
-    }
+   public GameObjectRenderManager(Batch batch) {
+      this.batch = batch;
+   }
 
-    public static interface GameObjectRenderer {
+   public void render(GameObject object, float delta) {
+      final GameObjectRenderer renderer = rendererMap.get(object.getType());
+      if (renderer != null) {
+         renderer.render(object, batch, delta);
+      }
+   }
 
-	void init();
+   public void register(Object gameObjectType, GameObjectRenderer renderer) {
+      if (!rendererMap.containsKey(gameObjectType)) {
+         renderer.init();
+         rendererMap.put(gameObjectType, renderer);
+      }
+   }
 
-	void render(GameObject object, Batch batch, float delta);
-    }
+   public void unregister(Object gameObjectType) {
+      rendererMap.remove(gameObjectType);
+   }
+
+   @Override
+   public void dispose() {
+      for (GameObjectRenderer renderer : rendererMap.values()) {
+         if (renderer instanceof Disposable) {
+            ((Disposable) renderer).dispose();
+         }
+      }
+      rendererMap.clear();
+   }
+
+   /**
+    * Combines multiple renderers for a particular game object
+    * 
+    * @param gameObjectRenderers renderers
+    * @return a new combined {@link GameObjectRenderer}
+    */
+   public static GameObjectRenderer combine(GameObjectRenderer... gameObjectRenderers) {
+      return new CombinedGameObjectRenderer(gameObjectRenderers);
+   }
+
+   public static interface GameObjectRenderer {
+
+      void init();
+
+      void render(GameObject object, Batch batch, float delta);
+   }
+
+   static class CombinedGameObjectRenderer implements GameObjectRenderer {
+
+      private final GameObjectRenderer[] renderers;
+
+      public CombinedGameObjectRenderer(GameObjectRenderer... gameObjectRenderers) {
+         this.renderers = gameObjectRenderers;
+      }
+
+      @Override
+      public void init() {
+         for (GameObjectRenderer renderer : renderers) {
+            renderer.init();
+         }
+      }
+
+      @Override
+      public void render(GameObject object, Batch batch, float delta) {
+         for (GameObjectRenderer renderer : renderers) {
+            renderer.render(object, batch, delta);
+         }
+      }
+
+   }
+
 }

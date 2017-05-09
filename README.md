@@ -2,11 +2,11 @@
 -
 :video_game: Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
 
-[![Build Status](https://travis-ci.org/MyRealityCoding/braingdx.svg?branch=master)](https://travis-ci.org/MyRealityCoding/braingdx)
+[![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=master)](https://travis-ci.org/bitbrain/braingdx)
 
 **:space_invader: [Features](#features) |**
 **:package: [Installation](#installation) |**
-**:green_book: [Documentation](https://github.com/MyRealityCoding/braingdx/wiki) |**
+**:green_book: [Documentation](https://github.com/bitbrain/braingdx/wiki) |**
 **:beers: [Collaboration](#collaboration) |**
 **:rocket: [License](#license) |**
 **:pencil: [Changelog](CHANGELOG.md)**
@@ -32,14 +32,14 @@
 ```xml
 <dependency>
    <artifactId>braingdx</artifactId>
-   <groupId>com.github.myrealitycoding</groupId>
+   <groupId>com.github.bitbrain</groupId>
    <version>{not available yet}</version>
 </dependency>
 ```
 
 # Collaboration
 
-Feel free to create [a new pull request](https://github.com/MyRealityCoding/braingdx/pull/new/master). When you detect an issue [please report it here](https://github.com/MyRealityCoding/braingdx/issues).
+Feel free to create [a new pull request](https://github.com/bitbrain/braingdx/pull/new/master). When you detect an issue [please report it here](https://github.com/bitbrain/braingdx/issues).
 
 # License
 

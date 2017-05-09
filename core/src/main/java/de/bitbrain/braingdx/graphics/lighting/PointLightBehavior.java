@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import box2dLight.PointLight;
-import de.bitbrain.braingdx.GameObject;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Lighting behavior to attach lights to game objects
@@ -31,43 +31,44 @@ import de.bitbrain.braingdx.behavior.BehaviorAdapter;
  */
 public class PointLightBehavior extends BehaviorAdapter {
 
-    private static int LIGHT_COUNT = 0;
+   private static int LIGHT_COUNT = 0;
 
-    private PointLight light;
+   private PointLight light;
 
-    private String lightId;
+   private String lightId;
 
-    private LightingManager lightingManager;
+   private LightingManager lightingManager;
 
-    private Color color;
+   private Color color;
 
-    private float distance;
+   private float distance;
 
-    public PointLightBehavior(Color color, float distance, LightingManager lightingManager) {
-	this.color = color;
-	this.distance = distance;
-	this.lightingManager = lightingManager;
-	createLight();
-    }
+   public PointLightBehavior(Color color, float distance, LightingManager lightingManager) {
+      this.color = color;
+      this.distance = distance;
+      this.lightingManager = lightingManager;
+      createLight();
+   }
 
-    @Override
-    public void update(GameObject source, float delta) {
-	super.update(source, delta);
-	light.setPosition(source.getLeft() + source.getWidth() / 2f, source.getTop() + source.getHeight() / 2f);
-    }
+   @Override
+   public void update(GameObject source, float delta) {
+      super.update(source, delta);
+      light.setPosition(source.getLeft() + source.getOffset().x + source.getWidth() / 2f,
+            source.getTop() + source.getOffset().y + source.getHeight() / 2f);
+   }
 
-    @Override
-    public void onRemove(GameObject source) {
-	lightingManager.removePointLight(lightId);
-    }
+   @Override
+   public void onDetach(GameObject source) {
+      lightingManager.removePointLight(lightId);
+   }
 
-    private void createLight() {
-	lightId = generateId();
-	light = lightingManager.addPointLight(lightId, Vector2.Zero, distance, color);
-    }
+   private void createLight() {
+      lightId = generateId();
+      light = lightingManager.addPointLight(lightId, Vector2.Zero, distance, color);
+   }
 
-    private String generateId() {
-	return getClass().getCanonicalName() + "_" + LIGHT_COUNT++;
-    }
+   private String generateId() {
+      return getClass().getCanonicalName() + "_" + LIGHT_COUNT++;
+   }
 
 }

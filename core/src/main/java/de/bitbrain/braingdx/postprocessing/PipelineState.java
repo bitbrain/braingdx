@@ -16,29 +16,29 @@ import java.nio.ByteBuffer;
  */
 public final class PipelineState implements Disposable {
 
-    private ByteBuffer byteBuffer;
+   private ByteBuffer byteBuffer;
 
-    protected PipelineState() {
-	byteBuffer = BufferUtils.newByteBuffer(32);
-    }
+   protected PipelineState() {
+      byteBuffer = BufferUtils.newByteBuffer(32);
+   }
 
-    public boolean isEnabled(int pname) {
-	boolean ret = false;
+   public boolean isEnabled(int pname) {
+      boolean ret = false;
 
-	switch (pname) {
-	    case GL20.GL_BLEND:
-		Gdx.gl20.glGetBooleanv(GL20.GL_BLEND, byteBuffer);
-		ret = (byteBuffer.get() == 1);
-		byteBuffer.clear();
-		break;
-	    default:
-		ret = false;
-	}
+      switch (pname) {
+         case GL20.GL_BLEND:
+            Gdx.gl20.glGetBooleanv(GL20.GL_BLEND, byteBuffer);
+            ret = (byteBuffer.get() == 1);
+            byteBuffer.clear();
+            break;
+         default:
+            ret = false;
+      }
 
-	return ret;
-    }
+      return ret;
+   }
 
-    @Override
-    public void dispose() {
-    }
+   @Override
+   public void dispose() {
+   }
 }

@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,29 +24,29 @@ package de.bitbrain.braingdx.util;
  */
 public class DeltaTimer {
 
-    private float time;
+   private float time;
 
-    public DeltaTimer() {
-	// noOp
-    }
+   public DeltaTimer() {
+      // noOp
+   }
 
-    public DeltaTimer(float time) {
-	this.time = time;
-    }
+   public DeltaTimer(float time) {
+      this.time = time;
+   }
 
-    public float getTicks() {
-	return time;
-    }
+   public float getTicks() {
+      return time;
+   }
 
-    public void update(float delta) {
-	time += delta;
-    }
+   public void update(float delta) {
+      time += delta;
+   }
 
-    public void reset() {
-	time = 0;
-    }
+   public void reset() {
+      time = 0;
+   }
 
-    public boolean reached(float millis) {
-	return time >= millis;
-    }
+   public boolean reached(float millis) {
+      return time >= millis;
+   }
 }

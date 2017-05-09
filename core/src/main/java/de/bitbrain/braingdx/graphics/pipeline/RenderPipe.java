@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,95 +14,19 @@
  */
 package de.bitbrain.braingdx.graphics.pipeline;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap.Format;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.utils.Disposable;
-
-import de.bitbrain.braingdx.graphics.shader.ShaderManager;
-import de.bitbrain.braingdx.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 
 /**
  * A renderpipe is compatible with other pipes and is responsible for rendering internal layers.
- * These layers have two types. First there is the rendering layer and afterwards the shader layer
- * is applied.
  * 
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-public class RenderPipe implements Disposable {
+public interface RenderPipe {
 
-    private RenderLayer renderLayer;
+   public boolean isEnabled();
 
-    private ShaderManager shaderManager;
+   void setEnabled(boolean enabled);
 
-    private FrameBuffer buffer;
-
-    private boolean enabled;
-
-    public RenderPipe(RenderLayer layer, PostProcessor processor, PostProcessorEffect... effects) {
-	this.renderLayer = layer;
-	this.shaderManager = new ShaderManager(processor, effects);
-	this.setEnabled(true);
-    }
-
-    public boolean isEnabled() {
-	return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-	this.enabled = enabled;
-    }
-
-    public void render(Batch batch, float delta) {
-	if (shaderManager.hasEffects() && buffer != null) {
-	    renderOntoBuffer(batch, delta);
-	} else {
-	    draw(batch, delta);
-	}
-	blendAndDraw(batch);
-    }
-
-    public void resize(int width, int height) {
-	if (buffer != null) {
-	    buffer.dispose();
-	}
-	this.buffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(),
-		false);
-    }
-
-    public void addEffects(PostProcessorEffect... effects) {
-	shaderManager.addEffects(effects);
-    }
-
-    @Override
-    public void dispose() {
-	buffer.dispose();
-    }
-
-    private void renderOntoBuffer(Batch batch, float delta) {
-	shaderManager.begin();
-	renderLayer.render(batch, delta);
-	shaderManager.end(buffer);
-    }
-
-    private void blendAndDraw(Batch batch) {
-	int srcFunc = batch.getBlendSrcFunc();
-	int dstFunc = batch.getBlendDstFunc();
-	batch.begin();
-	batch.setColor(Color.WHITE);
-	batch.setBlendFunction(GL20.GL_SRC_COLOR, GL20.GL_DST_ALPHA);
-	batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
-	batch.end();
-	batch.setBlendFunction(srcFunc, dstFunc);
-    }
-
-    private void draw(Batch batch, float delta) {
-	batch.setColor(Color.WHITE);
-	renderLayer.render(batch, delta);
-    }
+   void addEffects(PostProcessorEffect... effects);
 }

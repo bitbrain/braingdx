@@ -1,4 +1,4 @@
-/* Copyright 2016 Miguel Gonzalez Sanchez
+/* Copyright 2017 Miguel Gonzalez Sanchez
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,8 @@ package de.bitbrain.braingdx.assets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-
-import de.bitbrain.braingdx.assets.loader.ParticleLoader;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 /**
  * Singleton implementation of an asset manager
@@ -31,35 +29,33 @@ import de.bitbrain.braingdx.assets.loader.ParticleLoader;
  */
 public class SharedAssetManager extends AssetManager {
 
-    private static AssetManager instance = null;
+   private static AssetManager instance = null;
 
-    private SharedAssetManager() {
-    }
+   private SharedAssetManager() {
+   }
 
-    /**
-     * Provides the internal asset manager instance
-     */
-    public static AssetManager getInstance() {
+   /**
+    * Provides the internal asset manager instance
+    */
+   public static AssetManager getInstance() {
 
-	if (instance == null)
-	    loadInternal();
+      if (instance == null)
+         loadInternal();
 
-	return instance;
-    }
+      return instance;
+   }
 
-    public static void reload() {
-	instance.dispose();
-	loadInternal();
-    }
+   public static void reload() {
+      instance.dispose();
+      loadInternal();
+   }
 
-    private static void loadInternal() {
+   private static void loadInternal() {
 
-	if (Gdx.files == null)
-	    throw new RuntimeException("LibGDX is not initialized yet!");
+      if (Gdx.files == null)
+         throw new RuntimeException("LibGDX is not initialized yet!");
 
-	if (Gdx.files.isLocalStorageAvailable()) {
-	    instance = new AssetManager();
-	    instance.setLoader(ParticleEffect.class, new ParticleLoader(new InternalFileHandleResolver()));
-	}
-    }
+      instance = new AssetManager();
+      instance.setLoader(TiledMap.class, new TmxMapLoader());
+   }
 }

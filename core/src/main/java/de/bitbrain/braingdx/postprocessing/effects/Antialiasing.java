@@ -5,5 +5,5 @@ import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 
 public abstract class Antialiasing extends PostProcessorEffect {
 
-    public abstract void setViewportSize(int width, int height);
+   public abstract void setViewportSize(int width, int height);
 }
