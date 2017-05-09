@@ -16,6 +16,7 @@
 package de.bitbrain.braingdx.tmx;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.calls;
 import static org.mockito.Mockito.inOrder;
@@ -157,7 +158,7 @@ public class TiledMapManagerTest {
             .addLayer().build();
       tiledMapManager.addListener(listenerMock);
       tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
-      assertThat(gameObjectCaptor.getAllValues()).hasSize(2);
+      assertEquals(gameObjectCaptor.getAllValues().size(), 2);
       assertThat(apiCaptor.getValue()).isNotNull();
       assertThat(apiCaptor.getValue().getNumberOfColumns()).isEqualTo(2);
       assertThat(apiCaptor.getValue().getNumberOfRows()).isEqualTo(2);

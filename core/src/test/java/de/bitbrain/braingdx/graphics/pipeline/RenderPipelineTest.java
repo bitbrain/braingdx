@@ -1,6 +1,7 @@
 package de.bitbrain.braingdx.graphics.pipeline;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -76,7 +77,7 @@ public class RenderPipelineTest {
       pipeline.set("a", mock(RenderLayer.class));
       pipeline.set("b", mock(RenderLayer.class));
       pipeline.set("c", mock(RenderLayer.class));
-      assertThat(pipeline.getPipeIds()).hasSize(3);
+      assertEquals(pipeline.getPipeIds().size(), 3);
    }
 
    @Test
@@ -86,7 +87,7 @@ public class RenderPipelineTest {
       pipeline.set("b", mock(RenderLayer.class));
       pipeline.set("c", mock(RenderLayer.class));
       pipeline.set("c", mock(RenderLayer.class));
-      assertThat(pipeline.getPipeIds()).hasSize(3);
+      assertEquals(pipeline.getPipeIds().size(), 3);
 
    }
 }
