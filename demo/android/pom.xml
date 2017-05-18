@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>de.bitbrain.braingdx</groupId>
-		<artifactId>demo</artifactId>
+		<artifactId>braingdx-demo</artifactId>
 		<version>1.0.0</version>
 	</parent>
 
@@ -30,7 +30,7 @@
 		
 		<dependency>
 			<groupId>de.bitbrain.braingdx</groupId>
-			<artifactId>core</artifactId>
+			<artifactId>braingdx-core</artifactId>
 		</dependency>
 
 		<dependency>
