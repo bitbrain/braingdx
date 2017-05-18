@@ -89,6 +89,7 @@ public class LightingManager {
       this.handler = new RayHandler(world);
       this.camera = camera;
       setConfig(new LightingConfig());
+      setAmbientLight(Color.WHITE);
    }
 
    public void setConfig(LightingConfig lightingConfig) {

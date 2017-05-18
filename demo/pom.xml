@@ -8,7 +8,7 @@
 		<version>1.0.0</version>
 	</parent>
 	<groupId>de.bitbrain.braingdx</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>braingdx-demo</artifactId>
 	<packaging>pom</packaging>
 	<name>BrainGDX Demo</name>
 
@@ -28,7 +28,7 @@
 			</dependency>
 			<dependency>
 				<groupId>de.bitbrain.braingdx</groupId>
-				<artifactId>core</artifactId>
+				<artifactId>braingdx-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
