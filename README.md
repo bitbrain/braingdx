@@ -29,13 +29,28 @@
 
 # Installation
 
+BrainGdx is not officially released on Central yet. Instead, we use [JitPack](https://jitpack.io) to automatically publish the artifacts.
+
+## Maven
+
 ```xml
 <dependency>
-   <artifactId>braingdx</artifactId>
+   <artifactId>braingdx-core</artifactId>
    <groupId>com.github.bitbrain</groupId>
-   <version>{not available yet}</version>
+   <version>1.0.0</version>
 </dependency>
 ```
+## Gradle
+
+Add the repository to your `build.gradle` file:
+```text
+maven { url 'https://jitpack.io' }
+```
+Afterwards add the following to your `core` module:
+```gradle
+compile 'com.github.bitbrain.braingdx:braingdx-core:deploy-SNAPSHOT'
+```
+After that you are ready to go! Learn [here](https://github.com/bitbrain/braingdx/wiki) how to integrate **braingdx** into your **libgdx** game!
 
 # Collaboration
 
