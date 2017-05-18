@@ -102,7 +102,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
       renderManager = new GameObjectRenderManager(batch);
       gameCamera = new VectorGameCamera(camera);
       particleManager = new ParticleManager();
-      stage = new Stage();
+      stage = new Stage(getViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
       renderPipeline = getRenderPipelineFactory().create();
       tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager);
       ScreenTransitions.init(game, renderPipeline, this);
