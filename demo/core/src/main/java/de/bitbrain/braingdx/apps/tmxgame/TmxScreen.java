@@ -5,8 +5,17 @@ import java.util.Map;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.apps.rpg.NPC;
@@ -55,7 +64,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
       }
       getGameCamera().setTarget(player);
 
-      Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
+      final Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
       SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
       createAnimations(sheet);
 
