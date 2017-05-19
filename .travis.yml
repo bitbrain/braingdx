@@ -2,9 +2,6 @@ language: java
 
 sudo: required
 
-services:
-  - docker
-
 branches:
   only:
   - deploy
@@ -21,3 +18,6 @@ before_install:
   - export CH_VERSION=$(docker run -v $(pwd):/chime bitbrain/chime:latest CHANGELOG.md version)
   - export CH_TEXT=$(docker run -v $(pwd):/chime bitbrain/chime:latest CHANGELOG.md text)
   - mvn versions:set -DnewVersion=$CH_VERSION
+
+after_success:
+  - ./deployment/deploy.sh
