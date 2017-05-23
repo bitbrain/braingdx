@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>de.bitbrain</groupId>
 		<artifactId>braingdx</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<groupId>de.bitbrain.braingdx</groupId>
 	<artifactId>braingdx-demo</artifactId>
@@ -69,7 +69,7 @@
 				<classifier>natives-armeabi-v7a</classifier>
 				<scope>provided</scope>
 			</dependency>
-			
+
 			<dependency>
 			    <groupId>com.badlogicgames.gdx</groupId>
 			    <artifactId>gdx-box2d-platform</artifactId>
