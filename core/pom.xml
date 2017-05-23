@@ -4,16 +4,17 @@
 	<parent>
 		<groupId>de.bitbrain</groupId>
 		<artifactId>braingdx</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	
+
 	<packaging>jar</packaging>
-	
+
 	<groupId>de.bitbrain.braingdx</groupId>
 	<artifactId>braingdx-core</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>BrainGDX Core</name>
 	<description>Core project of BrainGDX</description>
-	
+
 	<dependencies>
 		<dependency>
 		    <groupId>com.google.guava</groupId>
@@ -26,5 +27,5 @@
 		  <version>${box2dlights.version}</version>
 		</dependency>
 	</dependencies>
-	
+
 </project>

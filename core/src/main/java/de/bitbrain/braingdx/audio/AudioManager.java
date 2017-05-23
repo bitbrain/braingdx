@@ -43,10 +43,6 @@ public class AudioManager {
    private final static TweenManager TWEEN_MANAGER = SharedTweenManager.getInstance();
    private final static AssetManager ASSET_MANAGER = SharedAssetManager.getInstance();
 
-   private Music lastMusic = null;
-
-   private MusicClassWrapper wrapper;
-
    private float volume = DEFAULT_VOLUME;
 
    public AudioManager() {
@@ -61,19 +57,17 @@ public class AudioManager {
       this.volume = volume;
    }
 
-   public void crossFadeMusic(String path) {
-      crossFadeMusic(path, DEFAULT_DURATION);
+   public void crossFadeMusic(String fromPath, String toPath) {
+      crossFadeMusic(fromPath, fromPath, DEFAULT_DURATION);
    }
 
-   public void crossFadeMusic(String path, float duration) {
-      crossFadeMusic(ASSET_MANAGER.get(path, Music.class), duration);
+   public void crossFadeMusic(String fromPath, String toPath, float duration) {
+      crossFadeMusic(ASSET_MANAGER.get(fromPath, Music.class), ASSET_MANAGER.get(toPath, Music.class), duration);
    }
 
-   public void crossFadeMusic(Music to, float duration) {
-      if (lastMusic != null) {
-         fadeOutMusic(lastMusic, duration);
-         fadeInMusic(to, duration);
-      }
+   public void crossFadeMusic(Music from, Music to, float duration) {
+      fadeOutMusic(from, duration);
+      fadeInMusic(to, duration);
    }
 
    public void fadeOutMusic(final String path) {
@@ -85,12 +79,7 @@ public class AudioManager {
    }
 
    public void fadeOutMusic(final Music music, float duration) {
-      if (wrapper == null) {
-         wrapper = new MusicClassWrapper(music);
-      } else {
-         wrapper.set(music);
-      }
-      TWEEN_MANAGER.killTarget(wrapper);
+	  final MusicClassWrapper wrapper = new MusicClassWrapper(music);
       Tween.to(wrapper, MusicTween.VOLUME, duration)
             .setCallbackTriggers(TweenCallback.COMPLETE)
             .target(0f)
@@ -113,12 +102,7 @@ public class AudioManager {
    }
 
    public void fadeInMusic(Music music, float duration) {
-      if (wrapper == null) {
-         wrapper = new MusicClassWrapper(music);
-      } else {
-         wrapper.set(music);
-      }
-      lastMusic = music;
+	  MusicClassWrapper wrapper = new MusicClassWrapper(music);
       wrapper.setVolume(0f);
       wrapper.play();
       Tween.to(wrapper, MusicTween.VOLUME, duration)
@@ -128,19 +112,17 @@ public class AudioManager {
    }
 
    public void playMusic(String path) {
-      lastMusic = ASSET_MANAGER.get(path, Music.class);
+      Music lastMusic = ASSET_MANAGER.get(path, Music.class);
       lastMusic.setVolume(volume);
       lastMusic.play();
    }
 
    public void stopMusic(String path) {
       ASSET_MANAGER.get(path, Music.class).stop();
-      lastMusic = null;
    }
 
    public void pauseMusic(String path) {
       ASSET_MANAGER.get(path, Music.class).pause();
-      lastMusic = null;
    }
 
    private static class MusicClassWrapper implements Music {
@@ -149,12 +131,6 @@ public class AudioManager {
 
       public MusicClassWrapper(Music music) {
          this.music = music;
-      }
-
-      public void set(Music music) {
-         if (music != null) {
-            this.music = music;
-         }
       }
 
       @Override
