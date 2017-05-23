@@ -11,6 +11,7 @@
 
 	<groupId>de.bitbrain.braingdx</groupId>
 	<artifactId>braingdx-core</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
 	<name>BrainGDX Core</name>
 	<description>Core project of BrainGDX</description>
 

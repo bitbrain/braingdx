@@ -1,7 +1,7 @@
 <settings>
     <servers>
         <server>
-            <id>ossrh</id>
+            <id>nexus-releases</id>
             <username>${env.OSSRH_USER}</username>
             <password>${env.OSSRH_PASS}</password>
         </server>
