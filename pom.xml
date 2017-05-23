@@ -38,11 +38,11 @@
 	
 	<distributionManagement>
 		<snapshotRepository>
-			<id>ossrh</id>
+			<id>ossrh-snapshot</id>
 			<url>https://nexus.k40s.net/repository/braingdx</url>
 		</snapshotRepository>
 		<repository>
-			<id>ossrh</id>
+			<id>ossrh-release</id>
 			<url>https://nexus.k40s.net/repository/braingdx</url>
 		</repository>
 	</distributionManagement>
