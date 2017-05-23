@@ -156,7 +156,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<serverId>ossrh</serverId>
-					<nexusUrl>https://nexus.k40s.net</nexusUrl>
+					<nexusUrl>https://nexus.k40s.net/repository/braingdx</nexusUrl>
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
 			</plugin>
