@@ -7,7 +7,7 @@
 		<artifactId>braingdx</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	
+
 	<groupId>de.bitbrain.braingdx</groupId>
 	<artifactId>braingdx-demo</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
@@ -73,11 +73,11 @@
 			</dependency>
 
 			<dependency>
-			    <groupId>com.badlogicgames.gdx</groupId>
-			    <artifactId>gdx-box2d-platform</artifactId>
-			    <classifier>natives-desktop</classifier>
-			    <version>1.6.4</version>
-			    <scope>compile</scope>
+				<groupId>com.badlogicgames.gdx</groupId>
+				<artifactId>gdx-box2d-platform</artifactId>
+				<classifier>natives-desktop</classifier>
+				<version>1.6.4</version>
+				<scope>compile</scope>
 			</dependency>
 
 			<!-- gwt-specific dependencies -->

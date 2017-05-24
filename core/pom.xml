@@ -17,14 +17,14 @@
 
 	<dependencies>
 		<dependency>
-		    <groupId>com.google.guava</groupId>
-		    <artifactId>guava</artifactId>
-		    <version>19.0</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
 		</dependency>
 		<dependency>
-		  <groupId>com.github.libgdx</groupId>
-		  <artifactId>box2dlights</artifactId>
-		  <version>${box2dlights.version}</version>
+			<groupId>com.badlogicgames.box2dlights</groupId>
+			<artifactId>box2dlights</artifactId>
+			<version>${box2dlights.version}</version>
 		</dependency>
 	</dependencies>
 
