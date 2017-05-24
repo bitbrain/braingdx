@@ -171,6 +171,10 @@
 		    <name>k40s</name>
 		    <url>https://nexus.k40s.net/repository/braingdx</url>
 		</repository>
+			<repository>
+			    <id>jitpack.io</id>
+			    <url>https://jitpack.io</url>
+			</repository>
 	</repositories>
 
 	<scm>
