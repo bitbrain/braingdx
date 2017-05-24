@@ -36,7 +36,7 @@
 <repositories>
    <id>k40s</id>
    <name>k40s custom nexus</name>
-   <repository>https://nexus.k40s.net/repository/maven-public/</repository>
+   <repository>https://nexus.k40s.net/repository/maven-public</repository>
 </repositories>
 <!-- add dependency -->
 <dependency>
@@ -49,7 +49,7 @@
 
 Add the repository to your `build.gradle` file:
 ```text
-maven { url 'https://nexus.k40s.net/repository/braingdx' }
+maven { url 'https://nexus.k40s.net/repository/maven-public' }
 ```
 Afterwards add the following to your `core` module:
 ```gradle
