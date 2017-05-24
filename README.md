@@ -34,9 +34,9 @@
 ```xml
 <!-- add repository definition -->
 <repositories>
-   <id>bitbrain</id>
-	<name>bitbrain</name>
-   <repository>https://nexus.k40s.net/repository/braingdx</repository>
+   <id>k40s</id>
+   <name>k40s custom nexus</name>
+   <repository>https://nexus.k40s.net/repository/maven-public/</repository>
 </repositories>
 <!-- add dependency -->
 <dependency>
