@@ -27,7 +27,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sdk.version>1.6</sdk.version>
 		<maven.compiler.source>${sdk.version}</maven.compiler.source>
-    <maven.compiler.target>${sdk.version}</maven.compiler.target>
+    	<maven.compiler.target>${sdk.version}</maven.compiler.target>
 		<libgdx.version>1.6.4</libgdx.version>
 		<tween.version>6.3.3</tween.version>
 		<box2dlights.version>1.5-20170524.182408-1</box2dlights.version>
