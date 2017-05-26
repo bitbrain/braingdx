@@ -26,9 +26,9 @@ import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.postprocessing.filters.Blur;
+import de.bitbrain.braingdx.postprocessing.filters.Blur.BlurType;
 import de.bitbrain.braingdx.postprocessing.filters.Combine;
 import de.bitbrain.braingdx.postprocessing.filters.CrtScreen;
-import de.bitbrain.braingdx.postprocessing.filters.Blur.BlurType;
 import de.bitbrain.braingdx.postprocessing.filters.CrtScreen.RgbMode;
 import de.bitbrain.braingdx.postprocessing.utils.PingPongBuffer;
 

@@ -33,8 +33,6 @@ import de.bitbrain.braingdx.util.IDGenerator;
  */
 public class GameObject implements Pool.Poolable {
 
-   private static int COUNTER = 0;
-
    private final Vector2 position, dimensions, lastPosition, offset;
 
    private String id;
