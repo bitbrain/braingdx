@@ -32,13 +32,13 @@
 ## Maven
 
 ```xml
-<!-- add repository definition -->
-<repositories>
+<!-- add repository under <repositories></repositories> -->
+<repository>
    <id>k40s</id>
    <name>k40s custom nexus</name>
-   <repository>https://nexus.k40s.net/repository/maven-public</repository>
-</repositories>
-<!-- add dependency -->
+   <url>https://nexus.k40s.net/repository/maven-public</url>
+</repository>
+<!-- add dependency under <dependencies></dependencies> -->
 <dependency>
    <artifactId>braingdx-core</artifactId>
    <groupId>de.bitbrain.braingdx</groupId>
