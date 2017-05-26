@@ -16,10 +16,10 @@
 
 package de.bitbrain.braingdx.util;
 
+import java.util.Iterator;
+
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-
-import java.util.Iterator;
 
 public class ItemsManager<T extends Disposable> implements Iterable<T>, Disposable {
    private static final int ItemNotFound = -1;

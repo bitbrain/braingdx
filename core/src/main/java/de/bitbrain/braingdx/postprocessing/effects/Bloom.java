@@ -24,9 +24,9 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import de.bitbrain.braingdx.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.postprocessing.filters.Blur;
+import de.bitbrain.braingdx.postprocessing.filters.Blur.BlurType;
 import de.bitbrain.braingdx.postprocessing.filters.Combine;
 import de.bitbrain.braingdx.postprocessing.filters.Threshold;
-import de.bitbrain.braingdx.postprocessing.filters.Blur.BlurType;
 import de.bitbrain.braingdx.postprocessing.utils.PingPongBuffer;
 
 public final class Bloom extends PostProcessorEffect {
