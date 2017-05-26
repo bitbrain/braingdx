@@ -148,6 +148,9 @@
 			      </goals>
 			    </execution>
 			  </executions>
+			  <configuration>
+			    <excludeResources>true</excludeResources>
+			  </configuration>
 			</plugin>
 			<plugin>
 			   <artifactId>maven-deploy-plugin</artifactId>
