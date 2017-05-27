@@ -18,11 +18,14 @@ package de.bitbrain.braingdx.world;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.Pool;
 
@@ -70,6 +73,8 @@ public class GameWorld implements Iterable<GameObject> {
    private final List<GameObject> removals = new ArrayList<GameObject>();
 
    private final List<GameObject> objects = new ArrayList<GameObject>();
+   
+   private final Map<String, GameObject> identityMap = new HashMap<String, GameObject>();
 
    private final List<GameObject> unmodifiableObjects;
 
@@ -127,12 +132,24 @@ public class GameWorld implements Iterable<GameObject> {
     * @return newly created game object
     */
    public GameObject addObject() {
-      final GameObject object = pool.obtain();
-      objects.add(object);
-      for (GameWorldListener l : listeners) {
-         l.onAdd(object);
-      }
-      return object;
+      return addObject(null);
+   }
+   
+   public GameObject addObject(String id) {
+	   final GameObject object = pool.obtain();
+	   if (id != null) {
+		   if (!identityMap.containsKey(id)) {
+		   object.setId(id);
+		   } else {
+			   Gdx.app.log("WARN", "Unable to assign id '" + id + "' to game object. Already exists!");
+		   }
+	   }
+	   objects.add(object);
+	   identityMap.put(object.getId(), object);
+	   for (GameWorldListener l : listeners) {
+	       l.onAdd(object);
+	   }
+	   return object;
    }
 
    /**
@@ -166,6 +183,10 @@ public class GameWorld implements Iterable<GameObject> {
          remove(removal);
       removals.clear();
    }
+   
+   public GameObject getObjectById(String id) {
+	   return identityMap.get(id);
+   }
 
    /**
     * Number of active objects in the world
@@ -183,6 +204,7 @@ public class GameWorld implements Iterable<GameObject> {
       pool.clear();
       objects.clear();
       removals.clear();
+      identityMap.clear();
       for (GameWorldListener l : listeners) {
          l.onClear();
       }
@@ -206,6 +228,7 @@ public class GameWorld implements Iterable<GameObject> {
    private void remove(GameObject object) {
       pool.free(object);
       objects.remove(object);
+      identityMap.remove(object.getId());
       for (GameWorldListener l : listeners) {
          l.onRemove(object);
       }
