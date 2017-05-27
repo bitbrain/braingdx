@@ -40,6 +40,20 @@ public interface GameCamera {
     * @param zoom baseZoom
     */
    void setBaseZoom(float zoom);
+   
+   /**
+    * Provides the current base zoom
+    * 
+    * @return baseZoom
+    */
+   float getBaseZoom();
+   
+   /**
+    * Zooms the current baseZoom.
+    * 
+    * @param amount the base zoom amount
+    */
+   void zoom(float amount);
 
    /**
     * Focuses directly on the target
