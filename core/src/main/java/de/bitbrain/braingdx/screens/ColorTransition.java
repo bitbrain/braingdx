@@ -46,7 +46,7 @@ public class ColorTransition extends AbstractTransitionable implements RenderLay
 
    private Color color = Color.WHITE.cpy();
 
-   private final Color fadeToColor;
+   private Color fadeToColor;
 
    public ColorTransition(Color color) {
       this.fadeToColor = color;
@@ -78,6 +78,12 @@ public class ColorTransition extends AbstractTransitionable implements RenderLay
       if (texture != null) {
          texture.dispose();
       }
+   }
+   
+   public void setColor(Color color) {
+	   fadeToColor = color;
+	   dispose();
+	   initTexture();
    }
 
    private void initTexture() {

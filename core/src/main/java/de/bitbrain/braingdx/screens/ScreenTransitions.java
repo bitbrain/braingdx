@@ -52,11 +52,19 @@ public class ScreenTransitions {
    }
 
    public void in(float duration) {
-      in(null, duration);
+      in((TransitionCallback)null, duration);
    }
 
    public void in() {
       in(Transitionable.DEFAULT_DURATION);
+   }
+   
+   public void in(Transitionable transition) {
+	  in(transition, Transitionable.DEFAULT_DURATION);
+   }
+   
+   public void in(Transitionable transition, float duration) {
+      in(transition, null, Transitionable.DEFAULT_DURATION);
    }
 
    public void in(TransitionCallback callback, float duration) {
@@ -69,7 +77,7 @@ public class ScreenTransitions {
    }
 
    public void out(float duration) {
-      out(null, null, duration);
+      out((TransitionCallback)null, null, duration);
    }
 
    public void out() {
@@ -87,10 +95,30 @@ public class ScreenTransitions {
    public void out(TransitionCallback callback, float duration) {
       out(defaultTransition, callback, null, duration);
    }
+   
+   public void outIn(Transitionable transition, TransitionCallback callback, float duration) {
+	   renderPipeline.set(ScreenTransitions.class.getSimpleName(), transition);
+	   defaultTransition.outIn(callback, duration);
+   }
 
    public void outIn(TransitionCallback callback, float duration) {
-      renderPipeline.set(ScreenTransitions.class.getSimpleName(), defaultTransition);
-      defaultTransition.outIn(callback, duration);
+	   outIn(defaultTransition, callback, duration);
+   }
+   
+   public void outIn(Transitionable transition, float duration) {
+	   outIn(transition, null, duration);
+   }
+   
+   public void outIn(float duration) {
+	   outIn(defaultTransition, null, duration);
+   }
+   
+   public void outIn() {
+	   outIn(defaultTransition, null, Transitionable.DEFAULT_DURATION);
+   }
+   
+   public void out(Transitionable transition, final AbstractScreen<?> to, float duration) {
+	  out(transition, null, to, duration);
    }
 
    public void out(Transitionable transition, final TransitionCallback callback, final AbstractScreen<?> to,
