@@ -18,6 +18,7 @@ package de.bitbrain.braingdx.world;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
@@ -117,6 +118,10 @@ public class GameObject implements Pool.Poolable {
    }
 
    public void setId(String id) {
+	  if (id == null || id.trim().isEmpty()) {
+		  Gdx.app.log("ERROR", "Unable to assign id=" + id + " to game object " + toString() + ": invalid ID!");
+		  return;
+	  }
       this.id = id;
    }
 

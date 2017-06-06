@@ -29,6 +29,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.Pool;
 
+import de.bitbrain.braingdx.util.Mutator;
 import de.bitbrain.braingdx.util.ZIndexComparator;
 
 /**
@@ -135,14 +136,20 @@ public class GameWorld implements Iterable<GameObject> {
       return addObject(null);
    }
    
-   public GameObject addObject(String id) {
+   /**
+    * Adds a new game object to the game world with a custom ID
+    * 
+    * @param mutator the mutator which might change the GameObject
+    * @return newly created game object
+    */
+   public GameObject addObject(Mutator<GameObject> mutator) {
 	   final GameObject object = pool.obtain();
-	   if (id != null) {
-		   if (!identityMap.containsKey(id)) {
-		   object.setId(id);
-		   } else {
-			   Gdx.app.log("WARN", "Unable to assign id '" + id + "' to game object. Already exists!");
-		   }
+	   if (mutator != null) {
+		   mutator.mutate(object);
+	   }
+	   if (identityMap.containsKey(object.getId())) {
+	       Gdx.app.log("ERROR", "Unable to add game object with ID '" + object.getId() + "' to game world. Already exists!");
+	       return object;
 	   }
 	   objects.add(object);
 	   identityMap.put(object.getId(), object);
