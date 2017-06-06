@@ -6,5 +6,6 @@ public interface RenderPipeIds {
    String FOREGROUND = "foreground";
    String WORLD = "world";
    String LIGHTING = "lighting";
+   String WORLD_UI = "world-ui";
    String UI = "ui";
 }

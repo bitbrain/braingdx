@@ -27,6 +27,8 @@ public interface GameContext {
    GameWorld getGameWorld();
 
    Stage getStage();
+   
+   Stage getWorldStage();
 
    World getBox2DWorld();
 

@@ -20,13 +20,16 @@ public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
    private final LightingManager lightingManager;
 
    private final Stage stage;
+   
+   private final Stage worldStage;
 
    public CombinedRenderPipelineFactory(ShaderConfig config, GameWorld world, LightingManager lightingManager,
-         Stage stage) {
+         Stage stage, Stage worldStage) {
       this.config = config;
       this.world = world;
       this.lightingManager = lightingManager;
       this.stage = stage;
+      this.worldStage = worldStage;
    }
 
    @Override
@@ -45,6 +48,7 @@ public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
       });
       pipeline.set(RenderPipeIds.WORLD, new WorldRenderLayer(world));
       pipeline.set(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(lightingManager));
+      pipeline.set(RenderPipeIds.WORLD_UI, new StageRenderLayer(worldStage));
       pipeline.set(RenderPipeIds.UI, new StageRenderLayer(stage));
       return pipeline;
    }

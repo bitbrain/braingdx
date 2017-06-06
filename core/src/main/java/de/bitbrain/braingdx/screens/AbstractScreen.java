@@ -69,7 +69,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
    private OrthographicCamera camera;
    private Color backgroundColor = Color.BLACK.cpy();
    private Batch batch;
-   private Stage stage;
+   private Stage stage, worldStage;
    private RenderPipeline renderPipeline;
    private LightingManager lightingManager;
    private ParticleManager particleManager;
@@ -103,6 +103,9 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
       gameCamera = new VectorGameCamera(camera);
       particleManager = new ParticleManager();
       stage = new Stage(getViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+      Viewport worldStageViewport = getViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      worldStageViewport.setCamera(camera);
+      worldStage = new Stage(worldStageViewport);
       renderPipeline = getRenderPipelineFactory().create();
       tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager);
       ScreenTransitions.init(game, renderPipeline, this);
@@ -117,6 +120,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
       tweenManager.update(delta);
       gameCamera.update(delta);
       stage.act(delta);
+      worldStage.act(delta);
       batch.setProjectionMatrix(camera.combined);
       renderPipeline.render(batch, delta);
    }
@@ -125,11 +129,13 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
    public final void resize(int width, int height) {
       if (!uiInitialized) {
          input.addProcessor(stage);
-         onCreateStage(stage, width, height);
+         input.addProcessor(worldStage);
          Gdx.input.setInputProcessor(input);
+         onCreateStage(stage, width, height);
          uiInitialized = true;
       }
       stage.getViewport().update(width, height);
+      worldStage.getViewport().update(width, height);
       renderPipeline.resize(width, height);
       camera.setToOrtho(false, width, height);
    }
@@ -156,6 +162,11 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
 
    public Color getBackgroundColor() {
       return backgroundColor;
+   }
+   
+   @Override
+   public Stage getWorldStage() {
+      return worldStage;
    }
 
    @Override
@@ -243,6 +254,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
    public void dispose() {
       world.clear();
       stage.dispose();
+      worldStage.dispose();
       input.clear();
       particleManager.dispose();
       renderPipeline.dispose();
@@ -262,6 +274,6 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
    }
 
    protected RenderPipelineFactory getRenderPipelineFactory() {
-      return new CombinedRenderPipelineFactory(getShaderConfig(), world, lightingManager, stage);
+      return new CombinedRenderPipelineFactory(getShaderConfig(), world, lightingManager, stage, worldStage);
    }
 }
