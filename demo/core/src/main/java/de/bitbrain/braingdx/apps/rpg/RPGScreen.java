@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import de.bitbrain.braingdx.GameContext;
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.behavior.movement.MovementController;
@@ -42,47 +42,47 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
    }
 
    @Override
-   protected void onCreateStage(Stage stage, int width, int height) {
-      getGameCamera().setBaseZoom(0.25f);
-      getGameCamera().setSpeed(1.6f);
-      getGameCamera().setZoomScale(0.001f);
-      prepareResources();
-      setupShaders();
+   protected void onCreate(GameContext context) {
+	  context.getGameCamera().setBaseZoom(0.25f);
+	  context.getGameCamera().setSpeed(1.6f);
+	  context.getGameCamera().setZoomScale(0.001f);
+      prepareResources(context);
+      setupShaders(context);
 
    }
 
-   private void prepareResources() {
+   private void prepareResources(GameContext context) {
       TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_1, TiledMap.class);
-      getRenderPipeline().set(RenderPipeIds.BACKGROUND,
-            new TiledMapRenderer(map, (OrthographicCamera) getGameCamera().getInternal()));
-      getLightingManager().setAmbientLight(new Color(0.1f, 0.05f, 0.3f, 0.4f));
+      context.getRenderPipeline().set(RenderPipeIds.BACKGROUND,
+            new TiledMapRenderer(map, (OrthographicCamera) context.getGameCamera().getInternal()));
+      context.getLightingManager().setAmbientLight(new Color(0.1f, 0.05f, 0.3f, 0.4f));
       Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
       SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
-      createAnimations(sheet);
+      createAnimations(context, sheet);
 
-      factory = new NPCFactory(BLOCK_SIZE, getGameWorld());
-      GameObject player = spawnObject(10, 10, NPC.CITIZEN_MALE, new OrientationMovementController());
-      getGameCamera().setTarget(player);
+      factory = new NPCFactory(BLOCK_SIZE, context.getGameWorld());
+      GameObject player = spawnObject(context, 10, 10, NPC.CITIZEN_MALE, new OrientationMovementController());
+      context.getGameCamera().setTarget(player);
       final int NPCS = 25;
 
       for (int i = 0; i < NPCS; ++i) {
          int randomX = (int) (Math.random() * 25);
          int randomY = (int) (Math.random() * 25);
-         spawnObject(randomX, randomY, NPC.random(), new RandomOrientationMovementController());
+         spawnObject(context, randomX, randomY, NPC.random(), new RandomOrientationMovementController());
       }
 
-      getLightingManager().addPointLight("lantern", 200, 200, 500, Color.valueOf("ff9955ff"));
+      context.getLightingManager().addPointLight("lantern", 200, 200, 500, Color.valueOf("ff9955ff"));
    }
 
-   private GameObject spawnObject(int indexX, int indexY, NPC type, MovementController<Orientation> controller) {
+   private GameObject spawnObject(GameContext context, int indexX, int indexY, NPC type, MovementController<Orientation> controller) {
       GameObject object = factory.spawn(indexX, indexY, type.ordinal(), controller);
       RasteredMovementBehavior behavior = new RasteredMovementBehavior(controller).interval(0.3f).rasterSize(BLOCK_SIZE,
             BLOCK_SIZE);
-      getBehaviorManager().apply(behavior, object);
+      context.getBehaviorManager().apply(behavior, object);
       return object;
    }
 
-   private void createAnimations(SpriteSheet sheet) {
+   private void createAnimations(GameContext context, SpriteSheet sheet) {
       Map<Integer, Index> indices = createSpriteIndices();
       SpriteSheetAnimationFactory animationFactory = new SpriteSheetAnimationFactory(sheet, indices);
       Map<Integer, SpriteSheetAnimation> animations = new HashMap<Integer, SpriteSheetAnimation>();
@@ -91,8 +91,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
          animations.put(type, animation);
          SpriteSheetAnimationSupplier supplier = new SpriteSheetAnimationSupplier(orientations(), animation,
                AnimationTypes.FORWARD_YOYO);
-         getBehaviorManager().apply(supplier);
-         getRenderManager().register(type, new AnimationRenderer(supplier));
+         context.getBehaviorManager().apply(supplier);
+         context.getRenderManager().register(type, new AnimationRenderer(supplier));
       }
    }
 
@@ -118,8 +118,8 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
       return indices;
    }
 
-   private void setupShaders() {
-      RenderPipe worldPipe = getRenderPipeline().getPipe(RenderPipeIds.WORLD);
+   private void setupShaders(GameContext context) {
+      RenderPipe worldPipe = context.getRenderPipeline().getPipe(RenderPipeIds.WORLD);
       Bloom bloom = new Bloom(Math.round(Gdx.graphics.getWidth() / 3.5f), Math.round(Gdx.graphics.getHeight() / 3.5f));
       bloom.setBlurAmount(0.1f);
       bloom.setBloomIntesity(1.2f);

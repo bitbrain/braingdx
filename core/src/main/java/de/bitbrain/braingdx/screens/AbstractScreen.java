@@ -16,41 +16,19 @@
 package de.bitbrain.braingdx.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.GameContext;
-import de.bitbrain.braingdx.audio.AudioManager;
-import de.bitbrain.braingdx.behavior.BehaviorManager;
-import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
-import de.bitbrain.braingdx.graphics.GameCamera;
-import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
-import de.bitbrain.braingdx.graphics.GameObjectRenderManagerAdapter;
-import de.bitbrain.braingdx.graphics.VectorGameCamera;
-import de.bitbrain.braingdx.graphics.lighting.LightingManager;
-import de.bitbrain.braingdx.graphics.particles.ParticleManager;
+import de.bitbrain.braingdx.GameContext2DImpl;
 import de.bitbrain.braingdx.graphics.pipeline.ColoredRenderLayer;
-import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipelineFactory;
-import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
-import de.bitbrain.braingdx.graphics.pipeline.RenderPipelineFactory;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
-import de.bitbrain.braingdx.tmx.TiledMapManager;
-import de.bitbrain.braingdx.tmx.TiledMapManagerImpl;
-import de.bitbrain.braingdx.tweens.SharedTweenManager;
-import de.bitbrain.braingdx.world.GameWorld;
+import de.bitbrain.braingdx.util.ViewportFactory;
 
 /**
  * Abstract base class for screens
@@ -59,27 +37,21 @@ import de.bitbrain.braingdx.world.GameWorld;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, GameContext {
+public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
    private T game;
-   private GameWorld world;
-   private BehaviorManager behaviorManager;
-   private GameObjectRenderManager renderManager;
-   private GameCamera gameCamera;
-   private OrthographicCamera camera;
    private Color backgroundColor = Color.BLACK.cpy();
-   private Batch batch;
-   private Stage stage, worldStage;
-   private RenderPipeline renderPipeline;
-   private LightingManager lightingManager;
-   private ParticleManager particleManager;
-   private World boxWorld;
-   private TiledMapManager tiledMapManager;
-   private TweenManager tweenManager = SharedTweenManager.getInstance();
-   private InputMultiplexer input;
    private ColoredRenderLayer coloredRenderLayer;
+   private GameContext2DImpl gameContext2D;
+   
+   private final ViewportFactory viewportFactory = new ViewportFactory() {
 
-   private boolean uiInitialized = false;
+	@Override
+	public Viewport create(int width, int height) {
+		return getViewport(width, height);
+	}
+	   
+   };
 
    public AbstractScreen(T game) {
       this.game = game;
@@ -92,24 +64,9 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
    @Override
    public final void show() {
       coloredRenderLayer = new ColoredRenderLayer();
-      camera = new OrthographicCamera();
-      world = new GameWorld(camera);
-      behaviorManager = new BehaviorManager();
-      batch = new SpriteBatch();
-      input = new InputMultiplexer();
-      boxWorld = new World(Vector2.Zero, false);
-      lightingManager = new LightingManager(boxWorld, camera);
-      renderManager = new GameObjectRenderManager(batch);
-      gameCamera = new VectorGameCamera(camera);
-      particleManager = new ParticleManager();
-      stage = new Stage(getViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-      Viewport worldStageViewport = getViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-      worldStageViewport.setCamera(camera);
-      worldStage = new Stage(worldStageViewport);
-      renderPipeline = getRenderPipelineFactory().create();
-      tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager);
-      ScreenTransitions.init(game, renderPipeline, this);
-      wire();
+      gameContext2D = new GameContext2DImpl(viewportFactory, getShaderConfig());
+      ScreenTransitions.init(game, gameContext2D.getRenderPipeline(), this);
+      onCreate(gameContext2D);
    }
 
    @Override
@@ -117,27 +74,16 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
       Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       onUpdate(delta);
-      tweenManager.update(delta);
-      gameCamera.update(delta);
-      stage.act(delta);
-      worldStage.act(delta);
-      batch.setProjectionMatrix(camera.combined);
-      renderPipeline.render(batch, delta);
+      gameContext2D.updateAndRender(delta);
    }
 
    @Override
    public final void resize(int width, int height) {
-      if (!uiInitialized) {
-         input.addProcessor(stage);
-         input.addProcessor(worldStage);
-         Gdx.input.setInputProcessor(input);
-         onCreateStage(stage, width, height);
-         uiInitialized = true;
-      }
-      stage.getViewport().update(width, height);
-      worldStage.getViewport().update(width, height);
-      renderPipeline.resize(width, height);
-      camera.setToOrtho(false, width, height);
+	   gameContext2D.resize(width, height);
+   }
+   
+   public Color getBackgroundColor() {
+	   return backgroundColor;
    }
 
    @Override
@@ -155,91 +101,10 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
 
    }
 
-   @Override
-   public GameWorld getGameWorld() {
-      return world;
-   }
-
-   public Color getBackgroundColor() {
-      return backgroundColor;
-   }
-   
-   @Override
-   public Stage getWorldStage() {
-      return worldStage;
-   }
-
-   @Override
-   public Stage getStage() {
-      return stage;
-   }
-
-   @Override
-   public RenderPipeline getRenderPipeline() {
-      return renderPipeline;
-   }
-
-   @Override
-   public World getBox2DWorld() {
-      return boxWorld;
-   }
-
-   @Override
-   public ParticleManager getParticleManager() {
-      return particleManager;
-   }
-
-   @Override
-   public TweenManager getTweenManager() {
-      return tweenManager;
-   }
-
-   @Override
-   public BehaviorManager getBehaviorManager() {
-      return behaviorManager;
-   }
-
-   @Override
-   public GameObjectRenderManager getRenderManager() {
-      return renderManager;
-   }
-
-   @Override
-   public GameCamera getGameCamera() {
-      return gameCamera;
-   }
-
-   @Override
-   public LightingManager getLightingManager() {
-      return lightingManager;
-   }
-
-   @Override
-   public InputMultiplexer getInput() {
-      return input;
-   }
-
-   @Override
-   public TiledMapManager getTiledMapManager() {
-      return tiledMapManager;
-   }
-
-   @Override
-   public ScreenTransitions getScreenTransitions() {
-      return ScreenTransitions.getInstance();
-   }
-
-   @Override
-   public AudioManager getAudioManager() {
-      return AudioManager.getInstance();
-   }
-
-   protected void onCreateStage(Stage stage, int width, int height) {
-
-   }
+   protected abstract void onCreate(GameContext context);
 
    protected void onUpdate(float delta) {
-
+	   // noOp
    }
 
    protected ShaderConfig getShaderConfig() {
@@ -252,28 +117,12 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen, 
 
    @Override
    public void dispose() {
-      world.clear();
-      stage.dispose();
-      worldStage.dispose();
-      input.clear();
-      particleManager.dispose();
-      renderPipeline.dispose();
-      tweenManager.killAll();
-      renderManager.dispose();
+     gameContext2D.dispose();
    }
 
    public void setBackgroundColor(Color color) {
       this.backgroundColor = color;
       coloredRenderLayer.setColor(color);
-      this.getRenderPipeline().set(RenderPipeIds.BACKGROUND, coloredRenderLayer);
-   }
-
-   private void wire() {
-      world.addListener(new BehaviorManagerAdapter(behaviorManager));
-      world.addListener(new GameObjectRenderManagerAdapter(renderManager));
-   }
-
-   protected RenderPipelineFactory getRenderPipelineFactory() {
-      return new CombinedRenderPipelineFactory(getShaderConfig(), world, lightingManager, stage, worldStage);
+      gameContext2D.getRenderPipeline().set(RenderPipeIds.BACKGROUND, coloredRenderLayer);
    }
 }

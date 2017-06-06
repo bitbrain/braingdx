@@ -6,8 +6,8 @@ import java.util.Map;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
+import de.bitbrain.braingdx.GameContext;
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.apps.rpg.NPC;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
@@ -36,37 +36,37 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
    }
 
    @Override
-   protected void onCreateStage(Stage stage, int width, int height) {
-      getGameCamera().setBaseZoom(0.15f);
-      getGameCamera().setSpeed(3.6f);
-      getGameCamera().setZoomScale(0.001f);
+   protected void onCreate(GameContext context) {
+	  context.getGameCamera().setBaseZoom(0.15f);
+	  context.getGameCamera().setSpeed(3.6f);
+	  context.getGameCamera().setZoomScale(0.001f);
       TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_2, TiledMap.class);
-      TiledMapManager tiledMapManager = getTiledMapManager();
-      getLightingManager().setAmbientLight(new Color(0.2f, 0.3f, 0.6f, 0.4f));
-      tiledMapManager.load(map, getGameCamera().getInternal(), TiledMapType.ORTHOGONAL);
+      TiledMapManager tiledMapManager = context.getTiledMapManager();
+      context.getLightingManager().setAmbientLight(new Color(0.2f, 0.3f, 0.6f, 0.4f));
+      tiledMapManager.load(map, context.getGameCamera().getInternal(), TiledMapType.ORTHOGONAL);
 
       player = null;
-      for (GameObject o : getGameWorld()) {
-         getBehaviorManager().apply(new PointLightBehavior(new Color(1f, 0.7f, 0.7f, 1f), 190f, getLightingManager()),
+      for (GameObject o : context.getGameWorld()) {
+    	  context.getBehaviorManager().apply(new PointLightBehavior(new Color(1f, 0.7f, 0.7f, 1f), 190f, context.getLightingManager()),
                o);
          if (o.getType().equals("CLERIC_MALE")) {
             player = o;
          }
       }
-      getGameCamera().setTarget(player);
+      context.getGameCamera().setTarget(player);
 
       final Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
       SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
-      createAnimations(sheet);
+      createAnimations(context, sheet);
 
       OrientationMovementController controller = new OrientationMovementController();
       RasteredMovementBehavior behavior = new RasteredMovementBehavior(controller, tiledMapManager.getAPI())
             .interval(0.3f)
             .rasterSize(tiledMapManager.getAPI().getCellWidth(), tiledMapManager.getAPI().getCellHeight());
-      getBehaviorManager().apply(behavior, player);
+      context.getBehaviorManager().apply(behavior, player);
    }
 
-   private void createAnimations(SpriteSheet sheet) {
+   private void createAnimations(GameContext context, SpriteSheet sheet) {
       Map<Integer, Index> indices = createSpriteIndices();
       SpriteSheetAnimationFactory animationFactory = new SpriteSheetAnimationFactory(sheet, indices);
       Map<Integer, SpriteSheetAnimation> animations = new HashMap<Integer, SpriteSheetAnimation>();
@@ -75,8 +75,8 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
          animations.put(type, animation);
          SpriteSheetAnimationSupplier supplier = new SpriteSheetAnimationSupplier(orientations(), animation,
                AnimationTypes.FORWARD_YOYO);
-         getBehaviorManager().apply(supplier);
-         getRenderManager().register(NPC.values()[type].name(), new AnimationRenderer(supplier).scale(1f, 1.3f));
+         context.getBehaviorManager().apply(supplier);
+         context.getRenderManager().register(NPC.values()[type].name(), new AnimationRenderer(supplier).scale(1f, 1.3f));
       }
    }
 
