@@ -70,7 +70,12 @@
 			<version>${libgdx.version}</version>
 			<optional>true</optional>
 		</dependency>
-
+		<dependency>
+			<groupId>com.badlogicgames.gdx</groupId>
+			<artifactId>gdx-freetype</artifactId>
+			<version>${libgdx.version}</version>
+			<optional>true</optional>
+		</dependency>
 	    <dependency>
 	        <groupId>aurelienribon.tweenengine</groupId>
 	        <artifactId>universal-tween-engine</artifactId>

@@ -17,6 +17,9 @@ package de.bitbrain.braingdx.assets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
@@ -51,11 +54,13 @@ public class SharedAssetManager extends AssetManager {
    }
 
    private static void loadInternal() {
-
       if (Gdx.files == null)
          throw new RuntimeException("LibGDX is not initialized yet!");
 
       instance = new AssetManager();
+      // TODO make FileHandleResolver injectible
       instance.setLoader(TiledMap.class, new TmxMapLoader());
+      instance.setLoader(FreeTypeFontGenerator.class, 
+    		   new FreeTypeFontGeneratorLoader(new InternalFileHandleResolver()));
    }
 }
