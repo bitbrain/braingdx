@@ -54,6 +54,10 @@ public class MotionFilter extends Filter<MotionFilter> {
       if (lastFrameTex != null)
          setParam(Param.LastFrame, u_texture1);
    }
+   
+   public float getBlurOpacity() {
+	   return this.blurOpacity;
+   }
 
    @Override
    public void rebind() {

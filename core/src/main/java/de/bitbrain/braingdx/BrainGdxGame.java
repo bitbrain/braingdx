@@ -28,12 +28,22 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import aurelienribon.tweenengine.Tween;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.postprocessing.effects.Bloom;
+import de.bitbrain.braingdx.postprocessing.effects.CrtMonitor;
+import de.bitbrain.braingdx.postprocessing.effects.MotionBlur;
+import de.bitbrain.braingdx.postprocessing.effects.Vignette;
+import de.bitbrain.braingdx.postprocessing.effects.Zoomer;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.tweens.ActorTween;
+import de.bitbrain.braingdx.tweens.BloomShaderTween;
 import de.bitbrain.braingdx.tweens.ColorTween;
+import de.bitbrain.braingdx.tweens.CrtMonitorShaderTween;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
+import de.bitbrain.braingdx.tweens.MotionBlurShaderTween;
 import de.bitbrain.braingdx.tweens.SpriteTween;
 import de.bitbrain.braingdx.tweens.VectorTween;
+import de.bitbrain.braingdx.tweens.VignetteShaderTween;
+import de.bitbrain.braingdx.tweens.ZoomerShaderTween;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -70,10 +80,17 @@ public abstract class BrainGdxGame extends Game {
    }
 
    private void initTweens() {
+	  // Normal tweens
       Tween.registerAccessor(Actor.class, new ActorTween());
       Tween.registerAccessor(Color.class, new ColorTween());
       Tween.registerAccessor(Sprite.class, new SpriteTween());
       Tween.registerAccessor(Vector2.class, new VectorTween());
       Tween.registerAccessor(GameObject.class, new GameObjectTween());
+      // Shader tweens
+      Tween.registerAccessor(Bloom.class, new BloomShaderTween());
+      Tween.registerAccessor(CrtMonitor.class, new CrtMonitorShaderTween());
+      Tween.registerAccessor(Zoomer.class, new ZoomerShaderTween());
+      Tween.registerAccessor(Vignette.class, new VignetteShaderTween());
+      Tween.registerAccessor(MotionBlur.class, new MotionBlurShaderTween());
    }
 }

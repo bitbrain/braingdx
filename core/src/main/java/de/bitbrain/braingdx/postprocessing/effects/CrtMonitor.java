@@ -152,6 +152,14 @@ public final class CrtMonitor extends PostProcessorEffect {
    public Color getTint() {
       return crt.getTint();
    }
+   
+   public float getTime() {
+	   return crt.getTime();
+   }
+   
+   public float getDistortion() {
+	   return crt.getDistortion();
+   }
 
    public RgbMode getRgbMode() {
       return crt.getRgbMode();
@@ -204,5 +212,5 @@ public final class CrtMonitor extends PostProcessorEffect {
 
       // do combine pass
       combine.setOutput(dest).setInput(in, out).render();
-   };
+   }
 }

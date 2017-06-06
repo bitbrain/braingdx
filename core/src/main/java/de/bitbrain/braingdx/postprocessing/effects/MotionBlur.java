@@ -27,6 +27,10 @@ public class MotionBlur extends PostProcessorEffect {
    public void setBlurOpacity(float blurOpacity) {
       motionFilter.setBlurOpacity(blurOpacity);
    }
+   
+   public float getBlurOpacity() {
+	   return motionFilter.getBlurOpacity();
+   }
 
    @Override
    public void dispose() {

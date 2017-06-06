@@ -195,9 +195,17 @@ public final class CrtScreen extends Filter<CrtScreen> {
          setParam(Param.Zoom, this.zoom);
       }
    }
+   
+   public float getTime() {
+	   return elapsedSecs;
+   }
 
    public RgbMode getRgbMode() {
       return mode;
+   }
+   
+   public float getDistortion() {
+	   return distortion;
    }
 
    public float getOffset() {
