@@ -1,3 +1,7 @@
+# Version 0.1.1
+
+Added offset attribute to `AnimationRenderer` class.
+
 # Version 0.1.0
 
 This version improves braingdx and comes with the following highlights:

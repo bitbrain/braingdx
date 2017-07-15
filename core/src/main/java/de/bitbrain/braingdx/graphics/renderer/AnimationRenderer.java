@@ -35,6 +35,7 @@ public class AnimationRenderer implements GameObjectRenderer {
    private final AnimationSupplier<GameObject> supplier;
 
    private final Vector2 scale = new Vector2(1f, 1f);
+   private final Vector2 offset = new Vector2();
 
    public AnimationRenderer(AnimationSupplier<GameObject> supplier) {
       this.supplier = supplier;
@@ -43,6 +44,14 @@ public class AnimationRenderer implements GameObjectRenderer {
    public AnimationRenderer scale(float x, float y) {
       this.scale.set(x, y);
       return this;
+   }
+   
+   public Vector2 getOffset() {
+   	return offset;
+   }
+   
+   public void setOffset(float x, float y) {
+   	offset.set(x, y);
    }
 
    @Override
@@ -54,7 +63,7 @@ public class AnimationRenderer implements GameObjectRenderer {
    public void render(GameObject object, Batch batch, float delta) {
       Animation animation = supplier.supplyFor(object);
 
-      animation.render(batch, object.getLeft() + object.getOffset().x, object.getTop() + object.getOffset().y,
+      animation.render(batch, object.getLeft() + object.getOffset().x + offset.x, object.getTop() + object.getOffset().y + offset.y,
             object.getWidth() * scale.x, object.getHeight() * scale.y, delta);
    }
 }
