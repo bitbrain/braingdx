@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.postprocessing.PostProcessor;
+import de.bitbrain.braingdx.util.ViewportFactory;
 
 public class MockedCombinedRenderPipelineFactory implements RenderPipelineFactory {
 
@@ -23,10 +24,11 @@ public class MockedCombinedRenderPipelineFactory implements RenderPipelineFactor
       FrameBufferFactory factory = mock(FrameBufferFactory.class);
       FrameBuffer buffer = mock(FrameBuffer.class);
       Texture mockTexture = mock(Texture.class);
+      ViewportFactory viewportFactory = mock(ViewportFactory.class);
       when(factory.create(Mockito.anyInt(), Mockito.anyInt())).thenReturn(buffer);
       when(buffer.getColorBufferTexture()).thenReturn(mockTexture);
       return new CombinedRenderPipeline(config, processorMock, factory, mock(SpriteBatch.class),
-            mock(OrthographicCamera.class));
+            mock(OrthographicCamera.class), viewportFactory);
    }
 
 }

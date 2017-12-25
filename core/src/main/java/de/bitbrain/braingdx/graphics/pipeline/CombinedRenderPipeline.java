@@ -29,12 +29,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.util.ShaderLoader;
+import de.bitbrain.braingdx.util.ViewportFactory;
 
 /**
  * Combined implementation of {@link RenderPipeline}. This pipeline will bake together all layers
@@ -65,7 +67,9 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
    private final SpriteBatch internalBatch;
 
-   public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera) {
+   private final Viewport viewport;
+
+   public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera, ViewportFactory viewportFactory) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
          @Override
@@ -73,10 +77,10 @@ public class CombinedRenderPipeline implements RenderPipeline {
             return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
          }
 
-      }, internalBatch, camera);
+      }, internalBatch, camera, viewportFactory);
    }
 
-   public CombinedRenderPipeline(ShaderConfig config) {
+   public CombinedRenderPipeline(ShaderConfig config, ViewportFactory viewportFactory) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
          @Override
@@ -84,11 +88,11 @@ public class CombinedRenderPipeline implements RenderPipeline {
             return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
          }
 
-      }, new SpriteBatch(), new OrthographicCamera());
+      }, new SpriteBatch(), new OrthographicCamera(), viewportFactory);
    }
 
    CombinedRenderPipeline(ShaderConfig config, PostProcessor processor, FrameBufferFactory factory,
-         SpriteBatch internalBatch, OrthographicCamera camera) {
+         SpriteBatch internalBatch, OrthographicCamera camera, ViewportFactory viewportFactory) {
       this.config = config;
       ShaderLoader.BasePath = this.config.basePath;
       ShaderLoader.PathResolver = this.config.pathResolver;
@@ -96,6 +100,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
       this.bufferFactory = factory;
       this.internalBatch = internalBatch;
       this.camera = camera;
+      this.viewport = viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      this.viewport.setCamera(camera);
    }
 
    @Override
@@ -114,7 +120,6 @@ public class CombinedRenderPipeline implements RenderPipeline {
       }
       buffer = bufferFactory.create(width, height);
       camera.setToOrtho(true, width, height);
-      camera.update();
    }
 
    @Override
@@ -136,6 +141,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
    @Override
    public void render(Batch batch, float delta) {
       clearBuffer();
+      viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       for (CombinedRenderPipe pipe : pipes.values()) {
          pipe.beforeRender();
          pipe.render(batch, delta, buffer);

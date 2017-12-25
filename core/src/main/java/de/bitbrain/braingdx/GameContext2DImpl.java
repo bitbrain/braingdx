@@ -85,7 +85,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 		Viewport worldStageViewport = viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		worldStageViewport.setCamera(camera);
 		worldStage = new Stage(worldStageViewport);
-		renderPipeline = new CombinedRenderPipelineFactory(shaderConfig, world, lightingManager, stage, worldStage)
+		renderPipeline = new CombinedRenderPipelineFactory(shaderConfig, world, lightingManager, stage, worldStage, viewportFactory)
 				.create();
 		tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager);
 		wire();

@@ -5,11 +5,13 @@ import static org.mockito.Mockito.when;
 
 import org.mockito.Mockito;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.postprocessing.PostProcessor;
+import de.bitbrain.braingdx.util.ViewportFactory;
 
 public class MockedLayeredRenderPipelineFactory implements RenderPipelineFactory {
 

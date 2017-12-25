@@ -6,6 +6,11 @@ import java.util.Map;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bitbrain.braingdx.GameContext;
 import de.bitbrain.braingdx.apps.Assets;
@@ -65,6 +70,11 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
             .rasterSize(tiledMapManager.getAPI().getCellWidth(), tiledMapManager.getAPI().getCellHeight());
       context.getBehaviorManager().apply(behavior, player);
    }
+   
+   @Override
+	protected Viewport getViewport(int width, int height) {
+		return new FillViewport(width, height);
+	}
 
    private void createAnimations(GameContext context, SpriteSheet sheet) {
       Map<Integer, Index> indices = createSpriteIndices();
