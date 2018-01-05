@@ -9,6 +9,7 @@ import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.pipeline.layers.StageRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.layers.WorldRenderLayer;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
+import de.bitbrain.braingdx.util.ViewportFactory;
 import de.bitbrain.braingdx.world.GameWorld;
 
 public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
@@ -22,19 +23,22 @@ public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
    private final Stage stage;
    
    private final Stage worldStage;
+   
+   private final ViewportFactory viewportFactory;
 
    public CombinedRenderPipelineFactory(ShaderConfig config, GameWorld world, LightingManager lightingManager,
-         Stage stage, Stage worldStage) {
+         Stage stage, Stage worldStage, ViewportFactory viewportFactory) {
       this.config = config;
       this.world = world;
       this.lightingManager = lightingManager;
       this.stage = stage;
       this.worldStage = worldStage;
+      this.viewportFactory = viewportFactory;
    }
 
    @Override
    public RenderPipeline create() {
-      RenderPipeline pipeline = new CombinedRenderPipeline(config);
+      RenderPipeline pipeline = new CombinedRenderPipeline(config, viewportFactory);
       pipeline.set(RenderPipeIds.BACKGROUND, new AbstractRenderLayer() {
          @Override
          public void render(Batch batch, float delta) {

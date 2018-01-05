@@ -1,3 +1,8 @@
+# Version 0.1.2
+
+* added partial support for viewports
+* introduced lazy object creation for game worlds
+
 # Version 0.1.1
 
 Added offset attribute to `AnimationRenderer` class.

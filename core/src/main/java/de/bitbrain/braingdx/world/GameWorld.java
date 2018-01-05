@@ -72,6 +72,8 @@ public class GameWorld implements Iterable<GameObject> {
    }
 
    private final List<GameObject> removals = new ArrayList<GameObject>();
+   
+   private final List<GameObject> additions = new ArrayList<GameObject>();
 
    private final List<GameObject> objects = new ArrayList<GameObject>();
    
@@ -126,14 +128,23 @@ public class GameWorld implements Iterable<GameObject> {
    public void setBounds(WorldBounds bounds) {
       this.bounds = bounds;
    }
-
+   
    /**
     * Adds a new game object to the game world and provides it.
     *
     * @return newly created game object
     */
    public GameObject addObject() {
-      return addObject(null);
+      return addObject(null, false);
+   }
+
+   /**
+    * Adds a new game object to the game world and provides it.
+    *
+    * @return newly created game object
+    */
+   public GameObject addObject(boolean lazy) {
+      return addObject(null, lazy);
    }
    
    /**
@@ -143,6 +154,16 @@ public class GameWorld implements Iterable<GameObject> {
     * @return newly created game object
     */
    public GameObject addObject(Mutator<GameObject> mutator) {
+	   return addObject(mutator, false);
+   }
+   
+   /**
+    * Adds a new game object to the game world with a custom ID
+    * 
+    * @param mutator the mutator which might change the GameObject
+    * @return newly created game object
+    */
+   public GameObject addObject(Mutator<GameObject> mutator, boolean lazy) {
 	   final GameObject object = pool.obtain();
 	   if (mutator != null) {
 		   mutator.mutate(object);
@@ -151,11 +172,15 @@ public class GameWorld implements Iterable<GameObject> {
 	       Gdx.app.log("ERROR", "Unable to add game object with ID '" + object.getId() + "' to game world. Already exists!");
 	       return object;
 	   }
-	   objects.add(object);
-	   identityMap.put(object.getId(), object);
-	   for (GameWorldListener l : listeners) {
-	       l.onAdd(object);
+	   if (lazy) {
+		   additions.add(object);
+	   } else {
+		   objects.add(object);
+		   for (GameWorldListener l : listeners) {
+		       l.onAdd(object);
+		   }
 	   }
+	   identityMap.put(object.getId(), object);
 	   return object;
    }
 
@@ -166,6 +191,13 @@ public class GameWorld implements Iterable<GameObject> {
     * @param delta frame delta
     */
    public void update(float delta) {
+	  for (GameObject addition : additions) {
+		  objects.add(addition);
+		   for (GameWorldListener l : listeners) {
+		       l.onAdd(addition);
+		   }
+	  }
+	  additions.clear();
       Collections.sort(objects, comparator);
       for (GameObject object : objects) {
          if (object.isActive() && !bounds.isInBounds(object, camera)) {
