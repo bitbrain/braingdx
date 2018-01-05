@@ -5,10 +5,12 @@ sudo: required
 services:
   - docker
 
-addons:
-  apt:
-    packages:
-      - oracle-java7-installer
+jdk:
+  - openjdk7
+
+cache:
+    directories:
+        - $HOME/.m2
 
 branches:
   only:
@@ -17,10 +19,6 @@ branches:
 env:
   global:
     - COMMIT=${TRAVIS_COMMIT::8}
-
-cache:
-  directories:
-  - ~/.m2/repository
 
 before_install:
   - export CH_VERSION=$(docker run -v $(pwd):/chime bitbrain/chime:latest CHANGELOG.md version)
