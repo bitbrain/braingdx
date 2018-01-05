@@ -67,7 +67,9 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
    private final SpriteBatch internalBatch;
 
-   private final Viewport viewport;
+   private Viewport viewport;
+   
+   private final ViewportFactory viewportFactory;
 
    public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera, ViewportFactory viewportFactory) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
@@ -100,8 +102,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
       this.bufferFactory = factory;
       this.internalBatch = internalBatch;
       this.camera = camera;
-      this.viewport = viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-      this.viewport.setCamera(camera);
+      this.viewportFactory = viewportFactory;
    }
 
    @Override
@@ -140,8 +141,12 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
    @Override
    public void render(Batch batch, float delta) {
+	  if (viewport == null) {
+		  this.viewport = viewportFactory.create((int)camera.viewportWidth, (int)camera.viewportHeight);
+		  this.viewport.setCamera(camera);
+	  }
       clearBuffer();
-      viewport.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      viewport.update((int)camera.viewportWidth, (int)camera.viewportHeight);
       for (CombinedRenderPipe pipe : pipes.values()) {
          pipe.beforeRender();
          pipe.render(batch, delta, buffer);

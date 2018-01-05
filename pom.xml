@@ -148,6 +148,7 @@
 				</executions>
 			    <configuration>
 		           <additionalparam>-Xdoclint:none</additionalparam>
+		           <additionalparam>-quiet</additionalparam>
 		        </configuration>
 			</plugin>
 			<plugin>
