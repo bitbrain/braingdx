@@ -43,6 +43,8 @@ public class GameObject implements Pool.Poolable {
    private Color color = Color.WHITE.cpy();
 
    private final Vector2 scale;
+   
+   private float rotation;
 
    private float zIndex;
 
@@ -144,6 +146,10 @@ public class GameObject implements Pool.Poolable {
    public Vector2 getScale() {
       return scale;
    }
+   
+   public void scale(float scale) {
+	   this.scale.scl(scale);
+   }
 
    public Vector2 getOffset() {
       return offset;
@@ -181,6 +187,18 @@ public class GameObject implements Pool.Poolable {
    public boolean isActive() {
       return active;
    }
+   
+   public void setRotation(float rotation) {
+	   this.rotation = rotation;
+   }
+   
+   public float getRotation() {
+	   return this.rotation;
+   }
+   
+   public void rotate(float delta) {
+	   this.rotation += delta;
+   }
 
    @Override
    public void reset() {
@@ -198,13 +216,14 @@ public class GameObject implements Pool.Poolable {
       color = Color.WHITE.cpy();
       attributes.clear();
       active = true;
+      rotation = 0f;
    }
 
    @Override
    public String toString() {
       return "GameObject [position=" + position + ", dimensions=" + dimensions + ", lastPosition=" + lastPosition
             + ", offset=" + offset + ", id=" + id + ", type=" + type + ", color=" + color + ", scale=" + scale
-            + ", zIndex=" + zIndex + "]";
+            + ", zIndex=" + zIndex + ", rotation=" + rotation + "]";
    }
 
    @Override

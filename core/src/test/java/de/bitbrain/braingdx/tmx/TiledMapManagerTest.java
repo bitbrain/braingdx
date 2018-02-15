@@ -243,10 +243,8 @@ public class TiledMapManagerTest {
       world.update(0f);
       api.setLayerIndex(objectA, 1);
       world.update(0f);
-
       assertThat(api.isCollision(1, 0, 1)).isTrue();
       assertThat(api.isCollision(1, 0, 0)).isFalse();
-      assertThat(api.isCollision(0, 1, 0)).isFalse();
       assertThat(api.isCollision(0, 1, 0)).isFalse();
    }
 

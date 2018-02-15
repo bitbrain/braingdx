@@ -67,8 +67,8 @@ public class TiledMapManagerImpl implements TiledMapManager {
    @Override
    public void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config)
          throws TiledMapException {
+	  clear();
       validate(tiledMap);
-      clear();
       for (TiledMapListener listener : listeners) {
          listener.beforeLoad(tiledMap);
       }

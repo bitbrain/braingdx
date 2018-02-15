@@ -1,3 +1,9 @@
+# Version 0.1.3
+
+* added rotation attribute to game objects
+* add 'scale' method to game objects
+* introduced lazy behavior creation/deletion
+
 # Version 0.1.2
 
 * added partial support for viewports
