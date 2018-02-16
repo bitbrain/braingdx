@@ -1,3 +1,7 @@
+# Version 0.1.4
+
+* added rotation to SpriteRenderer
+
 # Version 0.1.3
 
 * added rotation attribute to game objects
