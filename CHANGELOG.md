@@ -1,3 +1,8 @@
+# Version 0.1.5
+
+* do not set center on sprite rotation
+
+
 # Version 0.1.4
 
 * added rotation to SpriteRenderer

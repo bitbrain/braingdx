@@ -72,7 +72,6 @@ public class SpriteRenderer implements GameObjectRenderManager.GameObjectRendere
       sprite.setColor(object.getColor());
       sprite.setRotation(object.getRotation());
       sprite.setOrigin(object.getWidth() / 2f, object.getHeight() / 2f);
-      sprite.setCenter(object.getWidth() / 2f, object.getHeight() / 2f);
       sprite.setScale(object.getScale().x, object.getScale().y);
       sprite.draw(batch, 1f);
    }
