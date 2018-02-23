@@ -1,3 +1,8 @@
+# Version 0.1.6
+
+* GameCamera: add 'focus(GameObject)' method
+* bugfix: remove objects which are outside of the world, even if they are inactive
+
 # Version 0.1.5
 
 * do not set center on sprite rotation

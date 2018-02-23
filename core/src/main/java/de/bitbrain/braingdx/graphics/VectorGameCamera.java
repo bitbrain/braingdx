@@ -66,8 +66,7 @@ public class VectorGameCamera implements GameCamera {
 		if (target == null)
 			return;
 		if (focusRequested) {
-			camera.position.x = target.getLeft() + target.getOffset().x + target.getWidth() / 2f;
-			camera.position.y = target.getTop() + target.getOffset().y + target.getHeight() / 2f;
+		   focus(target);
 			focusRequested = false;
 		} else {
 			BigDecimal preciseDelta = BigDecimal.valueOf(delta);
@@ -118,6 +117,12 @@ public class VectorGameCamera implements GameCamera {
 	public void setZoomScale(float zoomScale) {
 		this.zoomScale = new BigDecimal(zoomScale, PRECISION);
 	}
+	
+	@Override
+   public void focus(GameObject object) {
+	   camera.position.x = object.getLeft() + object.getOffset().x + object.getWidth() / 2f;
+      camera.position.y = object.getTop() + object.getOffset().y + object.getHeight() / 2f;
+   }
 
 	@Override
 	public void focus() {

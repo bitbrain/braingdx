@@ -61,6 +61,12 @@ public interface GameCamera {
    void focus();
 
    /**
+    * When no target is defined or the given object is the target, it focuses the
+    * game camera onto the given object.
+    */
+   void focus(GameObject object);
+
+   /**
     * Sets a new target. Focuses by default.
     *
     * @param target the target

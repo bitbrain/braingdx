@@ -200,7 +200,7 @@ public class GameWorld implements Iterable<GameObject> {
 	  additions.clear();
       Collections.sort(objects, comparator);
       for (GameObject object : objects) {
-         if (object.isActive() && !bounds.isInBounds(object, camera)) {
+         if (!bounds.isInBounds(object, camera)) {
             removals.add(object);
             continue;
          }
@@ -218,8 +218,9 @@ public class GameWorld implements Iterable<GameObject> {
          }
       }
 
-      for (final GameObject removal : removals)
-         remove(removal);
+      for (final GameObject removal : removals) {
+         removeInternally(removal);
+      }
       removals.clear();
    }
    
@@ -264,7 +265,7 @@ public class GameWorld implements Iterable<GameObject> {
          removals.add(object);
    }
 
-   private void remove(GameObject object) {
+   private void removeInternally(GameObject object) {
       pool.free(object);
       objects.remove(object);
       identityMap.remove(object.getId());
