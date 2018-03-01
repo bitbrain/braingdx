@@ -6,8 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import static org.mockito.Mockito.mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -20,6 +23,7 @@ public class GameWorldTest {
 
    @Before
    public void beforeTest() {
+      Gdx.app = mock(Application.class);
       world = new GameWorld(camera);
    }
 
