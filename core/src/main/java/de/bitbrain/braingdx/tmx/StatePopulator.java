@@ -17,6 +17,7 @@ package de.bitbrain.braingdx.tmx;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.MapLayer;
@@ -36,7 +37,6 @@ import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.tmx.State.CellState;
-import de.bitbrain.braingdx.util.IDGenerator;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
@@ -154,7 +154,7 @@ class StatePopulator {
          MapLayerRendererFactory rendererFactory, TiledMapConfig config) {
       final int numberOfRows = tiledMap.getProperties().get(config.get(Constants.HEIGHT), Integer.class);
       GameObjectRenderer renderer = rendererFactory.create(index, tiledMap, camera);
-      String id = IDGenerator.generateNext(OrthogonalMapLayerRenderer.class);
+      String id = UUID.randomUUID().toString();
       renderManager.register(id, renderer);
       GameObject layerObject = gameWorld.addObject();
       layerObject.setActive(false);

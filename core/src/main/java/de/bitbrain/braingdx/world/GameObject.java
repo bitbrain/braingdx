@@ -17,13 +17,12 @@ package de.bitbrain.braingdx.world;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
-
-import de.bitbrain.braingdx.util.IDGenerator;
 
 /**
  * Simple game object implementation which can be pooled
@@ -37,6 +36,10 @@ public class GameObject implements Pool.Poolable {
    private final Vector2 position, dimensions, lastPosition, offset;
 
    private String id;
+   
+   private String internalId;
+   
+   private String previousId;
 
    private Object type;
 
@@ -59,7 +62,8 @@ public class GameObject implements Pool.Poolable {
       lastPosition = new Vector2();
       offset = new Vector2();
       scale = new Vector2(1f, 1f);
-      id = IDGenerator.generateNext(getClass());
+      id = UUID.randomUUID().toString();
+      internalId = UUID.randomUUID().toString();
       active = true;
    }
 
@@ -211,7 +215,8 @@ public class GameObject implements Pool.Poolable {
       offset.x = 0;
       offset.y = 0;
       zIndex = 0;
-      id = IDGenerator.generateNext(getClass());
+      previousId = id;
+      id = UUID.randomUUID().toString();
       scale.set(1f, 1f);
       color = Color.WHITE.cpy();
       attributes.clear();
@@ -219,12 +224,6 @@ public class GameObject implements Pool.Poolable {
       rotation = 0f;
    }
 
-   @Override
-   public String toString() {
-      return "GameObject [position=" + position + ", dimensions=" + dimensions + ", lastPosition=" + lastPosition
-            + ", offset=" + offset + ", id=" + id + ", type=" + type + ", color=" + color + ", scale=" + scale
-            + ", zIndex=" + zIndex + ", rotation=" + rotation + "]";
-   }
 
    @Override
    public int hashCode() {
@@ -251,4 +250,12 @@ public class GameObject implements Pool.Poolable {
       return true;
    }
 
+   @Override
+   public String toString() {
+      return "GameObject [position=" + position + ", dimensions=" + dimensions + ", lastPosition=" + lastPosition
+            + ", id=" + id + ", internalId=" + internalId + ", previousId=" + previousId + ", type=" + type + ", color="
+            + color + ", zIndex=" + zIndex + ", active=" + active + "]";
+   }
+
+   
 }

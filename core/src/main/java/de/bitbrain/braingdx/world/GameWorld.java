@@ -42,7 +42,7 @@ import de.bitbrain.braingdx.util.ZIndexComparator;
 public class GameWorld implements Iterable<GameObject> {
 
    /** the default cache size this world uses */
-   public static final int DEFAULT_CACHE_SIZE = 100;
+   public static final int DEFAULT_CACHE_SIZE = 512;
 
    /**
     * Listens to GameWorld events.
@@ -164,23 +164,31 @@ public class GameWorld implements Iterable<GameObject> {
     * @return newly created game object
     */
    public GameObject addObject(Mutator<GameObject> mutator, boolean lazy) {
+      Gdx.app.debug("DEBUG", "GameWorld - obtaining new object...");
 	   final GameObject object = pool.obtain();
-	   if (mutator != null) {
-		   mutator.mutate(object);
-	   }
 	   if (identityMap.containsKey(object.getId())) {
-	       Gdx.app.log("ERROR", "Unable to add game object with ID '" + object.getId() + "' to game world. Already exists!");
+	       Gdx.app.error("FATAL", String.format(
+	             "GameWorld - game object %s already exists. Unable to add new object %s",
+	             object,
+	             identityMap.get(object.getId())
+	          )
+	       );
 	       return object;
 	   }
 	   if (lazy) {
+	      Gdx.app.debug("DEBUG", String.format("GameWorld - requested addition for new game object %s", object));
 		   additions.add(object);
 	   } else {
+	      Gdx.app.debug("DEBUG", String.format("GameWorld - added new game object %s", object));
 		   objects.add(object);
 		   for (GameWorldListener l : listeners) {
 		       l.onAdd(object);
 		   }
 	   }
-	   identityMap.put(object.getId(), object);
+      if (mutator != null) {
+         mutator.mutate(object);
+      }
+      identityMap.put(object.getId(), object);
 	   return object;
    }
 
@@ -191,17 +199,19 @@ public class GameWorld implements Iterable<GameObject> {
     * @param delta frame delta
     */
    public void update(float delta) {
-	  for (GameObject addition : additions) {
-		  objects.add(addition);
-		   for (GameWorldListener l : listeners) {
-		       l.onAdd(addition);
-		   }
-	  }
+      for (GameObject addition : additions) {
+         Gdx.app.debug("DEBUG", String.format("GameWorld - added new game object %s", addition));
+         objects.add(addition);
+         for (GameWorldListener l : listeners) {
+            l.onAdd(addition);
+         }
+      }
 	  additions.clear();
       Collections.sort(objects, comparator);
       for (GameObject object : objects) {
          if (!bounds.isInBounds(object, camera)) {
-            removals.add(object);
+            Gdx.app.debug("DEBUG", String.format("GameWorld - object %s is out of bounds! Remove...", object));
+            remove(object);
             continue;
          }
          for (GameWorldListener l : listeners) {
@@ -217,7 +227,6 @@ public class GameWorld implements Iterable<GameObject> {
             }
          }
       }
-
       for (final GameObject removal : removals) {
          removeInternally(removal);
       }
@@ -248,6 +257,7 @@ public class GameWorld implements Iterable<GameObject> {
       for (GameWorldListener l : listeners) {
          l.onClear();
       }
+      Gdx.app.debug("DEBUG", "GameWorld - Cleared all game objects!");
    }
 
    @Override
@@ -261,16 +271,21 @@ public class GameWorld implements Iterable<GameObject> {
     * @param objects
     */
    public void remove(GameObject... objects) {
-      for (final GameObject object : objects)
+      for (final GameObject object : objects) {
+         Gdx.app.debug("DEBUG", String.format("GameWorld - requested lazy removal of game object %s", object));
          removals.add(object);
+      }
    }
 
    private void removeInternally(GameObject object) {
-      pool.free(object);
-      objects.remove(object);
-      identityMap.remove(object.getId());
+      Gdx.app.debug("DEBUG", String.format("%s - GameWorld - removing game object %s", System.nanoTime(), object));
+      if (identityMap.remove(object.getId()) == null) {
+         Gdx.app.error("FATAL", String.format("%s - GameWorld - game object %s does not exist.", System.nanoTime(), object));
+      }
       for (GameWorldListener l : listeners) {
          l.onRemove(object);
       }
+      pool.free(object);
+      objects.remove(object);
    }
 }
