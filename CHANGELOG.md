@@ -1,3 +1,11 @@
+# Version 0.1.7
+
+* BehaviorManager: map behaviors via game object id to prevent race conditions
+* introduced DEBUG logging for GameWorld
+* rewrote the ID system - now a UUID is being used
+* GameObject: added internal id which does not change, even after re-obtaining from the pool
+* GameObject: added previous id from a previous pooling iteration
+
 # Version 0.1.6
 
 * GameCamera: add 'focus(GameObject)' method
