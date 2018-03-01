@@ -67,7 +67,7 @@ public class TiledMapManagerTest {
    @Before
    public void beforeTest() {
       world = new GameWorld(camera);
-      BehaviorManager behaviorManager = new BehaviorManager();
+      BehaviorManager behaviorManager = new BehaviorManager(world);
       world.addListener(new BehaviorManagerAdapter(behaviorManager));
       tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager) {
          @Override

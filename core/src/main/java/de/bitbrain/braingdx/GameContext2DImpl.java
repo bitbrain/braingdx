@@ -73,7 +73,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 	public GameContext2DImpl(ViewportFactory viewportFactory, ShaderConfig shaderConfig) {
 		camera = new OrthographicCamera();
 		world = new GameWorld(camera);
-		behaviorManager = new BehaviorManager();
+		behaviorManager = new BehaviorManager(world);
 		batch = new SpriteBatch();
 		input = new InputMultiplexer();
 		boxWorld = new World(Vector2.Zero, false);
