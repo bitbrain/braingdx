@@ -1,3 +1,7 @@
+# Version 0.1.8
+
+* global behaviors can now be used to compare two objects on update
+
 # Version 0.1.7
 
 * BehaviorManager: map behaviors via game object id to prevent race conditions

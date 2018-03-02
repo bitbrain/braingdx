@@ -22,6 +22,7 @@ public class BehaviorManagerAdapter extends GameWorldListener {
    @Override
    public void onUpdate(GameObject object, GameObject other, float delta) {
       behaviorManager.updateLocallyCompared(object, other, delta);
+      behaviorManager.updateGloballyCompared(object, other, delta);
    }
 
    @Override

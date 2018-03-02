@@ -106,6 +106,12 @@ public class BehaviorManager {
          }
       }
    }
+   
+   public void updateGloballyCompared(GameObject source, GameObject target, float delta) {
+      for (Behavior behavior : globalBehaviors) {
+         behavior.update(source, target, delta);
+      }
+   }
 
    public void clear() {
       for (Entry<String, List<Behavior>> behaviors : localBehaviors.entrySet()) {
