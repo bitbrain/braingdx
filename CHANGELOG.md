@@ -1,3 +1,7 @@
+# Version 0.1.9
+
+* reset music position on play
+
 # Version 0.1.8
 
 * global behaviors can now be used to compare two objects on update

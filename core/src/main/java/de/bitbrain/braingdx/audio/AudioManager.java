@@ -104,6 +104,7 @@ public class AudioManager {
    public void fadeInMusic(Music music, float duration) {
 	  MusicClassWrapper wrapper = new MusicClassWrapper(music);
       wrapper.setVolume(0f);
+      wrapper.setPosition(0f);
       wrapper.play();
       Tween.to(wrapper, MusicTween.VOLUME, duration)
            .target(volume)
@@ -114,6 +115,7 @@ public class AudioManager {
    public void playMusic(String path) {
       Music lastMusic = ASSET_MANAGER.get(path, Music.class);
       lastMusic.setVolume(volume);
+      lastMusic.setPosition(0f);
       lastMusic.play();
    }
 
