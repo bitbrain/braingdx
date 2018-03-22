@@ -1,0 +1,59 @@
+package de.bitbrain.braingdx.event;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+
+import static org.mockito.Mockito.*;
+
+@RunWith(MockitoJUnitRunner.class)
+public class GameEventManagerTest {
+   
+   private static class ConcreteGameEvent implements GameEvent {
+      
+   }
+   
+   private GameEventManager impl;
+   
+   private ConcreteGameEvent event;
+   
+   @Mock
+   private GameEventListener<ConcreteGameEvent> listener;
+   
+   @Before
+   public void beforeTest() {
+      impl = new GameEventManagerImpl();
+      Gdx.app = mock(Application.class);
+      event = new ConcreteGameEvent();
+   }
+   
+   @Test
+   public void testPublishEvent() {
+      impl.register(listener, ConcreteGameEvent.class);
+      impl.publish(event);
+      inOrder(listener)
+         .verify(listener, times(1))
+         .onEvent(event);
+   }
+   
+   @Test
+   public void testUnregisterListener() {
+      impl.register(listener, ConcreteGameEvent.class);
+      impl.publish(event);
+      impl.unregister(listener, ConcreteGameEvent.class);
+      impl.publish(event);
+      inOrder(listener)
+         .verify(listener, times(1))
+         .onEvent(event);
+   }
+   
+   @Test
+   public void testPublishEvent_MissingListenerNoExceptionThrown() {
+      impl.publish(event);
+   }
+}

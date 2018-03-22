@@ -1,10 +1,13 @@
 # Version 0.2.0
 
-* [#12] implement `ParallaxMap`
-* [#39] upgrade `ParticleManager` codebase
-* [#90] use 'Fonts' to load ttf fonts instead of BitmapFont
-* [#91] introduce BitmapFontBaker
-* [#94] it is now possible to append or prepend additional render pipes
+This version introduces new features such as better event handling and general bug fixes.
+
+* [[#12](https://github.com/bitbrain/braingdx/issues/12)] implemented `ParallaxMap`
+* [[#39](https://github.com/bitbrain/braingdx/issues/39)] upgraded `ParticleManager` codebase
+* [[#90](https://github.com/bitbrain/braingdx/issues/90)] use 'Fonts' to load ttf fonts instead of BitmapFont
+* [[#91](https://github.com/bitbrain/braingdx/issues/91)] introduced BitmapFontBaker 🍞
+* [[#94](https://github.com/bitbrain/braingdx/issues/94)] it is now possible to append or prepend additional render pipes
+* [[#97](https://github.com/bitbrain/braingdx/issues/97)] implemented Simple Event System
 
 # Version 0.1.9
 
