@@ -2,6 +2,7 @@
 
 * [#12] implement `ParallaxMap`
 * [#39] upgrade `ParticleManager` codebase
+* [#90] use 'Fonts' to load ttf fonts instead of BitmapFont
 * Make `FileHandleResolver` configurable
 
 # Version 0.1.9
