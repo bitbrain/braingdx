@@ -39,21 +39,21 @@ public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
    @Override
    public RenderPipeline create() {
       RenderPipeline pipeline = new CombinedRenderPipeline(config, viewportFactory);
-      pipeline.set(RenderPipeIds.BACKGROUND, new AbstractRenderLayer() {
+      pipeline.put(RenderPipeIds.BACKGROUND, new AbstractRenderLayer() {
          @Override
          public void render(Batch batch, float delta) {
          }
       });
-      pipeline.set(RenderPipeIds.FOREGROUND, new AbstractRenderLayer() {
+      pipeline.put(RenderPipeIds.FOREGROUND, new AbstractRenderLayer() {
          @Override
          public void render(Batch batch, float delta) {
             // noOp
          }
       });
-      pipeline.set(RenderPipeIds.WORLD, new WorldRenderLayer(world));
-      pipeline.set(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(lightingManager));
-      pipeline.set(RenderPipeIds.WORLD_UI, new StageRenderLayer(worldStage));
-      pipeline.set(RenderPipeIds.UI, new StageRenderLayer(stage));
+      pipeline.put(RenderPipeIds.WORLD, new WorldRenderLayer(world));
+      pipeline.put(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(lightingManager));
+      pipeline.put(RenderPipeIds.WORLD_UI, new StageRenderLayer(worldStage));
+      pipeline.put(RenderPipeIds.UI, new StageRenderLayer(stage));
       return pipeline;
    }
 

@@ -71,9 +71,19 @@ public class LayeredRenderPipeline implements RenderPipeline {
    }
 
    @Override
-   public void set(String id, RenderLayer layer, PostProcessorEffect... effects) {
+   public void put(String id, RenderLayer layer, PostProcessorEffect... effects) {
       LayeredRenderPipe pipe = new LayeredRenderPipe(layer, processor, bufferFactory, effects);
       pipes.put(id, pipe);
+   }
+
+   @Override
+   public void putAfter(String existing, String id, RenderLayer layer, PostProcessorEffect... effects) {
+      throw new UnsupportedOperationException("Not implemented yet!");
+   }
+
+   @Override
+   public void putBefore(String existing, String id, RenderLayer layer, PostProcessorEffect... effects) {
+      throw new UnsupportedOperationException("Not implemented yet!");
    }
 
    @Override

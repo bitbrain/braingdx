@@ -19,6 +19,9 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.commons.collections.OrderedMap;
+import org.apache.commons.collections.map.ListOrderedMap;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -52,8 +55,8 @@ import de.bitbrain.braingdx.util.ViewportFactory;
 public class CombinedRenderPipeline implements RenderPipeline {
 
    private static final boolean isDesktop = (Gdx.app.getType() == Application.ApplicationType.Desktop);
-
-   private final Map<String, CombinedRenderPipe> pipes = new LinkedHashMap<String, CombinedRenderPipe>();
+   
+   private final ListOrderedMap orderedPipes = new ListOrderedMap();
 
    private final PostProcessor processor;
 
@@ -110,9 +113,10 @@ public class CombinedRenderPipeline implements RenderPipeline {
       processor.dispose();
    }
 
+   @SuppressWarnings("unchecked")
    @Override
    public void resize(int width, int height) {
-      for (CombinedRenderPipe pipe : pipes.values()) {
+      for (CombinedRenderPipe pipe : (Collection<CombinedRenderPipe>)orderedPipes.values()) {
          pipe.resize(width, height);
       }
       processor.setViewport(new Rectangle(0f, 0f, width, height));
@@ -124,21 +128,43 @@ public class CombinedRenderPipeline implements RenderPipeline {
    }
 
    @Override
-   public void set(String id, RenderLayer layer, PostProcessorEffect... effects) {
+   public void put(String id, RenderLayer layer, PostProcessorEffect... effects) {
       CombinedRenderPipe pipe = new CombinedRenderPipe(layer, processor, camera, internalBatch, effects);
-      pipes.put(id, pipe);
+      orderedPipes.put(id, pipe);
+   }
+
+   @Override
+   public void putAfter(String existing, String id, RenderLayer layer, PostProcessorEffect... effects) {
+      int index = orderedPipes.indexOf(existing);
+      if (index < 0) {
+         Gdx.app.error("FATAL", "Unable add layer '" + id + "'!");
+         return;
+      }
+      orderedPipes.put(index + 1, id, new CombinedRenderPipe(layer, processor, camera, internalBatch, effects));
+   }
+
+   @Override
+   public void putBefore(String existing, String id, RenderLayer layer, PostProcessorEffect... effects) {
+      int index = orderedPipes.indexOf(existing);
+      if (index < 0) {
+         Gdx.app.error("FATAL", "Unable add layer '" + id + "'!");
+         return;
+      }
+      orderedPipes.put(index > 0 ? index - 1 : index, id, new CombinedRenderPipe(layer, processor, camera, internalBatch, effects));
    }
 
    @Override
    public RenderPipe getPipe(String id) {
-      return pipes.containsKey(id) ? pipes.get(id) : null;
+      return (RenderPipe) (orderedPipes.containsKey(id) ? orderedPipes.get(id) : null);
    }
 
+   @SuppressWarnings("unchecked")
    @Override
    public Collection<String> getPipeIds() {
-      return pipes.keySet();
+      return orderedPipes.keySet();
    }
 
+   @SuppressWarnings("unchecked")
    @Override
    public void render(Batch batch, float delta) {
 	  if (viewport == null) {
@@ -147,7 +173,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
 	  }
       clearBuffer();
       viewport.update((int)camera.viewportWidth, (int)camera.viewportHeight);
-      for (CombinedRenderPipe pipe : pipes.values()) {
+      for (CombinedRenderPipe pipe : (Collection<CombinedRenderPipe>)orderedPipes.values()) {
          pipe.beforeRender();
          pipe.render(batch, delta, buffer);
       }

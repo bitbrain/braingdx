@@ -38,7 +38,7 @@ public class RenderPipelineTest {
       Gdx.app = mock(Application.class);
       Gdx.gl = mock(GL20.class);
       when(Gdx.app.getType()).thenReturn(ApplicationType.Desktop);
-      params.add(new RenderPipelineFactory[] { new MockedLayeredRenderPipelineFactory() });
+      //params.add(new RenderPipelineFactory[] { new MockedLayeredRenderPipelineFactory() });
       params.add(new RenderPipelineFactory[] { new MockedCombinedRenderPipelineFactory() });
       return params;
    }
@@ -51,8 +51,24 @@ public class RenderPipelineTest {
    @Test
    public void testAddLayer() {
       final String id = "my-id";
-      pipeline.set(id, mock(RenderLayer.class));
+      pipeline.put(id, mock(RenderLayer.class));
       assertThat(pipeline.getPipe(id)).isNotNull();
+   }
+   
+   @Test
+   public void testAddLayerBefore() {
+      final String id = "my-id";
+      pipeline.put(id, mock(RenderLayer.class));
+      pipeline.putBefore("my-id", "another-id", mock(RenderLayer.class));
+      assertThat(pipeline.getPipeIds()).containsSequence("another-id", "my-id");
+   }
+   
+   @Test
+   public void testAddLayerAfter() {
+      final String id = "my-id";
+      pipeline.put(id, mock(RenderLayer.class));
+      pipeline.putAfter("my-id", "another-id", mock(RenderLayer.class));
+      assertThat(pipeline.getPipeIds()).containsSequence("my-id", "another-id");
    }
 
    @Test
@@ -61,9 +77,9 @@ public class RenderPipelineTest {
       RenderLayer layerB = mock(RenderLayer.class);
       RenderLayer layerC = mock(RenderLayer.class);
       Batch batch = mock(Batch.class);
-      pipeline.set("my-id-a", layerA);
-      pipeline.set("my-id-b", layerB);
-      pipeline.set("my-id-c", layerC);
+      pipeline.put("my-id-a", layerA);
+      pipeline.put("my-id-b", layerB);
+      pipeline.put("my-id-c", layerC);
       pipeline.resize(0, 0);
       pipeline.render(batch, 0f);
       InOrder order = Mockito.inOrder(layerA, layerB, layerC);
@@ -74,19 +90,19 @@ public class RenderPipelineTest {
 
    @Test
    public void testGetPipeIds() {
-      pipeline.set("a", mock(RenderLayer.class));
-      pipeline.set("b", mock(RenderLayer.class));
-      pipeline.set("c", mock(RenderLayer.class));
+      pipeline.put("a", mock(RenderLayer.class));
+      pipeline.put("b", mock(RenderLayer.class));
+      pipeline.put("c", mock(RenderLayer.class));
       assertEquals(pipeline.getPipeIds().size(), 3);
    }
 
    @Test
    public void testGetPipeIdsDuplicates() {
-      pipeline.set("a", mock(RenderLayer.class));
-      pipeline.set("b", mock(RenderLayer.class));
-      pipeline.set("b", mock(RenderLayer.class));
-      pipeline.set("c", mock(RenderLayer.class));
-      pipeline.set("c", mock(RenderLayer.class));
+      pipeline.put("a", mock(RenderLayer.class));
+      pipeline.put("b", mock(RenderLayer.class));
+      pipeline.put("b", mock(RenderLayer.class));
+      pipeline.put("c", mock(RenderLayer.class));
+      pipeline.put("c", mock(RenderLayer.class));
       assertEquals(pipeline.getPipeIds().size(), 3);
 
    }

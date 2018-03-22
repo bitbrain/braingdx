@@ -3,7 +3,8 @@
 * [#12] implement `ParallaxMap`
 * [#39] upgrade `ParticleManager` codebase
 * [#90] use 'Fonts' to load ttf fonts instead of BitmapFont
-* Make `FileHandleResolver` configurable
+* [#91] introduce BitmapFontBaker
+* [#94] it is now possible to append or prepend additional render pipes
 
 # Version 0.1.9
 

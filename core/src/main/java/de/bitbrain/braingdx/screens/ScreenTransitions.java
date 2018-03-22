@@ -72,7 +72,7 @@ public class ScreenTransitions {
    }
 
    public void in(Transitionable transition, TransitionCallback callback, float duration) {
-      renderPipeline.set(ScreenTransitions.class.getSimpleName(), transition);
+      renderPipeline.put(ScreenTransitions.class.getSimpleName(), transition);
       transition.in(callback, duration);
    }
 
@@ -97,7 +97,7 @@ public class ScreenTransitions {
    }
    
    public void outIn(Transitionable transition, TransitionCallback callback, float duration) {
-	   renderPipeline.set(ScreenTransitions.class.getSimpleName(), transition);
+	   renderPipeline.put(ScreenTransitions.class.getSimpleName(), transition);
 	   defaultTransition.outIn(callback, duration);
    }
 
@@ -123,7 +123,7 @@ public class ScreenTransitions {
 
    public void out(Transitionable transition, final TransitionCallback callback, final AbstractScreen<?> to,
          float duration) {
-      renderPipeline.set(ScreenTransitions.class.getSimpleName(), transition);
+      renderPipeline.put(ScreenTransitions.class.getSimpleName(), transition);
       transition.out(new TransitionCallback() {
          @Override
          public void beforeTransition() {

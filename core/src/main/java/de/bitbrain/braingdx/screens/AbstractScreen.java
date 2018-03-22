@@ -123,6 +123,6 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
    public void setBackgroundColor(Color color) {
       this.backgroundColor = color;
       coloredRenderLayer.setColor(color);
-      gameContext2D.getRenderPipeline().set(RenderPipeIds.BACKGROUND, coloredRenderLayer);
+      gameContext2D.getRenderPipeline().put(RenderPipeIds.BACKGROUND, coloredRenderLayer);
    }
 }

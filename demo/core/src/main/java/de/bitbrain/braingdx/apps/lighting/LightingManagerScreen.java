@@ -43,7 +43,7 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
    private void prepareResources(GameContext context) {
       Styles.init();
       final Texture background = SharedAssetManager.getInstance().get(Assets.WALL, Texture.class);
-      context.getRenderPipeline().set(RenderPipeIds.BACKGROUND, new TextureRenderLayer(background));
+      context.getRenderPipeline().put(RenderPipeIds.BACKGROUND, new TextureRenderLayer(background));
       context.getLightingManager().setAmbientLight(new Color(0.1f, 0f, 0.2f, 0.25f));
       Texture texture = SharedAssetManager.getInstance().get(Assets.SOLDIER);
       context.getRenderManager().register(TYPE, new SpriteRenderer(texture));

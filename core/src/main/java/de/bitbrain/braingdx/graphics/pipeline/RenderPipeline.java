@@ -30,7 +30,11 @@ import de.bitbrain.braingdx.util.Resizeable;
  */
 public interface RenderPipeline extends Disposable, Resizeable {
 
-   public void set(String id, RenderLayer layer, PostProcessorEffect... effects);
+   public void put(String id, RenderLayer layer, PostProcessorEffect... effects);
+   
+   public void putAfter(String existing, String id, RenderLayer layer, PostProcessorEffect... effects);
+   
+   public void putBefore(String existing, String id, RenderLayer layer, PostProcessorEffect... effects);
 
    public RenderPipe getPipe(String id);
 
