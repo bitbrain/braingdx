@@ -80,7 +80,7 @@ public abstract class BrainGdxGame extends Game {
    }
 
    private void initTweens() {
-	  // Normal tweens
+      // Normal tweens
       Tween.registerAccessor(Actor.class, new ActorTween());
       Tween.registerAccessor(Color.class, new ColorTween());
       Tween.registerAccessor(Sprite.class, new SpriteTween());
