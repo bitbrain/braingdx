@@ -42,7 +42,7 @@
 <dependency>
    <artifactId>braingdx-core</artifactId>
    <groupId>de.bitbrain.braingdx</groupId>
-   <version>0.1.0</version>
+   <version>0.2.0</version>
 </dependency>
 ```
 ## Gradle
@@ -53,9 +53,9 @@ maven { url 'https://nexus.k40s.net/repository/maven-public' }
 ```
 Afterwards add the following to your `core` module:
 ```gradle
-compile 'de.bitbrain.braingdx:braingdx-core:0.1.3'
-compile 'de.bitbrain.braingdx:braingdx-core:0.1.3:sources'
-compile 'de.bitbrain.braingdx:braingdx-core:0.1.3:javadoc'
+compile 'de.bitbrain.braingdx:braingdx-core:0.2.0'
+compile 'de.bitbrain.braingdx:braingdx-core:0.2.0:sources'
+compile 'de.bitbrain.braingdx:braingdx-core:0.2.0:javadoc'
 ```
 After that you are ready to go! Learn [here](https://github.com/bitbrain/braingdx/wiki) how to integrate **braingdx** into your **libgdx** game!
 
