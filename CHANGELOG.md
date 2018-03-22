@@ -1,3 +1,9 @@
+# Version 0.2.0
+
+* [#12] implement `ParallaxMap`
+* [#39] upgrade `ParticleManager` codebase
+* Make `FileHandleResolver` configurable
+
 # Version 0.1.9
 
 * reset music position on play

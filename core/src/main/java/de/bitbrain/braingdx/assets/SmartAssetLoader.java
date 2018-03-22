@@ -25,6 +25,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
 /**
@@ -59,7 +60,8 @@ public class SmartAssetLoader implements GameAssetLoader {
 		mapping.put("Textures", Texture.class);
 		mapping.put("Sounds", Sound.class);
 		mapping.put("Musics", Music.class);
-		mapping.put("Fonts", BitmapFont.class);
+		mapping.put("BitmapFonts", BitmapFont.class);
+		mapping.put("Fonts", FreeTypeFontGenerator.class);
 		mapping.put("Particles", ParticleEffect.class);
 		mapping.put("TiledMaps", TiledMap.class);
 		return new SmartAssetLoaderConfiguration() {
