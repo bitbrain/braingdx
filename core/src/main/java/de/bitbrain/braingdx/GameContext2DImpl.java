@@ -30,6 +30,8 @@ import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
+import de.bitbrain.braingdx.event.GameEventManager;
+import de.bitbrain.braingdx.event.GameEventManagerImpl;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManagerAdapter;
@@ -69,6 +71,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 	private final TiledMapManager tiledMapManager;
 	private final TweenManager tweenManager = SharedTweenManager.getInstance();
 	private final InputMultiplexer input;
+	private final GameEventManager eventManager;
 
 	public GameContext2DImpl(ViewportFactory viewportFactory, ShaderConfig shaderConfig) {
 		camera = new OrthographicCamera();
@@ -88,6 +91,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 		renderPipeline = new CombinedRenderPipelineFactory(shaderConfig, world, lightingManager, stage, worldStage, viewportFactory)
 				.create();
 		tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager);
+		eventManager = new GameEventManagerImpl();
 		wire();
 	}
 
@@ -176,6 +180,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 		renderPipeline.dispose();
 		tweenManager.killAll();
 		renderManager.dispose();
+		eventManager.clear();
 	}
 
 	@Override
@@ -203,4 +208,9 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 		input.addProcessor(worldStage);
 		Gdx.input.setInputProcessor(input);
 	}
+
+   @Override
+   public GameEventManager getEventManager() {
+      return eventManager;
+   }
 }

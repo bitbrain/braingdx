@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
+import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
@@ -69,6 +70,8 @@ public interface GameContext {
    ScreenTransitions getScreenTransitions();
 
    AudioManager getAudioManager();
+   
+   GameEventManager getEventManager();
    
    void updateAndRender(float delta);
 }
