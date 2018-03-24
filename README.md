@@ -2,7 +2,7 @@
 -
 :video_game: Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
 
-[![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=master)](https://travis-ci.org/bitbrain/braingdx)
+[![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=master)](https://travis-ci.org/bitbrain/braingdx) [![codecov](https://codecov.io/gh/bitbrain/braingdx/branch/master/graph/badge.svg)](https://codecov.io/gh/bitbrain/braingdx)
 
 **:space_invader: [Features](#features) |**
 **:package: [Installation](#installation) |**
