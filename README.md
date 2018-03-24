@@ -2,7 +2,7 @@
 -
 :video_game: Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
 
-[![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=master)](https://travis-ci.org/bitbrain/braingdx)
+[![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=deploy)](https://travis-ci.org/bitbrain/braingdx) [![codecov](https://codecov.io/gh/bitbrain/braingdx/branch/deploy/graph/badge.svg)](https://codecov.io/gh/bitbrain/braingdx)
 
 **:space_invader: [Features](#features) |**
 **:package: [Installation](#installation) |**
@@ -42,7 +42,7 @@
 <dependency>
    <artifactId>braingdx-core</artifactId>
    <groupId>de.bitbrain.braingdx</groupId>
-   <version>0.1.0</version>
+   <version>0.2.0</version>
 </dependency>
 ```
 ## Gradle
@@ -53,9 +53,9 @@ maven { url 'https://nexus.k40s.net/repository/maven-public' }
 ```
 Afterwards add the following to your `core` module:
 ```gradle
-compile 'de.bitbrain.braingdx:braingdx-core:0.1.3'
-compile 'de.bitbrain.braingdx:braingdx-core:0.1.3:sources'
-compile 'de.bitbrain.braingdx:braingdx-core:0.1.3:javadoc'
+compile 'de.bitbrain.braingdx:braingdx-core:0.2.0'
+compile 'de.bitbrain.braingdx:braingdx-core:0.2.0:sources'
+compile 'de.bitbrain.braingdx:braingdx-core:0.2.0:javadoc'
 ```
 After that you are ready to go! Learn [here](https://github.com/bitbrain/braingdx/wiki) how to integrate **braingdx** into your **libgdx** game!
 
