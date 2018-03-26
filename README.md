@@ -21,6 +21,8 @@ In Java world, we game developers already have [libgdx](https://libgdx.badlogicg
 
 # Features
 
+This framework provides:
+
 * **Scene transitions** how to switch between screens by applying different and custom animations
 * **Tweening pipeline** Using [Universal Tween Engine](https://github.com/AurelienRibon/universal-tween-engine) to make the most of animations in a few lines. 
 * **World rendering pipeline** no more custom Java classes for game entities. *brainGDX* offers a way to add objects to a game world, handle physics, collision detection and updating out of the box.
