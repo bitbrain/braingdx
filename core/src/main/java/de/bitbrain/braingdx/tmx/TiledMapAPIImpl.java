@@ -141,6 +141,16 @@ class TiledMapAPIImpl implements TiledMapAPI {
       return state.getState(tileX, tileY, layer).getProperties();
    }
 
+   @Override
+   public float getWorldWidth() {
+      return getCellWidth() * getNumberOfColumns();
+   }
+
+   @Override
+   public float getWorldHeight() {
+      return getCellHeight() * getNumberOfRows();
+   }
+
    private boolean verifyIndex(int indexX, int indexY) {
       return indexX >= 0 && indexY >= 0 && indexX < state.getMapIndexWidth() && indexY < state.getMapIndexHeight();
    }

@@ -3,6 +3,7 @@
 :video_game: Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
 
 [![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=deploy)](https://travis-ci.org/bitbrain/braingdx) [![codecov](https://codecov.io/gh/bitbrain/braingdx/branch/deploy/graph/badge.svg)](https://codecov.io/gh/bitbrain/braingdx)
+[![license](https://img.shields.io/github/license/bitbrain/braingdx.svg)](LICENSE.MD)
 
 **:space_invader: [Features](#features) |**
 **:package: [Installation](#installation) |**
@@ -12,8 +13,15 @@
 **:pencil: [Changelog](CHANGELOG.md)**
 
 ---
+# Motivation
+
+> Another game development framework? Really?
+
+In Java world, we game developers already have [libgdx](https://libgdx.badlogicgames.com/) in order to create beautiful, feature-rich games. It allows us to be highly flexible how we design our game, however it is not ideal for small game jams. Especially in the first hours time is spent on wiring everything together, creating game object classes, setting up lighting, physics, tweening, writing shaders and particle management as well as sound manipulation. From experience, this can take several hours which is costly, especially on small 24 hour game jams. You could move away from Java and use a popular game engine instead, but we Java developers like it simple and we do *not* want to give up on Java! Alternatively, all the boilerplate work should be done for you - and this is where **braingdx** comes into play!
 
 # Features
+
+This framework provides:
 
 * **Scene transitions** how to switch between screens by applying different and custom animations
 * **Tweening pipeline** Using [Universal Tween Engine](https://github.com/AurelienRibon/universal-tween-engine) to make the most of animations in a few lines. 

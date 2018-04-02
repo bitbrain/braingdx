@@ -54,6 +54,8 @@ public class GameObject implements Pool.Poolable {
    private Map<Object, Object> attributes;
 
    private boolean active;
+   
+   private boolean persistent;
 
    public GameObject() {
       attributes = new HashMap<Object, Object>();
@@ -190,6 +192,14 @@ public class GameObject implements Pool.Poolable {
 
    public boolean isActive() {
       return active;
+   }
+   
+   public void setPersistent(boolean persistent) {
+      this.persistent = persistent;
+   }
+   
+   public boolean isPersistent() {
+      return persistent;
    }
    
    public void setRotation(float rotation) {

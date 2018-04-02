@@ -27,6 +27,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameWorld;
+import de.bitbrain.braingdx.world.SimpleWorldBounds;
 
 /**
  * Implementation of {@link TiledMapManager}.
@@ -67,13 +68,14 @@ public class TiledMapManagerImpl implements TiledMapManager {
    @Override
    public void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config)
          throws TiledMapException {
-	  clear();
+      clear();
       validate(tiledMap);
       for (TiledMapListener listener : listeners) {
          listener.beforeLoad(tiledMap);
       }
       behaviorManager.apply(gameObjectUpdater);
       populator.populate(tiledMap, state, camera, factories.get(type), config);
+      gameWorld.setBounds(new SimpleWorldBounds(api.getWorldWidth(), api.getWorldHeight()));
       for (TiledMapListener listener : listeners) {
          listener.afterLoad(tiledMap, api);
       }
