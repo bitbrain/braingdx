@@ -1,3 +1,7 @@
+# Version 0.2.1
+
+* [[#101](https://github.com/bitbrain/braingdx/issues/101)] Make camera optionally sticky to world bounds
+
 # Version 0.2.0
 
 This version introduces new features such as better event handling and general bug fixes.
