@@ -42,6 +42,12 @@ public interface GameCamera {
    void setBaseZoom(float zoom);
    
    /**
+    * Enables or disables the camera to stick to the current
+    * {@link GameWorld} bounds. By default this is enabled.
+    */
+   void setStickToWorldBounds(boolean enabled);
+   
+   /**
     * Provides the current base zoom
     * 
     * @return baseZoom

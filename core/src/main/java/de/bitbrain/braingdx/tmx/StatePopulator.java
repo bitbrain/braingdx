@@ -158,6 +158,7 @@ class StatePopulator {
       renderManager.register(id, renderer);
       GameObject layerObject = gameWorld.addObject();
       layerObject.setActive(false);
+      layerObject.setPersistent(true);
       layerObject.setType(id);
       layerObject.setZIndex(IndexCalculator.calculateZIndex(numberOfRows, numberOfRows, index));
       return id;

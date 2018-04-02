@@ -23,6 +23,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
 import de.bitbrain.braingdx.world.GameObject;
+import de.bitbrain.braingdx.world.GameWorld;
+import de.bitbrain.braingdx.world.GameWorld.WorldBounds;
 
 /**
  * Using underlying vectors to calculate the camera tracking.
@@ -37,15 +39,21 @@ public class VectorGameCamera implements GameCamera {
 
 	private final OrthographicCamera camera;
 	private final Vector2 velocity;
+	private final GameWorld world;
+	
 	private GameObject target;
 	private BigDecimal speed = new BigDecimal(6.2f, PRECISION);
 	private BigDecimal zoomScale = new BigDecimal(0.0025f, PRECISION);
 	private boolean focusRequested = false;
 	private BigDecimal baseZoom = new BigDecimal(1, PRECISION);
+	private boolean worldBoundsStickiness = true;
+	private boolean adjustedX = false;
+	private boolean adjustedY = false;
 
-	public VectorGameCamera(OrthographicCamera camera) {
+	public VectorGameCamera(OrthographicCamera camera, GameWorld world) {
 		this.camera = camera;
 		velocity = new Vector2();
+		this.world = world;
 	}
 
 	@Override
@@ -77,20 +85,35 @@ public class VectorGameCamera implements GameCamera {
 			BigDecimal height = new BigDecimal(target.getHeight(), PRECISION);
 			BigDecimal camTop = new BigDecimal(camera.position.y, PRECISION);
 
-			velocity.x = left.add(width.divide(BigDecimal.valueOf(2.0))).subtract(camLeft).floatValue();
-			velocity.y = top.add(height.divide(BigDecimal.valueOf(2.0))).subtract(camTop).floatValue();
+			if (!adjustedX) {
+			   velocity.x = left.add(width.divide(BigDecimal.valueOf(2.0))).subtract(camLeft).floatValue();
+			}
+			if (!adjustedY) {
+			   velocity.y = top.add(height.divide(BigDecimal.valueOf(2.0))).subtract(camTop).floatValue();
+			}
 
 			BigDecimal distance = BigDecimal.valueOf(velocity.len());
-			velocity.nor();
 			BigDecimal overAllSpeed = distance.multiply(speed);
 
 			BigDecimal deltaX = BigDecimal.valueOf(velocity.x).multiply(overAllSpeed).multiply(preciseDelta);
 			BigDecimal deltaY = BigDecimal.valueOf(velocity.y).multiply(overAllSpeed).multiply(preciseDelta);
-			camera.position.x = camLeft.add(deltaX).floatValue();
-			camera.position.y = camTop.add(deltaY).floatValue();
-			camera.zoom = zoomScale.multiply(distance).add(baseZoom).floatValue();
+			if (!adjustedX) {
+			   camera.position.x = camLeft.add(deltaX).floatValue();
+			}
+			if (!adjustedY) {
+			   camera.position.y = camTop.add(deltaY).floatValue();
+			}
+			if (!adjustedX && !adjustedY) {
+			   camera.zoom = zoomScale.multiply(distance).add(baseZoom).floatValue();
+			}
 		}
-		camera.update();
+      adjustedX = false;
+      adjustedY = false;
+      if (worldBoundsStickiness) {
+         applyWorldBounds();
+      }
+
+      camera.update();
 	}
 
 	@Override
@@ -133,4 +156,73 @@ public class VectorGameCamera implements GameCamera {
 	public Camera getInternal() {
 		return camera;
 	}
+
+   @Override
+   public void setStickToWorldBounds(boolean enabled) {
+      this.worldBoundsStickiness = enabled;
+   }
+   
+   private void applyWorldBounds() {
+      
+      final WorldBounds bounds = world.getBounds();
+      
+      if (bounds.getWorldWidth() == 0 || bounds.getWorldHeight() == 0) {
+         return;
+      }
+      final float camWidthScaled = camera.viewportWidth * camera.zoom;
+      final float camHeightScaled = camera.viewportHeight * camera.zoom;
+
+      final boolean worldWidthTooSmall = camWidthScaled >= bounds.getWorldWidth();
+      final boolean worldHeightTooSmall = camHeightScaled >= bounds.getWorldHeight();    
+
+      final float camLeft = camera.position.x - camWidthScaled / 2f;
+      final float camBottom = camera.position.y + camHeightScaled / 2f;
+      final float camRight = camera.position.x + camWidthScaled / 2f;
+      final float camTop = camera.position.y - camHeightScaled / 2f;
+      
+      if (worldWidthTooSmall) {
+         if (camera.zoom > bounds.getWorldWidth() / camWidthScaled) {
+            camera.zoom = bounds.getWorldWidth() / camWidthScaled;
+            camera.position.x = bounds.getWorldWidth() / 2f;
+         }
+         adjustedX = true;
+      }
+      if (worldHeightTooSmall) {
+         if (camera.zoom > bounds.getWorldHeight() / camHeightScaled) {
+            camera.zoom = bounds.getWorldHeight() / camHeightScaled;
+            camera.position.y = bounds.getWorldHeight() / 2f;
+         }
+         adjustedY = true;
+      }
+      if (!worldWidthTooSmall) {         
+         if (camLeft < 0f) {
+            if (camera.zoom > baseZoom.floatValue()) {
+               camera.zoom = baseZoom.floatValue();
+            }
+            camera.position.x = camWidthScaled / 2f;
+            adjustedX = true;
+         } else if (camRight > bounds.getWorldWidth()) {
+            if (camera.zoom > baseZoom.floatValue()) {
+               camera.zoom = baseZoom.floatValue();
+            }
+            camera.position.x = bounds.getWorldWidth() - camWidthScaled / 2f;
+            adjustedX = true;
+         }
+      }
+      if (!worldHeightTooSmall) {
+         if (camTop < 0f) {
+            if (camera.zoom > baseZoom.floatValue()) {
+               camera.zoom = baseZoom.floatValue();
+            }
+            camera.position.y = camHeightScaled / 2f;
+            adjustedY = true;
+         } else if (camBottom > bounds.getWorldHeight()) {
+            if (camera.zoom > baseZoom.floatValue()) {
+               camera.zoom = baseZoom.floatValue();
+            }
+            camera.position.y = bounds.getWorldHeight() - camHeightScaled / 2f;
+            adjustedY = true;
+         }
+      }
+   }
 }

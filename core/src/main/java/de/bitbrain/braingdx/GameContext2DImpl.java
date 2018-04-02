@@ -82,7 +82,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 		boxWorld = new World(Vector2.Zero, false);
 		lightingManager = new LightingManager(boxWorld, camera);
 		renderManager = new GameObjectRenderManager(batch);
-		gameCamera = new VectorGameCamera(camera);
+		gameCamera = new VectorGameCamera(camera, world);
 		particleManager = new ParticleManager(behaviorManager);
 		stage = new Stage(viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 		Viewport worldStageViewport = viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

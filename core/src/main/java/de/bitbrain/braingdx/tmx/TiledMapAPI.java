@@ -51,5 +51,9 @@ public interface TiledMapAPI extends TiledCollisionResolver {
    float getCellWidth();
 
    float getCellHeight();
+   
+   float getWorldWidth();
+   
+   float getWorldHeight();
 
 }
