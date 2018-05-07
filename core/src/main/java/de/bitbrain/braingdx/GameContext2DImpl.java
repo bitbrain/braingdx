@@ -198,7 +198,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 		stage.getViewport().update(width, height);
 		worldStage.getViewport().update(width, height);
 		renderPipeline.resize(width, height);
-		camera.setToOrtho(false, width, height);
+		gameCamera.resize(width, height);
 	}
 
 	private void wire() {
