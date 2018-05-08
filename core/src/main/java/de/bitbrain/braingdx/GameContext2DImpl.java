@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import aurelienribon.tweenengine.TweenManager;
+import box2dLight.RayHandler;
 import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
@@ -80,7 +81,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 		batch = new SpriteBatch();
 		input = new InputMultiplexer();
 		boxWorld = new World(Vector2.Zero, false);
-		lightingManager = new LightingManager(boxWorld, camera);
+		lightingManager = new LightingManager(new RayHandler(boxWorld), camera);
 		renderManager = new GameObjectRenderManager(batch);
 		gameCamera = new VectorGameCamera(camera, world);
 		particleManager = new ParticleManager(behaviorManager);
