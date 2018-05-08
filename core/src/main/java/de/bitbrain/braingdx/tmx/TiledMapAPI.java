@@ -56,4 +56,7 @@ public interface TiledMapAPI extends TiledCollisionResolver {
    
    float getWorldHeight();
 
+   void setDebug(boolean enabled);
+
+   boolean isDebug();
 }

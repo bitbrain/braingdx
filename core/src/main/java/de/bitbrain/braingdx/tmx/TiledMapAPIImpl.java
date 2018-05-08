@@ -31,6 +31,7 @@ class TiledMapAPIImpl implements TiledMapAPI {
 
    private final State state;
    private final GameWorld gameWorld;
+   private boolean debug;
 
    public TiledMapAPIImpl(State state, GameWorld gameWorld) {
       this.state = state;
@@ -153,6 +154,16 @@ class TiledMapAPIImpl implements TiledMapAPI {
 
    private boolean verifyIndex(int indexX, int indexY) {
       return indexX >= 0 && indexY >= 0 && indexX < state.getMapIndexWidth() && indexY < state.getMapIndexHeight();
+   }
+
+   @Override
+   public void setDebug(boolean enabled) {
+      this.debug = enabled;
+   }
+
+   @Override
+   public boolean isDebug() {
+      return debug;
    }
 
 }

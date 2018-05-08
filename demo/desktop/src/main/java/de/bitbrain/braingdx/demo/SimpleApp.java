@@ -12,7 +12,7 @@ public class SimpleApp {
       LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
       config.width = 1200;
       config.height = 1000;
-      new LwjglApplication(new LightingManagerTest(), config);
+      new LwjglApplication(new TmxTest(), config);
    }
 
 }
