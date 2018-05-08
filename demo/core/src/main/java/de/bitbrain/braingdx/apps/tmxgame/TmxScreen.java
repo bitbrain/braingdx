@@ -48,6 +48,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
       TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_2, TiledMap.class);
       TiledMapManager tiledMapManager = context.getTiledMapManager();
       context.getLightingManager().setAmbientLight(new Color(0.2f, 0.3f, 0.6f, 0.4f));
+      tiledMapManager.getAPI().setDebug(true);
       tiledMapManager.load(map, context.getGameCamera().getInternal(), TiledMapType.ORTHOGONAL);
 
       player = null;

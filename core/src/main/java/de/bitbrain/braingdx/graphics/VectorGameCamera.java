@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
+import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.GameWorld.WorldBounds;
@@ -115,6 +116,14 @@ public class VectorGameCamera implements GameCamera {
 
       camera.update();
 	}
+
+   @Override
+   public void resize(int width, int height) {
+      adjustedX = false;
+      adjustedY = false;
+      focusRequested = true;
+      camera.setToOrtho(false, width, height);
+   }
 
 	@Override
 	public float getBaseZoom() {

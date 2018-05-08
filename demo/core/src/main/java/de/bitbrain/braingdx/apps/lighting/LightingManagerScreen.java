@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bitbrain.braingdx.GameContext;
 import de.bitbrain.braingdx.apps.Assets;
@@ -103,5 +105,10 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
          group.left().top().add(textButton).width(400f).padBottom(10f).row();
       }
       context.getStage().addActor(group);
+   }
+   
+   @Override
+   protected Viewport getViewport(int width, int height) {
+      return new FitViewport(width, height);
    }
 }

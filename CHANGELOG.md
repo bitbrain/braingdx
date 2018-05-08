@@ -1,3 +1,9 @@
+# Version 0.2.2
+
+* [[#80](https://github.com/bitbrain/braingdx/issues/80)] Introduce collision debug mode for tiled maps
+* [[#105](https://github.com/bitbrain/braingdx/issues/105)] NumberFormatException when resizing window
+* [[#109](https://github.com/bitbrain/braingdx/issues/109)] LightingManager: clear all lights
+
 # Version 0.2.1
 
 * [[#101](https://github.com/bitbrain/braingdx/issues/101)] Make camera optionally sticky to world bounds

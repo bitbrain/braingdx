@@ -2,6 +2,7 @@ package de.bitbrain.braingdx.graphics;
 
 import com.badlogic.gdx.graphics.Camera;
 
+import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -11,7 +12,7 @@ import de.bitbrain.braingdx.world.GameObject;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-public interface GameCamera {
+public interface GameCamera extends Resizeable {
 
    /**
     * Updates the tracker in a frame step

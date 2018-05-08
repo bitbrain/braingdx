@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
@@ -88,6 +89,9 @@ class StatePopulator {
          }
       }
       state.setLayerIds(layerIds);
+      
+      // Add debug layer
+      handleDebugTileLayer(state, camera, rendererFactory, config);
    }
 
    private void handleMapProperties(MapProperties properties, State state, TiledMapConfig config) {
@@ -148,6 +152,20 @@ class StatePopulator {
          e.printStackTrace();
          return null;
       }
+   }
+   
+   private String handleDebugTileLayer(State state, Camera camera,
+         MapLayerRendererFactory rendererFactory, TiledMapConfig config) {
+      GameObjectRenderer renderer = rendererFactory.createDebug(api, state, camera);
+      String id = UUID.randomUUID().toString();
+      renderManager.register(id, renderer);
+      GameObject layerObject = gameWorld.addObject();
+      layerObject.setActive(false);
+      layerObject.setPersistent(true);
+      layerObject.setType(id);
+      // Over the top
+      layerObject.setZIndex(99999999);
+      return id;
    }
 
    private String handleTiledMapTileLayer(TiledMapTileLayer layer, int index, TiledMap tiledMap, Camera camera,
