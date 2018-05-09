@@ -82,7 +82,7 @@ public class AudioManagerImpl implements AudioManager {
    @Override
    public void spawnSound(String path, float x, float y, float pitch, final float volume, float hearingRange) {
       final Sound sound = assetManager.get(path, Sound.class);
-      final long handle = sound.play(volume * 0f, pitch, 0f);
+      final long handle = sound.play(volume, pitch, 0f);
       float computedPan = computePan(x, y, hearingRange);
       float computedVolume = computeVolume(x, y, hearingRange) * volume * this.volume;
       sound.setPan(handle, computedPan, computedVolume);
@@ -96,7 +96,7 @@ public class AudioManagerImpl implements AudioManager {
       soundObject.setPosition(x, y);
       soundObject.setDimensions(1, 1);
       final Sound sound = assetManager.get(path, Sound.class);
-      final long handle = sound.play(volume * 0f, pitch, 0f);
+      final long handle = sound.play(0f, pitch, 0f);
       sound.setLooping(handle, true);
       behaviorManager.apply(new BehaviorAdapter() {
          @Override
@@ -334,7 +334,7 @@ public class AudioManagerImpl implements AudioManager {
       tmp.set(camera.position.x, camera.position.y, camera.position.z);
       tmp.x -= sourceX;
       tmp.y -= sourceY;
-      return MathUtils.clamp(0.1f / (tmp.len() / maxDistance), 0.2f, 0.8f);
+      return MathUtils.clamp(1 - (tmp.len() / maxDistance), 0.0f, 1f);
    }
    
    private float computePan(float sourceX, float sourceY, float maxDistance) {

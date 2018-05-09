@@ -71,6 +71,8 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
             .interval(0.3f)
             .rasterSize(tiledMapManager.getAPI().getCellWidth(), tiledMapManager.getAPI().getCellHeight());
       context.getBehaviorManager().apply(behavior, player);
+      
+      context.getAudioManager().spawnSoundLooped(Sounds.SOUND_TEST, 500, 500, 1f, 1f, 700f);
    }
    
    @Override
