@@ -84,12 +84,12 @@ class GameObjectUpdater extends BehaviorAdapter {
          int lastTileX = IndexCalculator.calculateIndex(lastPosition.x, api.getCellWidth());
          int lastTileY = IndexCalculator.calculateIndex(lastPosition.y, api.getCellHeight());
          GameObject occupant = api.getGameObjectAt(lastTileX, lastTileY, lastLayerIndex);
-         if (occupant == null) {
-            // Last cell is empty, clear collision
-            state.getState(lastTileX, lastTileY, lastLayerIndex).setCollision(false);
-         }
+
+         // clear last collision
+         state.getState(lastTileX, lastTileY, lastLayerIndex).setCollision(false);
+
          // Update current collision
-         if (!object.equals(occupant)) {
+         if (!object.equals(occupant) && object.isActive()) {
             CollisionCalculator.updateCollision(true, object.getLeft(), object.getTop(), currentLayerIndex, state);
          }
       }

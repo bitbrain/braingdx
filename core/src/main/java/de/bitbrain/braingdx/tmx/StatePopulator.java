@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
@@ -112,12 +113,13 @@ class StatePopulator {
          final float cellWidth = state.getCellWidth();
          final float cellHeight = state.getCellHeight();
          Object objectType = objectProperties.get(config.get(Constants.TYPE));
-         boolean collision = objectProperties.get(config.get(Constants.COLLISION), true, Boolean.class);
+         Object collision = objectProperties.get(config.get(Constants.COLLISION), "false", Object.class);
          gameObject.setPosition(x, y);
          gameObject.setDimensions(IndexCalculator.calculateIndexedDimension(w, cellWidth),
                IndexCalculator.calculateIndexedDimension(h, cellHeight));
+         Color color = objectProperties.get(config.get(Constants.COLOR), mapObject.getColor(), Color.class);
          gameObject.setLastPosition(x, y);
-         gameObject.setColor(mapObject.getColor());
+         gameObject.setColor(color);
          gameObject.setType(objectType);
          gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
          gameObject.setAttribute(MapProperties.class, objectProperties);
@@ -128,7 +130,11 @@ class StatePopulator {
                behaviorManager.apply(behavior, gameObject);
             }
          }
-         CollisionCalculator.updateCollision(collision, x, y, layerIndex, state);
+         if (collision instanceof Boolean) {
+            CollisionCalculator.updateCollision((Boolean)collision, x, y, layerIndex, state);
+         } else if (collision instanceof String) {
+            CollisionCalculator.updateCollision(Boolean.valueOf((String)collision), x, y, layerIndex, state);
+         }
          IndexCalculator.calculateZIndex(gameObject, state, layerIndex);
          for (TiledMapListener listener : listeners) {
             listener.onLoadGameObject(gameObject, api);
@@ -164,7 +170,7 @@ class StatePopulator {
       layerObject.setPersistent(true);
       layerObject.setType(id);
       // Over the top
-      layerObject.setZIndex(99999999);
+      layerObject.setZIndex(Integer.MAX_VALUE);
       return id;
    }
 

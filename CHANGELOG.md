@@ -1,7 +1,12 @@
+# Version 0.2.3
+
+* [[#110](https://github.com/bitbrain/braingdx/issues/110)] bugfix: TiledMap collisions become sticky on non-collision game objects
+
+
 # Version 0.2.2
 
 * [[#80](https://github.com/bitbrain/braingdx/issues/80)] Introduce collision debug mode for tiled maps
-* [[#105](https://github.com/bitbrain/braingdx/issues/105)] NumberFormatException when resizing window
+* [[#105](https://github.com/bitbrain/braingdx/issues/105)] bugfix: NumberFormatException when resizing window
 * [[#109](https://github.com/bitbrain/braingdx/issues/109)] LightingManager: clear all lights
 
 # Version 0.2.1
