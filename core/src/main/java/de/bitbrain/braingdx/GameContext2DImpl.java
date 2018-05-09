@@ -28,7 +28,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import aurelienribon.tweenengine.TweenManager;
 import box2dLight.RayHandler;
+import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.audio.AudioManager;
+import de.bitbrain.braingdx.audio.AudioManagerImpl;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
 import de.bitbrain.braingdx.event.GameEventManager;
@@ -73,6 +75,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 	private final TweenManager tweenManager = SharedTweenManager.getInstance();
 	private final InputMultiplexer input;
 	private final GameEventManager eventManager;
+	private final AudioManager audioManager;
 
 	public GameContext2DImpl(ViewportFactory viewportFactory, ShaderConfig shaderConfig) {
 		camera = new OrthographicCamera();
@@ -93,6 +96,13 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 				.create();
 		tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager);
 		eventManager = new GameEventManagerImpl();
+		audioManager = new AudioManagerImpl(//
+		      gameCamera,//
+		      tweenManager,//
+		      SharedAssetManager.getInstance(),//
+		      world,//
+		      behaviorManager//
+		);
 		wire();
 	}
 
@@ -168,7 +178,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 
 	@Override
 	public AudioManager getAudioManager() {
-		return AudioManager.getInstance();
+		return audioManager;
 	}
 
 	@Override

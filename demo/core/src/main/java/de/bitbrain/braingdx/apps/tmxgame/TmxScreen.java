@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bitbrain.braingdx.GameContext;
 import de.bitbrain.braingdx.apps.Assets;
+import de.bitbrain.braingdx.apps.Assets.Sounds;
 import de.bitbrain.braingdx.apps.rpg.NPC;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.behavior.movement.Orientation;

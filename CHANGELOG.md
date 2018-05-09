@@ -1,3 +1,7 @@
+# Version 0.2.5
+
+* [[#112](https://github.com/bitbrain/braingdx/issues/112)] 2D audio support: rewritten AudioManager for better audio handling. Also supporting 2D sound.
+
 # Version 0.2.4
 
 * fix class cast exception for collisions
