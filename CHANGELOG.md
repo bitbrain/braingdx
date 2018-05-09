@@ -1,3 +1,7 @@
+# Version 0.2.4
+
+* fix class cast exception for collisions
+
 # Version 0.2.3
 
 * [[#110](https://github.com/bitbrain/braingdx/issues/110)] bugfix: TiledMap collisions become sticky on non-collision game objects

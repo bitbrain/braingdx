@@ -113,7 +113,15 @@ class StatePopulator {
          final float cellWidth = state.getCellWidth();
          final float cellHeight = state.getCellHeight();
          Object objectType = objectProperties.get(config.get(Constants.TYPE));
-         Object collision = objectProperties.get(config.get(Constants.COLLISION), "false", Object.class);
+         
+         Object collisionObject = objectProperties.get(config.get(Constants.COLLISION), "false", Object.class);
+         boolean collision = false;
+         if (collisionObject instanceof Boolean) {
+            collision = (Boolean)collisionObject;
+         } else if (collisionObject instanceof String) {
+            collision = Boolean.valueOf((String)collisionObject);
+         }
+         
          gameObject.setPosition(x, y);
          gameObject.setDimensions(IndexCalculator.calculateIndexedDimension(w, cellWidth),
                IndexCalculator.calculateIndexedDimension(h, cellHeight));
@@ -130,11 +138,7 @@ class StatePopulator {
                behaviorManager.apply(behavior, gameObject);
             }
          }
-         if (collision instanceof Boolean) {
-            CollisionCalculator.updateCollision((Boolean)collision, x, y, layerIndex, state);
-         } else if (collision instanceof String) {
-            CollisionCalculator.updateCollision(Boolean.valueOf((String)collision), x, y, layerIndex, state);
-         }
+         CollisionCalculator.updateCollision(collision, x, y, layerIndex, state);
          IndexCalculator.calculateZIndex(gameObject, state, layerIndex);
          for (TiledMapListener listener : listeners) {
             listener.onLoadGameObject(gameObject, api);
@@ -216,8 +220,13 @@ class StatePopulator {
          TiledMapConfig config) {
       Cell cell = layer.getCell(x, y);
       MapProperties layerProperties = layer.getProperties();
-      boolean collisionLayer = Boolean
-            .valueOf(layerProperties.get(config.get(Constants.COLLISION), "false", String.class));
+      Object collisionObject = layerProperties.get(config.get(Constants.COLLISION), "false", Object.class);
+      boolean collisionLayer = false;
+      if (collisionObject instanceof Boolean) {
+         collisionLayer = (Boolean)collisionObject;
+      } else if (collisionObject instanceof String) {
+         collisionLayer = Boolean.valueOf((String)collisionObject);
+      }
       CellState cellState = state.getState(x, y, layerIndex);
       // Inherit the collision from the previous layer, if and only if
       // the current layer is non-collision by default
