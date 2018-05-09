@@ -33,6 +33,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
@@ -67,6 +69,7 @@ public class TiledMapManagerTest {
    @Before
    public void beforeTest() {
       world = new GameWorld(camera);
+      Gdx.app = mock(Application.class);
       BehaviorManager behaviorManager = new BehaviorManager(world);
       world.addListener(new BehaviorManagerAdapter(behaviorManager));
       tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager) {
@@ -114,7 +117,7 @@ public class TiledMapManagerTest {
    public void load_withNoMapObjects() throws TiledMapException {
       TiledMap map = new MockTiledMapBuilder(1, 1, 1).addLayer().build();
       tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
-      assertThat(world.size()).isEqualTo(1);
+      assertThat(world.size()).isEqualTo(2); // 1 + 1 debug layer
       inOrder(renderManager).verify(renderManager, calls(1)).register(any(), any(GameObjectRenderer.class));
    }
 
@@ -142,7 +145,7 @@ public class TiledMapManagerTest {
       assertThat(objectA.getHeight()).isEqualTo(5f);
       assertThat(objectB.getWidth()).isEqualTo(10f);
       assertThat(objectB.getHeight()).isEqualTo(10f);
-      assertThat(world.size()).isEqualTo(5);
+      assertThat(world.size()).isEqualTo(6); // 5 + 1 debug layer
       inOrder(renderManager).verify(renderManager, calls(3)).register(any(), any(GameObjectRenderer.class));
    }
 

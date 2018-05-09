@@ -113,7 +113,7 @@ class StatePopulator {
          final float cellWidth = state.getCellWidth();
          final float cellHeight = state.getCellHeight();
          Object objectType = objectProperties.get(config.get(Constants.TYPE));
-         boolean collision = objectProperties.get(config.get(Constants.COLLISION), false, Boolean.class);
+         Object collision = objectProperties.get(config.get(Constants.COLLISION), "false", Object.class);
          gameObject.setPosition(x, y);
          gameObject.setDimensions(IndexCalculator.calculateIndexedDimension(w, cellWidth),
                IndexCalculator.calculateIndexedDimension(h, cellHeight));
@@ -130,7 +130,11 @@ class StatePopulator {
                behaviorManager.apply(behavior, gameObject);
             }
          }
-         CollisionCalculator.updateCollision(collision, x, y, layerIndex, state);
+         if (collision instanceof Boolean) {
+            CollisionCalculator.updateCollision((Boolean)collision, x, y, layerIndex, state);
+         } else if (collision instanceof String) {
+            CollisionCalculator.updateCollision(Boolean.valueOf((String)collision), x, y, layerIndex, state);
+         }
          IndexCalculator.calculateZIndex(gameObject, state, layerIndex);
          for (TiledMapListener listener : listeners) {
             listener.onLoadGameObject(gameObject, api);

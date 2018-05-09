@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-down" width="8" height="8" tilewidth="16" tileheight="16" nextobjectid="8">
- <tileset firstgid="1" name="tileset-01" tilewidth="16" tileheight="16" tilecount="2376">
+<!DOCTYPE map SYSTEM "http://mapeditor.org/dtd/1.0/map.dtd">
+<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="left-down" width="8" height="8" tilewidth="16" tileheight="16" infinite="0" nextobjectid="11">
+ <tileset firstgid="1" name="tileset-01" tilewidth="16" tileheight="16" tilecount="2376" columns="54">
   <image source="tileset-01.png" trans="ffffff" width="864" height="705"/>
   <tile id="378">
    <properties>
@@ -44,7 +45,11 @@
   </data>
  </layer>
  <objectgroup name="Object Layer 1">
-  <object id="1" type="CLERIC_MALE" x="16" y="16" width="16" height="16"/>
+  <object id="1" type="CLERIC_MALE" x="16" y="16" width="16" height="16">
+   <properties>
+    <property name="collision" type="bool" value="true"/>
+   </properties>
+  </object>
   <object id="5" type="EXPLORER_FEMALE" x="96" y="80" width="16" height="16">
    <properties>
     <property name="movement" value="de.bitbrain.braingdx.behavior.movement.RandomOrientationMovementController"/>
@@ -52,14 +57,17 @@
   </object>
   <object id="6" type="PRIEST_MALE" x="48" y="112" width="16" height="16">
    <properties>
+    <property name="collision" type="bool" value="true"/>
     <property name="movement" value="de.bitbrain.braingdx.behavior.movement.RandomOrientationMovementController"/>
    </properties>
   </object>
   <object id="7" type="EXPLORER_MALE" x="80" y="96" width="16" height="16">
    <properties>
+    <property name="collision" type="bool" value="true"/>
     <property name="movement" value="de.bitbrain.braingdx.behavior.movement.RandomOrientationMovementController"/>
    </properties>
   </object>
+  <object id="8" type="event" x="48.3636" y="32.3636" width="14.9091" height="15.0909"/>
  </objectgroup>
  <layer name="Tile Layer 3" width="8" height="8">
   <data encoding="base64">
