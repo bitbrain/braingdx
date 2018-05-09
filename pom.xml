@@ -153,26 +153,12 @@
 						</goals>
 					</execution>
 				</executions>
-			    <configuration>
-		           <additionalparam>-Xdoclint:none</additionalparam>
-		           <additionalparam>-quiet</additionalparam>
-		        </configuration>
+			   <configuration>
+			      <failOnError>false</failOnError>
+			      <additionalparam>-Xdoclint:none</additionalparam>
+			      <doclint>none</doclint>
+			   </configuration>
 			</plugin>
-			<plugin>
-	        <groupId>org.apache.maven.plugins</groupId>
-	        <artifactId>maven-site-plugin</artifactId>
-	        <configuration>
-	          <reportPlugins>
-	            <plugin>
-	              <groupId>org.apache.maven.plugins</groupId>
-	              <artifactId>maven-javadoc-plugin</artifactId>
-	              <configuration>
-	                <additionalparam>-Xdoclint:none</additionalparam>
-	              </configuration>
-	            </plugin>
-	          </reportPlugins>
-	        </configuration>
-	       </plugin>
 			<plugin>
 			  <groupId>org.apache.maven.plugins</groupId>
 			  <artifactId>maven-source-plugin</artifactId>

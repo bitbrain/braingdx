@@ -17,6 +17,8 @@ package de.bitbrain.braingdx.tmx;
 
 import java.util.List;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
@@ -71,6 +73,7 @@ class GameObjectUpdater extends BehaviorAdapter {
       int currentLayerIndex = api.layerIndexOf(object);
       for (TiledMapListener listener : listeners) {
          if (lastLayerIndex != currentLayerIndex) {
+            Gdx.app.debug("TiledMapAPI", "Tiled map layer change of " + object + " from " + lastLayerIndex + " -> " + currentLayerIndex);
             listener.onLayerChange(lastLayerIndex, currentLayerIndex, object, api);
          }
          if (!currentPosition.equals(lastPosition)) {
@@ -80,6 +83,7 @@ class GameObjectUpdater extends BehaviorAdapter {
          }
       }
       if (lastLayerIndex != currentLayerIndex || !currentPosition.equals(lastPosition)) {
+         Gdx.app.debug("TiledMapAPI", "Updating collision of " + object);
          // Object has moved, now check if last position is already occupied
          int lastTileX = IndexCalculator.calculateIndex(lastPosition.x, api.getCellWidth());
          int lastTileY = IndexCalculator.calculateIndex(lastPosition.y, api.getCellHeight());
@@ -87,10 +91,15 @@ class GameObjectUpdater extends BehaviorAdapter {
 
          // clear last collision
          state.getState(lastTileX, lastTileY, lastLayerIndex).setCollision(false);
-
+         Gdx.app.debug("TiledMapAPI", "Cleared collision at x=" + lastTileX + " y=" + lastTileY + " layer=" + lastLayerIndex);
          // Update current collision
          if (!object.equals(occupant) && object.isActive()) {
             CollisionCalculator.updateCollision(true, object.getLeft(), object.getTop(), currentLayerIndex, state);
+            if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+               int tileX = IndexCalculator.calculateIndex(object.getLeft(), state.getCellWidth());
+               int tileY = IndexCalculator.calculateIndex(object.getTop(), state.getCellWidth());
+               Gdx.app.debug("TiledMapAPI", "Applied collision at x=" + tileX + " y=" + tileY + " layer=" + lastLayerIndex);
+            }
          }
       }
    }
