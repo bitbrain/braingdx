@@ -58,6 +58,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
                o);
          if (o.getType().equals("CLERIC_MALE")) {
             player = o;
+            player.setDimensions(32f, 32f);
          }
       }
       context.getGameCamera().setTarget(player);
@@ -72,7 +73,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
             .rasterSize(tiledMapManager.getAPI().getCellWidth(), tiledMapManager.getAPI().getCellHeight());
       context.getBehaviorManager().apply(behavior, player);
       
-      context.getAudioManager().spawnSoundLooped(Sounds.SOUND_TEST, 500, 500, 1f, 1f, 700f);
+      //context.getAudioManager().spawnSoundLooped(Sounds.SOUND_TEST, 500, 500, 1f, 1f, 700f);
    }
    
    @Override
@@ -85,7 +86,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
       SpriteSheetAnimationFactory animationFactory = new SpriteSheetAnimationFactory(sheet, indices);
       Map<Integer, SpriteSheetAnimation> animations = new HashMap<Integer, SpriteSheetAnimation>();
       for (int type : indices.keySet()) {
-         SpriteSheetAnimation animation = animationFactory.create(type);
+         SpriteSheetAnimation animation = animationFactory.create(type).scale(1f, 1f);
          animations.put(type, animation);
          SpriteSheetAnimationSupplier supplier = new SpriteSheetAnimationSupplier(orientations(), animation,
                AnimationTypes.FORWARD_YOYO);

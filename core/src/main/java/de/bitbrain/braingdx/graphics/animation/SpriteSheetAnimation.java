@@ -16,6 +16,7 @@
 package de.bitbrain.braingdx.graphics.animation;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.util.DeltaTimer;
@@ -46,6 +47,7 @@ public class SpriteSheetAnimation implements Animation {
    private float interval;
    private int base = 0;
    private Direction direction = Direction.HORIZONTAL;
+   private final Vector2 scale = new Vector2(1f, 1f);
 
    private AnimationType type = AnimationTypes.FORWARD;
 
@@ -71,6 +73,8 @@ public class SpriteSheetAnimation implements Animation {
       this.type = other.type;
       this.totalFrames = other.totalFrames;
       this.lastFrame = other.lastFrame;
+      this.scale.x = other.scale.x;
+      this.scale.y = other.scale.y;
    }
 
    public SpriteSheetAnimation origin(int originX, int originY) {
@@ -120,6 +124,11 @@ public class SpriteSheetAnimation implements Animation {
       this.base = Math.abs(base);
       return this;
    }
+   
+   public SpriteSheetAnimation scale(float scaleX, float scaleY) {
+      this.scale.set(scaleX, scaleY);
+      return this;
+   }
 
    @Override
    public SpriteSheetAnimation clone() {
@@ -136,7 +145,7 @@ public class SpriteSheetAnimation implements Animation {
          timer.reset();
       }
       if (sheet != null) {
-         sheet.draw(batch, getDirectionalOffsetX(), getDirectionalOffsetY(), x, y, width, height);
+         sheet.draw(batch, getDirectionalOffsetX(), getDirectionalOffsetY(), x, y, width * scale.x, height * scale.y);
       }
    }
 
