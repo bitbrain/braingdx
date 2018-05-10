@@ -1,3 +1,7 @@
+# Version 0.2.5.2
+
+* Introduce SpriteSheet scaling
+
 # Version 0.2.5.1
 
 * Fix audio issues
