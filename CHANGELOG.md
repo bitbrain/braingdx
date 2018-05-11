@@ -1,3 +1,9 @@
+# Version 0.2.6
+
+* [[#114](https://github.com/bitbrain/braingdx/issues/114)] integrate path finder
+* [[#115](https://github.com/bitbrain/braingdx/issues/115)] improved particle management
+* fix a bug where `onEnterCell` had been called before collisions were updated
+
 # Version 0.2.5.2
 
 * Introduce SpriteSheet scaling

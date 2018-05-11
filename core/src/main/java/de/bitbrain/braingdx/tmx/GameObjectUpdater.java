@@ -71,17 +71,6 @@ class GameObjectUpdater extends BehaviorAdapter {
       currentPosition.set(object.getLeft(), object.getTop());
       int lastLayerIndex = api.lastLayerIndexOf(object);
       int currentLayerIndex = api.layerIndexOf(object);
-      for (TiledMapListener listener : listeners) {
-         if (lastLayerIndex != currentLayerIndex) {
-            Gdx.app.debug("TiledMapAPI", "Tiled map layer change of " + object + " from " + lastLayerIndex + " -> " + currentLayerIndex);
-            listener.onLayerChange(lastLayerIndex, currentLayerIndex, object, api);
-         }
-         if (!currentPosition.equals(lastPosition)) {
-            int xIndex = IndexCalculator.calculateIndex(currentPosition.x, api.getCellWidth());
-            int yIndex = IndexCalculator.calculateIndex(currentPosition.y, api.getCellHeight());
-            listener.onEnterCell(xIndex, yIndex, object, api);
-         }
-      }
       if (lastLayerIndex != currentLayerIndex || !currentPosition.equals(lastPosition)) {
          Gdx.app.debug("TiledMapAPI", "Updating collision of " + object);
          // Object has moved, now check if last position is already occupied
@@ -100,6 +89,17 @@ class GameObjectUpdater extends BehaviorAdapter {
                int tileY = IndexCalculator.calculateIndex(object.getTop(), state.getCellWidth());
                Gdx.app.debug("TiledMapAPI", "Applied collision at x=" + tileX + " y=" + tileY + " layer=" + lastLayerIndex);
             }
+         }
+      }
+      for (TiledMapListener listener : listeners) {
+         if (lastLayerIndex != currentLayerIndex) {
+            Gdx.app.debug("TiledMapAPI", "Tiled map layer change of " + object + " from " + lastLayerIndex + " -> " + currentLayerIndex);
+            listener.onLayerChange(lastLayerIndex, currentLayerIndex, object, api);
+         }
+         if (!currentPosition.equals(lastPosition)) {
+            int xIndex = IndexCalculator.calculateIndex(currentPosition.x, api.getCellWidth());
+            int yIndex = IndexCalculator.calculateIndex(currentPosition.y, api.getCellHeight());
+            listener.onEnterCell(xIndex, yIndex, object, api);
          }
       }
    }

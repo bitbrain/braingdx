@@ -24,6 +24,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 
+import de.bitbrain.braingdx.ai.pathfinding.AStarPathFinder;
+import de.bitbrain.braingdx.ai.pathfinding.PathFinder;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameWorld;
@@ -47,6 +49,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
    private final State state;
    private final StatePopulator populator;
    private final Map<TiledMapType, MapLayerRendererFactory> factories;
+   private final AStarPathFinder pathFinder;
 
    public TiledMapManagerImpl(BehaviorManager behaviorManager, GameWorld gameWorld,
          GameObjectRenderManager renderManager) {
@@ -58,6 +61,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
       this.populator = new StatePopulator(renderManager, gameWorld, api, behaviorManager, listeners);
       this.gameObjectUpdater = new GameObjectUpdater(api, state, listeners);
       this.factories = createFactories();
+      this.pathFinder = new AStarPathFinder(api, 100, false);
    }
 
    @Override
@@ -79,6 +83,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
       for (TiledMapListener listener : listeners) {
          listener.afterLoad(tiledMap, api);
       }
+      pathFinder.refresh();
    }
 
    @Override
@@ -131,6 +136,11 @@ public class TiledMapManagerImpl implements TiledMapManager {
       if (properties.get(Constants.HEIGHT, int.class) <= 0f) {
          throw new TiledMapException("Map height must be larger than 0");
       }
+   }
+
+   @Override
+   public PathFinder getPathFinder() {
+      return this.pathFinder;
    }
 
 }

@@ -19,6 +19,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Disposable;
 
+import de.bitbrain.braingdx.ai.pathfinding.PathFinder;
+
 /**
  * This manager gives extended support for {@link TiledMap} objects. It features an API to query the
  * map for details and provides an own rendering integration for braingdx.
@@ -36,4 +38,6 @@ public interface TiledMapManager extends Disposable {
    void load(TiledMap tiledMap, Camera camera, TiledMapType type) throws TiledMapException;
 
    TiledMapAPI getAPI();
+   
+   PathFinder getPathFinder();
 }

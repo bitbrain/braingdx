@@ -24,7 +24,7 @@ import de.bitbrain.braingdx.world.GameObject;
  * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
  */
-class IndexCalculator {
+public class IndexCalculator {
 
    public static int calculateXIndex(GameObject object, State state) {
       return calculateIndex(object.getLeft(), state.getCellWidth());

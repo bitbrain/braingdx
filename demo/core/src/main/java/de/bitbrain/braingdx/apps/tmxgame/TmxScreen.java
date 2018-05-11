@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -13,12 +14,14 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bitbrain.braingdx.GameContext;
+import de.bitbrain.braingdx.ai.pathfinding.Path;
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.apps.Assets.Sounds;
 import de.bitbrain.braingdx.apps.rpg.NPC;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
 import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
+import de.bitbrain.braingdx.graphics.GraphicsFactory;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheet;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation;
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationFactory;
@@ -26,14 +29,63 @@ import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationFactory.Index
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimationSupplier;
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.renderer.AnimationRenderer;
 import de.bitbrain.braingdx.input.OrientationMovementController;
 import de.bitbrain.braingdx.screens.AbstractScreen;
+import de.bitbrain.braingdx.tmx.IndexCalculator;
+import de.bitbrain.braingdx.tmx.TiledMapAPI;
+import de.bitbrain.braingdx.tmx.TiledMapListenerAdapter;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
 import de.bitbrain.braingdx.tmx.TiledMapType;
 import de.bitbrain.braingdx.world.GameObject;
 
 public class TmxScreen extends AbstractScreen<TmxTest> {
+   
+   private class AStarRenderer extends TiledMapListenerAdapter implements RenderLayer {
+      
+      private final TiledMapManager tiledMapManager;
+      private Path path;
+      private Texture texture;
+      
+      public AStarRenderer(TiledMapManager manager) {
+         this.tiledMapManager = manager;
+         texture = GraphicsFactory.createTexture(2, 2, Color.GREEN);
+      }
+
+      @Override
+      public void beforeRender() {
+         // TODO Auto-generated method stub
+         
+      }
+
+      @Override
+      public void render(Batch batch, float delta) {
+         if (path != null) {
+            batch.begin();
+            for (int i = 0; i < path.getLength(); ++i) {
+               batch.draw(texture, 
+                     path.getX(i) * tiledMapManager.getAPI().getCellWidth(), 
+                     path.getY(i) * tiledMapManager.getAPI().getCellHeight(),
+                     tiledMapManager.getAPI().getCellWidth(),
+                     tiledMapManager.getAPI().getCellHeight());
+            }
+            batch.end();
+         }
+      }
+      
+      @Override
+      public void onEnterCell(int xIndex, int yIndex, GameObject object, TiledMapAPI api) {
+         path = tiledMapManager.getPathFinder().findPath(player, 0, 0);
+      }
+      
+      @Override
+      public void onLayerChange(int previousLayer, int newLayer, GameObject object, TiledMapAPI api) {
+         path = tiledMapManager.getPathFinder().findPath(player, 0, 0);
+      }
+      
+   }
 
    private GameObject player;
 
@@ -47,7 +99,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
 	  context.getGameCamera().setSpeed(3.6f);
 	  context.getGameCamera().setZoomScale(0.001f);
       TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_2, TiledMap.class);
-      TiledMapManager tiledMapManager = context.getTiledMapManager();
+      final TiledMapManager tiledMapManager = context.getTiledMapManager();
       context.getLightingManager().setAmbientLight(new Color(0.2f, 0.3f, 0.6f, 0.4f));
       tiledMapManager.getAPI().setDebug(true);
       tiledMapManager.load(map, context.getGameCamera().getInternal(), TiledMapType.ORTHOGONAL);
@@ -58,7 +110,6 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
                o);
          if (o.getType().equals("CLERIC_MALE")) {
             player = o;
-            player.setDimensions(32f, 32f);
          }
       }
       context.getGameCamera().setTarget(player);
@@ -73,7 +124,9 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
             .rasterSize(tiledMapManager.getAPI().getCellWidth(), tiledMapManager.getAPI().getCellHeight());
       context.getBehaviorManager().apply(behavior, player);
       
-      //context.getAudioManager().spawnSoundLooped(Sounds.SOUND_TEST, 500, 500, 1f, 1f, 700f);
+      AStarRenderer renderer = new AStarRenderer(context.getTiledMapManager());
+      context.getTiledMapManager().addListener(renderer);
+      context.getRenderPipeline().putAfter(RenderPipeIds.LIGHTING, "astar", renderer);
    }
    
    @Override
