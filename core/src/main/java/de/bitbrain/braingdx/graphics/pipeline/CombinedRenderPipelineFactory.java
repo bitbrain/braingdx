@@ -5,6 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
 import de.bitbrain.braingdx.graphics.lighting.LightingManagerRenderLayer;
+import de.bitbrain.braingdx.graphics.particles.ParticleManager;
+import de.bitbrain.braingdx.graphics.particles.ParticleManagerRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.pipeline.layers.StageRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.layers.WorldRenderLayer;
@@ -19,6 +21,8 @@ public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
    private final GameWorld world;
 
    private final LightingManager lightingManager;
+   
+   private final ParticleManager particleManager;
 
    private final Stage stage;
    
@@ -26,11 +30,12 @@ public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
    
    private final ViewportFactory viewportFactory;
 
-   public CombinedRenderPipelineFactory(ShaderConfig config, GameWorld world, LightingManager lightingManager,
+   public CombinedRenderPipelineFactory(ShaderConfig config, GameWorld world, LightingManager lightingManager, ParticleManager particleManager,
          Stage stage, Stage worldStage, ViewportFactory viewportFactory) {
       this.config = config;
       this.world = world;
       this.lightingManager = lightingManager;
+      this.particleManager = particleManager;
       this.stage = stage;
       this.worldStage = worldStage;
       this.viewportFactory = viewportFactory;
@@ -52,6 +57,7 @@ public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
       });
       pipeline.put(RenderPipeIds.WORLD, new WorldRenderLayer(world));
       pipeline.put(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(lightingManager));
+      pipeline.put(RenderPipeIds.PARTICLES, new ParticleManagerRenderLayer(particleManager));
       pipeline.put(RenderPipeIds.WORLD_UI, new StageRenderLayer(worldStage));
       pipeline.put(RenderPipeIds.UI, new StageRenderLayer(stage));
       return pipeline;

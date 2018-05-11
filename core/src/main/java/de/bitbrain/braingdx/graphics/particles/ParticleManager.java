@@ -95,6 +95,18 @@ public class ParticleManager implements Disposable {
        internal.effect.setPosition(worldX, worldY);
    }
 
+   @Override
+   public void dispose() {
+      for (InternalPooledEffect effect : effects) {
+         ParticleEffectPool pool = pools.get(effect.assetId);
+         effect.effect.free();
+         pool.free(effect.effect);
+      }
+      effects.clear();
+      pools.clear();
+      removals.clear();
+   }
+
    private InternalPooledEffect ensureEffect(String particleId) {
        ParticleEffectPool pool = pools.get(particleId);
        if (pool == null) {
@@ -118,17 +130,5 @@ public class ParticleManager implements Disposable {
        } else {
            Gdx.app.error("Particles", "Unable to release effect " + effect.assetId + ". No pool available!");
        }
-   }
-
-   @Override
-   public void dispose() {
-      for (InternalPooledEffect effect : effects) {
-         ParticleEffectPool pool = pools.get(effect.assetId);
-         effect.effect.free();
-         pool.free(effect.effect);
-      }
-      effects.clear();
-      pools.clear();
-      removals.clear();
    }
 }
