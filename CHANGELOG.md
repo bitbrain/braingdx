@@ -1,3 +1,7 @@
+# Version 0.2.7
+
+* Upgrade libgdx to 1.9.8
+
 # Version 0.2.6
 
 * [[#114](https://github.com/bitbrain/braingdx/issues/114)] integrate path finder
