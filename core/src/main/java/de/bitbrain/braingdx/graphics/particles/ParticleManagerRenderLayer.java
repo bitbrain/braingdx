@@ -25,7 +25,9 @@ public class ParticleManagerRenderLayer implements RenderLayer {
 
    @Override
    public void render(Batch batch, float delta) {
+      batch.begin();
       manager.draw(batch, delta);
+      batch.end();
    }
 
 }
