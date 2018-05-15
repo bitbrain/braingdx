@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
 
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
@@ -65,6 +66,19 @@ class GameObjectUpdater extends BehaviorAdapter {
    }
 
    private void updateCollision(GameObject object) {
+      // Verify that object is valid for collisions
+      if (object.hasAttribute(MapProperties.class)) {
+         MapProperties mapProperties = (MapProperties)object.getAttribute(MapProperties.class);
+         // Do not update objects which have a false collision
+         if (mapProperties.containsKey("collision")) {
+            if (mapProperties.get("collision") instanceof Boolean && !(Boolean)mapProperties.get("collision")) {
+               return;
+            }
+            if (mapProperties.get("collision") instanceof String && mapProperties.get("collision").equals("false")) {
+               return;
+            }
+         }
+      }
       // Remove last collision if object has moved
       // and last position is not occupied
       Vector2 lastPosition = object.getLastPosition();

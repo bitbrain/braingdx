@@ -1,8 +1,7 @@
-# Version 0.2.7.1
-
 # Version 0.2.7
 
-* Upgrade libgdx to 1.9.8
+* [[#117](https://github.com/bitbrain/braingdx/issues/117)] add support to TMX to disable collisions for game objects
+
 
 # Version 0.2.6
 
