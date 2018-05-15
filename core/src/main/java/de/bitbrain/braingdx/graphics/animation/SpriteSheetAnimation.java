@@ -15,6 +15,7 @@
 
 package de.bitbrain.braingdx.graphics.animation;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -136,7 +137,7 @@ public class SpriteSheetAnimation implements Animation {
    }
 
    @Override
-   public void render(Batch batch, float x, float y, float width, float height, float delta) {
+   public void render(Batch batch, float x, float y, float width, float height, float delta, Color color) {
       timer.update(delta);
       if (timer.reached(interval)) {
          int currentLastFrame = currentFrame;
@@ -145,7 +146,10 @@ public class SpriteSheetAnimation implements Animation {
          timer.reset();
       }
       if (sheet != null) {
+         Color defaultColor = batch.getColor();
+         batch.setColor(color);
          sheet.draw(batch, getDirectionalOffsetX(), getDirectionalOffsetY(), x, y, width * scale.x, height * scale.y);
+         batch.setColor(defaultColor);
       }
    }
 

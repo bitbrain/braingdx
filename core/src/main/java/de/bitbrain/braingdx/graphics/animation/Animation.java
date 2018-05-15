@@ -16,6 +16,7 @@
 package de.bitbrain.braingdx.graphics.animation;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
@@ -37,7 +38,7 @@ public interface Animation {
     * @param height the height in pixel of this animation
     * @param delta the current frame delta
     */
-   void render(Batch batch, float x, float y, float width, float height, float delta);
+   void render(Batch batch, float x, float y, float width, float height, float delta, Color color);
 
    /**
     * Clones this animation.

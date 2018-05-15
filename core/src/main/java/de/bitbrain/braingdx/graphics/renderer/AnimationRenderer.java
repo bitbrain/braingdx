@@ -64,6 +64,6 @@ public class AnimationRenderer implements GameObjectRenderer {
       Animation animation = supplier.supplyFor(object);
 
       animation.render(batch, object.getLeft() + object.getOffset().x + offset.x, object.getTop() + object.getOffset().y + offset.y,
-            object.getWidth() * scale.x, object.getHeight() * scale.y, delta);
+            object.getWidth() * scale.x, object.getHeight() * scale.y, delta, object.getColor());
    }
 }

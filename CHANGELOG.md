@@ -1,7 +1,7 @@
 # Version 0.2.7
 
+* [[#116](https://github.com/bitbrain/braingdx/issues/116)] set object color correctly on animations
 * [[#117](https://github.com/bitbrain/braingdx/issues/117)] add support to TMX to disable collisions for game objects
-
 
 # Version 0.2.6
 
