@@ -1,3 +1,7 @@
+# Version 0.2.8
+
+* [[#119](https://github.com/bitbrain/braingdx/issues/119)] hide invisible tiledmap layers
+
 # Version 0.2.7
 
 * [[#116](https://github.com/bitbrain/braingdx/issues/116)] set object color correctly on animations

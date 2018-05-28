@@ -189,6 +189,9 @@ class StatePopulator {
       layerObject.setPersistent(true);
       layerObject.setType(id);
       layerObject.setZIndex(IndexCalculator.calculateZIndex(numberOfRows, numberOfRows, index));
+      if (!layer.isVisible()) {
+         layerObject.getColor().a = 0f;
+      }
       return id;
    }
 
