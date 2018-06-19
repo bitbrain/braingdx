@@ -1,3 +1,7 @@
+# Version 0.2.9
+
+* add method to `AudioManager` to directly attach sounds to game objects
+
 # Version 0.2.8
 
 * [[#119](https://github.com/bitbrain/braingdx/issues/119)] hide invisible tiledmap layers

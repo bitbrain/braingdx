@@ -94,7 +94,11 @@ public class AudioManagerImpl implements AudioManager {
       soundObject.setPersistent(true);
       soundObject.setActive(false);
       soundObject.setPosition(x, y);
-      soundObject.setDimensions(1, 1);
+      spawnSoundLooped(path, soundObject, pitch, volume, hearingRange);
+   }
+   
+   @Override
+   public void spawnSoundLooped(String path, GameObject target, float pitch, final float volume, final float hearingRange) {
       final Sound sound = assetManager.get(path, Sound.class);
       final long handle = sound.play(0f, pitch, 0f);
       sound.setLooping(handle, true);
@@ -105,7 +109,7 @@ public class AudioManagerImpl implements AudioManager {
             float computedVolume = computeVolume(source.getLeft(), source.getTop(), hearingRange) * volume * AudioManagerImpl.this.volume;
             sound.setPan(handle, computedPan, computedVolume);
          }
-      }, soundObject);
+      }, target);
    }
 
    @Override

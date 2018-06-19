@@ -1,6 +1,11 @@
 package de.bitbrain.braingdx.audio;
 
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+
+import de.bitbrain.braingdx.graphics.GameCamera;
+import de.bitbrain.braingdx.world.GameObject;
+import de.bitbrain.braingdx.world.GameWorld;
 
 /**
  * Provides a variety of audio controls such as spawning
@@ -34,6 +39,17 @@ public interface AudioManager {
     * @param hearingRange the hearing range where the audio is hearable from
     */
    void spawnSoundLooped(String path, float x, float y, float pitch, float volume, float hearingRange);
+   
+   /**
+    * Spawns a {@link Sound} in the {@link GameWorld} relative to the {@link GameCamera}. The sound object is removed as soon the sound has stopped playing.
+    * 
+    * @param path the path of the audio file
+    * @param target the target to attach the sound to
+    * @param pitch the audio pitch
+    * @param volume the audio volume. <code>FinalVolume=MasterVolume*volume*directionalVolume</code>
+    * @param hearingRange the hearing range where the audio is hearable from
+    */
+   void spawnSoundLooped(String path, GameObject target, float pitch, float volume, float hearingRange);
    
    /**
     * Spawns a {@link Music} in the world. The music persists until it is deleted via {@link clearMusic}.
