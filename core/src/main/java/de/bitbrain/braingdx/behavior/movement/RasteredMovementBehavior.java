@@ -25,6 +25,8 @@ import aurelienribon.tweenengine.TweenEquation;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
+import de.bitbrain.braingdx.tmx.IndexCalculator;
+import de.bitbrain.braingdx.tmx.TiledMapAPI;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.util.DeltaTimer;
@@ -40,28 +42,6 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
    public static final int DEFAULT_RASTER_SIZE = 32;
    public static final float DEFAULT_INTERVAL = 1f;
    public static final Orientation DEFAULT_DIRECTION = Orientation.DOWN;
-   public static final TiledCollisionResolver EMPTY_COLLISION_RESOLVER = new TiledCollisionResolver() {
-
-      @Override
-      public boolean isCollision(GameObject object, int tileOffsetX, int tileOffsetY) {
-         return false;
-      }
-
-      @Override
-      public boolean isCollision(float x, float y, int layer) {
-         return false;
-      }
-
-      @Override
-      public boolean isCollision(int tileX, int tileY, int layer) {
-         return false;
-      }
-
-      @Override
-      public boolean isCollision(int tileX, int tileY, int layer, GameObject source) {
-         return false;
-      }
-   };
 
    private float rasterWidth = DEFAULT_RASTER_SIZE;
    private float rasterHeight = DEFAULT_RASTER_SIZE;
@@ -75,17 +55,13 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
    private final TweenManager tweenManager = SharedTweenManager.getInstance();
    private final DeltaTimer timer = new DeltaTimer(DEFAULT_INTERVAL);
    private final MovementController<Orientation> controller;
-   private final TiledCollisionResolver collisionResolver;
+   private final TiledMapAPI api;
    private final List<RasteredMovementListener> listeners = new ArrayList<RasteredMovementListener>();
 
    public RasteredMovementBehavior(MovementController<Orientation> controller,
-         TiledCollisionResolver collisionResolver) {
+                                   TiledMapAPI api) {
       this.controller = controller;
-      this.collisionResolver = collisionResolver;
-   }
-
-   public RasteredMovementBehavior(MovementController<Orientation> controller) {
-      this(controller, EMPTY_COLLISION_RESOLVER);
+      this.api = api;
    }
 
    public RasteredMovementBehavior rasterSize(float width, float height) {
@@ -180,7 +156,34 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
    }
 
    private boolean canMove(Orientation orientation) {
-      return !collisionResolver.isCollision(source, orientation.getXFactor(), orientation.getYFactor());
+      // 1. Get the raw target to check
+      int targetX = orientation.getXFactor();
+      int targetY = orientation.getYFactor();
+      int widthIndex = (int)Math.floor(source.getWidth() / api.getCellWidth());
+      int heightIndex = (int)Math.floor(source.getHeight() / api.getCellHeight());
+
+      // Offset target by width
+      if (targetX > 0) {
+         targetX += widthIndex - 1;
+      }
+      if (targetY > 0) {
+         targetY += heightIndex - 1;
+      }
+
+      for (int i = 0; i < widthIndex; ++i) {
+         int checkIndex = orientation.getYFactor() != 0 ? targetX + i : targetX;
+         if (api.isCollision(source, checkIndex, targetY)) {
+            return false;
+         }
+      }
+      for (int i = 0; i < heightIndex; ++i) {
+         int checkIndex = orientation.getXFactor() != 0 ? targetY + i : targetY;
+         if (api.isCollision(source, targetX, checkIndex)) {
+            return false;
+         }
+      }
+
+      return true;
    }
 
    private boolean isReadyToMove() {

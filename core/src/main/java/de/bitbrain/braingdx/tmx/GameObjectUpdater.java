@@ -93,17 +93,28 @@ class GameObjectUpdater extends BehaviorAdapter {
          GameObject occupant = api.getGameObjectAt(lastTileX, lastTileY, lastLayerIndex);
 
          // clear last collision
-         state.getState(lastTileX, lastTileY, lastLayerIndex).setCollision(false);
-         state.getState(lastTileX, lastTileY, lastLayerIndex).setFingerprint(null);
+         for (int xIndex = lastTileX; xIndex < lastTileX + getObjectIndexWidth(object); ++xIndex) {
+            for (int yIndex = lastTileY; yIndex < lastTileY + getObjectIndexHeight(object); ++yIndex) {
+               state.getState(xIndex, yIndex, lastLayerIndex).setCollision(false);
+               state.getState(xIndex, yIndex, lastLayerIndex).setFingerprint(null);
+            }
+         }
+
          Gdx.app.debug("TiledMapAPI", "Cleared collision at x=" + lastTileX + " y=" + lastTileY + " layer=" + lastLayerIndex);
          // Update current collision
          if (!object.equals(occupant) && object.isActive()) {
             CollisionCalculator.updateCollision(true, object.getLeft(), object.getTop(), currentLayerIndex, state);
             state.getState(lastTileX, lastTileY, lastLayerIndex).setFingerprint(object.getId());
-            if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
-               int tileX = IndexCalculator.calculateIndex(object.getLeft(), state.getCellWidth());
-               int tileY = IndexCalculator.calculateIndex(object.getTop(), state.getCellWidth());
-               Gdx.app.debug("TiledMapAPI", "Applied collision at x=" + tileX + " y=" + tileY + " layer=" + lastLayerIndex);
+            int tileX = IndexCalculator.calculateIndex(object.getLeft(), state.getCellWidth());
+            int tileY = IndexCalculator.calculateIndex(object.getTop(), state.getCellWidth());
+            for (int xIndex = tileX; xIndex < tileX + getObjectIndexWidth(object); ++xIndex) {
+               for (int yIndex = tileY; yIndex < tileY + getObjectIndexHeight(object); ++yIndex) {
+                  state.getState(xIndex, yIndex, currentLayerIndex).setCollision(true);
+                  state.getState(xIndex, yIndex, currentLayerIndex).setFingerprint(object.getId());
+                  if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+                     Gdx.app.debug("TiledMapAPI", "Applied collision at x=" + xIndex + " y=" + yIndex + " layer=" + lastLayerIndex);
+                  }
+               }
             }
          }
       }
@@ -125,5 +136,13 @@ class GameObjectUpdater extends BehaviorAdapter {
          int layerIndex = (Integer) object.getAttribute(Constants.LAYER_INDEX);
          object.setAttribute(Constants.LAST_LAYER_INDEX, layerIndex);
       }
+   }
+
+   private int getObjectIndexWidth(GameObject object) {
+      return (int)Math.floor(object.getWidth() / api.getCellWidth());
+   }
+
+   private int getObjectIndexHeight(GameObject object) {
+      return (int)Math.floor(object.getHeight() / api.getCellHeight());
    }
 }
