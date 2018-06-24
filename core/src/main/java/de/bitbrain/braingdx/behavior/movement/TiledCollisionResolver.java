@@ -17,9 +17,14 @@ package de.bitbrain.braingdx.behavior.movement;
 
 import de.bitbrain.braingdx.world.GameObject;
 
+/**
+ * Resolves collisions in a Tiled basis.
+ */
 public interface TiledCollisionResolver {
 
    boolean isCollision(int tileX, int tileY, int layer);
+
+   boolean isCollision(int tileX, int tileY, int layer, GameObject source);
 
    boolean isCollision(float x, float y, int layer);
 

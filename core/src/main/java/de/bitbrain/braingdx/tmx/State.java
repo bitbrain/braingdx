@@ -33,6 +33,7 @@ class State {
 
    public static class CellState {
       private boolean collision;
+      private Object fingerprint;
       private MapProperties properties;
 
       public boolean isCollision() {
@@ -41,6 +42,14 @@ class State {
 
       public void setCollision(boolean collision) {
          this.collision = collision;
+      }
+
+      public void setFingerprint(String fingerprint) {
+         this.fingerprint = fingerprint;
+      }
+
+      public boolean isFingerprint(Object fingerprint) {
+         return this.fingerprint != null && this.fingerprint.equals(fingerprint);
       }
 
       public MapProperties getProperties() {

@@ -90,9 +90,6 @@ public class AStarPathFinder implements PathFinder {
       }
    }
 
-   /**
-    * @see PathFinder#findPath(GameObject, int, int, int, int)
-    */
    @Override
    public Path findPath(GameObject mover, int tx, int ty) {     
 
@@ -101,7 +98,7 @@ public class AStarPathFinder implements PathFinder {
       int sy = IndexCalculator.calculateIndex(mover.getTop(), map.getCellHeight());
       
       // easy first check, if the destination is blocked, we can't get there
-      if (map.isCollision(tx, ty, map.layerIndexOf(mover))) {
+      if (map.isCollision(tx, ty, map.layerIndexOf(mover), mover)) {
          return null;
       }
 
@@ -296,7 +293,7 @@ public class AStarPathFinder implements PathFinder {
       boolean invalid = (x < 0) || (y < 0) || (x >= map.getNumberOfColumns()) || (y >= map.getNumberOfRows());
 
       if ((!invalid) && ((sx != x) || (sy != y))) {
-         invalid = map.isCollision(x, y, map.layerIndexOf(mover));
+         invalid = map.isCollision(x, y, map.layerIndexOf(mover), mover);
       }
 
       return !invalid;

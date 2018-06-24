@@ -56,6 +56,11 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
       public boolean isCollision(int tileX, int tileY, int layer) {
          return false;
       }
+
+      @Override
+      public boolean isCollision(int tileX, int tileY, int layer, GameObject source) {
+         return false;
+      }
    };
 
    private float rasterWidth = DEFAULT_RASTER_SIZE;

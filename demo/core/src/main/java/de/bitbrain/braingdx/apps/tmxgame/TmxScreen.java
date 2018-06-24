@@ -110,6 +110,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
                o);
          if (o.getType().equals("CLERIC_MALE")) {
             player = o;
+            player.setDimensions(player.getWidth() * 2f, player.getHeight());
          }
       }
       context.getGameCamera().setTarget(player);
@@ -141,6 +142,9 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
       for (int type : indices.keySet()) {
          SpriteSheetAnimation animation = animationFactory.create(type).scale(1f, 1f);
          animations.put(type, animation);
+         if (type == NPC.CLERIC_MALE.ordinal()) {
+            animation.scale(1f, 2f);
+         }
          SpriteSheetAnimationSupplier supplier = new SpriteSheetAnimationSupplier(orientations(), animation,
                AnimationTypes.FORWARD_YOYO);
          context.getBehaviorManager().apply(supplier);
