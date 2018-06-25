@@ -1,3 +1,9 @@
+# Version 0.2.10
+
+* [[#113](https://github.com/bitbrain/braingdx/issues/113)] implement advanced collision detection for larger object
+* [[#120](https://github.com/bitbrain/braingdx/issues/120)] add fingerprints to collisions
+* [[#121](https://github.com/bitbrain/braingdx/issues/121)] include object collisions for path finding
+
 # Version 0.2.9
 
 * add method to `AudioManager` to directly attach sounds to game objects
