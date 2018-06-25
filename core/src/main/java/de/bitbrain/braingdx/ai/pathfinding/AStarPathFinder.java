@@ -293,7 +293,15 @@ public class AStarPathFinder implements PathFinder {
       boolean invalid = (x < 0) || (y < 0) || (x >= map.getNumberOfColumns()) || (y >= map.getNumberOfRows());
 
       if ((!invalid) && ((sx != x) || (sy != y))) {
-         invalid = map.isCollision(x, y, map.layerIndexOf(mover), mover);
+         int widthCells = (int)Math.floor(mover.getWidth() / map.getCellWidth());
+         int heightCells = (int)Math.floor(mover.getHeight() / map.getCellHeight());
+         for (int xAddition = 0; xAddition < widthCells; ++xAddition) {
+            for (int yAddition = 0; yAddition < heightCells; ++yAddition) {
+               if (map.isCollision(x + xAddition, y + yAddition, map.layerIndexOf(mover), mover)) {
+                  return false;
+               }
+            }
+         }
       }
 
       return !invalid;
