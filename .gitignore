@@ -66,3 +66,5 @@ build/
 *~
 ~*
 project.properties
+
+target/

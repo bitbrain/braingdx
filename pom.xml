@@ -22,6 +22,22 @@
 		</developer>
 	</developers>
 
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:https://github.com/bitbrain/braingdx.git</connection>
+		<developerConnection>scm:git:git@github.com:bitbrain/braingdx.git</developerConnection>
+		<url>https://github.com/bitbrain/braingdx</url>
+		<tag>HEAD</tag>
+	</scm>
+
 	<!-- Properties -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -40,14 +56,27 @@
 
 	<distributionManagement>
 		<snapshotRepository>
-			<id>nexus-releases</id>
-			<url>https://nexus.k40s.net/repository/braingdx</url>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 		<repository>
-			<id>nexus-releases</id>
-			<url>https://nexus.k40s.net/repository/braingdx</url>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/releases</url>
 		</repository>
 	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>k40s</id>
+			<name>k40s</name>
+			<url>https://nexus.k40s.net/repository/maven-public</url>
+		</repository>
+		<repository>
+			<id>braingdx</id>
+			<name>braingdx</name>
+			<url>https://nexus.k40s.net/repository/braingdx</url>
+		</repository>
+	</repositories>
 
 	<!-- Module definitions -->
 	<modules>
@@ -60,6 +89,27 @@
 			<modules>
 				<module>demo</module>
 			</modules>
+		</profile>
+		<profile>
+			<id>sign</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 
@@ -199,21 +249,17 @@
 					<check />
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
-	<repositories>
-		<repository>
-		    <id>k40s</id>
-		    <name>k40s</name>
-		    <url>https://nexus.k40s.net/repository/maven-public</url>
-		</repository>
-	</repositories>
-
-	<scm>
-		<connection>scm:git:https://github.com/bitbrain/braingdx.git</connection>
-		<developerConnection>scm:git:git@github.com:bitbrain/braingdx.git</developerConnection>
-		<url>https://github.com/bitbrain/braingdx</url>
-		<tag>HEAD</tag>
-	</scm>
 </project>
