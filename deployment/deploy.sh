@@ -2,6 +2,7 @@
 
 if [ "$TRAVIS_BRANCH" = 'deploy' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
 mvn deploy \
+    -Psign \
     -DskipTests \
     --settings deployment/settings.xml
 fi
