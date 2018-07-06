@@ -10,11 +10,12 @@ mkdir cd $HOME/docs
 cd $HOME/braingdx
 mvn javadoc:javadoc
 cd $HOME/docs
-mv -f $HOME/braingdx/core/target/site/apidocs $HOME/docs
+cp -r $HOME/braingdx/core/target/site/apidocs/* $HOME/docs
+rm -rf $HOME/braingdx/*
 cd $HOME/braingdx
 git checkout gh-pages
-rm -rf *
-mv -f $HOME/docs $HOME/braingdx
+rm -rf $HOME/braingdx/*
+cp -r $HOME/docs $HOME/braingdx
 git add -f *
 git commit -m "Travis build $TRAVIS_BUILD_NUMBER - update Javadoc"
 git push -fq origin gh-pages && echo "Successfully deployed Javadoc to /docs"
