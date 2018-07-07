@@ -41,7 +41,6 @@ This framework provides:
 ## Maven
 
 ```xml
-<!-- add dependency under <dependencies></dependencies> -->
 <dependency>
     <groupId>io.github.bitbrain</groupId>
     <artifactId>braingdx-core</artifactId>
