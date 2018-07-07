@@ -2,7 +2,8 @@
 -
 :video_game: Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
 
-[![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=deploy)](https://travis-ci.org/bitbrain/braingdx) [![codecov](https://codecov.io/gh/bitbrain/braingdx/branch/deploy/graph/badge.svg)](https://codecov.io/gh/bitbrain/braingdx)
+[![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=deploy)](https://travis-ci.org/bitbrain/braingdx)
+[![mavencentral](https://maven-badges.herokuapp.com/maven-central/io.github.bitbrain/braingdx-core/badge.svg)](https://search.maven.org/#artifactdetails|io.github.bitbrain|braingdx-core) [![codecov](https://codecov.io/gh/bitbrain/braingdx/branch/deploy/graph/badge.svg)](https://codecov.io/gh/bitbrain/braingdx)
 [![license](https://img.shields.io/github/license/bitbrain/braingdx.svg)](LICENSE.MD)
 
 **:space_invader: [Features](#features) |**
@@ -24,7 +25,7 @@ In Java world, we game developers already have [libgdx](https://libgdx.badlogicg
 This framework provides:
 
 * **Scene transitions** how to switch between screens by applying different and custom animations
-* **Tweening pipeline** Using [Universal Tween Engine](https://github.com/AurelienRibon/universal-tween-engine) to make the most of animations in a few lines. 
+* **Tweening pipeline** Using [Universal Tween Engine](https://github.com/AurelienRibon/universal-tween-engine) to make the most of animations in a few lines.
 * **World rendering pipeline** no more custom Java classes for game entities. *brainGDX* offers a way to add objects to a game world, handle physics, collision detection and updating out of the box.
 * **Lighting** brainGDX comes with [Box2DLights](https://github.com/libgdx/box2dlights) under the hood. Apply and configure dynamic lighting even for your entities.
 * **Particles** a game is no game without proper particles. brainGDX comes with full particle support. Attach particles to entities, apply behaviors to particles or define particle fields and effects out of the box.
@@ -40,32 +41,24 @@ This framework provides:
 ## Maven
 
 ```xml
-<!-- add repository under <repositories></repositories> -->
-<repository>
-   <id>k40s</id>
-   <name>k40s custom nexus</name>
-   <url>https://nexus.k40s.net/repository/maven-public</url>
-</repository>
 <!-- add dependency under <dependencies></dependencies> -->
 <dependency>
-   <artifactId>braingdx-core</artifactId>
-   <groupId>de.bitbrain.braingdx</groupId>
-   <version>0.2.10</version>
+    <groupId>io.github.bitbrain</groupId>
+    <artifactId>braingdx-core</artifactId>
+    <version>$braingdxVersion</version>
 </dependency>
 ```
 ## Gradle
 
-Add the repository to your `build.gradle` file:
-```text
-maven { url 'https://nexus.k40s.net/repository/maven-public' }
-```
-Afterwards add the following to your `core` module:
+Add the following to your `build.gradle` file to your `core` module:
 ```gradle
-compile 'de.bitbrain.braingdx:braingdx-core:0.2.10'
-compile 'de.bitbrain.braingdx:braingdx-core:0.2.10:sources'
-compile 'de.bitbrain.braingdx:braingdx-core:0.2.10:javadoc'
+compile 'io.github.bitbrain:braingdx-core:$braingdxVersion'
+compile 'io.github.bitbrain:braingdx-core:$braingdxVersion:sources'
+compile 'io.github.bitbrain:braingdx-core:$braingdxVersion:javadoc'
 ```
-After that you are ready to go! Learn [here](https://github.com/bitbrain/braingdx/wiki) how to integrate **braingdx** into your **libgdx** game!
+Replace `$brainGdxVersion` with the version on Maven Central.
+After that you are ready to go!
+Learn [here](https://github.com/bitbrain/braingdx/wiki) how to integrate **braingdx** into your **libgdx** game!
 
 # Collaboration
 
