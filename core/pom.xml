@@ -12,12 +12,4 @@
    <artifactId>braingdx-core</artifactId>
    <name>BrainGDX Core</name>
    <description>Core project of BrainGDX</description>
-
-   <dependencies>
-      <dependency>
-         <groupId>com.badlogicgames.box2dlights</groupId>
-         <artifactId>box2dlights</artifactId>
-         <version>${box2dlights.version}</version>
-      </dependency>
-   </dependencies>
 </project>
