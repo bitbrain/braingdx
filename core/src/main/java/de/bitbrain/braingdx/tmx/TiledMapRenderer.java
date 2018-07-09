@@ -19,7 +19,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 
 public class TiledMapRenderer implements RenderLayer {

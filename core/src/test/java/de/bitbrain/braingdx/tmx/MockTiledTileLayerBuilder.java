@@ -1,11 +1,10 @@
 package de.bitbrain.braingdx.tmx;
 
-import org.mockito.Mockito;
-
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import org.mockito.Mockito;
 
 public class MockTiledTileLayerBuilder {
 

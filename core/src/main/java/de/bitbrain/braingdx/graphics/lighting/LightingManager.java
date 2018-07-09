@@ -14,19 +14,14 @@
  */
 package de.bitbrain.braingdx.graphics.lighting;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import box2dLight.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
-import box2dLight.ChainLight;
-import box2dLight.ConeLight;
-import box2dLight.DirectionalLight;
-import box2dLight.PointLight;
-import box2dLight.RayHandler;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Manages box2d lights internally and stores them in memory.

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
 import de.bitbrain.braingdx.graphics.pipeline.AbstractRenderLayer;
 
 public class ColorRenderLayer extends AbstractRenderLayer {

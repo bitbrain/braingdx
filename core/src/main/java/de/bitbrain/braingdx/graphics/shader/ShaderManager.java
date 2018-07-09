@@ -15,14 +15,13 @@
 
 package de.bitbrain.braingdx.graphics.shader;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-
 import de.bitbrain.braingdx.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Manages GLSL shaders internally

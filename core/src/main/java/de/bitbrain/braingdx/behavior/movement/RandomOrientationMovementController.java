@@ -15,9 +15,9 @@
 
 package de.bitbrain.braingdx.behavior.movement;
 
-import java.util.Random;
-
 import de.bitbrain.braingdx.util.DeltaTimer;
+
+import java.util.Random;
 
 public class RandomOrientationMovementController implements MovementController<Orientation> {
 

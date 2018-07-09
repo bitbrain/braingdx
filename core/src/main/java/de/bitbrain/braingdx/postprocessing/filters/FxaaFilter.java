@@ -16,7 +16,6 @@
 package de.bitbrain.braingdx.postprocessing.filters;
 
 import com.badlogic.gdx.math.Vector2;
-
 import de.bitbrain.braingdx.util.ShaderLoader;
 
 /**

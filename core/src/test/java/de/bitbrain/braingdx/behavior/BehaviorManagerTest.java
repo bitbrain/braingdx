@@ -1,19 +1,17 @@
 package de.bitbrain.braingdx.behavior;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import de.bitbrain.braingdx.world.GameObject;
+import de.bitbrain.braingdx.world.GameWorld;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-
 import static org.mockito.Mockito.mock;
-
-import de.bitbrain.braingdx.world.GameObject;
-import de.bitbrain.braingdx.world.GameWorld;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BehaviorManagerTest {

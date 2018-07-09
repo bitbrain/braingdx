@@ -14,13 +14,12 @@
  */
 package de.bitbrain.braingdx.graphics.pipeline;
 
-import java.util.Collection;
-
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
-
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.util.Resizeable;
+
+import java.util.Collection;
 
 /**
  * Handles the complete pipeline of rendering internally. The pipeline consists of render pipes.

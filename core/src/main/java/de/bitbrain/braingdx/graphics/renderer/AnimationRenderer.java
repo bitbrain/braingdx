@@ -17,7 +17,6 @@ package de.bitbrain.braingdx.graphics.renderer;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.graphics.animation.Animation;
 import de.bitbrain.braingdx.graphics.animation.AnimationSupplier;

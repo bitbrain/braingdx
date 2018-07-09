@@ -15,9 +15,8 @@
 
 package de.bitbrain.braingdx.tweens;
 
-import com.badlogic.gdx.math.Vector2;
-
 import aurelienribon.tweenengine.TweenAccessor;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Tween facility for vectors

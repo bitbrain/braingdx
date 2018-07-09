@@ -1,20 +1,15 @@
 package de.bitbrain.braingdx.audio;
 
-import static org.junit.Assert.*;
-
-import org.junit.Before;
+import aurelienribon.tweenengine.TweenManager;
+import com.badlogic.gdx.assets.AssetManager;
+import de.bitbrain.braingdx.behavior.BehaviorManager;
+import de.bitbrain.braingdx.graphics.GameCamera;
+import de.bitbrain.braingdx.world.GameWorld;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import com.badlogic.gdx.assets.AssetManager;
-
-import aurelienribon.tweenengine.TweenManager;
-import de.bitbrain.braingdx.behavior.BehaviorManager;
-import de.bitbrain.braingdx.graphics.GameCamera;
-import de.bitbrain.braingdx.world.GameWorld;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AudioManagerTest {

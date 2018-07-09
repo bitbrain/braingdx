@@ -19,7 +19,6 @@ package de.bitbrain.braingdx.postprocessing.effects;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
-
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.postprocessing.filters.CameraBlur;
 

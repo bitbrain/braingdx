@@ -1,7 +1,6 @@
 package de.bitbrain.braingdx.graphics;
 
 import com.badlogic.gdx.graphics.Camera;
-
 import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.world.GameObject;
 

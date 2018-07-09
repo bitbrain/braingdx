@@ -1,13 +1,9 @@
 package de.bitbrain.braingdx.event;
 
-import java.util.Collection;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import org.apache.commons.collections.MultiMap;
+import com.badlogic.gdx.Gdx;
 import org.apache.commons.collections.map.MultiValueMap;
 
-import com.badlogic.gdx.Gdx;
+import java.util.Collection;
 
 /**
  * @since 0.2.0

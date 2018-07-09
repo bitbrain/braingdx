@@ -17,9 +17,7 @@ package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
-import de.bitbrain.braingdx.tmx.State.CellState;
 
 /**
  * Provides renderers for map layers.

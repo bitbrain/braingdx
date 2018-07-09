@@ -15,21 +15,20 @@
 
 package de.bitbrain.braingdx.tmx;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import de.bitbrain.braingdx.ai.pathfinding.AStarPathFinder;
 import de.bitbrain.braingdx.ai.pathfinding.PathFinder;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.SimpleWorldBounds;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Implementation of {@link TiledMapManager}.

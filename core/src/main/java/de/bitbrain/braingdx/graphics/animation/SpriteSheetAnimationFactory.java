@@ -15,10 +15,10 @@
 
 package de.bitbrain.braingdx.graphics.animation;
 
-import java.util.Map;
-
 import de.bitbrain.braingdx.graphics.animation.SpriteSheetAnimation.Direction;
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
+
+import java.util.Map;
 
 /**
  * Creates {@link SpriteSheetAnimation} objects.

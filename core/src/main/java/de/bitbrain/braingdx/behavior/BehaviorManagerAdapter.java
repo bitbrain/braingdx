@@ -1,7 +1,5 @@
 package de.bitbrain.braingdx.behavior;
 
-import com.badlogic.gdx.Gdx;
-
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld.GameWorldListener;
 

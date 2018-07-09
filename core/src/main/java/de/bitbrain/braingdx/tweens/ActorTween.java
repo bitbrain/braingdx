@@ -15,10 +15,9 @@
 
 package de.bitbrain.braingdx.tweens;
 
+import aurelienribon.tweenengine.TweenAccessor;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
-import aurelienribon.tweenengine.TweenAccessor;
 
 /**
  * Tween facility for actors

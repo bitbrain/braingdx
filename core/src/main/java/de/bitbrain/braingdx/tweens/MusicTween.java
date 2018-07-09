@@ -15,9 +15,8 @@
 
 package de.bitbrain.braingdx.tweens;
 
-import com.badlogic.gdx.audio.Music;
-
 import aurelienribon.tweenengine.TweenAccessor;
+import com.badlogic.gdx.audio.Music;
 
 public class MusicTween implements TweenAccessor<Music> {
 

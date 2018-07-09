@@ -15,15 +15,14 @@
 
 package de.bitbrain.braingdx.tmx;
 
-import java.util.List;
-
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
-
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.world.GameObject;
+
+import java.util.List;
 
 /**
  * This component updates game objects which are part of the tiledmap lifecycle.

@@ -1,17 +1,13 @@
 package de.bitbrain.braingdx.graphics.pipeline;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import org.mockito.Mockito;
-
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.postprocessing.PostProcessor;
-import de.bitbrain.braingdx.util.ViewportFactory;
+import org.mockito.Mockito;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MockedLayeredRenderPipelineFactory implements RenderPipelineFactory {
 

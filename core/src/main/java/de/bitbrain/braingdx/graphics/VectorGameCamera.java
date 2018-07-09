@@ -15,17 +15,15 @@
 
 package de.bitbrain.braingdx.graphics;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-
-import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.GameWorld.WorldBounds;
+
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 /**
  * Using underlying vectors to calculate the camera tracking.

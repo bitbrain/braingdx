@@ -2,7 +2,6 @@
 package de.bitbrain.braingdx.postprocessing.filters;
 
 import com.badlogic.gdx.graphics.Texture;
-
 import de.bitbrain.braingdx.util.ShaderLoader;
 
 /**

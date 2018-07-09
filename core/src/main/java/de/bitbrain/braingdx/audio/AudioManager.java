@@ -2,7 +2,6 @@ package de.bitbrain.braingdx.audio;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;

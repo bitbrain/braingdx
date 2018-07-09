@@ -15,9 +15,8 @@
 
 package de.bitbrain.braingdx.tweens;
 
-import com.badlogic.gdx.graphics.Color;
-
 import aurelienribon.tweenengine.TweenAccessor;
+import com.badlogic.gdx.graphics.Color;
 
 public class ColorTween implements TweenAccessor<Color> {
 

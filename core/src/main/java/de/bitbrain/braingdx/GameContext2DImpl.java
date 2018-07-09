@@ -15,6 +15,8 @@
 
 package de.bitbrain.braingdx;
 
+import aurelienribon.tweenengine.TweenManager;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,9 +27,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import aurelienribon.tweenengine.TweenManager;
-import box2dLight.RayHandler;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.audio.AudioManagerImpl;

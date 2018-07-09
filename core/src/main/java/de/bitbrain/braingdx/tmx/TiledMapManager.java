@@ -18,7 +18,6 @@ package de.bitbrain.braingdx.tmx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Disposable;
-
 import de.bitbrain.braingdx.ai.pathfinding.PathFinder;
 
 /**

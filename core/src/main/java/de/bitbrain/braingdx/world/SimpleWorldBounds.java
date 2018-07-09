@@ -2,7 +2,6 @@ package de.bitbrain.braingdx.world;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
-
 import de.bitbrain.braingdx.world.GameWorld.WorldBounds;
 
 public class SimpleWorldBounds implements WorldBounds {

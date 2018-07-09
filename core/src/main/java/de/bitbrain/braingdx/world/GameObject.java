@@ -15,14 +15,14 @@
 
 package de.bitbrain.braingdx.world;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Simple game object implementation which can be pooled

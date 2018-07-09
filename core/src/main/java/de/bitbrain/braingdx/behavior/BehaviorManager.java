@@ -15,19 +15,11 @@
 
 package de.bitbrain.braingdx.behavior;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import com.badlogic.gdx.Gdx;
-
-import java.util.Set;
-
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Manages behavior of game objects.

@@ -1,7 +1,6 @@
 package de.bitbrain.braingdx.graphics.lighting;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 import de.bitbrain.braingdx.util.Resizeable;
 

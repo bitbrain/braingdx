@@ -18,7 +18,6 @@ package de.bitbrain.braingdx.postprocessing.filters;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-
 import de.bitbrain.braingdx.util.ShaderLoader;
 
 public final class Combine extends Filter<Combine> {

@@ -15,10 +15,9 @@
 
 package de.bitbrain.braingdx.graphics.lighting;
 
+import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-
-import box2dLight.PointLight;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.world.GameObject;
 

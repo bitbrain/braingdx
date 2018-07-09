@@ -17,7 +17,6 @@ package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import de.bitbrain.braingdx.behavior.movement.TiledCollisionResolver;
 import de.bitbrain.braingdx.world.GameObject;
 

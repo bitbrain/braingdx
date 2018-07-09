@@ -15,13 +15,12 @@
 
 package de.bitbrain.braingdx.graphics;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
-
 import de.bitbrain.braingdx.world.GameObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Handles rendering of game objects

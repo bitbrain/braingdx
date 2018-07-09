@@ -17,7 +17,6 @@
 package de.bitbrain.braingdx.postprocessing.filters;
 
 import com.badlogic.gdx.utils.IntMap;
-
 import de.bitbrain.braingdx.postprocessing.utils.PingPongBuffer;
 
 public final class Blur extends MultipassFilter {

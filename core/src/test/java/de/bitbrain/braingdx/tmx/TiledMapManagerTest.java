@@ -15,16 +15,16 @@
 
 package de.bitbrain.braingdx.tmx;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.calls;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.mock;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import de.bitbrain.braingdx.behavior.BehaviorManager;
+import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
+import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
+import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
+import de.bitbrain.braingdx.world.GameObject;
+import de.bitbrain.braingdx.world.GameWorld;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,17 +33,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.tiled.TiledMap;
+import java.util.HashMap;
+import java.util.Map;
 
-import de.bitbrain.braingdx.behavior.BehaviorManager;
-import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
-import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
-import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
-import de.bitbrain.braingdx.world.GameObject;
-import de.bitbrain.braingdx.world.GameWorld;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests and verifies the integrity of the {@link TiledMapManager} implementation used within

@@ -15,22 +15,16 @@
 
 package de.bitbrain.braingdx.behavior.movement;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import aurelienribon.tweenengine.BaseTween;
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenCallback;
-import aurelienribon.tweenengine.TweenEquation;
-import aurelienribon.tweenengine.TweenEquations;
-import aurelienribon.tweenengine.TweenManager;
+import aurelienribon.tweenengine.*;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
-import de.bitbrain.braingdx.tmx.IndexCalculator;
 import de.bitbrain.braingdx.tmx.TiledMapAPI;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.util.DeltaTimer;
 import de.bitbrain.braingdx.world.GameObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RasteredMovementBehavior extends BehaviorAdapter implements Movement<Orientation> {
 

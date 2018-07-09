@@ -15,12 +15,12 @@
 
 package de.bitbrain.braingdx.tmx;
 
+import com.badlogic.gdx.maps.MapProperties;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.badlogic.gdx.maps.MapProperties;
 
 /**
  * Internal state for tiled map operations.

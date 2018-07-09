@@ -25,7 +25,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-
 import de.bitbrain.braingdx.postprocessing.utils.PingPongBuffer;
 import de.bitbrain.braingdx.util.ItemsManager;
 

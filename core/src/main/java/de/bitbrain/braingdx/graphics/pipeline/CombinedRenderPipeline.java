@@ -15,13 +15,6 @@
 
 package de.bitbrain.braingdx.graphics.pipeline;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import org.apache.commons.collections.OrderedMap;
-import org.apache.commons.collections.map.ListOrderedMap;
-
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -33,13 +26,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.util.ShaderLoader;
 import de.bitbrain.braingdx.util.ViewportFactory;
+import org.apache.commons.collections.map.ListOrderedMap;
+
+import java.util.Collection;
 
 /**
  * Combined implementation of {@link RenderPipeline}. This pipeline will bake together all layers

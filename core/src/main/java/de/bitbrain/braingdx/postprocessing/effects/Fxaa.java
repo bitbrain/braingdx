@@ -17,7 +17,6 @@
 package de.bitbrain.braingdx.postprocessing.effects;
 
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-
 import de.bitbrain.braingdx.postprocessing.filters.FxaaFilter;
 
 /**

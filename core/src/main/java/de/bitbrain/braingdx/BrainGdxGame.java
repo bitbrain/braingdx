@@ -15,36 +15,22 @@
 
 package de.bitbrain.braingdx;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import aurelienribon.tweenengine.Tween;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-
-import aurelienribon.tweenengine.Tween;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
-import de.bitbrain.braingdx.postprocessing.effects.Bloom;
-import de.bitbrain.braingdx.postprocessing.effects.CrtMonitor;
-import de.bitbrain.braingdx.postprocessing.effects.MotionBlur;
-import de.bitbrain.braingdx.postprocessing.effects.Vignette;
-import de.bitbrain.braingdx.postprocessing.effects.Zoomer;
+import de.bitbrain.braingdx.postprocessing.effects.*;
 import de.bitbrain.braingdx.screens.AbstractScreen;
-import de.bitbrain.braingdx.tweens.ActorTween;
-import de.bitbrain.braingdx.tweens.BloomShaderTween;
-import de.bitbrain.braingdx.tweens.ColorTween;
-import de.bitbrain.braingdx.tweens.CrtMonitorShaderTween;
-import de.bitbrain.braingdx.tweens.GameObjectTween;
-import de.bitbrain.braingdx.tweens.MotionBlurShaderTween;
-import de.bitbrain.braingdx.tweens.SpriteTween;
-import de.bitbrain.braingdx.tweens.VectorTween;
-import de.bitbrain.braingdx.tweens.VignetteShaderTween;
-import de.bitbrain.braingdx.tweens.ZoomerShaderTween;
+import de.bitbrain.braingdx.tweens.*;
 import de.bitbrain.braingdx.world.GameObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Base implementation of a brainGdx driven game

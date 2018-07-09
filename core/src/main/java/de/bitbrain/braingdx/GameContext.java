@@ -15,11 +15,10 @@
 
 package de.bitbrain.braingdx;
 
+import aurelienribon.tweenengine.TweenManager;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
-import aurelienribon.tweenengine.TweenManager;
 import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.event.GameEventManager;

@@ -15,18 +15,16 @@
 
 package de.bitbrain.braingdx.assets;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+import de.bitbrain.braingdx.assets.SmartAssetLoader.SmartAssetLoaderConfiguration;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
-
-import de.bitbrain.braingdx.assets.SmartAssetLoader.SmartAssetLoaderConfiguration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Test for {@link SmartAssetLoader}.

@@ -15,9 +15,8 @@
 
 package de.bitbrain.braingdx.tweens;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-
 import aurelienribon.tweenengine.TweenAccessor;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
  * Tween facility for sprites

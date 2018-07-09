@@ -18,7 +18,6 @@ package de.bitbrain.braingdx.postprocessing.effects;
 
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector2;
-
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.postprocessing.filters.RadialBlur;
 import de.bitbrain.braingdx.postprocessing.filters.Zoom;

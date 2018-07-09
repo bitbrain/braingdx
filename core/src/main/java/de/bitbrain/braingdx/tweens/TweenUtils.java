@@ -15,12 +15,11 @@
 
 package de.bitbrain.braingdx.tweens;
 
-import com.badlogic.gdx.graphics.Color;
-
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquation;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
+import com.badlogic.gdx.graphics.Color;
 
 /**
  * Provides animation utilities

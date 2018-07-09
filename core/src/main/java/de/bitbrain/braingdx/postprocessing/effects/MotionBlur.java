@@ -3,7 +3,6 @@ package de.bitbrain.braingdx.postprocessing.effects;
 
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.postprocessing.filters.Copy;
 import de.bitbrain.braingdx.postprocessing.filters.MotionFilter;

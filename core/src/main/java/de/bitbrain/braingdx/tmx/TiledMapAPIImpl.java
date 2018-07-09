@@ -16,7 +16,6 @@
 package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.maps.MapProperties;
-
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 

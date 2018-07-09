@@ -1,13 +1,13 @@
 package de.bitbrain.braingdx.ai.pathfinding;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import de.bitbrain.braingdx.ai.pathfinding.heuristics.AStarHeuristic;
 import de.bitbrain.braingdx.ai.pathfinding.heuristics.ClosestHeuristic;
 import de.bitbrain.braingdx.tmx.IndexCalculator;
 import de.bitbrain.braingdx.tmx.TiledMapAPI;
 import de.bitbrain.braingdx.world.GameObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A path finder implementation that uses the AStar heuristic based algorithm to

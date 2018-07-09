@@ -15,12 +15,11 @@
 
 package de.bitbrain.braingdx.tmx;
 
-import static org.mockito.Mockito.mock;
-
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
+
+import static org.mockito.Mockito.mock;
 
 public class MockMapLayerRendererFactory implements MapLayerRendererFactory {
 

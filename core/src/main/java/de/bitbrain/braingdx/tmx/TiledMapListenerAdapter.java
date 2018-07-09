@@ -16,7 +16,6 @@
 package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import de.bitbrain.braingdx.world.GameObject;
 
 /**

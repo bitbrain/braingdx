@@ -1,7 +1,6 @@
 package de.bitbrain.braingdx.behavior.movement;
 
 import com.badlogic.gdx.math.Vector2;
-
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.world.GameObject;
 

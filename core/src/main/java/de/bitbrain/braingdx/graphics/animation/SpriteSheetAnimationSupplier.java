@@ -15,14 +15,14 @@
 
 package de.bitbrain.braingdx.graphics.animation;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.behavior.movement.Movement;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
 import de.bitbrain.braingdx.graphics.animation.types.AnimationTypes;
 import de.bitbrain.braingdx.world.GameObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Orientation based implementation of {@link Animator}

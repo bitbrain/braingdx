@@ -15,22 +15,13 @@
 
 package de.bitbrain.braingdx.world;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.Pool;
-
 import de.bitbrain.braingdx.util.Mutator;
 import de.bitbrain.braingdx.util.ZIndexComparator;
+
+import java.util.*;
 
 /**
  * Game world which contains all game objects and managed them.
