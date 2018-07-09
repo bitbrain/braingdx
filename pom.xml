@@ -128,11 +128,11 @@
 			<version>${libgdx.version}</version>
 			<optional>true</optional>
 		</dependency>
-	    <dependency>
-	        <groupId>aurelienribon.tweenengine</groupId>
-	        <artifactId>universal-tween-engine</artifactId>
-	        <version>${tween.version}</version>
-	    </dependency>
+		<dependency>
+			<groupId>org.mini2Dx</groupId>
+			<artifactId>universal-tween-engine</artifactId>
+			<version>${tween.version}</version>
+		</dependency>
 
 	    <dependency>
 		  <groupId>com.badlogicgames.box2dlights</groupId>

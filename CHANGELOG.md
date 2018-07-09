@@ -1,3 +1,7 @@
+# Version 0.2.11
+
+* [[#123](https://github.com/bitbrain/braingdx/issues/123)] introduce Maven Central only-dependencies
+
 # Version 0.2.10
 
 * [[#113](https://github.com/bitbrain/braingdx/issues/113)] implement advanced collision detection for larger object
