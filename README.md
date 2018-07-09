@@ -14,6 +14,8 @@
 **:pencil: [Changelog](CHANGELOG.md)**
 
 ---
+# DISCLAIMER! WIKI IS NOT UP-TO-DATE YET!
+
 # Motivation
 
 > Another game development framework? Really?
