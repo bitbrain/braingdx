@@ -8,7 +8,7 @@ git config --global user.name "travis-ci"
 git clone --quiet --branch=master https://${GITHUB_TOKEN}@github.com/bitbrain/braingdx
 mkdir cd $HOME/docs
 cd $HOME/braingdx
-mvn javadoc:javadoc
+mvn versions:set -DnewVersion=$CH_VERSION && mvn javadoc:javadoc
 cd $HOME/docs
 cp -r $HOME/braingdx/core/target/site/apidocs/* $HOME/docs
 rm -rf $HOME/braingdx/*
