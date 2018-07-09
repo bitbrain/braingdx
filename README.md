@@ -14,8 +14,6 @@
 **:pencil: [Changelog](CHANGELOG.md)**
 
 ---
-# DISCLAIMER! WIKI IS NOT UP-TO-DATE YET!
-
 # Motivation
 
 > Another game development framework? Really?
@@ -33,6 +31,7 @@ This framework provides:
 * **Particles** a game is no game without proper particles. brainGDX comes with full particle support. Attach particles to entities, apply behaviors to particles or define particle fields and effects out of the box.
 * **Parallaxing** beautiful parallax scrolling effects await you in this framework.
 * **Scene shaders** apply different shaders like Bloom, Antialiasing or Vignette effects to your scenes.
+* **3D audio support** apply 3D sound effects and set sound sources in your world. Additionally, apply sound sources to moving game objects, fade in between music etc.
 * **Controller support for components** plug in your controller and go ahead. No more configuration hell!
 * **Actor library (button menu, nameplates, tooltips)** ever wanted to write an RPG or just show little tooltips on the screen? brainGDX provides several UI components for your needs.
 * **Extended Tiled Map support** Ever wanted to write a multi-layered game by using the map editor of your choice? brainGDX provides a framework to render and handle multi-layered 2D maps
