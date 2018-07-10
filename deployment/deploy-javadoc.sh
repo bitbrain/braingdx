@@ -19,12 +19,12 @@ cd $HOME/braingdx
 
 # 3. Checkout Jekyll branch and create new folder with new version
 git checkout gh-pages
-mkdir $HOME/braingdx/docs/$CH_VERSION
+mkdir -p $HOME/braingdx/docs/$CH_VERSION
 cp -r $HOME/docs/* $HOME/braingdx/docs/$CH_VERSION
 
 # 4. Copy also into "latest" docs
 rm -rf $HOME/braingdx/docs/latest
-mkdir $HOME/braingdx/docs/latest
+mkdir -p $HOME/braingdx/docs/latest
 cp -r $HOME/docs/* $HOME/braingdx/docs/latest
 
 # Add everything and push!
