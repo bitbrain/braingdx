@@ -18,7 +18,7 @@ cache:
 
 branches:
   only:
-  - deploy
+  - master
 
 env:
   global:
@@ -27,15 +27,18 @@ env:
 before_install:
   - export CH_VERSION=$(docker run -v $(pwd):/chime bitbrain/chime:latest CHANGELOG.md version)
   - export CH_TEXT=$(docker run -v $(pwd):/chime bitbrain/chime:latest CHANGELOG.md text)
+  - export LATEST_TAG=$(git describe --abbrev=0 --tags)
   - mvn versions:set -DnewVersion=$CH_VERSION
   - chmod +x deployment/before-deploy.sh
   - chmod +x deployment/deploy.sh
-  - chmod +x deployment/deploy-javadoc.sh
+  - chmod +x deployment/after-deploy.sh
+  - chmod +x deployment/github-javadoc.sh
+  - chmod +x deployment/github-release.sh
   - ./deployment/before-deploy.sh
 
 install:
   - ./deployment/deploy.sh
 
 after_success:
-  - ./deployment/deploy-javadoc.sh
+  - ./deployment/after-deploy.sh
   - bash <(curl -s https://codecov.io/bash)

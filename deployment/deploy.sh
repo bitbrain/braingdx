@@ -1,8 +1,10 @@
 #!/bin/bash
 
-if [ "$TRAVIS_BRANCH" = 'deploy' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
+if [ "$LATEST_TAG" != "$CH_VERSION" ]; then
 mvn deploy \
     -Psign \
-    -DskipTests \
     --settings deployment/settings.xml
+else
+echo "Skipping release! $LATEST_TAG already released to Nexus! Running tests..."
+mvn clean test
 fi
