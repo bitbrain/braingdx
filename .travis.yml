@@ -32,8 +32,6 @@ before_install:
   - chmod +x deployment/before-deploy.sh
   - chmod +x deployment/deploy.sh
   - chmod +x deployment/after-deploy.sh
-  - chmod +x deployment/github-javadoc.sh
-  - chmod +x deployment/github-release.sh
   - ./deployment/before-deploy.sh
 
 install:

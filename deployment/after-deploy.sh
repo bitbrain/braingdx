@@ -24,7 +24,7 @@ curl -X POST \
 
 mkdir cd $HOME/docs
 cd $HOME/braingdx
-mvn versions:set -DnewVersion=$CH_VERSION && mvn javadoc:javadoc
+mvn versions:set -DskipTests -DnewVersion=$CH_VERSION -T4 && mvn javadoc:javadoc -DskipTests -T4
 cd $HOME/docs
 cp -r $HOME/braingdx/core/target/site/apidocs/* $HOME/docs
 rm -rf $HOME/braingdx/*
