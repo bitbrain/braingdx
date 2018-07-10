@@ -7,8 +7,8 @@ fi
 
 # 1. Download freshly from Github
 cd $HOME
-git config --global user.email "jarvisdeploybot@gmail.com"
-git config --global user.name "Jarvis"
+git config --global user.email "sirlancelbot@gmail.com"
+git config --global user.name "Sir Lancelbot"
 git clone --quiet --branch=master https://${GITHUB_TOKEN}@github.com/bitbrain/braingdx
 
 curl -X POST \
