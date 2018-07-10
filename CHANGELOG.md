@@ -1,3 +1,7 @@
+# Unreleased
+
+* [[#124](https://github.com/bitbrain/braingdx/issues/124)] introduce new deployment flow
+
 # Version 0.2.11
 
 * [[#123](https://github.com/bitbrain/braingdx/issues/123)] introduce Maven Central only-dependencies
