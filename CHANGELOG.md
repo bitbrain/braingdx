@@ -1,4 +1,4 @@
-# Unreleased
+# Version 0.2.11.1
 
 * [[#124](https://github.com/bitbrain/braingdx/issues/124)] introduce new deployment flow
 
