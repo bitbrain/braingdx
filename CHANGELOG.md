@@ -1,4 +1,4 @@
-# Unreleased
+# Version 0.2.12
 
 * [[#118](https://github.com/bitbrain/braingdx/issues/118)] replace listeners with TiledMap events
 * do not log an error message when no event listeners are defined for a published event
