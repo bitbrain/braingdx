@@ -13,7 +13,7 @@
    <name>BrainGDX Demo Desktop</name>
 
    <properties>
-      <mainClass>de.bitbrain.braingdx.java.BrainGdxAppDesktop</mainClass>
+      <mainClass>de.bitbrain.braingdx.demo.SimpleApp</mainClass>
    </properties>
 
    <dependencies>
