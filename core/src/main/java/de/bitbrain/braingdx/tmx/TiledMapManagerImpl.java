@@ -21,6 +21,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.ai.pathfinding.AStarPathFinder;
 import de.bitbrain.braingdx.ai.pathfinding.PathFinder;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
+import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.SimpleWorldBounds;
@@ -41,7 +42,6 @@ public class TiledMapManagerImpl implements TiledMapManager {
 
    private final BehaviorManager behaviorManager;
    private final GameWorld gameWorld;
-   private final List<TiledMapListener> listeners = new ArrayList<TiledMapListener>();
    private final GameObjectRenderManager renderManager;
    private final TiledMapAPIImpl api;
    private final GameObjectUpdater gameObjectUpdater;
@@ -49,23 +49,20 @@ public class TiledMapManagerImpl implements TiledMapManager {
    private final StatePopulator populator;
    private final Map<TiledMapType, MapLayerRendererFactory> factories;
    private final AStarPathFinder pathFinder;
+   private final GameEventManager gameEventManager;
 
    public TiledMapManagerImpl(BehaviorManager behaviorManager, GameWorld gameWorld,
-         GameObjectRenderManager renderManager) {
+                              GameObjectRenderManager renderManager, GameEventManager gameEventManager) {
+      this.gameEventManager = gameEventManager;
       this.behaviorManager = behaviorManager;
       this.gameWorld = gameWorld;
       this.renderManager = renderManager;
       this.state = new State();
       this.api = new TiledMapAPIImpl(state, gameWorld);
-      this.populator = new StatePopulator(renderManager, gameWorld, api, behaviorManager, listeners);
-      this.gameObjectUpdater = new GameObjectUpdater(api, state, listeners);
+      this.populator = new StatePopulator(renderManager, gameWorld, api, behaviorManager, gameEventManager);
+      this.gameObjectUpdater = new GameObjectUpdater(api, state, gameEventManager);
       this.factories = createFactories();
       this.pathFinder = new AStarPathFinder(api, 100, false);
-   }
-
-   @Override
-   public void addListener(TiledMapListener listener) {
-      listeners.add(listener);
    }
 
    @Override
@@ -73,15 +70,11 @@ public class TiledMapManagerImpl implements TiledMapManager {
          throws TiledMapException {
       clear();
       validate(tiledMap);
-      for (TiledMapListener listener : listeners) {
-         listener.beforeLoad(tiledMap);
-      }
+      gameEventManager.publish(new TiledMapEvents.BeforeLoadEvent(tiledMap));
       behaviorManager.apply(gameObjectUpdater);
       populator.populate(tiledMap, state, camera, factories.get(type), config);
       gameWorld.setBounds(new SimpleWorldBounds(api.getWorldWidth(), api.getWorldHeight()));
-      for (TiledMapListener listener : listeners) {
-         listener.afterLoad(tiledMap, api);
-      }
+      gameEventManager.publish(new TiledMapEvents.AfterLoadEvent(tiledMap, api));
       pathFinder.refresh();
    }
 
@@ -101,18 +94,14 @@ public class TiledMapManagerImpl implements TiledMapManager {
    }
 
    private void clear() {
-      for (TiledMapListener listener : listeners) {
-         listener.beforeUnload(api);
-      }
+      gameEventManager.publish(new TiledMapEvents.BeforeUnloadEvent(api));
       behaviorManager.remove(gameObjectUpdater);
       gameWorld.clear();
       for (String id : state.getLayerIds()) {
          renderManager.unregister(id);
       }
       state.clear();
-      for (TiledMapListener listener : listeners) {
-         listener.afterUnload();
-      }
+      gameEventManager.publish(new TiledMapEvents.AfterUnloadEvent());
    }
 
    protected Map<TiledMapType, MapLayerRendererFactory> createFactories() {

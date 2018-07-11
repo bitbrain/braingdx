@@ -20,6 +20,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
+import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.world.GameObject;
 
 import java.util.List;
@@ -39,12 +40,12 @@ class GameObjectUpdater extends BehaviorAdapter {
 
    private final Vector2 currentPosition = new Vector2();
 
-   private final List<TiledMapListener> listeners;
+   private final GameEventManager gameEventManager;
 
-   public GameObjectUpdater(TiledMapAPI api, State state, List<TiledMapListener> listeners) {
+   public GameObjectUpdater(TiledMapAPI api, State state, GameEventManager gameEventManager) {
       this.api = api;
       this.state = state;
-      this.listeners = listeners;
+      this.gameEventManager = gameEventManager;
    }
 
    @Override
@@ -117,16 +118,15 @@ class GameObjectUpdater extends BehaviorAdapter {
             }
          }
       }
-      for (TiledMapListener listener : listeners) {
-         if (lastLayerIndex != currentLayerIndex) {
-            Gdx.app.debug("TiledMapAPI", "Tiled map layer change of " + object + " from " + lastLayerIndex + " -> " + currentLayerIndex);
-            listener.onLayerChange(lastLayerIndex, currentLayerIndex, object, api);
-         }
-         if (!currentPosition.equals(lastPosition)) {
-            int xIndex = IndexCalculator.calculateIndex(currentPosition.x, api.getCellWidth());
-            int yIndex = IndexCalculator.calculateIndex(currentPosition.y, api.getCellHeight());
-            listener.onEnterCell(xIndex, yIndex, object, api);
-         }
+      if (lastLayerIndex != currentLayerIndex) {
+         Gdx.app.debug("TiledMapAPI", "Tiled map layer change of " + object + " from " + lastLayerIndex + " -> " + currentLayerIndex);
+         gameEventManager.publish(new TiledMapEvents.OnLayerChangeEvent(lastLayerIndex, currentLayerIndex, object, api));
+
+      }
+      if (!currentPosition.equals(lastPosition)) {
+         int xIndex = IndexCalculator.calculateIndex(currentPosition.x, api.getCellWidth());
+         int yIndex = IndexCalculator.calculateIndex(currentPosition.y, api.getCellHeight());
+         gameEventManager.publish(new TiledMapEvents.OnEnterCellEvent(xIndex, yIndex, object, api));
       }
    }
 

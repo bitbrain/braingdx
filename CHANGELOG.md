@@ -1,3 +1,7 @@
+# Unreleased
+
+* [[#118](https://github.com/bitbrain/braingdx/issues/118)] replace listeners with TiledMap events
+
 # Version 0.2.11.2
 
 * introduce **box2dlights** 1.5-SNAPSHOT

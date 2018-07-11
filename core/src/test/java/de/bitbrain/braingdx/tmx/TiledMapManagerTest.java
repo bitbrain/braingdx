@@ -21,6 +21,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
+import de.bitbrain.braingdx.event.GameEventListener;
+import de.bitbrain.braingdx.event.GameEventManager;
+import de.bitbrain.braingdx.event.GameEventManagerImpl;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.world.GameObject;
@@ -29,15 +32,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -60,15 +66,18 @@ public class TiledMapManagerTest {
 
    private TiledMapManager tiledMapManager;
 
+   private GameEventManager gameEventManager;
+
    private GameWorld world;
 
    @Before
    public void beforeTest() {
       world = new GameWorld(camera);
+      gameEventManager = new GameEventManagerImpl();
       Gdx.app = mock(Application.class);
       BehaviorManager behaviorManager = new BehaviorManager(world);
       world.addListener(new BehaviorManagerAdapter(behaviorManager));
-      tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager) {
+      tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager, gameEventManager) {
          @Override
          protected Map<TiledMapType, MapLayerRendererFactory> createFactories() {
             Map<TiledMapType, MapLayerRendererFactory> mockMap = new HashMap<TiledMapType, MapLayerRendererFactory>();
@@ -148,22 +157,33 @@ public class TiledMapManagerTest {
    @Test
    public void load_withMapObjectsValidAPI() throws TiledMapException {
       final String type = "game_object";
-      TiledMapListener listenerMock = mock(TiledMapListener.class);
-      ArgumentCaptor<GameObject> gameObjectCaptor = ArgumentCaptor.forClass(GameObject.class);
-      ArgumentCaptor<TiledMapAPI> apiCaptor = ArgumentCaptor.forClass(TiledMapAPI.class);
-      Mockito.doNothing().when(listenerMock).onLoadGameObject(gameObjectCaptor.capture(), apiCaptor.capture());
+      final AtomicBoolean failed = new AtomicBoolean(true);
+      final AtomicBoolean firstObject = new AtomicBoolean(true);
+      gameEventManager.register(new GameEventListener<TiledMapEvents.OnLoadGameObjectEvent>() {
+         @Override
+         public void onEvent(TiledMapEvents.OnLoadGameObjectEvent event) {
+            if (firstObject.get()) {
+               assertThat(event.getTiledMapAPI().getNumberOfColumns()).isEqualTo(2);
+               assertThat(event.getTiledMapAPI().getNumberOfRows()).isEqualTo(2);
+               assertThat(event.getTiledMapAPI().highestZIndexAt(0, 0)).isGreaterThan(2);
+               assertThat(event.getTiledMapAPI().isCollision(0, 0, 1)).isFalse();
+               assertThat(event.getTiledMapAPI().isCollision(1, 1, 1)).isFalse();
+               failed.set(false);
+               firstObject.set(false);
+            } else {
+               assertThat(event.getTiledMapAPI().getNumberOfColumns()).isEqualTo(2);
+               assertThat(event.getTiledMapAPI().getNumberOfRows()).isEqualTo(2);
+               assertThat(event.getTiledMapAPI().highestZIndexAt(0, 0)).isGreaterThan(2);
+               assertThat(event.getTiledMapAPI().isCollision(0, 0, 1)).isFalse();
+               assertThat(event.getTiledMapAPI().isCollision(1, 1, 1)).isTrue();
+            }
+         }
+      }, TiledMapEvents.OnLoadGameObjectEvent.class);
       TiledMap map = new MockTiledMapBuilder(2, 2, 1).addLayer().addLayer()
             .addLayer(new MockObjectLayerBuilder().addObject(0, 0, type, false).addObject(1, 1, type).build())
             .addLayer().build();
-      tiledMapManager.addListener(listenerMock);
       tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
-      assertEquals(gameObjectCaptor.getAllValues().size(), 2);
-      assertThat(apiCaptor.getValue()).isNotNull();
-      assertThat(apiCaptor.getValue().getNumberOfColumns()).isEqualTo(2);
-      assertThat(apiCaptor.getValue().getNumberOfRows()).isEqualTo(2);
-      assertThat(apiCaptor.getValue().highestZIndexAt(0, 0)).isGreaterThan(2);
-      assertThat(apiCaptor.getValue().isCollision(0, 0, 1)).isFalse();
-      assertThat(apiCaptor.getValue().isCollision(1, 1, 1)).isTrue();
+      assertFalse(failed.get());
    }
 
    @Test

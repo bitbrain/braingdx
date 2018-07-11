@@ -77,6 +77,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 	private final AudioManager audioManager;
 
 	public GameContext2DImpl(ViewportFactory viewportFactory, ShaderConfig shaderConfig) {
+		eventManager = new GameEventManagerImpl();
 		camera = new OrthographicCamera();
 		world = new GameWorld(camera);
 		behaviorManager = new BehaviorManager(world);
@@ -100,8 +101,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 		      worldStage,//
 		      viewportFactory//
 		).create();
-		tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager);
-		eventManager = new GameEventManagerImpl();
+		tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager, eventManager);
 		audioManager = new AudioManagerImpl(//
 		      gameCamera,//
 		      tweenManager,//

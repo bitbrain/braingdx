@@ -26,6 +26,7 @@ import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.movement.MovementController;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
 import de.bitbrain.braingdx.behavior.movement.RasteredMovementBehavior;
+import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.tmx.State.CellState;
@@ -50,16 +51,16 @@ class StatePopulator {
    private final GameObjectRenderManager renderManager;
    private final GameWorld gameWorld;
    private final TiledMapAPI api;
-   private final List<TiledMapListener> listeners;
    private final BehaviorManager behaviorManager;
+   private final GameEventManager gameEventManager;
 
    public StatePopulator(GameObjectRenderManager renderManager, GameWorld gameWorld, TiledMapAPI api,
-         BehaviorManager behaviorManager, List<TiledMapListener> listeners) {
+         BehaviorManager behaviorManager, GameEventManager gameEventManager) {
       this.renderManager = renderManager;
       this.gameWorld = gameWorld;
       this.api = api;
       this.behaviorManager = behaviorManager;
-      this.listeners = listeners;
+      this.gameEventManager = gameEventManager;
    }
 
    public void populate(TiledMap tiledMap, State state, Camera camera, MapLayerRendererFactory rendererFactory,
@@ -134,9 +135,7 @@ class StatePopulator {
          }
          CollisionCalculator.updateCollision(collision, x, y, layerIndex, state);
          IndexCalculator.calculateZIndex(gameObject, state, layerIndex);
-         for (TiledMapListener listener : listeners) {
-            listener.onLoadGameObject(gameObject, api);
-         }
+         gameEventManager.publish(new TiledMapEvents.OnLoadGameObjectEvent(gameObject, api));
       }
    }
 
