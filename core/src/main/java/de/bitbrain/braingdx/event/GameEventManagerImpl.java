@@ -38,7 +38,7 @@ public class GameEventManagerImpl implements GameEventManager {
             listener.onEvent(event);
          }
       } else {
-         Gdx.app.error("FATAL", "No GameEventListener for event type " + event.getClass() + " registered!");
+         Gdx.app.debug("EVENT", "Not publishing event of type " + event.getClass() + " - no listener registered!");
       }
    }
 
