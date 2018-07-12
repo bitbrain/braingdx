@@ -4,6 +4,9 @@
             <id>ossrh</id>
             <username>${env.OSSRH_USER}</username>
             <password>${env.OSSRH_PASS}</password>
+            <configuration>  
+               <timeout>600000</timeout>
+            </configuration> 
         </server>
     </servers>
     <profiles>
