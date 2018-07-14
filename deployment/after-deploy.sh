@@ -11,18 +11,9 @@ git config --global user.email "sirlancelbot@gmail.com"
 git config --global user.name "Sir Lancelbot"
 git clone --quiet --branch=master https://${GITHUB_TOKEN}@github.com/bitbrain/braingdx
 
-json=$(cat <<EOF
-{\
-  \"tag_name\": \"${CH_VERSION}\",\
-  \"target_commitish\": \"${TRAVIS_BRANCH}\",\
-  \"name\": \"Version ${CH_VERSION}\",\
-  \"body\": \"${CH_TEXT}\",\
-  \"draft\": false,\
-  \"prerelease\": false\
-}
-EOF
-)
-
+json='"tag_name":"'${CH_VERSION}'","target_commitish":"'${TRAVIS_BRANCH}'","name":"Version '${CH_VERSION}'","body":"'${CH_TEXT}'","draft":false,"prerelease":false}'
+# escaping
+json=$(printf '%q' $json)
 echo "Sending JSON: $json"
 
 curl -X POST \
