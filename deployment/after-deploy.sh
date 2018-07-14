@@ -11,23 +11,13 @@ git config --global user.email "sirlancelbot@gmail.com"
 git config --global user.name "Sir Lancelbot"
 git clone --quiet --branch=master https://${GITHUB_TOKEN}@github.com/bitbrain/braingdx
 
-json=$(cat <<EOF
-{\
-  \"tag_name\": \"${CH_VERSION}\",\
-  \"target_commitish\": \"${TRAVIS_BRANCH}\",\
-  \"name\": \"Version ${CH_VERSION}\",\
-  \"body\": \"${CH_TEXT}\",\
-  \"draft\": false,\
-  \"prerelease\": false\
-}
-EOF
-)
-
-echo "Sending JSON: $json"
+# Replacing line endings in body
+body=$(sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' <(echo "$CH_TEXT"))
+json='{"tag_name":"'$CH_VERSION'","target_commitish":"'$TRAVIS_BRANCH'","name":"Version '$CH_VERSION'","body":"'$body'","draft":false,"prerelease":false}'
 
 curl -X POST \
 -u bitbrain:$GITHUB_TOKEN \
--d $json https://api.github.com/repos/bitbrain/braingdx/releases
+-d "$json" https://api.github.com/repos/bitbrain/braingdx/releases
 
 mkdir cd $HOME/docs
 cd $HOME/braingdx
