@@ -12,8 +12,9 @@ git config --global user.name "Sir Lancelbot"
 git clone --quiet --branch=master https://${GITHUB_TOKEN}@github.com/bitbrain/braingdx
 
 # Replacing line endings in body
-body=$(sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' <(echo $CH_TEXT))
-json='"tag_name":"'$CH_VERSION'","target_commitish":"'$TRAVIS_BRANCH'","name":"Version '$CH_VERSION'","body":"'$body'","draft":false,"prerelease":false}'
+#body=$(sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' <(echo $CH_TEXT))
+body=$(printf '%q' $CH_TEXT)
+json='{"tag_name":"'$CH_VERSION'","target_commitish":"'$TRAVIS_BRANCH'","name":"Version '$CH_VERSION'","body":"'$body'","draft":false,"prerelease":false}'
 
 echo "Sending JSON: $json"
 
