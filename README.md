@@ -52,9 +52,9 @@ This framework provides:
 
 Add the following to your `build.gradle` file to your `core` module:
 ```gradle
-compile 'io.github.bitbrain:braingdx-core:$braingdxVersion'
-compile 'io.github.bitbrain:braingdx-core:$braingdxVersion:sources'
-compile 'io.github.bitbrain:braingdx-core:$braingdxVersion:javadoc'
+compile "io.github.bitbrain:braingdx-core:$braingdxVersion"
+compile "io.github.bitbrain:braingdx-core:$braingdxVersion:sources"
+compile "io.github.bitbrain:braingdx-core:$braingdxVersion:javadoc"
 ```
 Replace `$brainGdxVersion` with the version on Maven Central.
 After that you are ready to go!

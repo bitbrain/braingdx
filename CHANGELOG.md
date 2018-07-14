@@ -1,3 +1,7 @@
+# Version 0.2.13
+
+* [[#127](https://github.com/bitbrain/braingdx/issues/127)] fix initial project setup
+
 # Version 0.2.12
 
 * [[#118](https://github.com/bitbrain/braingdx/issues/118)] replace listeners with TiledMap events
