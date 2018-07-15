@@ -37,6 +37,12 @@ This framework provides:
 * **Extended Tiled Map support** Ever wanted to write a multi-layered game by using the map editor of your choice? brainGDX provides a framework to render and handle multi-layered 2D maps
 * **Entity behaviors** brainGDX comes with a various palette of inbuilt entity behaviors, such as flickering torch lights, WASD movement, random movement or directional movement.
 
+## Roadmap
+
+This framework is currently developed by a single person. Pull requests are very welcome! The following roadmap is planned for the first 1.0 release of this framework:
+
+![roadmap](roadmap.svg)
+
 # Installation
 
 ## Maven
