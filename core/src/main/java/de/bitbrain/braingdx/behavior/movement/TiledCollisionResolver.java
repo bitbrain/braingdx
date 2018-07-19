@@ -18,15 +18,63 @@ package de.bitbrain.braingdx.behavior.movement;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
- * Resolves collisions in a Tiled basis.
+ * Resolves collisions on tiled maps.
  */
 public interface TiledCollisionResolver {
 
+   /**
+    * Determines the collision on tiled index and layer.
+    *
+    * @param tileX the horizontal tile index
+    * @param tileY the vertical tile index
+    * @param layer the tile layer
+    */
    boolean isCollision(int tileX, int tileY, int layer);
 
+   /**
+    * Determines the collision on tiled index and layer.
+    *
+    * @param tileX the horizontal tile index
+    * @param tileY the vertical tile index
+    * @param layer the tile layer
+    * @param source the source to ignore the collision on
+    */
    boolean isCollision(int tileX, int tileY, int layer, GameObject source);
 
+   /**
+    * Determines the collision on absolute x and y coordinate
+    *
+    * @param x the world x position
+    * @param y the world y position
+    * @param layer the tiled layer
+    */
    boolean isCollision(float x, float y, int layer);
 
+   /**
+    * Determines if there is an existing collision on the field where the object is,
+    * ignoring the self-collision caused by the object given.
+    *
+    * @param object the object to check
+    */
+   boolean isCollision(GameObject object);
+
+   /**
+    * Determines if there is an existing collision on the world position,
+    * ignoring the collision caused by an object given.
+    *
+    * @param x the world x position
+    * @param y the world y position
+    * @param layer the tiled layer
+    * @param object the object to ignore the collision on
+    */
+   boolean isCollision(float x, float y, int layer, GameObject object);
+
+   /**
+    * Determines the collision of the object with additional horizontal and vertical offset.
+    *
+    * @param object the object to check for
+    * @param tileOffsetX the horizontal offset
+    * @param tileOffsetY the vertical offset
+    */
    boolean isCollision(GameObject object, int tileOffsetX, int tileOffsetY);
 }
