@@ -1,3 +1,7 @@
+# Unreleased
+
+* [[#135](https://github.com/bitbrain/braingdx/issues/135)] Game objects with a collision now have an indexed initial position
+
 # Version 0.2.14
 
 * [[#134](https://github.com/bitbrain/braingdx/issues/134)] extend TiledCollisionResolver

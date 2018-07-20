@@ -116,8 +116,16 @@ class StatePopulator {
          } else if (collisionObject instanceof String) {
             collision = Boolean.valueOf((String)collisionObject);
          }
-         
-         gameObject.setPosition(x, y);
+
+         // issue #135 - correct positions of game objects with a collision
+         if (collision) {
+            gameObject.setPosition(
+               IndexCalculator.calculateIndex(x, state.getCellWidth()) * state.getCellWidth(),
+               IndexCalculator.calculateIndex(y, state.getCellHeight()) * state.getCellHeight()
+            );
+         } else {
+            gameObject.setPosition(x, y);
+         }
          gameObject.setDimensions(IndexCalculator.calculateIndexedDimension(w, cellWidth),
                IndexCalculator.calculateIndexedDimension(h, cellHeight));
          Color color = objectProperties.get(config.get(Constants.COLOR), mapObject.getColor(), Color.class);
