@@ -2,8 +2,8 @@
 -
 :video_game: Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
 
-[![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=deploy)](https://travis-ci.org/bitbrain/braingdx)
-[![mavencentral](https://maven-badges.herokuapp.com/maven-central/io.github.bitbrain/braingdx-core/badge.svg)](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22braingdx-core%22) [![javadoc](https://img.shields.io/badge/javadoc-latest-ff00c0.svg)](http://bitbrain.github.io/braingdx/docs/latest/) [![codecov](https://codecov.io/gh/bitbrain/braingdx/branch/deploy/graph/badge.svg)](https://codecov.io/gh/bitbrain/braingdx)
+[![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=master)](https://travis-ci.org/bitbrain/braingdx)
+[![mavencentral](https://maven-badges.herokuapp.com/maven-central/io.github.bitbrain/braingdx-core/badge.svg)](https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22braingdx-core%22) [![javadoc](https://img.shields.io/badge/javadoc-latest-ff00c0.svg)](http://bitbrain.github.io/braingdx/docs/latest/) [![codecov](https://codecov.io/gh/bitbrain/braingdx/branch/master/graph/badge.svg)](https://codecov.io/gh/bitbrain/braingdx)
 [![license](https://img.shields.io/github/license/bitbrain/braingdx.svg)](LICENSE.MD)
 
 **:space_invader: [Features](#features) |**
