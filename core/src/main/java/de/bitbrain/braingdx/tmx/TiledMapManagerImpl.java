@@ -22,6 +22,7 @@ import de.bitbrain.braingdx.ai.pathfinding.AStarPathFinder;
 import de.bitbrain.braingdx.ai.pathfinding.PathFinder;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.event.GameEventManager;
+import de.bitbrain.braingdx.event.GameEventRouter;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.SimpleWorldBounds;
@@ -50,6 +51,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
    private final Map<TiledMapType, MapLayerRendererFactory> factories;
    private final AStarPathFinder pathFinder;
    private final GameEventManager gameEventManager;
+   private final GameEventRouter router;
 
    public TiledMapManagerImpl(BehaviorManager behaviorManager, GameWorld gameWorld,
                               GameObjectRenderManager renderManager, GameEventManager gameEventManager) {
@@ -58,7 +60,8 @@ public class TiledMapManagerImpl implements TiledMapManager {
       this.gameWorld = gameWorld;
       this.renderManager = renderManager;
       this.state = new State();
-      this.api = new TiledMapAPIImpl(state, gameWorld);
+      this.router = new GameEventRouter(gameEventManager, gameWorld);
+      this.api = new TiledMapAPIImpl(state, gameWorld, router, gameEventManager);
       this.populator = new StatePopulator(renderManager, gameWorld, api, behaviorManager, gameEventManager);
       this.gameObjectUpdater = new GameObjectUpdater(api, state, gameEventManager);
       this.factories = createFactories();
@@ -72,6 +75,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
       validate(tiledMap);
       gameEventManager.publish(new TiledMapEvents.BeforeLoadEvent(tiledMap));
       behaviorManager.apply(gameObjectUpdater);
+      behaviorManager.apply(router);
       populator.populate(tiledMap, state, camera, factories.get(type), config);
       gameWorld.setBounds(new SimpleWorldBounds(api.getWorldWidth(), api.getWorldHeight()));
       gameEventManager.publish(new TiledMapEvents.AfterLoadEvent(tiledMap, api));

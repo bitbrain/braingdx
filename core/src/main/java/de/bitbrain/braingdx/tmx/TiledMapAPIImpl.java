@@ -16,6 +16,11 @@
 package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.maps.MapProperties;
+import de.bitbrain.braingdx.GameContext;
+import de.bitbrain.braingdx.behavior.BehaviorManager;
+import de.bitbrain.braingdx.event.GameEventFactory;
+import de.bitbrain.braingdx.event.GameEventManager;
+import de.bitbrain.braingdx.event.GameEventRouter;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
@@ -29,12 +34,21 @@ import de.bitbrain.braingdx.world.GameWorld;
 class TiledMapAPIImpl implements TiledMapAPI {
 
    private final State state;
+   private final GameEventManager gameEventManager;
    private final GameWorld gameWorld;
    private boolean debug;
+   private final GameEventRouter eventRouter;
 
-   public TiledMapAPIImpl(State state, GameWorld gameWorld) {
+   public TiledMapAPIImpl(State state, GameWorld gameWorld, GameEventRouter router, GameEventManager gameEventManager) {
       this.state = state;
+      this.gameEventManager = gameEventManager;
       this.gameWorld = gameWorld;
+      this.eventRouter = router;
+   }
+
+   @Override
+   public void setEventFactory(GameEventFactory eventFactory) {
+      this.eventRouter.setEventFactory(eventFactory);
    }
 
    @Override

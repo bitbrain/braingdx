@@ -18,6 +18,7 @@ package de.bitbrain.braingdx.tmx;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.behavior.movement.TiledCollisionResolver;
+import de.bitbrain.braingdx.event.GameEventFactory;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -28,6 +29,15 @@ import de.bitbrain.braingdx.world.GameObject;
  * @author Miguel Gonzalez Sanchez
  */
 public interface TiledMapAPI extends TiledCollisionResolver {
+
+   /**
+    * Sets an optional event factory which is utilized to create
+    * game events. A game event is any event matching the criteria
+    * of the event factory.
+    *
+    * @param eventFactory a new event factory. Not defined by default.
+    */
+   void setEventFactory(GameEventFactory eventFactory);
 
    int highestZIndexAt(int tileX, int tileY);
 

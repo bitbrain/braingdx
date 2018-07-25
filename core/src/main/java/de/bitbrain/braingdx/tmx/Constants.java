@@ -34,4 +34,6 @@ interface Constants {
    String LAST_LAYER_INDEX = "tmx_last_layer_index";
    String MOVEMENT = "movement";
    String COLOR = "color";
+   String STICKY = "sticky";
+   String PRODUCER = "producer";
 }

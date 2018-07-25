@@ -21,9 +21,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
-import de.bitbrain.braingdx.event.GameEventListener;
-import de.bitbrain.braingdx.event.GameEventManager;
-import de.bitbrain.braingdx.event.GameEventManagerImpl;
+import de.bitbrain.braingdx.event.*;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.world.GameObject;
@@ -37,9 +35,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -57,6 +57,10 @@ import static org.mockito.Mockito.*;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class TiledMapManagerTest {
+
+   private class TestEvent implements GameEvent {
+
+   }
 
    @Mock
    private GameObjectRenderManager renderManager;
@@ -273,6 +277,126 @@ public class TiledMapManagerTest {
       tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
       final GameObject objectA = api.getGameObjectAt(0, 1, 0);
       api.setLayerIndex(objectA, 2);
+   }
+
+   @Test
+   public void load_withSimple3x3Map_publishCustomEventOnCollision() throws TiledMapException {
+      TiledMap map = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "event").addObject(1, 1, "player").build())
+            .build();
+
+      final TiledMapAPI api = tiledMapManager.getAPI();
+      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      final AtomicBoolean called = new AtomicBoolean();
+      final GameEventListener<TestEvent> gameEventEventListener = new GameEventListener<TestEvent>() {
+         @Override
+         public void onEvent(TestEvent event) {
+            called.set(true);
+         }
+      };
+      gameEventManager.register(gameEventEventListener, TestEvent.class);
+      api.setEventFactory(new GameEventFactory() {
+         @Override
+         public GameEvent create(GameObject eventObject, GameObject producerObject) {
+            return new TestEvent();
+         }
+
+         @Override
+         public Object[] identifiers() {
+            return new Object[]{"event"};
+         }
+      });
+      for (GameObject o : world) {
+         if (o.getType().equals("player")) {
+            // move player to event
+            o.setPosition(0, 0);
+         }
+      }
+      world.update(0f);
+      assertThat(called.get()).isTrue();
+   }
+
+   @Test
+   public void load_withSimple3x3Map_publishOnProducerCollisionOnly() throws TiledMapException {
+      TiledMap map = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder()
+                  .addObject(0, 0, "event", "player", true)
+                  .addObject(1, 1, "player")
+                  .addObject(1, 1, "another_player").build())
+            .build();
+
+      final TiledMapAPI api = tiledMapManager.getAPI();
+      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      final AtomicInteger calls = new AtomicInteger();
+      final GameEventListener<TestEvent> gameEventEventListener = new GameEventListener<TestEvent>() {
+         @Override
+         public void onEvent(TestEvent event) {
+            calls.addAndGet(1);
+         }
+      };
+      gameEventManager.register(gameEventEventListener, TestEvent.class);
+      api.setEventFactory(new GameEventFactory() {
+         @Override
+         public GameEvent create(GameObject eventObject, GameObject producerObject) {
+            return new TestEvent();
+         }
+
+         @Override
+         public Object[] identifiers() {
+            return new Object[]{"event"};
+         }
+      });
+      for (GameObject o : world) {
+         if (o.getType().equals("player") || o.getType().equals("another_player")) {
+            // move player to event
+            o.setPosition(0, 0);
+         }
+      }
+      world.update(0f);
+      assertThat(calls.get()).isEqualTo(1);
+   }
+
+   @Test
+   public void load_withSimple3x3Map_republishOnSticky() throws TiledMapException {
+      TiledMap map = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder()
+                  .addObject(0, 0, "event", null, true)
+                  .addObject(1, 1, "player")
+                  .addObject(1, 1, "another_player").build())
+            .build();
+
+      final TiledMapAPI api = tiledMapManager.getAPI();
+      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      final AtomicInteger calls = new AtomicInteger();
+      final GameEventListener<TestEvent> gameEventEventListener = new GameEventListener<TestEvent>() {
+         @Override
+         public void onEvent(TestEvent event) {
+            calls.addAndGet(1);
+         }
+      };
+      gameEventManager.register(gameEventEventListener, TestEvent.class);
+      api.setEventFactory(new GameEventFactory() {
+         @Override
+         public GameEvent create(GameObject eventObject, GameObject producerObject) {
+            return new TestEvent();
+         }
+
+         @Override
+         public Object[] identifiers() {
+            return new Object[]{"event"};
+         }
+      });
+      for (GameObject o : world) {
+         if (o.getType().equals("player") || o.getType().equals("another_player")) {
+            // move player to event
+            o.setPosition(0, 0);
+         }
+      }
+      world.update(0f);
+      assertThat(calls.get()).isEqualTo(2);
    }
 
    /**

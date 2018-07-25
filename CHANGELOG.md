@@ -1,6 +1,11 @@
-# Unreleased
+# 0.2.15
 
+This release fixes various issues around tiled map support within **braingdx**.
+
+* [[#133](https://github.com/bitbrain/braingdx/issues/133)] Introduce `TiledMapAPI.setEventFactory(GameEventFactory)`
 * [[#135](https://github.com/bitbrain/braingdx/issues/135)] Game objects with a collision now have an indexed initial position
+* fixed a bug where sticky events would be accidentally deleted
+* added a `GameEventRouter` class which publishes game events when game objects collide with event objects
 
 # Version 0.2.14
 
