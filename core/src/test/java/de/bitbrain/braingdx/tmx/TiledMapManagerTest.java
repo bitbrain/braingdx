@@ -399,6 +399,43 @@ public class TiledMapManagerTest {
       assertThat(calls.get()).isEqualTo(2);
    }
 
+   @Test
+   public void load_withSimple3x3Map_removeLastCollisionOnSimpleMove() {
+      TiledMap map = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player").build())
+            .build();
+      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      world.update(0f);
+      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
+      for (GameObject o : world) {
+         if (o.getType().equals("player")) {
+            o.setPosition(1, 0);
+         }
+      }
+      world.update(0f);
+      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isFalse();
+   }
+
+   @Test
+   public void load_withSimple3x3Map_removeLastCollisionOnMultipleMoves() {
+      TiledMap map = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player").build())
+            .build();
+      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      world.update(0f);
+      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
+      for (GameObject o : world) {
+         if (o.getType().equals("player")) {
+            o.setPosition(1, 0);
+            o.setPosition(0, 1);
+         }
+      }
+      world.update(0f);
+      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isFalse();
+   }
+
    /**
     * Creates collisions on different layers
     * <p>

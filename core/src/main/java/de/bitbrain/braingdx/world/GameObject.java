@@ -178,6 +178,15 @@ public class GameObject implements Pool.Poolable {
       return attributes.get(key);
    }
 
+   public Object getOrSetAttribute(Object key, Object defaultValue) {
+      Object value = attributes.get(key);
+      if (value != null) {
+         return value;
+      }
+      setAttribute(key, defaultValue);
+      return defaultValue;
+   }
+
    public void setZIndex(float zIndex) {
       this.zIndex = zIndex;
    }

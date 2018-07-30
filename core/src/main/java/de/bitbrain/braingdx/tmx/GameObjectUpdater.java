@@ -83,13 +83,13 @@ class GameObjectUpdater extends BehaviorAdapter {
       // and last position is not occupied
       Vector2 lastPosition = object.getLastPosition();
       currentPosition.set(object.getLeft(), object.getTop());
-      int lastLayerIndex = api.lastLayerIndexOf(object);
+      int lastLayerIndex = (Integer)object.getOrSetAttribute("lastLayerIndex", api.lastLayerIndexOf(object));
       int currentLayerIndex = api.layerIndexOf(object);
       if (lastLayerIndex != currentLayerIndex || !currentPosition.equals(lastPosition)) {
          Gdx.app.debug("TiledMapAPI", "Updating collision of " + object);
          // Object has moved, now check if last position is already occupied
-         int lastTileX = IndexCalculator.calculateIndex(lastPosition.x, api.getCellWidth());
-         int lastTileY = IndexCalculator.calculateIndex(lastPosition.y, api.getCellHeight());
+         int lastTileX = (Integer)object.getOrSetAttribute("lastTileX", IndexCalculator.calculateIndex(lastPosition.x, api.getCellWidth()));
+         int lastTileY = (Integer)object.getOrSetAttribute("lastTileY", IndexCalculator.calculateIndex(lastPosition.y, api.getCellHeight()));
          GameObject occupant = api.getGameObjectAt(lastTileX, lastTileY, lastLayerIndex);
 
          // clear last collision
@@ -128,6 +128,9 @@ class GameObjectUpdater extends BehaviorAdapter {
          int yIndex = IndexCalculator.calculateIndex(currentPosition.y, api.getCellHeight());
          gameEventManager.publish(new TiledMapEvents.OnEnterCellEvent(xIndex, yIndex, object, api));
       }
+      object.setAttribute("lastTileX", IndexCalculator.calculateIndex(object.getLeft(), api.getCellWidth()));
+      object.setAttribute("lastTileY", IndexCalculator.calculateIndex(object.getTop(), api.getCellHeight()));
+      object.setAttribute("lastLayerIndex", api.layerIndexOf(object));
    }
 
    private void updateLayerIndex(GameObject object) {

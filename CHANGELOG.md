@@ -1,3 +1,10 @@
+# Version 0.2.16
+
+This release fixes collision removal for tiled maps.
+
+* [[#136](https://github.com/bitbrain/braingdx/issues/136)] fix issue where moving game objects leave collisions behind
+* add new method to `GameObject::getOrSetAttribute` which retrieves or sets an attribute, depending on its existence
+
 # Version 0.2.15
 
 This release fixes various issues around tiled map support within **braingdx**.
