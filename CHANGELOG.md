@@ -1,3 +1,8 @@
+# Version 0.2.17
+
+* [[#140](https://github.com/bitbrain/braingdx/issues/140)] fix issue where tiled collisions were overriden and removed by other game objects
+* [[#141](https://github.com/bitbrain/braingdx/issues/141)] improve collision API for tiled maps. Introduce `isExclusiveCollision` and `isInclusiveCollision` methods to `TiledMapAPI`
+
 # Version 0.2.16
 
 This release fixes collision removal for tiled maps.

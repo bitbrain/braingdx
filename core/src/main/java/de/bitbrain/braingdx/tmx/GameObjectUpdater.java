@@ -23,8 +23,6 @@ import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.world.GameObject;
 
-import java.util.List;
-
 /**
  * This component updates game objects which are part of the tiledmap lifecycle.
  *
@@ -95,22 +93,25 @@ class GameObjectUpdater extends BehaviorAdapter {
          // clear last collision
          for (int xIndex = lastTileX; xIndex < lastTileX + getObjectIndexWidth(object); ++xIndex) {
             for (int yIndex = lastTileY; yIndex < lastTileY + getObjectIndexHeight(object); ++yIndex) {
-               state.getState(xIndex, yIndex, lastLayerIndex).setCollision(false);
-               state.getState(xIndex, yIndex, lastLayerIndex).setFingerprint(null);
+               if (api.isInclusiveCollision(xIndex, yIndex, lastLayerIndex, object)) {
+                  CollisionCalculator.updateCollision(object, false, xIndex, yIndex, lastLayerIndex, state);
+               }
             }
          }
 
          Gdx.app.debug("TiledMapAPI", "Cleared collision at x=" + lastTileX + " y=" + lastTileY + " layer=" + lastLayerIndex);
          // Update current collision
          if (!object.equals(occupant) && object.isActive()) {
-            CollisionCalculator.updateCollision(true, object.getLeft(), object.getTop(), currentLayerIndex, state);
-            state.getState(lastTileX, lastTileY, lastLayerIndex).setFingerprint(object.getId());
+            if (!api.isExclusiveCollision(object.getLeft(), object.getTop(), currentLayerIndex, object)) {
+               CollisionCalculator.updateCollision(object, true, object.getLeft(), object.getTop(), currentLayerIndex, state);
+            }
             int tileX = IndexCalculator.calculateIndex(object.getLeft(), state.getCellWidth());
             int tileY = IndexCalculator.calculateIndex(object.getTop(), state.getCellWidth());
             for (int xIndex = tileX; xIndex < tileX + getObjectIndexWidth(object); ++xIndex) {
                for (int yIndex = tileY; yIndex < tileY + getObjectIndexHeight(object); ++yIndex) {
-                  state.getState(xIndex, yIndex, currentLayerIndex).setCollision(true);
-                  state.getState(xIndex, yIndex, currentLayerIndex).setFingerprint(object.getId());
+                  if (!api.isExclusiveCollision(xIndex, yIndex, currentLayerIndex, object)) {
+                     CollisionCalculator.updateCollision(object, true, xIndex, yIndex, currentLayerIndex, state);
+                  }
                   if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
                      Gdx.app.debug("TiledMapAPI", "Applied collision at x=" + xIndex + " y=" + yIndex + " layer=" + lastLayerIndex);
                   }

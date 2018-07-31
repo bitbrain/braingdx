@@ -16,8 +16,6 @@
 package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.maps.MapProperties;
-import de.bitbrain.braingdx.GameContext;
-import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.event.GameEventFactory;
 import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.event.GameEventRouter;
@@ -136,12 +134,21 @@ class TiledMapAPIImpl implements TiledMapAPI {
    }
 
    @Override
-   public boolean isCollision(int tileX, int tileY, int layer, GameObject source) {
+   public boolean isExclusiveCollision(int tileX, int tileY, int layer, GameObject source) {
       if (!verifyIndex(tileX, tileY)) {
          return true;
       }
       return state.getState(tileX, tileY, layer).isCollision()
           && !state.getState(tileX, tileY, layer).isFingerprint(source.getId());
+   }
+
+   @Override
+   public boolean isInclusiveCollision(int tileX, int tileY, int layer, GameObject source) {
+      if (!verifyIndex(tileX, tileY)) {
+         return true;
+      }
+      return state.getState(tileX, tileY, layer).isCollision()
+            && state.getState(tileX, tileY, layer).isFingerprint(source.getId());
    }
 
    @Override
@@ -152,12 +159,17 @@ class TiledMapAPIImpl implements TiledMapAPI {
    }
 
    @Override
-   public boolean isCollision(GameObject object) {
-      return isCollision(object.getLeft(), object.getHeight(), layerIndexOf(object), object);
+   public boolean isExclusiveCollision(GameObject object) {
+      return isExclusiveCollision(object.getLeft(), object.getHeight(), layerIndexOf(object), object);
    }
 
    @Override
-   public boolean isCollision(float x, float y, int layer, GameObject object) {
+   public boolean isInclusiveCollision(GameObject object) {
+      return isInclusiveCollision(object.getLeft(), object.getHeight(), layerIndexOf(object), object);
+   }
+
+   @Override
+   public boolean isExclusiveCollision(float x, float y, int layer, GameObject object) {
       int tileX = IndexCalculator.calculateIndex(x, state.getCellWidth());
       int tileY = IndexCalculator.calculateIndex(y, state.getCellHeight());
       if (!verifyIndex(tileX, tileY)) {
@@ -165,6 +177,17 @@ class TiledMapAPIImpl implements TiledMapAPI {
       }
       return state.getState(tileX, tileY, layer).isCollision()
             && !state.getState(tileX, tileY, layer).isFingerprint(object.getId());
+   }
+
+   @Override
+   public boolean isInclusiveCollision(float x, float y, int layer, GameObject object) {
+      int tileX = IndexCalculator.calculateIndex(x, state.getCellWidth());
+      int tileY = IndexCalculator.calculateIndex(y, state.getCellHeight());
+      if (!verifyIndex(tileX, tileY)) {
+         return true;
+      }
+      return state.getState(tileX, tileY, layer).isCollision()
+            && state.getState(tileX, tileY, layer).isFingerprint(object.getId());
    }
 
    @Override

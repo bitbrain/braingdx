@@ -32,14 +32,24 @@ public interface TiledCollisionResolver {
    boolean isCollision(int tileX, int tileY, int layer);
 
    /**
-    * Determines the collision on tiled index and layer.
+    * Determines the collision on tiled index and layer, excluding the source object.
     *
     * @param tileX the horizontal tile index
     * @param tileY the vertical tile index
     * @param layer the tile layer
     * @param source the source to ignore the collision on
     */
-   boolean isCollision(int tileX, int tileY, int layer, GameObject source);
+   boolean isExclusiveCollision(int tileX, int tileY, int layer, GameObject source);
+
+   /**
+    * Determines the collision on tiled index and layer, only for the source object.
+    *
+    * @param tileX the horizontal tile index
+    * @param tileY the vertical tile index
+    * @param layer the tile layer
+    * @param source the source to check collision for
+    */
+   boolean isInclusiveCollision(int tileX, int tileY, int layer, GameObject source);
 
    /**
     * Determines the collision on absolute x and y coordinate
@@ -56,7 +66,15 @@ public interface TiledCollisionResolver {
     *
     * @param object the object to check
     */
-   boolean isCollision(GameObject object);
+   boolean isExclusiveCollision(GameObject object);
+
+   /**
+    * Determines if there is an existing collision on the field where the object is,
+    * only for the object provided.
+    *
+    * @param object the object to check
+    */
+   boolean isInclusiveCollision(GameObject object);
 
    /**
     * Determines if there is an existing collision on the world position,
@@ -67,7 +85,18 @@ public interface TiledCollisionResolver {
     * @param layer the tiled layer
     * @param object the object to ignore the collision on
     */
-   boolean isCollision(float x, float y, int layer, GameObject object);
+   boolean isExclusiveCollision(float x, float y, int layer, GameObject object);
+
+   /**
+    * Determines if there is an existing collision on the world position,
+    * only for the object provided
+    *
+    * @param x the world x position
+    * @param y the world y position
+    * @param layer the tiled layer
+    * @param object the object to check collision for
+    */
+   boolean isInclusiveCollision(float x, float y, int layer, GameObject object);
 
    /**
     * Determines the collision of the object with additional horizontal and vertical offset.

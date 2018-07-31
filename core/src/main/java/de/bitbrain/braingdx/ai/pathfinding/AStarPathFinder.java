@@ -98,7 +98,7 @@ public class AStarPathFinder implements PathFinder {
       int sy = IndexCalculator.calculateIndex(mover.getTop(), map.getCellHeight());
       
       // easy first check, if the destination is blocked, we can't get there
-      if (map.isCollision(tx, ty, map.layerIndexOf(mover), mover)) {
+      if (map.isExclusiveCollision(tx, ty, map.layerIndexOf(mover), mover)) {
          return null;
       }
 
@@ -297,7 +297,7 @@ public class AStarPathFinder implements PathFinder {
          int heightCells = (int)Math.floor(mover.getHeight() / map.getCellHeight());
          for (int xAddition = 0; xAddition < widthCells; ++xAddition) {
             for (int yAddition = 0; yAddition < heightCells; ++yAddition) {
-               if (map.isCollision(x + xAddition, y + yAddition, map.layerIndexOf(mover), mover)) {
+               if (map.isExclusiveCollision(x + xAddition, y + yAddition, map.layerIndexOf(mover), mover)) {
                   return false;
                }
             }

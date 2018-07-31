@@ -141,7 +141,9 @@ class StatePopulator {
                behaviorManager.apply(behavior, gameObject);
             }
          }
-         CollisionCalculator.updateCollision(collision, x, y, layerIndex, state);
+         if (!api.isInclusiveCollision(x, y, layerIndex, gameObject)) {
+            CollisionCalculator.updateCollision(gameObject, collision, x, y, layerIndex, state);
+         }
          IndexCalculator.calculateZIndex(gameObject, state, layerIndex);
          gameEventManager.publish(new TiledMapEvents.OnLoadGameObjectEvent(gameObject, api));
       }
@@ -242,7 +244,13 @@ class StatePopulator {
             MapProperties properties = tile.getProperties();
             cellState.setProperties(properties);
             if (properties.containsKey(Constants.COLLISION)) {
-               boolean collision = Boolean.valueOf(properties.get(Constants.COLLISION, String.class));
+               Object collisionProperty = properties.get(Constants.COLLISION);
+               boolean collision = false;
+               if (collisionProperty instanceof Boolean) {
+                  collision = (Boolean)collisionProperty;
+               } else if (collisionProperty instanceof String) {
+                  collision = Boolean.valueOf(collisionProperty.toString());
+               }
                cellState.setCollision(collision);
             } else {
                cellState.setCollision(DEFAULT_COLLISION);

@@ -434,6 +434,42 @@ public class TiledMapManagerTest {
       }
       world.update(0f);
       assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isFalse();
+      assertThat(tiledMapManager.getAPI().isCollision(0, 1, 0)).isTrue();
+   }
+
+   @Test
+   public void load_withSimple3x3Map_shouldNotOverrideExistingCollision() {
+      TiledMap map = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1, true)
+                  .addCell(1, 0)
+                  .addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player").build())
+            .build();
+      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      world.update(0f);
+      // Check for normal collision setup
+      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
+      assertThat(tiledMapManager.getAPI().isCollision(0, 1, 0)).isTrue();
+      for (GameObject o : world) {
+         if (o.getType().equals("player")) {
+            o.setPosition(0, 1);
+         }
+      }
+      world.update(0f);
+      // Verify collision has moved
+      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isFalse();
+      assertThat(tiledMapManager.getAPI().isCollision(0, 1, 0)).isTrue();
+      for (GameObject o : world) {
+         if (o.getType().equals("player")) {
+            o.setPosition(0, 0);
+         }
+      }
+      world.update(0f);
+      // Verify that everything is back to normal
+      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
+      assertThat(tiledMapManager.getAPI().isCollision(0, 1, 0)).isTrue();
    }
 
    /**
