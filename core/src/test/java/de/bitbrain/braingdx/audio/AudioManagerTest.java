@@ -13,30 +13,30 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AudioManagerTest {
-   
+
    @InjectMocks
    private AudioManagerImpl impl;
-   
+
    @Mock
    private TweenManager tweenManager;
-   
+
    @Mock
    private AssetManager assetManager;
-   
+
    @Mock
    private GameCamera gameCamera;
-   
+
    @Mock
    private GameWorld gameWorld;
-   
+
    @Mock
    private BehaviorManager behaviorManager;
-   
+
    @Test
    public void testSpawnMusic() {
       // TODO
    }
-   
+
    @Test
    public void testSpawnSound() {
       // TODO

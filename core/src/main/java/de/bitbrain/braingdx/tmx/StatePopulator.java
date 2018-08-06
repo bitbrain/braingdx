@@ -40,9 +40,9 @@ import java.util.UUID;
 /**
  * Extracts {@link GameObject} instances from a {@link TiledMap} provided.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 class StatePopulator {
 
@@ -55,7 +55,7 @@ class StatePopulator {
    private final GameEventManager gameEventManager;
 
    public StatePopulator(GameObjectRenderManager renderManager, GameWorld gameWorld, TiledMapAPI api,
-         BehaviorManager behaviorManager, GameEventManager gameEventManager) {
+                         BehaviorManager behaviorManager, GameEventManager gameEventManager) {
       this.renderManager = renderManager;
       this.gameWorld = gameWorld;
       this.api = api;
@@ -64,7 +64,7 @@ class StatePopulator {
    }
 
    public void populate(TiledMap tiledMap, State state, Camera camera, MapLayerRendererFactory rendererFactory,
-         TiledMapConfig config) {
+                        TiledMapConfig config) {
       MapLayers mapLayers = tiledMap.getLayers();
       handleMapProperties(tiledMap.getProperties(), state, config);
       List<String> layerIds = new ArrayList<String>();
@@ -85,7 +85,7 @@ class StatePopulator {
          }
       }
       state.setLayerIds(layerIds);
-      
+
       // Add debug layer
       handleDebugTileLayer(state, camera, rendererFactory, config);
    }
@@ -108,20 +108,20 @@ class StatePopulator {
          final float cellWidth = state.getCellWidth();
          final float cellHeight = state.getCellHeight();
          Object objectType = objectProperties.get(config.get(Constants.TYPE));
-         
+
          Object collisionObject = objectProperties.get(config.get(Constants.COLLISION), "false", Object.class);
          boolean collision = false;
          if (collisionObject instanceof Boolean) {
-            collision = (Boolean)collisionObject;
+            collision = (Boolean) collisionObject;
          } else if (collisionObject instanceof String) {
-            collision = Boolean.valueOf((String)collisionObject);
+            collision = Boolean.valueOf((String) collisionObject);
          }
 
          // issue #135 - correct positions of game objects with a collision
          if (collision) {
             gameObject.setPosition(
-               IndexCalculator.calculateIndex(x, state.getCellWidth()) * state.getCellWidth(),
-               IndexCalculator.calculateIndex(y, state.getCellHeight()) * state.getCellHeight()
+                  IndexCalculator.calculateIndex(x, state.getCellWidth()) * state.getCellWidth(),
+                  IndexCalculator.calculateIndex(y, state.getCellHeight()) * state.getCellHeight()
             );
          } else {
             gameObject.setPosition(x, y);
@@ -166,9 +166,9 @@ class StatePopulator {
          return null;
       }
    }
-   
+
    private String handleDebugTileLayer(State state, Camera camera,
-         MapLayerRendererFactory rendererFactory, TiledMapConfig config) {
+                                       MapLayerRendererFactory rendererFactory, TiledMapConfig config) {
       GameObjectRenderer renderer = rendererFactory.createDebug(api, state, camera);
       String id = UUID.randomUUID().toString();
       renderManager.register(id, renderer);
@@ -182,7 +182,7 @@ class StatePopulator {
    }
 
    private String handleTiledMapTileLayer(TiledMapTileLayer layer, int index, TiledMap tiledMap, Camera camera,
-         MapLayerRendererFactory rendererFactory, TiledMapConfig config) {
+                                          MapLayerRendererFactory rendererFactory, TiledMapConfig config) {
       final int numberOfRows = tiledMap.getProperties().get(config.get(Constants.HEIGHT), Integer.class);
       GameObjectRenderer renderer = rendererFactory.create(index, tiledMap, camera);
       String id = UUID.randomUUID().toString();
@@ -223,15 +223,15 @@ class StatePopulator {
    }
 
    private void populateStateMap(int x, int y, State state, int layerIndex, TiledMapTileLayer layer,
-         TiledMapConfig config) {
+                                 TiledMapConfig config) {
       Cell cell = layer.getCell(x, y);
       MapProperties layerProperties = layer.getProperties();
       Object collisionObject = layerProperties.get(config.get(Constants.COLLISION), "false", Object.class);
       boolean collisionLayer = false;
       if (collisionObject instanceof Boolean) {
-         collisionLayer = (Boolean)collisionObject;
+         collisionLayer = (Boolean) collisionObject;
       } else if (collisionObject instanceof String) {
-         collisionLayer = Boolean.valueOf((String)collisionObject);
+         collisionLayer = Boolean.valueOf((String) collisionObject);
       }
       CellState cellState = state.getState(x, y, layerIndex);
       // Inherit the collision from the previous layer, if and only if
@@ -247,7 +247,7 @@ class StatePopulator {
                Object collisionProperty = properties.get(Constants.COLLISION);
                boolean collision = false;
                if (collisionProperty instanceof Boolean) {
-                  collision = (Boolean)collisionProperty;
+                  collision = (Boolean) collisionProperty;
                } else if (collisionProperty instanceof String) {
                   collision = Boolean.valueOf(collisionProperty.toString());
                }

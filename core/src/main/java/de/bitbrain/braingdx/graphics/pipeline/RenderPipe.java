@@ -18,7 +18,7 @@ import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 
 /**
  * A renderpipe is compatible with other pipes and is responsible for rendering internal layers.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */

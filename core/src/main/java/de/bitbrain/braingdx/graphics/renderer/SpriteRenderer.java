@@ -27,17 +27,17 @@ import de.bitbrain.braingdx.world.GameObject;
 /**
  * Renderer implementation for sprites.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class SpriteRenderer implements GameObjectRenderManager.GameObjectRenderer {
 
-   protected Sprite sprite;
    private final AssetManager assets = SharedAssetManager.getInstance();
+   private final Vector2 offset = new Vector2();
+   protected Sprite sprite;
    private String textureId;
    private Texture texture;
-   private final Vector2 offset = new Vector2();
 
    public SpriteRenderer(String textureId) {
       this.textureId = textureId;

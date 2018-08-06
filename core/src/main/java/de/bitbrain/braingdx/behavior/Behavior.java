@@ -20,40 +20,40 @@ import de.bitbrain.braingdx.world.GameObject;
 /**
  * Behavior which is executed every single frame
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public interface Behavior {
 
    /**
     * Callback which is called whenever this behavior gets attached to the source provided.
-    * 
+    *
     * @param source the source where this behavior gets attached to
     */
    void onAttach(GameObject source);
 
    /**
     * Callback which is called whenever this behavior gets detached from the source provided.
-    * 
+    *
     * @param source the source where this behavior gets detached from
     */
    void onDetach(GameObject source);
 
    /**
     * Updates the behavior for a given source object.
-    * 
+    *
     * @param source the game object to apply the behavior to
-    * @param delta current frame delta
+    * @param delta  current frame delta
     */
    void update(GameObject source, float delta);
 
    /**
     * Updates the behavior for a given source and a related target object.
-    * 
+    *
     * @param source the game object to apply the behavior to
     * @param target the game object to get information from
-    * @param delta current frame delta
+    * @param delta  current frame delta
     */
    void update(GameObject source, GameObject target, float delta);
 }

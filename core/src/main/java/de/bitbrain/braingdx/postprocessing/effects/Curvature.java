@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 bmanuel
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,20 +32,20 @@ public final class Curvature extends PostProcessorEffect {
       distort.dispose();
    }
 
-   public void setDistortion(float distortion) {
-      distort.setDistortion(distortion);
-   }
-
-   public void setZoom(float zoom) {
-      distort.setZoom(zoom);
-   }
-
    public float getDistortion() {
       return distort.getDistortion();
    }
 
+   public void setDistortion(float distortion) {
+      distort.setDistortion(distortion);
+   }
+
    public float getZoom() {
       return distort.getZoom();
+   }
+
+   public void setZoom(float zoom) {
+      distort.setZoom(zoom);
    }
 
    @Override
@@ -57,6 +57,8 @@ public final class Curvature extends PostProcessorEffect {
    public void render(FrameBuffer src, FrameBuffer dest) {
       restoreViewport(dest);
       distort.setInput(src).setOutput(dest).render();
-   };
+   }
+
+   ;
 
 }

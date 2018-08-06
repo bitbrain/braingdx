@@ -19,7 +19,7 @@ import de.bitbrain.braingdx.graphics.animation.AnimationType;
 
 /**
  * Moves the frames from start to end and vise versa.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */

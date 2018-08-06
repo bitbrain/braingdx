@@ -1,4 +1,3 @@
-
 package de.bitbrain.braingdx.postprocessing.effects;
 
 import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;

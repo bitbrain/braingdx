@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 bmanuel
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,43 +20,15 @@ import com.badlogic.gdx.utils.IntMap;
 import de.bitbrain.braingdx.postprocessing.utils.PingPongBuffer;
 
 public final class Blur extends MultipassFilter {
-   // @formatter:off
-   private enum Tap {
-      Tap3x3(1), Tap5x5(2),
-      // Tap7x7( 3 )
-      ;
-
-      public final int radius;
-
-      private Tap(int radius) {
-         this.radius = radius;
-      }
-   }
-
-   public enum BlurType {
-      Gaussian3x3(Tap.Tap3x3), Gaussian3x3b(Tap.Tap3x3), // R=5 (11x11, policy
-      // "higher-then-discard")
-      Gaussian5x5(Tap.Tap5x5), Gaussian5x5b(Tap.Tap5x5), // R=9 (19x19, policy
-      // "higher-then-discard")
-      ;
-
-      public final Tap tap;
-
-      private BlurType(Tap tap) {
-         this.tap = tap;
-      }
-   }
-
-   // @formatter:on
-
+   private final IntMap<Convolve2D> convolve = new IntMap<Convolve2D>(Tap.values().length);
    // blur
    private BlurType type;
+
+   // @formatter:on
    private float amount;
    private int passes;
-
    // fbo, textures
    private float invWidth, invHeight;
-   private final IntMap<Convolve2D> convolve = new IntMap<Convolve2D>(Tap.values().length);
 
    public Blur(int width, int height) {
       // precompute constants
@@ -80,8 +52,16 @@ public final class Blur extends MultipassFilter {
       }
    }
 
+   public int getPasses() {
+      return passes;
+   }
+
    public void setPasses(int passes) {
       this.passes = passes;
+   }
+
+   public BlurType getType() {
+      return type;
    }
 
    public void setType(BlurType type) {
@@ -92,22 +72,14 @@ public final class Blur extends MultipassFilter {
    }
 
    // not all blur types support custom amounts at this time
-   public void setAmount(float amount) {
-      this.amount = amount;
-      computeBlurWeightings();
-   }
-
-   public int getPasses() {
-      return passes;
-   }
-
-   public BlurType getType() {
-      return type;
+   public float getAmount() {
+      return amount;
    }
 
    // not all blur types support custom amounts at this time
-   public float getAmount() {
-      return amount;
+   public void setAmount(float amount) {
+      this.amount = amount;
+      computeBlurWeightings();
    }
 
    @Override
@@ -268,5 +240,32 @@ public final class Blur extends MultipassFilter {
    @Override
    public void rebind() {
       computeBlurWeightings();
+   }
+
+   // @formatter:off
+   private enum Tap {
+      Tap3x3(1), Tap5x5(2),
+      // Tap7x7( 3 )
+      ;
+
+      public final int radius;
+
+      private Tap(int radius) {
+         this.radius = radius;
+      }
+   }
+
+   public enum BlurType {
+      Gaussian3x3(Tap.Tap3x3), Gaussian3x3b(Tap.Tap3x3), // R=5 (11x11, policy
+      // "higher-then-discard")
+      Gaussian5x5(Tap.Tap5x5), Gaussian5x5b(Tap.Tap5x5), // R=9 (19x19, policy
+      // "higher-then-discard")
+      ;
+
+      public final Tap tap;
+
+      private BlurType(Tap tap) {
+         this.tap = tap;
+      }
    }
 }

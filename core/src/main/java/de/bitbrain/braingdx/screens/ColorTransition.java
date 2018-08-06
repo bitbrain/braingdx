@@ -28,23 +28,16 @@ import de.bitbrain.braingdx.tweens.ColorTween;
 
 /**
  * Implementation which fades a texture.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0
  * @since 1.0
  */
 public class ColorTransition extends AbstractTransitionable implements RenderLayer, Disposable {
 
-   public static interface ScreenFadeCallback {
-      void afterFade();
-   }
-
    private SpriteBatch batch = new SpriteBatch();
-
    private Texture texture;
-
    private Color color = Color.WHITE.cpy();
-
    private Color fadeToColor;
 
    public ColorTransition(Color color) {
@@ -78,11 +71,11 @@ public class ColorTransition extends AbstractTransitionable implements RenderLay
          texture.dispose();
       }
    }
-   
+
    public void setColor(Color color) {
-	   fadeToColor = color;
-	   dispose();
-	   initTexture();
+      fadeToColor = color;
+      dispose();
+      initTexture();
    }
 
    private void initTexture() {
@@ -106,6 +99,10 @@ public class ColorTransition extends AbstractTransitionable implements RenderLay
    @Override
    protected int getTweenType() {
       return ColorTween.A;
+   }
+
+   public static interface ScreenFadeCallback {
+      void afterFade();
    }
 
 }

@@ -1,4 +1,3 @@
-
 package de.bitbrain.braingdx.postprocessing;
 
 import com.badlogic.gdx.Gdx;
@@ -11,7 +10,7 @@ import java.nio.ByteBuffer;
 /**
  * Provides a simple mechanism to query OpenGL pipeline states. Note: state queries are costly and
  * stall the pipeline, especially on mobile devices!
- * 
+ *
  * @author bmanuel
  */
 public final class PipelineState implements Disposable {

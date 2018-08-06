@@ -27,26 +27,19 @@ import java.util.UUID;
 /**
  * Simple game object implementation which can be pooled
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class GameObject implements Pool.Poolable {
 
    private final Vector2 position, dimensions, lastPosition, offset;
-
-   private String id;
-   
-   private String internalId;
-   
-   private String previousId;
-
-   private Object type;
-
-   private Color color = Color.WHITE.cpy();
-
    private final Vector2 scale;
-   
+   private String id;
+   private String internalId;
+   private String previousId;
+   private Object type;
+   private Color color = Color.WHITE.cpy();
    private float rotation;
 
    private float zIndex;
@@ -54,7 +47,7 @@ public class GameObject implements Pool.Poolable {
    private Map<Object, Object> attributes;
 
    private boolean active;
-   
+
    private boolean persistent;
 
    public GameObject() {
@@ -69,12 +62,12 @@ public class GameObject implements Pool.Poolable {
       active = true;
    }
 
-   public void setType(Object typeId) {
-      this.type = typeId;
-   }
-
    public Object getType() {
       return type;
+   }
+
+   public void setType(Object typeId) {
+      this.type = typeId;
    }
 
    public void setDimensions(float width, float height) {
@@ -125,16 +118,16 @@ public class GameObject implements Pool.Poolable {
       return lastPosition;
    }
 
-   public void setId(String id) {
-	  if (id == null || id.trim().isEmpty()) {
-		  Gdx.app.log("ERROR", "Unable to assign id=" + id + " to game object " + toString() + ": invalid ID!");
-		  return;
-	  }
-      this.id = id;
-   }
-
    public String getId() {
       return id;
+   }
+
+   public void setId(String id) {
+      if (id == null || id.trim().isEmpty()) {
+         Gdx.app.log("ERROR", "Unable to assign id=" + id + " to game object " + toString() + ": invalid ID!");
+         return;
+      }
+      this.id = id;
    }
 
    public Color getColor() {
@@ -152,9 +145,9 @@ public class GameObject implements Pool.Poolable {
    public Vector2 getScale() {
       return scale;
    }
-   
+
    public void scale(float scale) {
-	   this.scale.scl(scale);
+      this.scale.scl(scale);
    }
 
    public Vector2 getOffset() {
@@ -187,40 +180,40 @@ public class GameObject implements Pool.Poolable {
       return defaultValue;
    }
 
+   public float getZIndex() {
+      return this.zIndex;
+   }
+
    public void setZIndex(float zIndex) {
       this.zIndex = zIndex;
    }
 
-   public float getZIndex() {
-      return this.zIndex;
+   public boolean isActive() {
+      return active;
    }
 
    public void setActive(boolean active) {
       this.active = active;
    }
 
-   public boolean isActive() {
-      return active;
-   }
-   
-   public void setPersistent(boolean persistent) {
-      this.persistent = persistent;
-   }
-   
    public boolean isPersistent() {
       return persistent;
    }
-   
-   public void setRotation(float rotation) {
-	   this.rotation = rotation;
+
+   public void setPersistent(boolean persistent) {
+      this.persistent = persistent;
    }
-   
+
    public float getRotation() {
-	   return this.rotation;
+      return this.rotation;
    }
-   
+
+   public void setRotation(float rotation) {
+      this.rotation = rotation;
+   }
+
    public void rotate(float delta) {
-	   this.rotation += delta;
+      this.rotation += delta;
    }
 
    @Override
@@ -276,5 +269,5 @@ public class GameObject implements Pool.Poolable {
             + color + ", zIndex=" + zIndex + ", active=" + active + "]";
    }
 
-   
+
 }

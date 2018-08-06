@@ -23,18 +23,14 @@ import de.bitbrain.braingdx.util.DeltaTimer;
 
 /**
  * Animates {@link SpriteSheet} objects.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
 public class SpriteSheetAnimation implements Animation {
 
-   public enum Direction {
-      HORIZONTAL, VERTICAL
-   }
-
    public static final float DEFAULT_INTERVAL = 0.2f;
-
+   private final Vector2 scale = new Vector2(1f, 1f);
    private SpriteSheet sheet;
 
    private int originX;
@@ -47,10 +43,7 @@ public class SpriteSheetAnimation implements Animation {
    private float interval;
    private int base = 0;
    private Direction direction = Direction.HORIZONTAL;
-   private final Vector2 scale = new Vector2(1f, 1f);
-
    private AnimationType type = AnimationTypes.FORWARD;
-
    private DeltaTimer timer = new DeltaTimer();
 
    public SpriteSheetAnimation() {
@@ -124,7 +117,7 @@ public class SpriteSheetAnimation implements Animation {
       this.base = Math.abs(base);
       return this;
    }
-   
+
    public SpriteSheetAnimation scale(float scaleX, float scaleY) {
       this.scale.set(scaleX, scaleY);
       return this;
@@ -164,5 +157,9 @@ public class SpriteSheetAnimation implements Animation {
          return originY + currentFrame;
       }
       return originY + offsetY;
+   }
+
+   public enum Direction {
+      HORIZONTAL, VERTICAL
    }
 }

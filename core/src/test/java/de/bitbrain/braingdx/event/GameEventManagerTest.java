@@ -12,34 +12,28 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameEventManagerTest {
-   
-   private static class ConcreteGameEvent implements GameEvent {
-      
-   }
-   
+
    private GameEventManager impl;
-   
    private ConcreteGameEvent event;
-   
    @Mock
    private GameEventListener<ConcreteGameEvent> listener;
-   
+
    @Before
    public void beforeTest() {
       impl = new GameEventManagerImpl();
       Gdx.app = mock(Application.class);
       event = new ConcreteGameEvent();
    }
-   
+
    @Test
    public void testPublishEvent() {
       impl.register(listener, ConcreteGameEvent.class);
       impl.publish(event);
       inOrder(listener)
-         .verify(listener, times(1))
-         .onEvent(event);
+            .verify(listener, times(1))
+            .onEvent(event);
    }
-   
+
    @Test
    public void testUnregisterListener() {
       impl.register(listener, ConcreteGameEvent.class);
@@ -47,12 +41,16 @@ public class GameEventManagerTest {
       impl.unregister(listener, ConcreteGameEvent.class);
       impl.publish(event);
       inOrder(listener)
-         .verify(listener, times(1))
-         .onEvent(event);
+            .verify(listener, times(1))
+            .onEvent(event);
    }
-   
+
    @Test
    public void testPublishEvent_MissingListenerNoExceptionThrown() {
       impl.publish(event);
+   }
+
+   private static class ConcreteGameEvent implements GameEvent {
+
    }
 }

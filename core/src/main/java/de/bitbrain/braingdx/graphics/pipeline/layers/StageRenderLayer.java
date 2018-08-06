@@ -14,7 +14,7 @@ public class StageRenderLayer extends AbstractRenderLayer {
 
    @Override
    public void render(Batch batch, float delta) {
-	  stage.draw();
+      stage.draw();
    }
 
 }

@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 bmanuel
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,12 +25,29 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 /**
  * Encapsulates a fullscreen quad, geometry is aligned to the screen corners.
- * 
+ *
  * @author bmanuel
  */
 public class FullscreenQuad {
+   private static final int VERT_SIZE = 16;
+   private static final int X1 = 0;
+   private static final int Y1 = 1;
+   private static final int U1 = 2;
+   private static final int V1 = 3;
+   private static final int X2 = 4;
+   private static final int Y2 = 5;
+   private static final int U2 = 6;
+   private static final int V2 = 7;
+   private static final int X3 = 8;
+   private static final int Y3 = 9;
+   private static final int U3 = 10;
+   private static final int V3 = 11;
+   private static final int X4 = 12;
+   private static final int Y4 = 13;
+   private static final int U4 = 14;
+   private static final int V4 = 15;
+   private static float[] verts = new float[VERT_SIZE];
    private Mesh quad;
-
    public FullscreenQuad() {
       quad = createFullscreenQuad();
    }
@@ -39,7 +56,9 @@ public class FullscreenQuad {
       quad.dispose();
    }
 
-   /** Renders the quad with the specified shader program. */
+   /**
+    * Renders the quad with the specified shader program.
+    */
    public void render(ShaderProgram program) {
       quad.render(program, GL20.GL_TRIANGLE_FAN, 0, 4);
    }
@@ -78,23 +97,4 @@ public class FullscreenQuad {
       tmpMesh.setVertices(verts);
       return tmpMesh;
    }
-
-   private static final int VERT_SIZE = 16;
-   private static float[] verts = new float[VERT_SIZE];
-   private static final int X1 = 0;
-   private static final int Y1 = 1;
-   private static final int U1 = 2;
-   private static final int V1 = 3;
-   private static final int X2 = 4;
-   private static final int Y2 = 5;
-   private static final int U2 = 6;
-   private static final int V2 = 7;
-   private static final int X3 = 8;
-   private static final int Y3 = 9;
-   private static final int U3 = 10;
-   private static final int V3 = 11;
-   private static final int X4 = 12;
-   private static final int Y4 = 13;
-   private static final int U4 = 14;
-   private static final int V4 = 15;
 }

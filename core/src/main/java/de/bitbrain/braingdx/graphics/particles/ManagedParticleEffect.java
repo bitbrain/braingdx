@@ -22,7 +22,7 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Is managed by {@link ParticleManager}
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */

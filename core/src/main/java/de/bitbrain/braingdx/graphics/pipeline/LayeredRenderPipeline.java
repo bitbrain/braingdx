@@ -33,10 +33,9 @@ import java.util.Map;
 
 /**
  * Layered render pipeline implementation.
- * 
- * @TODO Fix ensure shader transparency.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
+ * @TODO Fix ensure shader transparency.
  */
 public class LayeredRenderPipeline implements RenderPipeline {
 

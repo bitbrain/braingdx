@@ -42,10 +42,10 @@ public class GameWorldTest {
       assertThat(world.size()).isEqualTo(1);
       assertThat(object.getId()).isNotNull().isNotEmpty();
    }
-   
+
    @Test
    public void testAddObjectWithCustomId() {
-	  String customId = "customId";
+      String customId = "customId";
       GameObject object = world.addObject(new GameObjectIdMutator(customId));
       assertThat(object).isNotNull();
       assertThat(world.size()).isEqualTo(1);
@@ -59,7 +59,7 @@ public class GameWorldTest {
       world.update(0f);
       assertThat(world.size()).isEqualTo(0);
    }
-   
+
    @Test
    public void testRemoveObjectWithCustomId() {
       GameObject object = world.addObject(new GameObjectIdMutator("custom-id"));

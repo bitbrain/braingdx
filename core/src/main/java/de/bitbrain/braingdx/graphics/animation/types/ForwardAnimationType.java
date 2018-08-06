@@ -19,7 +19,7 @@ import de.bitbrain.braingdx.graphics.animation.AnimationType;
 
 /**
  * Moves the frame from start to end and starts again.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */

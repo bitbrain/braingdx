@@ -50,12 +50,9 @@ public class AStarPathFinder implements PathFinder {
    /**
     * Create a path finder with the default heuristic - closest to target.
     *
-    * @param map
-    *           The map to be searched
-    * @param maxSearchDistance
-    *           The maximum depth we'll search before giving up
-    * @param allowDiagMovement
-    *           True if the search should try diaganol movement
+    * @param map               The map to be searched
+    * @param maxSearchDistance The maximum depth we'll search before giving up
+    * @param allowDiagMovement True if the search should try diaganol movement
     */
    public AStarPathFinder(TiledMapAPI map, int maxSearchDistance, boolean allowDiagMovement) {
       this(map, maxSearchDistance, allowDiagMovement, new ClosestHeuristic());
@@ -64,14 +61,10 @@ public class AStarPathFinder implements PathFinder {
    /**
     * Create a path finder
     *
-    * @param heuristic
-    *           The heuristic used to determine the search order of the map
-    * @param map
-    *           The map to be searched
-    * @param maxSearchDistance
-    *           The maximum depth we'll search before giving up
-    * @param allowDiagMovement
-    *           True if the search should try diaganol movement
+    * @param heuristic         The heuristic used to determine the search order of the map
+    * @param map               The map to be searched
+    * @param maxSearchDistance The maximum depth we'll search before giving up
+    * @param allowDiagMovement True if the search should try diaganol movement
     */
    public AStarPathFinder(TiledMapAPI map, int maxSearchDistance, boolean allowDiagMovement, AStarHeuristic heuristic) {
       this.heuristic = heuristic;
@@ -80,7 +73,7 @@ public class AStarPathFinder implements PathFinder {
       this.allowDiagMovement = allowDiagMovement;
       refresh();
    }
-   
+
    public void refresh() {
       nodes = new Node[map.getNumberOfColumns()][map.getNumberOfRows()];
       for (int x = 0; x < map.getNumberOfColumns(); x++) {
@@ -91,12 +84,12 @@ public class AStarPathFinder implements PathFinder {
    }
 
    @Override
-   public Path findPath(GameObject mover, int tx, int ty) {     
+   public Path findPath(GameObject mover, int tx, int ty) {
 
-      
+
       int sx = IndexCalculator.calculateIndex(mover.getLeft(), map.getCellWidth());
       int sy = IndexCalculator.calculateIndex(mover.getTop(), map.getCellHeight());
-      
+
       // easy first check, if the destination is blocked, we can't get there
       if (map.isExclusiveCollision(tx, ty, map.layerIndexOf(mover), mover)) {
          return null;
@@ -215,8 +208,7 @@ public class AStarPathFinder implements PathFinder {
    /**
     * Add a node to the open list
     *
-    * @param node
-    *           The node to be added to the open list
+    * @param node The node to be added to the open list
     */
    protected void addToOpen(Node node) {
       open.add(node);
@@ -225,8 +217,7 @@ public class AStarPathFinder implements PathFinder {
    /**
     * Check if a node is in the open list
     *
-    * @param node
-    *           The node to check for
+    * @param node The node to check for
     * @return True if the node given is in the open list
     */
    protected boolean inOpenList(Node node) {
@@ -236,8 +227,7 @@ public class AStarPathFinder implements PathFinder {
    /**
     * Remove a node from the open list
     *
-    * @param node
-    *           The node to remove from the open list
+    * @param node The node to remove from the open list
     */
    protected void removeFromOpen(Node node) {
       open.remove(node);
@@ -246,8 +236,7 @@ public class AStarPathFinder implements PathFinder {
    /**
     * Add a node to the closed list
     *
-    * @param node
-    *           The node to add to the closed list
+    * @param node The node to add to the closed list
     */
    protected void addToClosed(Node node) {
       closed.add(node);
@@ -256,8 +245,7 @@ public class AStarPathFinder implements PathFinder {
    /**
     * Check if the node supplied is in the closed list
     *
-    * @param node
-    *           The node to search for
+    * @param node The node to search for
     * @return True if the node specified is in the closed list
     */
    protected boolean inClosedList(Node node) {
@@ -267,8 +255,7 @@ public class AStarPathFinder implements PathFinder {
    /**
     * Remove a node from the closed list
     *
-    * @param node
-    *           The node to remove from the closed list
+    * @param node The node to remove from the closed list
     */
    protected void removeFromClosed(Node node) {
       closed.remove(node);
@@ -277,24 +264,19 @@ public class AStarPathFinder implements PathFinder {
    /**
     * Check if a given location is valid for the supplied mover
     *
-    * @param mover
-    *           The mover that would hold a given location
-    * @param sx
-    *           The starting x coordinate
-    * @param sy
-    *           The starting y coordinate
-    * @param x
-    *           The x coordinate of the location to check
-    * @param y
-    *           The y coordinate of the location to check
+    * @param mover The mover that would hold a given location
+    * @param sx    The starting x coordinate
+    * @param sy    The starting y coordinate
+    * @param x     The x coordinate of the location to check
+    * @param y     The y coordinate of the location to check
     * @return True if the location is valid for the given mover
     */
    protected boolean isValidLocation(GameObject mover, int sx, int sy, int x, int y) {
       boolean invalid = (x < 0) || (y < 0) || (x >= map.getNumberOfColumns()) || (y >= map.getNumberOfRows());
 
       if ((!invalid) && ((sx != x) || (sy != y))) {
-         int widthCells = (int)Math.floor(mover.getWidth() / map.getCellWidth());
-         int heightCells = (int)Math.floor(mover.getHeight() / map.getCellHeight());
+         int widthCells = (int) Math.floor(mover.getWidth() / map.getCellWidth());
+         int heightCells = (int) Math.floor(mover.getHeight() / map.getCellHeight());
          for (int xAddition = 0; xAddition < widthCells; ++xAddition) {
             for (int yAddition = 0; yAddition < heightCells; ++yAddition) {
                if (map.isExclusiveCollision(x + xAddition, y + yAddition, map.layerIndexOf(mover), mover)) {
@@ -310,16 +292,11 @@ public class AStarPathFinder implements PathFinder {
    /**
     * Get the cost to move through a given location
     *
-    * @param mover
-    *           The entity that is being moved
-    * @param sx
-    *           The x coordinate of the tile whose cost is being determined
-    * @param sy
-    *           The y coordiante of the tile whose cost is being determined
-    * @param tx
-    *           The x coordinate of the target location
-    * @param ty
-    *           The y coordinate of the target location
+    * @param mover The entity that is being moved
+    * @param sx    The x coordinate of the tile whose cost is being determined
+    * @param sy    The y coordiante of the tile whose cost is being determined
+    * @param tx    The x coordinate of the target location
+    * @param ty    The y coordinate of the target location
     * @return The cost of movement through the given tile
     */
    public float getMovementCost(GameObject mover, int sx, int sy, int tx, int ty) {
@@ -331,16 +308,11 @@ public class AStarPathFinder implements PathFinder {
     * Get the heuristic cost for the given location. This determines in which order
     * the locations are processed.
     *
-    * @param mover
-    *           The entity that is being moved
-    * @param x
-    *           The x coordinate of the tile whose cost is being determined
-    * @param y
-    *           The y coordiante of the tile whose cost is being determined
-    * @param tx
-    *           The x coordinate of the target location
-    * @param ty
-    *           The y coordinate of the target location
+    * @param mover The entity that is being moved
+    * @param x     The x coordinate of the tile whose cost is being determined
+    * @param y     The y coordiante of the tile whose cost is being determined
+    * @param tx    The x coordinate of the target location
+    * @param ty    The y coordinate of the target location
     * @return The heuristic cost assigned to the tile
     */
    public float getHeuristicCost(GameObject mover, int x, int y, int tx, int ty) {
@@ -378,8 +350,7 @@ public class AStarPathFinder implements PathFinder {
       /**
        * Add an element to the list - causes sorting
        *
-       * @param o
-       *           The element to add
+       * @param o The element to add
        */
       @SuppressWarnings("unchecked")
       public void add(Object o) {
@@ -390,8 +361,7 @@ public class AStarPathFinder implements PathFinder {
       /**
        * Remove an element from the list
        *
-       * @param o
-       *           The element to remove
+       * @param o The element to remove
        */
       public void remove(Object o) {
          list.remove(o);
@@ -409,8 +379,7 @@ public class AStarPathFinder implements PathFinder {
       /**
        * Check if an element is in the list
        *
-       * @param o
-       *           The element to search for
+       * @param o The element to search for
        * @return True if the element is in the list
        */
       public boolean contains(Object o) {
@@ -450,10 +419,8 @@ public class AStarPathFinder implements PathFinder {
       /**
        * Create a new node
        *
-       * @param x
-       *           The x coordinate of the node
-       * @param y
-       *           The y coordinate of the node
+       * @param x The x coordinate of the node
+       * @param y The y coordinate of the node
        */
       public Node(int x, int y) {
          this.x = x;
@@ -463,8 +430,7 @@ public class AStarPathFinder implements PathFinder {
       /**
        * Set the parent of this node
        *
-       * @param parent
-       *           The parent node which lead us to this node
+       * @param parent The parent node which lead us to this node
        * @return The depth we have no reached in searching
        */
       public int setParent(Node parent) {

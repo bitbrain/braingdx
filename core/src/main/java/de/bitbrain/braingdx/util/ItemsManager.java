@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 bmanuel
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,8 +23,8 @@ import java.util.Iterator;
 
 public class ItemsManager<T extends Disposable> implements Iterable<T>, Disposable {
    private static final int ItemNotFound = -1;
-   private final Array<T> items = new Array<T>();
    protected final Array<Boolean> owned = new Array<Boolean>();
+   private final Array<T> items = new Array<T>();
 
    @Override
    public void dispose() {
@@ -50,17 +50,23 @@ public class ItemsManager<T extends Disposable> implements Iterable<T>, Disposab
       owned.add(own);
    }
 
-   /** Add an item to the manager and transfer ownership to it */
+   /**
+    * Add an item to the manager and transfer ownership to it
+    */
    public void add(T item) {
       add(item, true);
    }
 
-   /** Returns the item at the specified index */
+   /**
+    * Returns the item at the specified index
+    */
    public T get(int index) {
       return items.get(index);
    }
 
-   /** Returns the number of items managed by this instance */
+   /**
+    * Returns the number of items managed by this instance
+    */
    public int count() {
       return items.size;
    }
@@ -71,7 +77,9 @@ public class ItemsManager<T extends Disposable> implements Iterable<T>, Disposab
       return items.iterator();
    }
 
-   /** Removes a previously added resource */
+   /**
+    * Removes a previously added resource
+    */
    public void remove(T item) {
       int index = items.indexOf(item, true);
       if (index == ItemNotFound) {

@@ -24,9 +24,9 @@ import com.badlogic.gdx.graphics.Color;
 /**
  * Provides animation utilities
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public final class TweenUtils {
 
@@ -37,8 +37,8 @@ public final class TweenUtils {
     *
     * @param sourceColor the source color
     * @param targetColor the target color
-    * @param time given decimal time (in seconds)
-    * @param equation tween equation
+    * @param time        given decimal time (in seconds)
+    * @param equation    tween equation
     */
    public static void toColor(Color sourceColor, Color targetColor, float time, TweenEquation equation) {
       tweenManager.killTarget(sourceColor, ColorTween.R);
@@ -54,7 +54,7 @@ public final class TweenUtils {
     *
     * @param sourceColor the source color
     * @param targetColor the target color
-    * @param time given decimal time (in seconds)
+    * @param time        given decimal time (in seconds)
     */
    public static void toColor(Color sourceColor, Color targetColor, float time) {
       toColor(sourceColor, targetColor, time, TweenEquations.easeNone);

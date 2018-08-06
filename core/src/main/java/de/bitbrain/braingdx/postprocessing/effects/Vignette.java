@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 bmanuel
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,10 +42,6 @@ public final class Vignette extends PostProcessorEffect {
       return controlSaturation;
    }
 
-   public void setIntensity(float intensity) {
-      vignetting.setIntensity(intensity);
-   }
-
    public void setCoords(float x, float y) {
       vignetting.setCoords(x, y);
    }
@@ -58,20 +54,8 @@ public final class Vignette extends PostProcessorEffect {
       vignetting.setY(y);
    }
 
-   public void setSaturation(float saturation) {
-      vignetting.setSaturation(saturation);
-   }
-
-   public void setSaturationMul(float saturationMul) {
-      vignetting.setSaturationMul(saturationMul);
-   }
-
    public void setLutTexture(Texture texture) {
       vignetting.setLut(texture);
-   }
-
-   public void setLutIntensity(float value) {
-      vignetting.setLutIntensity(value);
    }
 
    public void setLutIndexVal(int index, int value) {
@@ -82,7 +66,9 @@ public final class Vignette extends PostProcessorEffect {
       vignetting.setLutIndexOffset(value);
    }
 
-   /** Specify the center, in screen coordinates. */
+   /**
+    * Specify the center, in screen coordinates.
+    */
    public void setCenter(float x, float y) {
       vignetting.setCenter(x * oneOnW, 1f - y * oneOnH);
    }
@@ -91,8 +77,16 @@ public final class Vignette extends PostProcessorEffect {
       return vignetting.getIntensity();
    }
 
+   public void setIntensity(float intensity) {
+      vignetting.setIntensity(intensity);
+   }
+
    public float getLutIntensity() {
       return vignetting.getLutIntensity();
+   }
+
+   public void setLutIntensity(float value) {
+      vignetting.setLutIntensity(value);
    }
 
    public int getLutIndexVal(int index) {
@@ -123,8 +117,16 @@ public final class Vignette extends PostProcessorEffect {
       return vignetting.getSaturation();
    }
 
+   public void setSaturation(float saturation) {
+      vignetting.setSaturation(saturation);
+   }
+
    public float getSaturationMul() {
       return vignetting.getSaturationMul();
+   }
+
+   public void setSaturationMul(float saturationMul) {
+      vignetting.setSaturationMul(saturationMul);
    }
 
    public boolean isGradientMappingEnabled() {
@@ -140,5 +142,7 @@ public final class Vignette extends PostProcessorEffect {
    public void render(FrameBuffer src, FrameBuffer dest) {
       restoreViewport(dest);
       vignetting.setInput(src).setOutput(dest).render();
-   };
+   }
+
+   ;
 }

@@ -21,9 +21,9 @@ import de.bitbrain.braingdx.world.GameObject;
 /**
  * Tween facility for game objects
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class GameObjectTween implements TweenAccessor<GameObject> {
 

@@ -37,28 +37,27 @@ import java.util.Map.Entry;
 /**
  * This audio manager implementation provides utility methods to fade between different music and
  * sounds.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
- * @since 1.0
  * @version 1.0
+ * @since 1.0
  */
 public class AudioManagerImpl implements AudioManager {
 
    private final static float DEFAULT_DURATION = 1f;
    private final static float DEFAULT_VOLUME = 1f;
-   
+
    private final Vector3 tmp = new Vector3();
-   
+
    private final TweenManager tweenManager;
    private final AssetManager assetManager;
    private final GameWorld gameWorld;
    private final BehaviorManager behaviorManager;
    private final GameCamera camera;
-   private float volume;
-   
    private final Map<String, Music> musicObjects = new HashMap<String, Music>();
    private final Map<String, Sound> soundObjects = new HashMap<String, Sound>();
    private final Map<String, Long> soundHandles = new HashMap<String, Long>();
+   private float volume;
 
    public AudioManagerImpl(GameCamera gameCamera, TweenManager tweenManager, AssetManager assetManager, GameWorld gameWorld, BehaviorManager behaviorManager) {
       this.tweenManager = tweenManager;
@@ -87,7 +86,7 @@ public class AudioManagerImpl implements AudioManager {
       soundObject.setPosition(x, y);
       spawnSoundLooped(path, soundObject, pitch, volume, hearingRange);
    }
-   
+
    @Override
    public void spawnSoundLooped(String path, GameObject target, float pitch, final float volume, final float hearingRange) {
       final Sound sound = assetManager.get(path, Sound.class);
@@ -195,7 +194,7 @@ public class AudioManagerImpl implements AudioManager {
 
    @Override
    public void fadeOutMusic(final Music music, float duration) {
-	  final MusicClassWrapper wrapper = new MusicClassWrapper(music);
+      final MusicClassWrapper wrapper = new MusicClassWrapper(music);
       Tween.to(wrapper, MusicTween.VOLUME, duration)
             .setCallbackTriggers(TweenCallback.COMPLETE)
             .target(0f)
@@ -221,14 +220,14 @@ public class AudioManagerImpl implements AudioManager {
 
    @Override
    public void fadeInMusic(Music music, float duration) {
-	  MusicClassWrapper wrapper = new MusicClassWrapper(music);
+      MusicClassWrapper wrapper = new MusicClassWrapper(music);
       wrapper.setVolume(0f);
       wrapper.setPosition(0f);
       wrapper.play();
       Tween.to(wrapper, MusicTween.VOLUME, duration)
-           .target(volume)
-           .ease(TweenEquations.easeNone)
-           .start(tweenManager);
+            .target(volume)
+            .ease(TweenEquations.easeNone)
+            .start(tweenManager);
    }
 
    @Override
@@ -247,6 +246,30 @@ public class AudioManagerImpl implements AudioManager {
    @Override
    public void pauseMusic(String path) {
       assetManager.get(path, Music.class).pause();
+   }
+
+   private float computeVolume(float sourceX, float sourceY, float maxDistance) {
+      Camera camera = this.camera.getInternal();
+      tmp.set(camera.position.x, camera.position.y, camera.position.z);
+      tmp.x -= sourceX;
+      tmp.y -= sourceY;
+      return MathUtils.clamp(1 - (tmp.len() / maxDistance), 0.0f, 1f);
+   }
+
+   private float computePan(float sourceX, float sourceY, float maxDistance) {
+      Camera camera = this.camera.getInternal();
+      if (camera != null) {
+         tmp.set(camera.up);
+         tmp.crs(camera.direction);
+         tmp.nor();
+         final float lenX = camera.position.x - sourceX;
+         final float lenY = camera.position.y - sourceY;
+         final float lenZ = camera.position.z - 0f;
+         final float clampX = tmp.dot(new Vector3(lenX, lenY, lenZ));
+         return MathUtils.clamp(clampX / maxDistance, -1f, 1f);
+      } else {
+         return 0f;
+      }
    }
 
    private static class MusicClassWrapper implements Music {
@@ -278,18 +301,13 @@ public class AudioManagerImpl implements AudioManager {
       }
 
       @Override
-      public void setLooping(boolean isLooping) {
-         music.setLooping(isLooping);
-      }
-
-      @Override
       public boolean isLooping() {
          return music.isLooping();
       }
 
       @Override
-      public void setVolume(float volume) {
-         music.setVolume(volume);
+      public void setLooping(boolean isLooping) {
+         music.setLooping(isLooping);
       }
 
       @Override
@@ -298,18 +316,23 @@ public class AudioManagerImpl implements AudioManager {
       }
 
       @Override
+      public void setVolume(float volume) {
+         music.setVolume(volume);
+      }
+
+      @Override
       public void setPan(float pan, float volume) {
          music.setPan(pan, volume);
       }
 
       @Override
-      public void setPosition(float position) {
-         music.setPosition(position);
+      public float getPosition() {
+         return music.getPosition();
       }
 
       @Override
-      public float getPosition() {
-         return music.getPosition();
+      public void setPosition(float position) {
+         music.setPosition(position);
       }
 
       @Override
@@ -322,29 +345,5 @@ public class AudioManagerImpl implements AudioManager {
          music.setOnCompletionListener(listener);
       }
 
-   }
-
-   private float computeVolume(float sourceX, float sourceY, float maxDistance) {
-      Camera camera = this.camera.getInternal();
-      tmp.set(camera.position.x, camera.position.y, camera.position.z);
-      tmp.x -= sourceX;
-      tmp.y -= sourceY;
-      return MathUtils.clamp(1 - (tmp.len() / maxDistance), 0.0f, 1f);
-   }
-   
-   private float computePan(float sourceX, float sourceY, float maxDistance) {
-      Camera camera = this.camera.getInternal();
-      if (camera != null) {
-         tmp.set(camera.up);
-         tmp.crs(camera.direction);
-         tmp.nor();
-         final float lenX = camera.position.x - sourceX;
-         final float lenY = camera.position.y - sourceY;
-         final float lenZ = camera.position.z - 0f;
-         final float clampX = tmp.dot(new Vector3(lenX, lenY, lenZ));
-         return MathUtils.clamp(clampX / maxDistance, -1f, 1f);
-     } else {
-         return 0f;
-      }
    }
 }

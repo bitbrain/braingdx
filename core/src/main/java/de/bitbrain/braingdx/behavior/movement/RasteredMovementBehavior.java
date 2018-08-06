@@ -28,30 +28,21 @@ import java.util.List;
 
 public class RasteredMovementBehavior extends BehaviorAdapter implements Movement<Orientation> {
 
-   public static interface RasteredMovementListener {
-      void moveBefore(GameObject object, float moveX, float moveY, float duration);
-      void moveAfter(GameObject object);
-   }
-
    public static final int DEFAULT_RASTER_SIZE = 32;
    public static final float DEFAULT_INTERVAL = 1f;
    public static final Orientation DEFAULT_DIRECTION = Orientation.DOWN;
-
-   private float rasterWidth = DEFAULT_RASTER_SIZE;
-   private float rasterHeight = DEFAULT_RASTER_SIZE;
-   private float interval = DEFAULT_INTERVAL;
-
-   private boolean moving = false;
-   private boolean wasMoving = false;
-   private GameObject source;
-   private TweenEquation ease = TweenEquations.easeNone;
-
    private final TweenManager tweenManager = SharedTweenManager.getInstance();
    private final DeltaTimer timer = new DeltaTimer(DEFAULT_INTERVAL);
    private final MovementController<Orientation> controller;
    private final TiledMapAPI api;
    private final List<RasteredMovementListener> listeners = new ArrayList<RasteredMovementListener>();
-
+   private float rasterWidth = DEFAULT_RASTER_SIZE;
+   private float rasterHeight = DEFAULT_RASTER_SIZE;
+   private float interval = DEFAULT_INTERVAL;
+   private boolean moving = false;
+   private boolean wasMoving = false;
+   private GameObject source;
+   private TweenEquation ease = TweenEquations.easeNone;
    public RasteredMovementBehavior(MovementController<Orientation> controller,
                                    TiledMapAPI api) {
       this.controller = controller;
@@ -101,25 +92,25 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
             source.setOffset(-moveX, -moveY);
             if (moveX != 0) {
                Tween.to(source, GameObjectTween.OFFSET_X, interval).target(0f).ease(ease)
-                  .setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
-                     @Override
-                     public void onEvent(int arg0, BaseTween<?> arg1) {
-                        for (RasteredMovementListener listener : listeners) {
-                           listener.moveAfter(source);
-                        }
+                     .setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
+                  @Override
+                  public void onEvent(int arg0, BaseTween<?> arg1) {
+                     for (RasteredMovementListener listener : listeners) {
+                        listener.moveAfter(source);
                      }
-                  }).start(tweenManager);
+                  }
+               }).start(tweenManager);
             }
             if (moveY != 0) {
                Tween.to(source, GameObjectTween.OFFSET_Y, interval).target(0f).ease(ease)
                      .setCallbackTriggers(TweenCallback.COMPLETE).setCallback(new TweenCallback() {
-                        @Override
-                        public void onEvent(int arg0, BaseTween<?> arg1) {
-                           for (RasteredMovementListener listener : listeners) {
-                              listener.moveAfter(source);
-                           }
-                        }
-                     }).start(tweenManager);
+                  @Override
+                  public void onEvent(int arg0, BaseTween<?> arg1) {
+                     for (RasteredMovementListener listener : listeners) {
+                        listener.moveAfter(source);
+                     }
+                  }
+               }).start(tweenManager);
             }
          }
       }
@@ -153,8 +144,8 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
       // 1. Get the raw target to check
       int targetX = orientation.getXFactor();
       int targetY = orientation.getYFactor();
-      int widthIndex = (int)Math.floor(source.getWidth() / api.getCellWidth());
-      int heightIndex = (int)Math.floor(source.getHeight() / api.getCellHeight());
+      int widthIndex = (int) Math.floor(source.getWidth() / api.getCellWidth());
+      int heightIndex = (int) Math.floor(source.getHeight() / api.getCellHeight());
 
       // Offset target by width
       if (targetX > 0) {
@@ -182,6 +173,12 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 
    private boolean isReadyToMove() {
       return timer.reached(interval);
+   }
+
+   public static interface RasteredMovementListener {
+      void moveBefore(GameObject object, float moveX, float moveY, float duration);
+
+      void moveAfter(GameObject object);
    }
 
 }

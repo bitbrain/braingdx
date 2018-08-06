@@ -26,56 +26,24 @@ import java.util.*;
 /**
  * Game world which contains all game objects and managed them.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class GameWorld implements Iterable<GameObject> {
 
-   /** the default cache size this world uses */
+   /**
+    * the default cache size this world uses
+    */
    public static final int DEFAULT_CACHE_SIZE = 512;
-
-   /**
-    * Listens to GameWorld events.
-    */
-   public static class GameWorldListener {
-      public void onAdd(GameObject object) {
-      }
-
-      public void onRemove(GameObject object) {
-      }
-
-      public void onUpdate(GameObject object, float delta) {
-      }
-
-      public void onUpdate(GameObject object, GameObject other, float delta) {
-      }
-
-      public void onClear() {
-      }
-   }
-
-   /**
-    * Describes when a game object is in bounds.
-    */
-   public static interface WorldBounds {
-      boolean isInBounds(GameObject object, OrthographicCamera camera);
-      float getWorldWidth();
-      float getWorldHeight();
-   }
-
    private final List<GameObject> removals = new ArrayList<GameObject>();
-   
    private final List<GameObject> additions = new ArrayList<GameObject>();
-
    private final List<GameObject> objects = new ArrayList<GameObject>();
-   
    private final Map<String, GameObject> identityMap = new HashMap<String, GameObject>();
-
    private final List<GameObject> unmodifiableObjects;
-
    private final Pool<GameObject> pool;
-
+   private final Comparator<GameObject> comparator = new ZIndexComparator();
+   private final Set<GameWorldListener> listeners = new HashSet<GameWorldListener>();
    private WorldBounds bounds = new WorldBounds() {
 
       @Override
@@ -95,10 +63,6 @@ public class GameWorld implements Iterable<GameObject> {
    };
 
    private OrthographicCamera camera;
-
-   private final Comparator<GameObject> comparator = new ZIndexComparator();
-
-   private final Set<GameWorldListener> listeners = new HashSet<GameWorldListener>();
 
    public GameWorld(OrthographicCamera camera) {
       this(camera, DEFAULT_CACHE_SIZE);
@@ -124,6 +88,15 @@ public class GameWorld implements Iterable<GameObject> {
    }
 
    /**
+    * Provides the world bounds.
+    *
+    * @return bounds the currently active world bounds
+    */
+   public WorldBounds getBounds() {
+      return bounds;
+   }
+
+   /**
     * Sets the bounds of the world. By default, everything is in bounds.
     *
     * @param bounds the new bounds implementation
@@ -131,16 +104,7 @@ public class GameWorld implements Iterable<GameObject> {
    public void setBounds(WorldBounds bounds) {
       this.bounds = bounds;
    }
-   
-   /**
-    * Provides the world bounds.
-    * 
-    * @return bounds the currently active world bounds
-    */
-   public WorldBounds getBounds() {
-      return bounds;
-   }
-   
+
    /**
     * Adds a new game object to the game world and provides it.
     *
@@ -158,50 +122,50 @@ public class GameWorld implements Iterable<GameObject> {
    public GameObject addObject(boolean lazy) {
       return addObject(null, lazy);
    }
-   
+
    /**
     * Adds a new game object to the game world with a custom ID
-    * 
+    *
     * @param mutator the mutator which might change the GameObject
     * @return newly created game object
     */
    public GameObject addObject(Mutator<GameObject> mutator) {
-	   return addObject(mutator, false);
+      return addObject(mutator, false);
    }
-   
+
    /**
     * Adds a new game object to the game world with a custom ID
-    * 
+    *
     * @param mutator the mutator which might change the GameObject
     * @return newly created game object
     */
    public GameObject addObject(Mutator<GameObject> mutator, boolean lazy) {
       Gdx.app.debug("DEBUG", "GameWorld - obtaining new object...");
-	   final GameObject object = pool.obtain();
-	   if (identityMap.containsKey(object.getId())) {
-	       Gdx.app.error("FATAL", String.format(
-	             "GameWorld - game object %s already exists. Unable to add new object %s",
-	             object,
-	             identityMap.get(object.getId())
-	          )
-	       );
-	       return object;
-	   }
-	   if (lazy) {
-	      Gdx.app.debug("DEBUG", String.format("GameWorld - requested addition for new game object %s", object));
-		   additions.add(object);
-	   } else {
-	      Gdx.app.debug("DEBUG", String.format("GameWorld - added new game object %s", object));
-		   objects.add(object);
-		   for (GameWorldListener l : listeners) {
-		       l.onAdd(object);
-		   }
-	   }
+      final GameObject object = pool.obtain();
+      if (identityMap.containsKey(object.getId())) {
+         Gdx.app.error("FATAL", String.format(
+               "GameWorld - game object %s already exists. Unable to add new object %s",
+               object,
+               identityMap.get(object.getId())
+               )
+         );
+         return object;
+      }
+      if (lazy) {
+         Gdx.app.debug("DEBUG", String.format("GameWorld - requested addition for new game object %s", object));
+         additions.add(object);
+      } else {
+         Gdx.app.debug("DEBUG", String.format("GameWorld - added new game object %s", object));
+         objects.add(object);
+         for (GameWorldListener l : listeners) {
+            l.onAdd(object);
+         }
+      }
       if (mutator != null) {
          mutator.mutate(object);
       }
       identityMap.put(object.getId(), object);
-	   return object;
+      return object;
    }
 
    /**
@@ -218,7 +182,7 @@ public class GameWorld implements Iterable<GameObject> {
             l.onAdd(addition);
          }
       }
-	  additions.clear();
+      additions.clear();
       Collections.sort(objects, comparator);
       for (GameObject object : objects) {
          if (!bounds.isInBounds(object, camera) && !object.isPersistent()) {
@@ -244,9 +208,9 @@ public class GameWorld implements Iterable<GameObject> {
       }
       removals.clear();
    }
-   
+
    public GameObject getObjectById(String id) {
-	   return identityMap.get(id);
+      return identityMap.get(id);
    }
 
    /**
@@ -299,5 +263,36 @@ public class GameWorld implements Iterable<GameObject> {
       }
       pool.free(object);
       objects.remove(object);
+   }
+
+   /**
+    * Describes when a game object is in bounds.
+    */
+   public static interface WorldBounds {
+      boolean isInBounds(GameObject object, OrthographicCamera camera);
+
+      float getWorldWidth();
+
+      float getWorldHeight();
+   }
+
+   /**
+    * Listens to GameWorld events.
+    */
+   public static class GameWorldListener {
+      public void onAdd(GameObject object) {
+      }
+
+      public void onRemove(GameObject object) {
+      }
+
+      public void onUpdate(GameObject object, float delta) {
+      }
+
+      public void onUpdate(GameObject object, GameObject other, float delta) {
+      }
+
+      public void onClear() {
+      }
    }
 }

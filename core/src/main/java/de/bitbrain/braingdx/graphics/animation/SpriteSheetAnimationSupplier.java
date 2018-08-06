@@ -26,10 +26,10 @@ import java.util.Map;
 
 /**
  * Orientation based implementation of {@link Animator}
- * 
+ *
  * @author Miguel Gonzalez Sanchez
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 public class SpriteSheetAnimationSupplier extends BehaviorAdapter implements AnimationSupplier<GameObject> {
 
@@ -41,12 +41,12 @@ public class SpriteSheetAnimationSupplier extends BehaviorAdapter implements Ani
    private final AnimationType stillType;
 
    public SpriteSheetAnimationSupplier(Map<Orientation, Integer> orientations, SpriteSheetAnimation template,
-         AnimationType movingType) {
+                                       AnimationType movingType) {
       this(orientations, template, movingType, AnimationTypes.RESET);
    }
 
    public SpriteSheetAnimationSupplier(Map<Orientation, Integer> orientations, SpriteSheetAnimation template,
-         AnimationType movingType, AnimationType stillType) {
+                                       AnimationType movingType, AnimationType stillType) {
       this.orientations = orientations;
       this.template = template;
       this.movingType = movingType;

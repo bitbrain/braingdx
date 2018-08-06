@@ -25,9 +25,9 @@ import java.util.Random;
 /**
  * Behavior which moves the object in random directions
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class RandomVelocityMovementBehavior extends BehaviorAdapter {
 

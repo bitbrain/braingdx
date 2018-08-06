@@ -29,10 +29,10 @@ public class MockedCombinedRenderPipelineFactory implements RenderPipelineFactor
       Viewport viewport = mock(Viewport.class);
       when(factory.create(Mockito.anyInt(), Mockito.anyInt())).thenReturn(buffer);
       Mockito.doAnswer(new Answer<Object>() {
-		@Override
-		public Object answer(InvocationOnMock invocation) throws Throwable {
-			return null;
-		}    	  
+         @Override
+         public Object answer(InvocationOnMock invocation) throws Throwable {
+            return null;
+         }
       }).when(viewport).update(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyBoolean());
       when(viewportFactory.create(Mockito.anyInt(), Mockito.anyInt())).thenReturn(viewport);
       when(buffer.getColorBufferTexture()).thenReturn(mockTexture);

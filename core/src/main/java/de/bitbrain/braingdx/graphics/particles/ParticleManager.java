@@ -32,66 +32,55 @@ import java.util.Set;
 
 /**
  * Manages particle effects.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
 public class ParticleManager implements Disposable {
 
-   private static class InternalPooledEffect {
-       public final ParticleEffectPool.PooledEffect effect;
-       public final String assetId;
-
-       public InternalPooledEffect(String assetId, ParticleEffectPool.PooledEffect effect) {
-           this.effect = effect;
-           this.assetId = assetId;
-       }
-   }
-
    private final Set<InternalPooledEffect> effects = new HashSet<InternalPooledEffect>();
    private final Set<InternalPooledEffect> removals = new HashSet<InternalPooledEffect>();
    private final Map<String, ParticleEffectPool> pools = new HashMap<String, ParticleEffectPool>();
    private final BehaviorManager behaviorManager;
-
    public ParticleManager(BehaviorManager behaviorManager) {
-       this.behaviorManager = behaviorManager;
+      this.behaviorManager = behaviorManager;
    }
 
    public void draw(Batch batch, float delta) {
-       for (InternalPooledEffect internal : effects) {
-           if (internal.effect.isComplete()) {
-               removals.add(internal);
-           }
-           internal.effect.draw(batch, delta);
-       }
-       for (InternalPooledEffect internal : removals) {
-           freeEffect(internal);
-       }
-       removals.clear();
+      for (InternalPooledEffect internal : effects) {
+         if (internal.effect.isComplete()) {
+            removals.add(internal);
+         }
+         internal.effect.draw(batch, delta);
+      }
+      for (InternalPooledEffect internal : removals) {
+         freeEffect(internal);
+      }
+      removals.clear();
    }
 
    public void attachEffect(String assetEffectId, GameObject object, final float offsetX, final float offsetY) {
-       final InternalPooledEffect effect = ensureEffect(assetEffectId);
-       behaviorManager.apply(new BehaviorAdapter() {
-           @Override
-           public void onDetach(GameObject source) {
-               freeEffect(effect);
-           }
+      final InternalPooledEffect effect = ensureEffect(assetEffectId);
+      behaviorManager.apply(new BehaviorAdapter() {
+         @Override
+         public void onDetach(GameObject source) {
+            freeEffect(effect);
+         }
 
-           @Override
-           public void update(GameObject source, float delta) {
-               if (effect.effect.isComplete() && effects.contains(effect)) {
-                   freeEffect(effect);
-               } else {
-                   effect.effect.setPosition(source.getLeft() + offsetX, source.getTop() + offsetY);
-               }
-           }
-       }, object);
+         @Override
+         public void update(GameObject source, float delta) {
+            if (effect.effect.isComplete() && effects.contains(effect)) {
+               freeEffect(effect);
+            } else {
+               effect.effect.setPosition(source.getLeft() + offsetX, source.getTop() + offsetY);
+            }
+         }
+      }, object);
    }
 
    public void spawnEffect(String assetEffectId, float worldX, float worldY) {
-       InternalPooledEffect internal = ensureEffect(assetEffectId);
-       internal.effect.setPosition(worldX, worldY);
+      InternalPooledEffect internal = ensureEffect(assetEffectId);
+      internal.effect.setPosition(worldX, worldY);
    }
 
    @Override
@@ -107,27 +96,37 @@ public class ParticleManager implements Disposable {
    }
 
    private InternalPooledEffect ensureEffect(String particleId) {
-       ParticleEffectPool pool = pools.get(particleId);
-       if (pool == null) {
-           ParticleEffect effect = SharedAssetManager.getInstance().get(particleId, ParticleEffect.class);
-           pool = new ParticleEffectPool(effect, 100, 500);
-           pools.put(particleId, pool);
-       }
-       InternalPooledEffect effect = new InternalPooledEffect(particleId, pool.obtain());
-       effects.add(effect);
-       effect.effect.reset();
-       effect.effect.start();
-       return effect;
+      ParticleEffectPool pool = pools.get(particleId);
+      if (pool == null) {
+         ParticleEffect effect = SharedAssetManager.getInstance().get(particleId, ParticleEffect.class);
+         pool = new ParticleEffectPool(effect, 100, 500);
+         pools.put(particleId, pool);
+      }
+      InternalPooledEffect effect = new InternalPooledEffect(particleId, pool.obtain());
+      effects.add(effect);
+      effect.effect.reset();
+      effect.effect.start();
+      return effect;
    }
 
    private void freeEffect(InternalPooledEffect effect) {
-       ParticleEffectPool pool = pools.get(effect.assetId);
-       if (pool != null) {
-           effect.effect.free();
-           effects.remove(effect);
-           pool.free(effect.effect);
-       } else {
-           Gdx.app.error("Particles", "Unable to release effect " + effect.assetId + ". No pool available!");
-       }
+      ParticleEffectPool pool = pools.get(effect.assetId);
+      if (pool != null) {
+         effect.effect.free();
+         effects.remove(effect);
+         pool.free(effect.effect);
+      } else {
+         Gdx.app.error("Particles", "Unable to release effect " + effect.assetId + ". No pool available!");
+      }
+   }
+
+   private static class InternalPooledEffect {
+      public final ParticleEffectPool.PooledEffect effect;
+      public final String assetId;
+
+      public InternalPooledEffect(String assetId, ParticleEffectPool.PooledEffect effect) {
+         this.effect = effect;
+         this.assetId = assetId;
+      }
    }
 }

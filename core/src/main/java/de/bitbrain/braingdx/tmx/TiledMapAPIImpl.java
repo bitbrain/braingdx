@@ -25,17 +25,17 @@ import de.bitbrain.braingdx.world.GameWorld;
 /**
  * Implementation of {@link TiledMapAPI}.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 class TiledMapAPIImpl implements TiledMapAPI {
 
    private final State state;
    private final GameEventManager gameEventManager;
    private final GameWorld gameWorld;
-   private boolean debug;
    private final GameEventRouter eventRouter;
+   private boolean debug;
 
    public TiledMapAPIImpl(State state, GameWorld gameWorld, GameEventRouter router, GameEventManager gameEventManager) {
       this.state = state;
@@ -139,7 +139,7 @@ class TiledMapAPIImpl implements TiledMapAPI {
          return true;
       }
       return state.getState(tileX, tileY, layer).isCollision()
-          && !state.getState(tileX, tileY, layer).isFingerprint(source.getId());
+            && !state.getState(tileX, tileY, layer).isFingerprint(source.getId());
    }
 
    @Override
@@ -218,13 +218,13 @@ class TiledMapAPIImpl implements TiledMapAPI {
    }
 
    @Override
-   public void setDebug(boolean enabled) {
-      this.debug = enabled;
+   public boolean isDebug() {
+      return debug;
    }
 
    @Override
-   public boolean isDebug() {
-      return debug;
+   public void setDebug(boolean enabled) {
+      this.debug = enabled;
    }
 
 }

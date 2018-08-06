@@ -32,25 +32,24 @@ import de.bitbrain.braingdx.util.ViewportFactory;
 /**
  * Abstract base class for screens
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
+   private final ViewportFactory viewportFactory = new ViewportFactory() {
+
+      @Override
+      public Viewport create(int width, int height) {
+         return getViewport(width, height);
+      }
+
+   };
    private T game;
    private Color backgroundColor = Color.BLACK.cpy();
    private ColoredRenderLayer coloredRenderLayer;
    private GameContext2DImpl gameContext2D;
-   
-   private final ViewportFactory viewportFactory = new ViewportFactory() {
-
-	@Override
-	public Viewport create(int width, int height) {
-		return getViewport(width, height);
-	}
-	   
-   };
 
    public AbstractScreen(T game) {
       this.game = game;
@@ -78,11 +77,17 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
    @Override
    public final void resize(int width, int height) {
-	   gameContext2D.resize(width, height);
+      gameContext2D.resize(width, height);
    }
-   
+
    public Color getBackgroundColor() {
-	   return backgroundColor;
+      return backgroundColor;
+   }
+
+   public void setBackgroundColor(Color color) {
+      this.backgroundColor = color;
+      coloredRenderLayer.setColor(color);
+      gameContext2D.getRenderPipeline().put(RenderPipeIds.BACKGROUND, coloredRenderLayer);
    }
 
    @Override
@@ -103,7 +108,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
    protected abstract void onCreate(GameContext context);
 
    protected void onUpdate(float delta) {
-	   // noOp
+      // noOp
    }
 
    protected ShaderConfig getShaderConfig() {
@@ -116,12 +121,6 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
    @Override
    public void dispose() {
-     gameContext2D.dispose();
-   }
-
-   public void setBackgroundColor(Color color) {
-      this.backgroundColor = color;
-      coloredRenderLayer.setColor(color);
-      gameContext2D.getRenderPipeline().put(RenderPipeIds.BACKGROUND, coloredRenderLayer);
+      gameContext2D.dispose();
    }
 }

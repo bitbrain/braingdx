@@ -19,7 +19,7 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 
 /**
  * Allows transitions.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0
  * @since 1.0
@@ -48,24 +48,24 @@ public interface Transitionable extends RenderLayer {
 
    /**
     * Fades in with the given transition callback and duration specified.
-    * 
-    * @param callback the duration callback.
+    *
+    * @param callback     the duration callback.
     * @param durationInMs the duration in ms.
     */
    void in(TransitionCallback callback, float durationInMs);
 
    /**
     * Fades out with the given transition callback and duration specified.
-    * 
-    * @param callback the duration callback.
+    *
+    * @param callback     the duration callback.
     * @param durationInMs the duration in ms.
     */
    void out(TransitionCallback callback, float durationInMs);
 
    /**
     * Fades out and in with the given transition callback and duration specified.
-    * 
-    * @param callback the duration callback.
+    *
+    * @param callback     the duration callback.
     * @param durationInMs the duration in ms.
     */
    void outIn(TransitionCallback callback, float durationInMs);

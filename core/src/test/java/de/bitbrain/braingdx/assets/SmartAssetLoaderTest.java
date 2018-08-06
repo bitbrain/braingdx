@@ -30,28 +30,28 @@ import java.util.Map;
  * Test for {@link SmartAssetLoader}.
  */
 public class SmartAssetLoaderTest {
-	
-	private Map<String, Class<?>> assets;
-	
-	@Before
-	public void beforeTest() {		
-		assets = new HashMap<String, Class<?>>();
-		Gdx.app = Mockito.mock(Application.class);
-	}
-	
-	@Test
-	public void testDefaultTypes() {
-		SmartAssetLoader loader = new SmartAssetLoader(SampleValidAssets.class);
-		loader.put(assets);
-		Assertions.assertThat(assets).hasSize(12);
-	}
-	
-	@Test
-	public void testDefaultTypesWithAsdfTypes() {
-		SmartAssetLoaderConfiguration config = SmartAssetLoader.defaultConfiguration();
-		config.getClassMapping().put("AsdfType", Object.class);
-		SmartAssetLoader loader = new SmartAssetLoader(CustomSampleValidAssets.class, config);
-		loader.put(assets);
-		Assertions.assertThat(assets).hasSize(2);
-	}
+
+   private Map<String, Class<?>> assets;
+
+   @Before
+   public void beforeTest() {
+      assets = new HashMap<String, Class<?>>();
+      Gdx.app = Mockito.mock(Application.class);
+   }
+
+   @Test
+   public void testDefaultTypes() {
+      SmartAssetLoader loader = new SmartAssetLoader(SampleValidAssets.class);
+      loader.put(assets);
+      Assertions.assertThat(assets).hasSize(12);
+   }
+
+   @Test
+   public void testDefaultTypesWithAsdfTypes() {
+      SmartAssetLoaderConfiguration config = SmartAssetLoader.defaultConfiguration();
+      config.getClassMapping().put("AsdfType", Object.class);
+      SmartAssetLoader loader = new SmartAssetLoader(CustomSampleValidAssets.class, config);
+      loader.put(assets);
+      Assertions.assertThat(assets).hasSize(2);
+   }
 }

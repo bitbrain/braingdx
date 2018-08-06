@@ -17,7 +17,7 @@ package de.bitbrain.braingdx.graphics.pipeline;
 
 /**
  * Creates {@link RenderPipeline} objects.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  */
 public interface RenderPipelineFactory {

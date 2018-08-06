@@ -25,9 +25,9 @@ import java.util.Map;
 /**
  * Handles rendering of game objects
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class GameObjectRenderManager implements Disposable {
 
@@ -37,6 +37,16 @@ public class GameObjectRenderManager implements Disposable {
 
    public GameObjectRenderManager(Batch batch) {
       this.batch = batch;
+   }
+
+   /**
+    * Combines multiple renderers for a particular game object
+    *
+    * @param gameObjectRenderers renderers
+    * @return a new combined {@link GameObjectRenderer}
+    */
+   public static GameObjectRenderer combine(GameObjectRenderer... gameObjectRenderers) {
+      return new CombinedGameObjectRenderer(gameObjectRenderers);
    }
 
    public void render(GameObject object, float delta) {
@@ -65,16 +75,6 @@ public class GameObjectRenderManager implements Disposable {
          }
       }
       rendererMap.clear();
-   }
-
-   /**
-    * Combines multiple renderers for a particular game object
-    * 
-    * @param gameObjectRenderers renderers
-    * @return a new combined {@link GameObjectRenderer}
-    */
-   public static GameObjectRenderer combine(GameObjectRenderer... gameObjectRenderers) {
-      return new CombinedGameObjectRenderer(gameObjectRenderers);
    }
 
    public static interface GameObjectRenderer {

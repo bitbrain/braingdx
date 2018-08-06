@@ -27,18 +27,14 @@ import com.badlogic.gdx.utils.Array;
 /**
  * Loader implementation for Particle effects
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class ParticleLoader extends SynchronousAssetLoader<ParticleEffect, ParticleLoader.ParticleParameter> {
 
    public ParticleLoader(FileHandleResolver resolver) {
       super(resolver);
-   }
-
-   static public class ParticleParameter extends AssetLoaderParameters<ParticleEffect> {
-      // do nothing here
    }
 
    @SuppressWarnings("rawtypes")
@@ -49,9 +45,13 @@ public class ParticleLoader extends SynchronousAssetLoader<ParticleEffect, Parti
 
    @Override
    public ParticleEffect load(AssetManager assetManager, String fileName, FileHandle file,
-         ParticleParameter parameter) {
+                              ParticleParameter parameter) {
       final ParticleEffect effect = new ParticleEffect();
       effect.load(file, resolve(""));
       return effect;
+   }
+
+   static public class ParticleParameter extends AssetLoaderParameters<ParticleEffect> {
+      // do nothing here
    }
 }

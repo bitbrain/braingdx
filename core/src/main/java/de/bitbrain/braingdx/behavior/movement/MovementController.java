@@ -17,20 +17,19 @@ package de.bitbrain.braingdx.behavior.movement;
 
 /**
  * Controls movement over time.
- * 
- * @author Miguel Gonzalez Sanchez
- * @since 1.0.0
- * @version 1.0.0
  *
  * @param <T> movement type
+ * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public interface MovementController<T> {
 
    /**
     * Updates the movement.
-    * 
+    *
     * @param movement the movement
-    * @param delta current frame delta
+    * @param delta    current frame delta
     */
    void update(Movement<T> movement, float delta);
 

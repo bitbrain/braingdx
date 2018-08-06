@@ -24,9 +24,9 @@ import de.bitbrain.braingdx.world.GameObject;
 /**
  * Provides extended operations on {@link TiledMap} objects.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public interface TiledMapAPI extends TiledCollisionResolver {
 
@@ -60,12 +60,12 @@ public interface TiledMapAPI extends TiledCollisionResolver {
    float getCellWidth();
 
    float getCellHeight();
-   
+
    float getWorldWidth();
-   
+
    float getWorldHeight();
 
-   void setDebug(boolean enabled);
-
    boolean isDebug();
+
+   void setDebug(boolean enabled);
 }

@@ -21,9 +21,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 /**
  * Tween facility for sprites
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class SpriteTween implements TweenAccessor<Sprite> {
 

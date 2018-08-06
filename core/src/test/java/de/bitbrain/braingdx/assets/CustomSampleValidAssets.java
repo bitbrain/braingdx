@@ -16,9 +16,9 @@
 package de.bitbrain.braingdx.assets;
 
 public interface CustomSampleValidAssets {
-	
-	interface AsdfType {
-		String field1 = "asdf-field1";
-		String field2 = "asdf-field2";
-	}
+
+   interface AsdfType {
+      String field1 = "asdf-field1";
+      String field2 = "asdf-field2";
+   }
 }

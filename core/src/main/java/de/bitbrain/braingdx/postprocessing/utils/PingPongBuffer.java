@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 bmanuel
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,38 +22,38 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
 /**
  * Encapsulates a framebuffer with the ability to ping-pong between two buffers.
- * 
+ * <p>
  * Upon {@link #begin()} the buffer is reset to a known initial state, this is usually done just
  * before the first usage of the buffer.
- * 
+ * <p>
  * Subsequent {@link #capture()} calls will initiate writing to the next available buffer, returning
  * the previously used one, effectively ping-ponging between the two. Until {@link #end()} is
  * called, chained rendering will be possible by retrieving the necessary buffers via
  * {@link #getSourceTexture()}, {@link #getSourceBuffer()}, {@link #getResultTexture()} or
  * {@link #getResultBuffer}.
- * 
+ * <p>
  * When finished, {@link #end()} should be called to stop capturing. When the OpenGL context is
  * lost, {@link #rebind()} should be called.
- * 
+ *
  * @author bmanuel
  */
 public final class PingPongBuffer {
+   public final boolean ownResources;
+   // save/restore state
+   private final FrameBuffer owned1, owned2;
    public FrameBuffer buffer1, buffer2;
    public Texture texture1, texture2;
    public int width, height;
-   public final boolean ownResources;
-
    // internal state
    private Texture texResult, texSrc;
    private FrameBuffer bufResult, bufSrc;
    private boolean writeState, pending1, pending2;
-
-   // save/restore state
-   private final FrameBuffer owned1, owned2;
    private FrameBuffer ownedResult, ownedSource;
    private int ownedW, ownedH;
 
-   /** Creates a new ping-pong buffer and owns the resources. */
+   /**
+    * Creates a new ping-pong buffer and owns the resources.
+    */
    public PingPongBuffer(int width, int height, Format frameBufferFormat, boolean hasDepth) {
       ownResources = true;
       owned1 = new FrameBuffer(frameBufferFormat, width, height, hasDepth);
@@ -61,7 +61,9 @@ public final class PingPongBuffer {
       set(owned1, owned2);
    }
 
-   /** Creates a new ping-pong buffer with the given buffers. */
+   /**
+    * Creates a new ping-pong buffer with the given buffers.
+    */
    public PingPongBuffer(FrameBuffer buffer1, FrameBuffer buffer2) {
       ownResources = false;
       owned1 = null;
@@ -72,10 +74,10 @@ public final class PingPongBuffer {
    /**
     * An instance of this object can also be used to manipulate some other externally-allocated
     * buffers, applying just the same ping-ponging behavior.
-    * 
+    * <p>
     * If this instance of the object was owning the resources, they will be preserved and will be
     * restored by a {@link #reset()} call.
-    * 
+    *
     * @param buffer1 the first buffer
     * @param buffer2 the second buffer
     */
@@ -94,7 +96,9 @@ public final class PingPongBuffer {
       rebind();
    }
 
-   /** Restore the previous buffers if the instance was owning resources. */
+   /**
+    * Restore the previous buffers if the instance was owning resources.
+    */
    public void reset() {
       if (ownResources) {
          buffer1 = owned1;
@@ -106,7 +110,9 @@ public final class PingPongBuffer {
       }
    }
 
-   /** Free the resources, if any. */
+   /**
+    * Free the resources, if any.
+    */
    public void dispose() {
       if (ownResources) {
          // make sure we delete what we own
@@ -116,13 +122,17 @@ public final class PingPongBuffer {
       }
    }
 
-   /** When needed graphics memory could be invalidated so buffers should be rebuilt. */
+   /**
+    * When needed graphics memory could be invalidated so buffers should be rebuilt.
+    */
    public void rebind() {
       texture1 = buffer1.getColorBufferTexture();
       texture2 = buffer2.getColorBufferTexture();
    }
 
-   /** Ensures the initial buffer state is always the same before starting ping-ponging. */
+   /**
+    * Ensures the initial buffer state is always the same before starting ping-ponging.
+    */
    public void begin() {
       pending1 = false;
       pending2 = false;
@@ -137,7 +147,7 @@ public final class PingPongBuffer {
    /**
     * Starts and/or continue ping-ponging, begin capturing on the next available buffer, returns the
     * result of the previous {@link #capture()} call.
-    * 
+    *
     * @return the Texture containing the result.
     */
    public Texture capture() {
@@ -170,27 +180,37 @@ public final class PingPongBuffer {
       return texSrc;
    }
 
-   /** Finishes ping-ponging, must always be called after a call to {@link #capture()} */
+   /**
+    * Finishes ping-ponging, must always be called after a call to {@link #capture()}
+    */
    public void end() {
       endPending();
    }
 
-   /** @return the source texture of the current ping-pong chain. */
+   /**
+    * @return the source texture of the current ping-pong chain.
+    */
    public Texture getSouceTexture() {
       return texSrc;
    }
 
-   /** @return the source buffer of the current ping-pong chain. */
+   /**
+    * @return the source buffer of the current ping-pong chain.
+    */
    public FrameBuffer getSourceBuffer() {
       return bufSrc;
    }
 
-   /** @return the result's texture of the latest {@link #capture()}. */
+   /**
+    * @return the result's texture of the latest {@link #capture()}.
+    */
    public Texture getResultTexture() {
       return texResult;
    }
 
-   /** @return Returns the result's buffer of the latest {@link #capture()}. */
+   /**
+    * @return Returns the result's buffer of the latest {@link #capture()}.
+    */
    public FrameBuffer getResultBuffer() {
       return bufResult;
    }

@@ -23,18 +23,18 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 /**
  * Contains utils for graphics creation
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public final class GraphicsFactory {
 
    /**
     * Creates a new texture of the given color and size
     *
-    * @param width width of the texture
+    * @param width  width of the texture
     * @param height height of the texture
-    * @param color color of the texture
+    * @param color  color of the texture
     * @return new texture object
     */
    public static Texture createTexture(int width, int height, Color color) {
@@ -48,8 +48,8 @@ public final class GraphicsFactory {
 
    /**
     * Creates a valid NinePatch from a texture with the given radius.
-    * 
-    * @param texture the texture
+    *
+    * @param texture      the texture
     * @param borderRadius the border radius
     * @return a new NinePatch instance
     */
@@ -59,10 +59,10 @@ public final class GraphicsFactory {
 
    /**
     * Creates a valid NinePatch from a texture with the given radius and the given color.
-    * 
-    * @param texture the texture
+    *
+    * @param texture      the texture
     * @param borderRadius the border radius
-    * @param color the color
+    * @param color        the color
     * @return a new NinePatch instance
     */
    public static NinePatch createNinePatch(Texture texture, int borderRadius, Color color) {

@@ -20,9 +20,9 @@ import de.bitbrain.braingdx.world.GameObject;
 /**
  * This component calculates the index for instances of type {@link GameObject}.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class IndexCalculator {
 

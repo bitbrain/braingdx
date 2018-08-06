@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 bmanuel
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,29 +25,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import de.bitbrain.braingdx.postprocessing.utils.FullscreenQuad;
 
-/** The base class for any single-pass filter. */
+/**
+ * The base class for any single-pass filter.
+ */
 
 @SuppressWarnings("unchecked")
 public abstract class Filter<T> {
 
-   public interface Parameter {
-      String mnemonic();
-
-      int arrayElementSize();
-   }
-
    protected static final FullscreenQuad quad = new FullscreenQuad();
-
    protected static final int u_texture0 = 0;
    protected static final int u_texture1 = 1;
    protected static final int u_texture2 = 2;
    protected static final int u_texture3 = 3;
-
    protected Texture inputTexture = null;
    protected FrameBuffer outputBuffer = null;
    protected ShaderProgram program = null;
    private boolean programBegan = false;
-
    public Filter(ShaderProgram program) {
       this.program = program;
    }
@@ -70,14 +63,10 @@ public abstract class Filter<T> {
       program.dispose();
    }
 
-   /** FIXME add comment */
-   public abstract void rebind();
-
-   /*
-    * Sets the parameter to the specified value for this filter. This is for one-off operations
-    * since the shader is being bound and unbound once per call: for a batch-ready version of this
-    * fuction see and use setParams instead.
+   /**
+    * FIXME add comment
     */
+   public abstract void rebind();
 
    // int
    protected void setParam(Parameter param, int value) {
@@ -85,6 +74,12 @@ public abstract class Filter<T> {
       program.setUniformi(param.mnemonic(), value);
       program.end();
    }
+
+   /*
+    * Sets the parameter to the specified value for this filter. This is for one-off operations
+    * since the shader is being bound and unbound once per call: for a batch-ready version of this
+    * fuction see and use setParams instead.
+    */
 
    // float
    protected void setParam(Parameter param, float value) {
@@ -238,7 +233,9 @@ public abstract class Filter<T> {
       return (T) this;
    }
 
-   /** Should be called after any one or more setParams method calls. */
+   /**
+    * Should be called after any one or more setParams method calls.
+    */
    protected void endParams() {
       if (programBegan) {
          program.end();
@@ -246,7 +243,9 @@ public abstract class Filter<T> {
       }
    }
 
-   /** This method will get called just before a rendering operation occurs. */
+   /**
+    * This method will get called just before a rendering operation occurs.
+    */
    protected abstract void onBeforeRender();
 
    public final void render() {
@@ -267,5 +266,11 @@ public abstract class Filter<T> {
       program.begin();
       quad.render(program);
       program.end();
+   }
+
+   public interface Parameter {
+      String mnemonic();
+
+      int arrayElementSize();
    }
 }

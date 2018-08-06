@@ -25,9 +25,9 @@ import de.bitbrain.braingdx.world.GameObject;
 /**
  * Renderer implementation for animations
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class AnimationRenderer implements GameObjectRenderer {
 
@@ -44,13 +44,13 @@ public class AnimationRenderer implements GameObjectRenderer {
       this.scale.set(x, y);
       return this;
    }
-   
+
    public Vector2 getOffset() {
-   	return offset;
+      return offset;
    }
-   
+
    public void setOffset(float x, float y) {
-   	offset.set(x, y);
+      offset.set(x, y);
    }
 
    @Override

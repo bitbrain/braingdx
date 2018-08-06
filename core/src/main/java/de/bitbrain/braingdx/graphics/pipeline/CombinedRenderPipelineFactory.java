@@ -20,17 +20,17 @@ public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
    private final GameWorld world;
 
    private final LightingManager lightingManager;
-   
+
    private final ParticleManager particleManager;
 
    private final Stage stage;
-   
+
    private final Stage worldStage;
-   
+
    private final ViewportFactory viewportFactory;
 
    public CombinedRenderPipelineFactory(ShaderConfig config, GameWorld world, LightingManager lightingManager, ParticleManager particleManager,
-         Stage stage, Stage worldStage, ViewportFactory viewportFactory) {
+                                        Stage stage, Stage worldStage, ViewportFactory viewportFactory) {
       this.config = config;
       this.world = world;
       this.lightingManager = lightingManager;

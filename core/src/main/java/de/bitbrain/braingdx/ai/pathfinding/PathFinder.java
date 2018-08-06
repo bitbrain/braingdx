@@ -13,10 +13,10 @@ public interface PathFinder {
     * provided by the tile map.
     *
     * @param target the {@link GameObject} to move
-    * @param sx the x coordinate of the start location
-    * @param sy the y coordinate of the start location
-    * @param tx the x coordinate of the target location
-    * @param ty the y coordinate of the target location
+    * @param sx     the x coordinate of the start location
+    * @param sy     the y coordinate of the start location
+    * @param tx     the x coordinate of the target location
+    * @param ty     the y coordinate of the target location
     * @return The path found from start to end, or null if no path can be found.
     */
    public Path findPath(GameObject target, int tx, int ty);

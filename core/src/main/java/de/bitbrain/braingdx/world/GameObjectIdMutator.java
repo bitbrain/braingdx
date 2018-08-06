@@ -19,20 +19,20 @@ import de.bitbrain.braingdx.util.Mutator;
 
 /**
  * Mutates game objects by assigning a custom ID
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  */
 public class GameObjectIdMutator implements Mutator<GameObject> {
-	
-	private final String id;
-	
-	public GameObjectIdMutator(String id) {
-		this.id = id;
-	}
 
-	@Override
-	public void mutate(GameObject target) {
-		target.setId(id);
-	}
+   private final String id;
+
+   public GameObjectIdMutator(String id) {
+      this.id = id;
+   }
+
+   @Override
+   public void mutate(GameObject target) {
+      target.setId(id);
+   }
 
 }

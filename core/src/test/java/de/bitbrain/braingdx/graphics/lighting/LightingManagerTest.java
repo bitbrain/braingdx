@@ -21,31 +21,31 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LightingManagerTest {
-   
+
    @Mock
    private RayHandler rayHandler;
-   
+
    @Mock
    private OrthographicCamera camera;
-   
+
    @Mock
    private LightFactory lightFactory;
-   
+
    @InjectMocks
    private LightingManager lightingManager;
-   
+
    @Before
    public void beforeTest() {
       PointLight pointLightMock = mock(PointLight.class);
       when(lightFactory.newPointLight(any(RayHandler.class), anyInt(), any(Color.class), anyFloat(), anyFloat(), anyFloat())).thenReturn(pointLightMock);
    }
-   
+
    @Test
    public void testRemoveLight_Point() {
       lightingManager.addPointLight("pointlight", new Vector2(), 0f, Color.WHITE);
       assertTrue(lightingManager.removePointLight("pointlight"));
    }
-   
+
    @Test
    public void testClear() {
       lightingManager.addPointLight("", new Vector2(), 0f, Color.WHITE);

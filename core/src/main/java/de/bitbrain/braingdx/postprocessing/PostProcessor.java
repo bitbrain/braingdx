@@ -31,29 +31,29 @@ import de.bitbrain.braingdx.util.ItemsManager;
 /**
  * Provides a way to capture the rendered scene to an off-screen buffer and to apply a chain of
  * effects on it before rendering to screen.
- *
+ * <p>
  * Effects can be added or removed via {@link #addEffect(PostProcessorEffect)} and
  * {@link #removeEffect(PostProcessorEffect)}.
  *
  * @author bmanuel
  */
 public class PostProcessor implements Disposable {
-   /** Enable pipeline state queries: beware the pipeline can stall! */
+   private static final Array<PingPongBuffer> buffers = new Array<PingPongBuffer>(5);
+   /**
+    * Enable pipeline state queries: beware the pipeline can stall!
+    */
    public static boolean EnableQueryStates = false;
-
    private static PipelineState pipelineState = null;
    private static Format fbFormat;
-   private final PingPongBuffer composite;
-   private TextureWrap compositeWrapU;
-   private TextureWrap compositeWrapV;
-   private final ItemsManager<PostProcessorEffect> effectsManager = new ItemsManager<PostProcessorEffect>();
-   private static final Array<PingPongBuffer> buffers = new Array<PingPongBuffer>(5);
-   private final Color clearColor = Color.CLEAR;
-   private int clearBits = GL20.GL_COLOR_BUFFER_BIT;
-   private float clearDepth = 1f;
    private static Rectangle viewport = new Rectangle();
    private static boolean hasViewport = false;
-
+   private final PingPongBuffer composite;
+   private final ItemsManager<PostProcessorEffect> effectsManager = new ItemsManager<PostProcessorEffect>();
+   private final Color clearColor = Color.CLEAR;
+   private TextureWrap compositeWrapU;
+   private TextureWrap compositeWrapV;
+   private int clearBits = GL20.GL_COLOR_BUFFER_BIT;
+   private float clearDepth = 1f;
    private boolean enabled = true;
    private boolean capturing = false;
    private boolean hasCaptured = false;
@@ -64,7 +64,9 @@ public class PostProcessor implements Disposable {
    // maintains a per-frame updated list of enabled effects
    private Array<PostProcessorEffect> enabledEffects = new Array<PostProcessorEffect>(5);
 
-   /** Construct a new PostProcessor with FBO dimensions set to the size of the screen */
+   /**
+    * Construct a new PostProcessor with FBO dimensions set to the size of the screen
+    */
    public PostProcessor(boolean useDepth, boolean useAlphaChannel, boolean use32Bits) {
       this(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), useDepth, useAlphaChannel, use32Bits);
    }
@@ -92,7 +94,7 @@ public class PostProcessor implements Disposable {
     * wrap mode
     */
    public PostProcessor(Rectangle viewport, boolean useDepth, boolean useAlphaChannel, boolean use32Bits, TextureWrap u,
-         TextureWrap v) {
+                        TextureWrap v) {
       this((int) viewport.width, (int) viewport.height, useDepth, useAlphaChannel, use32Bits, u, v);
       setViewport(viewport);
    }
@@ -101,7 +103,7 @@ public class PostProcessor implements Disposable {
     * Construct a new PostProcessor with the given parameters and the specified texture wrap mode
     */
    public PostProcessor(int fboWidth, int fboHeight, boolean useDepth, boolean useAlphaChannel, boolean use32Bits,
-         TextureWrap u, TextureWrap v) {
+                        TextureWrap u, TextureWrap v) {
       if (use32Bits) {
          if (useAlphaChannel) {
             fbFormat = Format.RGBA8888;
@@ -135,7 +137,7 @@ public class PostProcessor implements Disposable {
    /**
     * Creates and returns a managed PingPongBuffer buffer, just create and forget. If rebind() is
     * called on context loss, managed PingPongBuffers will be rebound for you.
-    *
+    * <p>
     * This is a drop-in replacement for the same-signature PingPongBuffer's constructor.
     */
    public static PingPongBuffer newPingPongBuffer(int width, int height, Format frameBufferFormat, boolean hasDepth) {
@@ -144,7 +146,9 @@ public class PostProcessor implements Disposable {
       return buffer;
    }
 
-   /** Provides a way to query the pipeline for the most used states */
+   /**
+    * Provides a way to query the pipeline for the most used states
+    */
    public static boolean isStateEnabled(int pname) {
       if (EnableQueryStates) {
          // Gdx.app.log( "PipelineState", "Querying blending" );
@@ -156,9 +160,27 @@ public class PostProcessor implements Disposable {
    }
 
    /**
+    * Returns the internal framebuffer format, computed from the parameters specified during
+    * construction. NOTE: the returned Format will be valid after construction and NOT early!
+    */
+   public static Format getFramebufferFormat() {
+      return fbFormat;
+   }
+
+   /**
+    * Restores the previously set viewport if one was specified earlier and the destination buffer
+    * is the screen
+    */
+   protected static void restoreViewport(FrameBuffer dest) {
+      if (hasViewport && dest == null) {
+         Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
+      }
+   }
+
+   /**
     * Sets the viewport to be restored, if null is specified then the viewport will NOT be restored
     * at all.
-    *
+    * <p>
     * The predefined effects will restore the viewport settings at the final blitting stage (render
     * to screen) by invoking the restoreViewport static method.
     */
@@ -169,7 +191,9 @@ public class PostProcessor implements Disposable {
       }
    }
 
-   /** Frees owned resources. */
+   /**
+    * Frees owned resources.
+    */
    @Override
    public void dispose() {
       effectsManager.dispose();
@@ -188,9 +212,18 @@ public class PostProcessor implements Disposable {
       pipelineState.dispose();
    }
 
-   /** Whether or not the post-processor is enabled */
+   /**
+    * Whether or not the post-processor is enabled
+    */
    public boolean isEnabled() {
       return enabled;
+   }
+
+   /**
+    * Sets whether or not the post-processor should be enabled
+    */
+   public void setEnabled(boolean enabled) {
+      this.enabled = enabled;
    }
 
    /**
@@ -209,12 +242,9 @@ public class PostProcessor implements Disposable {
       return (enabled && !capturing && hasEffects);
    }
 
-   /** Sets whether or not the post-processor should be enabled */
-   public void setEnabled(boolean enabled) {
-      this.enabled = enabled;
-   }
-
-   /** Returns the number of the currently enabled effects */
+   /**
+    * Returns the number of the currently enabled effects
+    */
    public int getEnabledEffectsCount() {
       return enabledEffects.size;
    }
@@ -235,35 +265,37 @@ public class PostProcessor implements Disposable {
       effectsManager.add(effect);
    }
 
-   /** Removes the specified effect from the effect chain. */
+   /**
+    * Removes the specified effect from the effect chain.
+    */
    public void removeEffect(PostProcessorEffect effect) {
       effectsManager.remove(effect);
    }
 
    /**
-    * Returns the internal framebuffer format, computed from the parameters specified during
-    * construction. NOTE: the returned Format will be valid after construction and NOT early!
+    * Sets the color that will be used to clear the buffer.
     */
-   public static Format getFramebufferFormat() {
-      return fbFormat;
-   }
-
-   /** Sets the color that will be used to clear the buffer. */
    public void setClearColor(Color color) {
       clearColor.set(color);
    }
 
-   /** Sets the color that will be used to clear the buffer. */
+   /**
+    * Sets the color that will be used to clear the buffer.
+    */
    public void setClearColor(float r, float g, float b, float a) {
       clearColor.set(r, g, b, a);
    }
 
-   /** Sets the clear bit for when glClear is invoked. */
+   /**
+    * Sets the clear bit for when glClear is invoked.
+    */
    public void setClearBits(int bits) {
       clearBits = bits;
    }
 
-   /** Sets the depth value with which to clear the depth buffer when needed. */
+   /**
+    * Sets the depth value with which to clear the depth buffer when needed.
+    */
    public void setClearDepth(float depth) {
       clearDepth = depth;
    }
@@ -281,8 +313,8 @@ public class PostProcessor implements Disposable {
     * {@link #setClearColor(Color)} or {@link #setClearColor(float r, float g, float b, float a)}.
     *
     * @return true or false, whether or not capturing has been initiated. Capturing will fail in
-    *         case there are no enabled effects in the chain or this instance is not enabled or
-    *         capturing is already started.
+    * case there are no enabled effects in the chain or this instance is not enabled or
+    * capturing is already started.
     */
    public boolean capture() {
       hasCaptured = false;
@@ -336,7 +368,9 @@ public class PostProcessor implements Disposable {
       return false;
    }
 
-   /** Stops capturing the scene and returns the result, or null if nothing was captured. */
+   /**
+    * Stops capturing the scene and returns the result, or null if nothing was captured.
+    */
    public FrameBuffer captureEnd() {
       if (enabled && capturing) {
          capturing = false;
@@ -352,7 +386,9 @@ public class PostProcessor implements Disposable {
       return composite;
    }
 
-   /** After a capture/captureEnd action, returns the just captured buffer */
+   /**
+    * After a capture/captureEnd action, returns the just captured buffer
+    */
    public FrameBuffer captured() {
       if (enabled && hasCaptured) {
          return composite.getResultBuffer();
@@ -426,7 +462,9 @@ public class PostProcessor implements Disposable {
       }
    }
 
-   /** Convenience method to render to screen. */
+   /**
+    * Convenience method to render to screen.
+    */
    public void render() {
       render(null);
    }
@@ -440,16 +478,6 @@ public class PostProcessor implements Disposable {
       }
 
       return enabledEffects.size;
-   }
-
-   /**
-    * Restores the previously set viewport if one was specified earlier and the destination buffer
-    * is the screen
-    */
-   protected static void restoreViewport(FrameBuffer dest) {
-      if (hasViewport && dest == null) {
-         Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
-      }
    }
 
 }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
 /**
  * Creates frame buffers
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @since 1.0.0
  */

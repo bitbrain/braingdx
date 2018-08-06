@@ -19,7 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 
 /**
  * Describes movement directions.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  */
 public enum Orientation {

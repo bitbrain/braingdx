@@ -19,10 +19,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Creates {@link Viewport} objects.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  */
 public interface ViewportFactory {
 
-	Viewport create(int width, int height);
+   Viewport create(int width, int height);
 }

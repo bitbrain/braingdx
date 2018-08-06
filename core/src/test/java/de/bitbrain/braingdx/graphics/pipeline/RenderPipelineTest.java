@@ -38,7 +38,7 @@ public class RenderPipelineTest {
       Gdx.gl = mock(GL20.class);
       when(Gdx.app.getType()).thenReturn(ApplicationType.Desktop);
       //params.add(new RenderPipelineFactory[] { new MockedLayeredRenderPipelineFactory() });
-      params.add(new RenderPipelineFactory[] { new MockedCombinedRenderPipelineFactory() });
+      params.add(new RenderPipelineFactory[]{new MockedCombinedRenderPipelineFactory()});
       return params;
    }
 
@@ -53,7 +53,7 @@ public class RenderPipelineTest {
       pipeline.put(id, mock(RenderLayer.class));
       assertThat(pipeline.getPipe(id)).isNotNull();
    }
-   
+
    @Test
    public void testAddLayerBefore() {
       final String id = "my-id";
@@ -61,7 +61,7 @@ public class RenderPipelineTest {
       pipeline.putBefore("my-id", "another-id", mock(RenderLayer.class));
       assertThat(pipeline.getPipeIds()).containsSequence("another-id", "my-id");
    }
-   
+
    @Test
    public void testAddLayerAfter() {
       final String id = "my-id";

@@ -24,9 +24,9 @@ import de.bitbrain.braingdx.ai.pathfinding.PathFinder;
  * This manager gives extended support for {@link TiledMap} objects. It features an API to query the
  * map for details and provides an own rendering integration for braingdx.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public interface TiledMapManager extends Disposable {
 
@@ -35,6 +35,6 @@ public interface TiledMapManager extends Disposable {
    void load(TiledMap tiledMap, Camera camera, TiledMapType type) throws TiledMapException;
 
    TiledMapAPI getAPI();
-   
+
    PathFinder getPathFinder();
 }

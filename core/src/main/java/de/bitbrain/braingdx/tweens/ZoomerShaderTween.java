@@ -19,34 +19,34 @@ import aurelienribon.tweenengine.TweenAccessor;
 import de.bitbrain.braingdx.postprocessing.effects.Zoomer;
 
 public class ZoomerShaderTween implements TweenAccessor<Zoomer> {
-	
-	public static final int BLUR_STRENGTH = 1;
-	public static final int ZOOM_AMOUNT = 2;
-	
 
-	@Override
-	public int getValues(Zoomer target, int tweenType, float[] returnValues) {
-		switch (tweenType) {
-			case BLUR_STRENGTH:
-				returnValues[0] = target.getBlurStrength();
-				return 1;
-			case ZOOM_AMOUNT:
-				returnValues[0] = target.getZoom();
-				return 1;
-		}
-		return 0;
-	}
+   public static final int BLUR_STRENGTH = 1;
+   public static final int ZOOM_AMOUNT = 2;
 
-	@Override
-	public void setValues(Zoomer target, int tweenType, float[] newValues) {
-		switch (tweenType) {
-			case BLUR_STRENGTH:
-				target.setBlurStrength(newValues[0]);
-				break;
-			case ZOOM_AMOUNT:
-				target.setZoom(newValues[0]);
-				break;
-		}
-	}
+
+   @Override
+   public int getValues(Zoomer target, int tweenType, float[] returnValues) {
+      switch (tweenType) {
+         case BLUR_STRENGTH:
+            returnValues[0] = target.getBlurStrength();
+            return 1;
+         case ZOOM_AMOUNT:
+            returnValues[0] = target.getZoom();
+            return 1;
+      }
+      return 0;
+   }
+
+   @Override
+   public void setValues(Zoomer target, int tweenType, float[] newValues) {
+      switch (tweenType) {
+         case BLUR_STRENGTH:
+            target.setBlurStrength(newValues[0]);
+            break;
+         case ZOOM_AMOUNT:
+            target.setZoom(newValues[0]);
+            break;
+      }
+   }
 
 }

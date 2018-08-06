@@ -14,91 +14,44 @@ import java.io.Serializable;
  */
 public class UUID implements Serializable, Comparable<UUID> {
 
-    private String uuidValue;
+   private String uuidValue;
 
-    /**
-     * Default constructor to make this work for GWT serialization.
-     */
-    private UUID() {
-        // Intentionally blank
-    }
+   /**
+    * Default constructor to make this work for GWT serialization.
+    */
+   private UUID() {
+      // Intentionally blank
+   }
 
-    /**
-     * Constructs a new UUID from a string representation.
-     *
-     * @param name
-     *
-     * @return
-     */
-    public static UUID fromString( String name ) {
-        UUID newUUID = new UUID();
-        newUUID.uuidValue = name;
-        return newUUID;
-    }
+   /**
+    * Constructs a new UUID from a string representation.
+    *
+    * @param name
+    * @return
+    */
+   public static UUID fromString(String name) {
+      UUID newUUID = new UUID();
+      newUUID.uuidValue = name;
+      return newUUID;
+   }
 
-    /**
-     * Generates a random UUID that <em>should</em> be RFC-4122 Version 4 compliant,
-     * although we can't really guarantee much about it's randomness.
-     *
-     * @return
-     */
-    public static UUID randomUUID() {
-        return fromString( generateUUIDString() );
-    }
+   /**
+    * Generates a random UUID that <em>should</em> be RFC-4122 Version 4 compliant,
+    * although we can't really guarantee much about it's randomness.
+    *
+    * @return
+    */
+   public static UUID randomUUID() {
+      return fromString(generateUUIDString());
+   }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @see java.lang.Comparable#compareTo(java.lang.Object)
-     */
-    @Override
-    public int compareTo( UUID o ) {
-        return uuidValue.compareTo( o.toString() );
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return uuidValue.hashCode();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals( Object obj ) {
-        if ( this == obj ) {
-            return true;
-        }
-        if ( obj == null || getClass() != obj.getClass() ) {
-            return false;
-        }
-        return uuidValue.equals( obj.toString() );
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-        return uuidValue;
-    }
-
-    /**
-     * Generates an RFC-4122, version 4, random UUID as a formatted string.  Code altered
-     * from http://www.broofa.com/Tools/Math.uuid.js under the MIT license.
-     *
-     * @return
-     */
-    private static native String generateUUIDString() /*-{
+   /**
+    * Generates an RFC-4122, version 4, random UUID as a formatted string.  Code altered
+    * from http://www.broofa.com/Tools/Math.uuid.js under the MIT license.
+    *
+    * @return
+    */
+   private static native String generateUUIDString() /*-{
         var chars = '0123456789ABCDEF'.split(''), uuid = [];
         radix = chars.length;
 
@@ -118,5 +71,51 @@ public class UUID implements Serializable, Comparable<UUID> {
 
         return uuid.join('');
     }-*/;
+
+   /**
+    * {@inheritDoc}
+    *
+    * @see java.lang.Comparable#compareTo(java.lang.Object)
+    */
+   @Override
+   public int compareTo(UUID o) {
+      return uuidValue.compareTo(o.toString());
+   }
+
+   /**
+    * {@inheritDoc}
+    *
+    * @see java.lang.Object#hashCode()
+    */
+   @Override
+   public int hashCode() {
+      return uuidValue.hashCode();
+   }
+
+   /**
+    * {@inheritDoc}
+    *
+    * @see java.lang.Object#equals(java.lang.Object)
+    */
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj) {
+         return true;
+      }
+      if (obj == null || getClass() != obj.getClass()) {
+         return false;
+      }
+      return uuidValue.equals(obj.toString());
+   }
+
+   /**
+    * {@inheritDoc}
+    *
+    * @see java.lang.Object#toString()
+    */
+   @Override
+   public String toString() {
+      return uuidValue;
+   }
 
 }

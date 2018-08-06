@@ -7,9 +7,9 @@ import de.bitbrain.braingdx.world.GameObject;
 /**
  * Tracks a camera and make it following a target
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public interface GameCamera extends Resizeable {
 
@@ -35,28 +35,28 @@ public interface GameCamera extends Resizeable {
    void setZoomScale(float zoomScale);
 
    /**
-    * Sets the base zoom
-    * 
-    * @param zoom baseZoom
-    */
-   void setBaseZoom(float zoom);
-   
-   /**
     * Enables or disables the camera to stick to the current
     * {@link GameWorld} bounds. By default this is enabled.
     */
    void setStickToWorldBounds(boolean enabled);
-   
+
    /**
     * Provides the current base zoom
-    * 
+    *
     * @return baseZoom
     */
    float getBaseZoom();
-   
+
+   /**
+    * Sets the base zoom
+    *
+    * @param zoom baseZoom
+    */
+   void setBaseZoom(float zoom);
+
    /**
     * Zooms the current baseZoom.
-    * 
+    *
     * @param amount the base zoom amount
     */
    void zoom(float amount);
@@ -81,15 +81,15 @@ public interface GameCamera extends Resizeable {
 
    /**
     * Sets a new target and determines if focus or not.
-    * 
+    *
     * @param target the target
-    * @param focus focus target on attach
+    * @param focus  focus target on attach
     */
    void setTarget(GameObject target, boolean focus);
 
    /**
     * Provides the internal camera
-    * 
+    *
     * @return the internal camera object
     */
    Camera getInternal();

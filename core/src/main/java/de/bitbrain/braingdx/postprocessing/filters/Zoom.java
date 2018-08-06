@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 bmanuel
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,30 +21,6 @@ import de.bitbrain.braingdx.util.ShaderLoader;
 public final class Zoom extends Filter<Zoom> {
    private float x, y, zoom;
 
-   public enum Param implements Parameter {
-      // @formatter:off
-      Texture("u_texture0", 0), OffsetX("offset_x", 0), OffsetY("offset_y", 0), Zoom("zoom", 0),;
-      // @formatter:on
-
-      private String mnemonic;
-      private int elementSize;
-
-      private Param(String mnemonic, int arrayElementSize) {
-         this.mnemonic = mnemonic;
-         this.elementSize = arrayElementSize;
-      }
-
-      @Override
-      public String mnemonic() {
-         return this.mnemonic;
-      }
-
-      @Override
-      public int arrayElementSize() {
-         return this.elementSize;
-      }
-   }
-
    public Zoom() {
       super(ShaderLoader.fromFile("zoom", "zoom"));
       rebind();
@@ -52,7 +28,9 @@ public final class Zoom extends Filter<Zoom> {
       setZoom(1f);
    }
 
-   /** Specify the zoom origin, in normalized screen coordinates. */
+   /**
+    * Specify the zoom origin, in normalized screen coordinates.
+    */
    public void setOrigin(float x, float y) {
       this.x = x;
       this.y = y;
@@ -61,13 +39,13 @@ public final class Zoom extends Filter<Zoom> {
       endParams();
    }
 
+   public float getZoom() {
+      return zoom;
+   }
+
    public void setZoom(float zoom) {
       this.zoom = zoom;
       setParam(Param.Zoom, this.zoom);
-   }
-
-   public float getZoom() {
-      return zoom;
    }
 
    public float getOriginX() {
@@ -91,5 +69,29 @@ public final class Zoom extends Filter<Zoom> {
    @Override
    protected void onBeforeRender() {
       inputTexture.bind(u_texture0);
+   }
+
+   public enum Param implements Parameter {
+      // @formatter:off
+      Texture("u_texture0", 0), OffsetX("offset_x", 0), OffsetY("offset_y", 0), Zoom("zoom", 0),;
+      // @formatter:on
+
+      private String mnemonic;
+      private int elementSize;
+
+      private Param(String mnemonic, int arrayElementSize) {
+         this.mnemonic = mnemonic;
+         this.elementSize = arrayElementSize;
+      }
+
+      @Override
+      public String mnemonic() {
+         return this.mnemonic;
+      }
+
+      @Override
+      public int arrayElementSize() {
+         return this.elementSize;
+      }
    }
 }

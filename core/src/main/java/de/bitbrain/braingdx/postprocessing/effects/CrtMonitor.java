@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 bmanuel
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,7 +44,7 @@ public final class CrtMonitor extends PostProcessorEffect {
 
    // the effect is designed to work on the whole screen area, no small/mid size tricks!
    public CrtMonitor(int fboWidth, int fboHeight, boolean barrelDistortion, boolean performBlur, RgbMode mode,
-         int effectsSupport) {
+                     int effectsSupport) {
       doblur = performBlur;
 
       if (doblur) {
@@ -90,11 +90,6 @@ public final class CrtMonitor extends PostProcessorEffect {
       this.blending = false;
    }
 
-   // setters
-   public void setTime(float elapsedSecs) {
-      crt.setTime(elapsedSecs);
-   }
-
    public void setColorOffset(float offset) {
       crt.setColorOffset(offset);
    }
@@ -111,24 +106,8 @@ public final class CrtMonitor extends PostProcessorEffect {
       crt.setChromaticDispersionBY(blueYellow);
    }
 
-   public void setTint(Color tint) {
-      crt.setTint(tint);
-   }
-
    public void setTint(float r, float g, float b) {
       crt.setTint(r, g, b);
-   }
-
-   public void setDistortion(float distortion) {
-      crt.setDistortion(distortion);
-   }
-
-   public void setZoom(float zoom) {
-      crt.setZoom(zoom);
-   }
-
-   public void setRgbMode(RgbMode mode) {
-      crt.setRgbMode(mode);
    }
 
    // getters
@@ -148,20 +127,41 @@ public final class CrtMonitor extends PostProcessorEffect {
       return crt.getZoom();
    }
 
+   public void setZoom(float zoom) {
+      crt.setZoom(zoom);
+   }
+
    public Color getTint() {
       return crt.getTint();
    }
-   
-   public float getTime() {
-	   return crt.getTime();
+
+   public void setTint(Color tint) {
+      crt.setTint(tint);
    }
-   
+
+   public float getTime() {
+      return crt.getTime();
+   }
+
+   // setters
+   public void setTime(float elapsedSecs) {
+      crt.setTime(elapsedSecs);
+   }
+
    public float getDistortion() {
-	   return crt.getDistortion();
+      return crt.getDistortion();
+   }
+
+   public void setDistortion(float distortion) {
+      crt.setDistortion(distortion);
    }
 
    public RgbMode getRgbMode() {
       return crt.getRgbMode();
+   }
+
+   public void setRgbMode(RgbMode mode) {
+      crt.setRgbMode(mode);
    }
 
    @Override

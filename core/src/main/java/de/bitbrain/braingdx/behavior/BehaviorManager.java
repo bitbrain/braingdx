@@ -23,7 +23,7 @@ import java.util.Map.Entry;
 
 /**
  * Manages behavior of game objects.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
@@ -32,11 +32,11 @@ public class BehaviorManager {
    private final Set<Behavior> globalBehaviors;
    private final Set<Behavior> globalBehaviorsAdditions;
    private final Set<Behavior> globalBehaviorsRemovals;
-   
-   private final Map<String, List<Behavior>> localBehaviors;   
+
+   private final Map<String, List<Behavior>> localBehaviors;
    private final Map<String, List<Behavior>> localBehaviorAdditions;
    private final Set<String> localBehaviorRemovals;
-   
+
    private final GameWorld world;
 
    public BehaviorManager(GameWorld world) {
@@ -50,44 +50,44 @@ public class BehaviorManager {
    }
 
    public void apply(Behavior behavior, GameObject source) {
-	   List<Behavior> additions = localBehaviorAdditions.get(source.getId());
-	   if (additions == null) {
-		   additions = new ArrayList<Behavior>();
-		   localBehaviorAdditions.put(source.getId(), additions);
-	   }
-	   additions.add(behavior);
+      List<Behavior> additions = localBehaviorAdditions.get(source.getId());
+      if (additions == null) {
+         additions = new ArrayList<Behavior>();
+         localBehaviorAdditions.put(source.getId(), additions);
+      }
+      additions.add(behavior);
    }
 
    public void apply(Behavior behavior) {
-	   globalBehaviorsAdditions.add(behavior);
+      globalBehaviorsAdditions.add(behavior);
    }
 
    public void remove(Behavior behavior) {
-	   globalBehaviorsRemovals.add(behavior);
+      globalBehaviorsRemovals.add(behavior);
    }
 
    public void remove(GameObject source) {
-	   localBehaviorRemovals.add(source.getId());
+      localBehaviorRemovals.add(source.getId());
    }
 
-	public void updateGlobally(GameObject source, float delta) {
-		invalidateGlobally();
-		for (Behavior behavior : globalBehaviors) {
-			behavior.update(source, delta);
-		}
-		invalidateGlobally();
-	}
+   public void updateGlobally(GameObject source, float delta) {
+      invalidateGlobally();
+      for (Behavior behavior : globalBehaviors) {
+         behavior.update(source, delta);
+      }
+      invalidateGlobally();
+   }
 
    public void updateLocally(GameObject source, float delta) {
-	   invalidateLocally();
+      invalidateLocally();
       List<Behavior> behaviors = localBehaviors.get(source.getId());
       if (behaviors != null) {
          for (Behavior behavior : behaviors) {
             behavior.update(source, delta);
-         }         
+         }
       }
       invalidateLocally();
-      
+
    }
 
    public void updateLocallyCompared(GameObject source, GameObject target, float delta) {
@@ -98,7 +98,7 @@ public class BehaviorManager {
          }
       }
    }
-   
+
    public void updateGloballyCompared(GameObject source, GameObject target, float delta) {
       for (Behavior behavior : globalBehaviors) {
          behavior.update(source, target, delta);
@@ -119,46 +119,46 @@ public class BehaviorManager {
       globalBehaviorsRemovals.clear();
    }
 
-	private void invalidateGlobally() {
-		for (Behavior addition : globalBehaviorsAdditions) {
-			globalBehaviors.add(addition);
-		}
-		globalBehaviorsAdditions.clear();
+   private void invalidateGlobally() {
+      for (Behavior addition : globalBehaviorsAdditions) {
+         globalBehaviors.add(addition);
+      }
+      globalBehaviorsAdditions.clear();
 
-		for (Behavior removal : globalBehaviorsRemovals) {
-			globalBehaviors.remove(removal);
-		}
+      for (Behavior removal : globalBehaviorsRemovals) {
+         globalBehaviors.remove(removal);
+      }
 
-		globalBehaviorsRemovals.clear();
-	}
-   
-	private void invalidateLocally() {
-		for (Entry<String, List<Behavior>> addition : localBehaviorAdditions.entrySet()) {
-			List<Behavior> behaviors = localBehaviors.get(addition.getKey());
-			if (behaviors == null) {
-				behaviors = new ArrayList<Behavior>();
-				localBehaviors.put(addition.getKey(), behaviors);
-			}
-			for (Behavior additionBehavior : addition.getValue()) {
-				behaviors.add(additionBehavior);
-				additionBehavior.onAttach(world.getObjectById(addition.getKey()));
-			}
+      globalBehaviorsRemovals.clear();
+   }
+
+   private void invalidateLocally() {
+      for (Entry<String, List<Behavior>> addition : localBehaviorAdditions.entrySet()) {
+         List<Behavior> behaviors = localBehaviors.get(addition.getKey());
+         if (behaviors == null) {
+            behaviors = new ArrayList<Behavior>();
+            localBehaviors.put(addition.getKey(), behaviors);
+         }
+         for (Behavior additionBehavior : addition.getValue()) {
+            behaviors.add(additionBehavior);
+            additionBehavior.onAttach(world.getObjectById(addition.getKey()));
+         }
          for (Behavior globalBehavior : globalBehaviors) {
             globalBehavior.onAttach(world.getObjectById(addition.getKey()));
          }
-		}
-		localBehaviorAdditions.clear();
-		for (String removal : localBehaviorRemovals) {
-			List<Behavior> behaviors = localBehaviors.remove(removal);
-			if (behaviors != null) {
-				for (Behavior behavior : behaviors) {
-					behavior.onDetach(world.getObjectById(removal));
-				}
-			}
-			for (Behavior globalBehavior : globalBehaviors) {
-				globalBehavior.onDetach(world.getObjectById(removal));
-			}
-		}
-		localBehaviorRemovals.clear();
-	}
+      }
+      localBehaviorAdditions.clear();
+      for (String removal : localBehaviorRemovals) {
+         List<Behavior> behaviors = localBehaviors.remove(removal);
+         if (behaviors != null) {
+            for (Behavior behavior : behaviors) {
+               behavior.onDetach(world.getObjectById(removal));
+            }
+         }
+         for (Behavior globalBehavior : globalBehaviors) {
+            globalBehavior.onDetach(world.getObjectById(removal));
+         }
+      }
+      localBehaviorRemovals.clear();
+   }
 }

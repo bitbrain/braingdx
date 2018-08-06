@@ -22,10 +22,10 @@ import java.util.Map;
 
 /**
  * Creates {@link SpriteSheetAnimation} objects.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 public class SpriteSheetAnimationFactory {
 
@@ -34,21 +34,8 @@ public class SpriteSheetAnimationFactory {
    private static final int DEFAULT_FRAMES = 3;
    private static final Direction DEFAULT_DIRECTION = Direction.HORIZONTAL;
    private static final AnimationType DEFAULT_TYPE = AnimationTypes.RESET;
-
-   public static class Index {
-      public final int x;
-      public final int y;
-
-      public Index(int x, int y) {
-         this.x = x;
-         this.y = y;
-      }
-   }
-
    private static final Index DEFAULT_INDEX = new Index(0, 0);
-
    private final Map<Integer, Index> indices;
-
    private final SpriteSheet sheet;
 
    public SpriteSheetAnimationFactory(SpriteSheet sheet, Map<Integer, Index> indices) {
@@ -63,5 +50,15 @@ public class SpriteSheetAnimationFactory {
       }
       return new SpriteSheetAnimation(sheet).origin(index.x, index.y).interval(DEFAULT_INTERVAL)
             .direction(DEFAULT_DIRECTION).type(DEFAULT_TYPE).base(DEFAULT_BASE).frames(DEFAULT_FRAMES);
+   }
+
+   public static class Index {
+      public final int x;
+      public final int y;
+
+      public Index(int x, int y) {
+         this.x = x;
+         this.y = y;
+      }
    }
 }

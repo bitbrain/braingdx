@@ -26,7 +26,7 @@ public class OrthogonalMapLayerRendererFactory implements MapLayerRendererFactor
          throw new RuntimeException("OrthographicCamera must be provided for Orthographic TiledMaps!");
       }
       return new GameObjectRenderer() {
-         
+
          private Texture texture;
 
          @Override
@@ -52,7 +52,7 @@ public class OrthogonalMapLayerRendererFactory implements MapLayerRendererFactor
                }
             }
          }
-         
+
       };
    }
 

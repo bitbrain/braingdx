@@ -6,11 +6,11 @@ import org.apache.commons.collections.map.MultiValueMap;
 import java.util.Collection;
 
 /**
- * @since 0.2.0
  * @author Miguel Gonzalez Sanchez
+ * @since 0.2.0
  */
 public class GameEventManagerImpl implements GameEventManager {
-   
+
    private final MultiValueMap listenerMapping = new MultiValueMap();
 
    @Override

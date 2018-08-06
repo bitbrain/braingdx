@@ -26,16 +26,16 @@ import de.bitbrain.braingdx.world.GameObject;
 /**
  * Renders {@link TiledMapTileLayer} instances.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 class OrthogonalMapLayerRenderer implements GameObjectRenderer {
 
-   private OrthogonalTiledMapRenderer renderer;
    private final TiledMapTileLayer layer;
    private final OrthographicCamera camera;
    private final TiledMap map;
+   private OrthogonalTiledMapRenderer renderer;
 
    OrthogonalMapLayerRenderer(int layerIndex, TiledMap map, OrthographicCamera camera) {
       layer = (TiledMapTileLayer) map.getLayers().get(layerIndex);

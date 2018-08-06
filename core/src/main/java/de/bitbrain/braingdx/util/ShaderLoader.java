@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 bmanuel
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,13 +22,11 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public final class ShaderLoader {
 
-   public static interface ShaderPathResolver {
-      FileHandle load(String path);
-   }
-
    public static String BasePath = "";
    public static boolean Pedantic = true;
    public static PathResolver PathResolver = new InternalPathResolver();
+   private ShaderLoader() {
+   }
 
    public static ShaderProgram fromFile(String vertexFileName, String fragmentFileName) {
       return ShaderLoader.fromFile(vertexFileName, fragmentFileName, "");
@@ -53,7 +51,7 @@ public final class ShaderLoader {
    }
 
    public static ShaderProgram fromString(String vertex, String fragment, String vertexName, String fragmentName,
-         String defines) {
+                                          String defines) {
       ShaderProgram.pedantic = ShaderLoader.Pedantic;
       ShaderProgram shader = new ShaderProgram(defines + "\n" + vertex, defines + "\n" + fragment);
 
@@ -65,6 +63,7 @@ public final class ShaderLoader {
       return shader;
    }
 
-   private ShaderLoader() {
+   public static interface ShaderPathResolver {
+      FileHandle load(String path);
    }
 }

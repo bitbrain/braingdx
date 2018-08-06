@@ -5,11 +5,11 @@ import com.badlogic.gdx.math.Rectangle;
 import de.bitbrain.braingdx.world.GameWorld.WorldBounds;
 
 public class SimpleWorldBounds implements WorldBounds {
-   
+
    private final float width, height;
-   
-   private final Rectangle rect,target;
-   
+
+   private final Rectangle rect, target;
+
    public SimpleWorldBounds(float width, float height) {
       this.width = width;
       this.height = height;

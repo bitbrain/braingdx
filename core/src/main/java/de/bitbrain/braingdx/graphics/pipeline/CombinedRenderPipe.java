@@ -29,15 +29,12 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
    private final RenderLayer layer;
 
    private final ShaderManager shaderManager;
-
+   private final OrthographicCamera camera;
+   private final SpriteBatch batch;
    private boolean enabled = true;
 
-   private final OrthographicCamera camera;
-
-   private final SpriteBatch batch;
-
    public CombinedRenderPipe(RenderLayer layer, PostProcessor processor, OrthographicCamera camera, SpriteBatch batch,
-         PostProcessorEffect... effects) {
+                             PostProcessorEffect... effects) {
       this.layer = layer;
       this.shaderManager = new ShaderManager(processor, effects);
       this.camera = camera;

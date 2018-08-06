@@ -1,4 +1,3 @@
-
 package de.bitbrain.braingdx.postprocessing.effects;
 
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -10,7 +9,7 @@ import de.bitbrain.braingdx.postprocessing.filters.MotionFilter;
 /**
  * A motion blur effect which draws the last frame with a lower opacity. The result is then stored
  * as the next last frame to create the trail effect.
- * 
+ *
  * @author Toni Sagrista
  */
 public class MotionBlur extends PostProcessorEffect {
@@ -23,12 +22,12 @@ public class MotionBlur extends PostProcessorEffect {
       copyFilter = new Copy();
    }
 
+   public float getBlurOpacity() {
+      return motionFilter.getBlurOpacity();
+   }
+
    public void setBlurOpacity(float blurOpacity) {
       motionFilter.setBlurOpacity(blurOpacity);
-   }
-   
-   public float getBlurOpacity() {
-	   return motionFilter.getBlurOpacity();
    }
 
    @Override

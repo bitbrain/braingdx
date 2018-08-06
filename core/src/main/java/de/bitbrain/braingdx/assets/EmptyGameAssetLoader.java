@@ -9,5 +9,6 @@ import java.util.Map;
  */
 public class EmptyGameAssetLoader implements GameAssetLoader {
    @Override
-   public void put(Map<String, Class<?>> assets) { }
+   public void put(Map<String, Class<?>> assets) {
+   }
 }

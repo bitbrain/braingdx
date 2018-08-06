@@ -20,9 +20,9 @@ import java.util.Map;
 /**
  * Indicates and provides functionality to specify asset information.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public interface GameAssetLoader {
 

@@ -23,16 +23,16 @@ import java.util.Collection;
 
 /**
  * Handles the complete pipeline of rendering internally. The pipeline consists of render pipes.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
 public interface RenderPipeline extends Disposable, Resizeable {
 
    public void put(String id, RenderLayer layer, PostProcessorEffect... effects);
-   
+
    public void putAfter(String existing, String id, RenderLayer layer, PostProcessorEffect... effects);
-   
+
    public void putBefore(String existing, String id, RenderLayer layer, PostProcessorEffect... effects);
 
    public RenderPipe getPipe(String id);

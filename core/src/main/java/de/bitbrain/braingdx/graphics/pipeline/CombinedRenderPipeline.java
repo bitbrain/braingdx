@@ -39,18 +39,18 @@ import java.util.Collection;
 /**
  * Combined implementation of {@link RenderPipeline}. This pipeline will bake together all layers
  * and apply shaders for all layers underneath: <br/>
- * 
+ *
  * <pre>
  * <code>{layer1}{layer2}{layer3}{end-layer3}{end-layer2}{end-layer1}</code>
  * </pre>
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
 public class CombinedRenderPipeline implements RenderPipeline {
 
    private static final boolean isDesktop = (Gdx.app.getType() == Application.ApplicationType.Desktop);
-   
+
    private final ListOrderedMap orderedPipes = new ListOrderedMap();
 
    private final PostProcessor processor;
@@ -58,16 +58,11 @@ public class CombinedRenderPipeline implements RenderPipeline {
    private final FrameBufferFactory bufferFactory;
 
    private final ShaderConfig config;
-
-   private FrameBuffer buffer;
-
-   private OrthographicCamera camera;
-
    private final SpriteBatch internalBatch;
-
-   private Viewport viewport;
-   
    private final ViewportFactory viewportFactory;
+   private FrameBuffer buffer;
+   private OrthographicCamera camera;
+   private Viewport viewport;
 
    public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera, ViewportFactory viewportFactory) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
@@ -92,7 +87,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
    }
 
    CombinedRenderPipeline(ShaderConfig config, PostProcessor processor, FrameBufferFactory factory,
-         SpriteBatch internalBatch, OrthographicCamera camera, ViewportFactory viewportFactory) {
+                          SpriteBatch internalBatch, OrthographicCamera camera, ViewportFactory viewportFactory) {
       this.config = config;
       ShaderLoader.BasePath = this.config.basePath;
       ShaderLoader.PathResolver = this.config.pathResolver;
@@ -111,7 +106,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
    @SuppressWarnings("unchecked")
    @Override
    public void resize(int width, int height) {
-      for (CombinedRenderPipe pipe : (Collection<CombinedRenderPipe>)orderedPipes.values()) {
+      for (CombinedRenderPipe pipe : (Collection<CombinedRenderPipe>) orderedPipes.values()) {
          pipe.resize(width, height);
       }
       processor.setViewport(new Rectangle(0f, 0f, width, height));
@@ -162,13 +157,13 @@ public class CombinedRenderPipeline implements RenderPipeline {
    @SuppressWarnings("unchecked")
    @Override
    public void render(Batch batch, float delta) {
-	  if (viewport == null) {
-		  this.viewport = viewportFactory.create((int)camera.viewportWidth, (int)camera.viewportHeight);
-		  this.viewport.setCamera(camera);
-	  }
+      if (viewport == null) {
+         this.viewport = viewportFactory.create((int) camera.viewportWidth, (int) camera.viewportHeight);
+         this.viewport.setCamera(camera);
+      }
       clearBuffer();
-      viewport.update((int)camera.viewportWidth, (int)camera.viewportHeight);
-      for (CombinedRenderPipe pipe : (Collection<CombinedRenderPipe>)orderedPipes.values()) {
+      viewport.update((int) camera.viewportWidth, (int) camera.viewportHeight);
+      for (CombinedRenderPipe pipe : (Collection<CombinedRenderPipe>) orderedPipes.values()) {
          pipe.beforeRender();
          pipe.render(batch, delta, buffer);
       }

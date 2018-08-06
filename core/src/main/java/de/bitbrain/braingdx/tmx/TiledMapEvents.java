@@ -11,6 +11,7 @@ public final class TiledMapEvents {
       private final int currentLayerIndex;
       private final GameObject object;
       private final TiledMapAPI api;
+
       public OnLayerChangeEvent(int lastLayerIndex, int currentLayerIndex, GameObject object, TiledMapAPI api) {
          this.lastLayerIndex = lastLayerIndex;
          this.currentLayerIndex = currentLayerIndex;
@@ -125,5 +126,6 @@ public final class TiledMapEvents {
       }
    }
 
-   public static class AfterUnloadEvent implements GameEvent {   }
+   public static class AfterUnloadEvent implements GameEvent {
+   }
 }

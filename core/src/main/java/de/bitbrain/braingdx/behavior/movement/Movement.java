@@ -17,23 +17,23 @@ package de.bitbrain.braingdx.behavior.movement;
 
 /**
  * Describes how to move into a given direction.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
- * @since 1.0.0
  * @version 1.0.0
+ * @since 1.0.0
  */
 public interface Movement<T> {
 
    /**
     * Moves into the direction provided.
-    * 
+    *
     * @param influencer the influencer of the movement
     */
    void move(T influencer);
 
    /**
     * Determines if currently moving
-    * 
+    *
     * @return true if moving
     */
    boolean isMoving();

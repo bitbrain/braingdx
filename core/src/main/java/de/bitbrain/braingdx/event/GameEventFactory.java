@@ -13,7 +13,7 @@ public interface GameEventFactory {
     * the current game world as a physical entity. Additionally, the optional <code>producerObject</code> is the
     * cause of this event.
     *
-    * @param eventObject the event object
+    * @param eventObject    the event object
     * @param producerObject the cause of this event to trigger
     * @return a new {@link GameEvent} object
     */

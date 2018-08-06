@@ -22,12 +22,13 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 /**
  * Provides renderers for map layers.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public interface MapLayerRendererFactory {
 
    GameObjectRenderer create(int index, TiledMap tiledMap, Camera camera);
+
    GameObjectRenderer createDebug(TiledMapAPI api, State state, Camera camera);
 }

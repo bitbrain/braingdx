@@ -27,15 +27,14 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 /**
  * Singleton implementation of an asset manager
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class SharedAssetManager extends AssetManager {
 
-   private static AssetManager instance = null;
-   
    public static FileHandleResolver fileHandleResolver = new InternalFileHandleResolver();
+   private static AssetManager instance = null;
 
    private SharedAssetManager() {
    }
@@ -62,7 +61,7 @@ public class SharedAssetManager extends AssetManager {
 
       instance = new AssetManager();
       instance.setLoader(TiledMap.class, new TmxMapLoader(fileHandleResolver));
-      instance.setLoader(FreeTypeFontGenerator.class, 
-    		   new FreeTypeFontGeneratorLoader(fileHandleResolver));
+      instance.setLoader(FreeTypeFontGenerator.class,
+            new FreeTypeFontGeneratorLoader(fileHandleResolver));
    }
 }

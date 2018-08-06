@@ -19,7 +19,7 @@ import de.bitbrain.braingdx.graphics.animation.AnimationType;
 
 /**
  * Describes default {@link AnimationType} objects.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */

@@ -18,9 +18,9 @@ package de.bitbrain.braingdx.tmx;
 /**
  * Contains constants for TMX.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 interface Constants {
 

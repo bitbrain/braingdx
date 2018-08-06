@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 /**
  * A render layer which is rendered during the render pipeline process.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
@@ -28,7 +28,7 @@ public interface RenderLayer {
 
    /**
     * Renders the layer with the given batch and delta.
-    * 
+    *
     * @param batch provided batch
     * @param delta frame delta
     */

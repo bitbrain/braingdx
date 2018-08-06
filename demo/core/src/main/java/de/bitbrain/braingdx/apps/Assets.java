@@ -16,7 +16,7 @@ public interface Assets {
       String MAP_1 = "rpg/map.tmx";
       String MAP_2 = "rpg/minimap.tmx";
    }
-   
+
    public static interface Sounds {
       String SOUND_TEST = "sounds/test.ogg";
    }

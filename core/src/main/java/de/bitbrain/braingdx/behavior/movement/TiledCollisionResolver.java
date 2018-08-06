@@ -34,9 +34,9 @@ public interface TiledCollisionResolver {
    /**
     * Determines the collision on tiled index and layer, excluding the source object.
     *
-    * @param tileX the horizontal tile index
-    * @param tileY the vertical tile index
-    * @param layer the tile layer
+    * @param tileX  the horizontal tile index
+    * @param tileY  the vertical tile index
+    * @param layer  the tile layer
     * @param source the source to ignore the collision on
     */
    boolean isExclusiveCollision(int tileX, int tileY, int layer, GameObject source);
@@ -44,9 +44,9 @@ public interface TiledCollisionResolver {
    /**
     * Determines the collision on tiled index and layer, only for the source object.
     *
-    * @param tileX the horizontal tile index
-    * @param tileY the vertical tile index
-    * @param layer the tile layer
+    * @param tileX  the horizontal tile index
+    * @param tileY  the vertical tile index
+    * @param layer  the tile layer
     * @param source the source to check collision for
     */
    boolean isInclusiveCollision(int tileX, int tileY, int layer, GameObject source);
@@ -54,8 +54,8 @@ public interface TiledCollisionResolver {
    /**
     * Determines the collision on absolute x and y coordinate
     *
-    * @param x the world x position
-    * @param y the world y position
+    * @param x     the world x position
+    * @param y     the world y position
     * @param layer the tiled layer
     */
    boolean isCollision(float x, float y, int layer);
@@ -80,9 +80,9 @@ public interface TiledCollisionResolver {
     * Determines if there is an existing collision on the world position,
     * ignoring the collision caused by an object given.
     *
-    * @param x the world x position
-    * @param y the world y position
-    * @param layer the tiled layer
+    * @param x      the world x position
+    * @param y      the world y position
+    * @param layer  the tiled layer
     * @param object the object to ignore the collision on
     */
    boolean isExclusiveCollision(float x, float y, int layer, GameObject object);
@@ -91,9 +91,9 @@ public interface TiledCollisionResolver {
     * Determines if there is an existing collision on the world position,
     * only for the object provided
     *
-    * @param x the world x position
-    * @param y the world y position
-    * @param layer the tiled layer
+    * @param x      the world x position
+    * @param y      the world y position
+    * @param layer  the tiled layer
     * @param object the object to check collision for
     */
    boolean isInclusiveCollision(float x, float y, int layer, GameObject object);
@@ -101,7 +101,7 @@ public interface TiledCollisionResolver {
    /**
     * Determines the collision of the object with additional horizontal and vertical offset.
     *
-    * @param object the object to check for
+    * @param object      the object to check for
     * @param tileOffsetX the horizontal offset
     * @param tileOffsetY the vertical offset
     */

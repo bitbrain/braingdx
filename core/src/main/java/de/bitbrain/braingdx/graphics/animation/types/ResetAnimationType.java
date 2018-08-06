@@ -19,7 +19,7 @@ import de.bitbrain.braingdx.graphics.animation.AnimationType;
 
 /**
  * Moves the frames back to the origin of the animation and remains there
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */

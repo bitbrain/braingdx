@@ -21,7 +21,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * Simple spritesheet which can be
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */

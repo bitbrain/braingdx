@@ -17,7 +17,7 @@ package de.bitbrain.braingdx.graphics.animation;
 
 /**
  * An animation type describes the behavior of frames which belong to a certain animation.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
@@ -25,9 +25,9 @@ public interface AnimationType {
 
    /**
     * Updates the given frame and returns it. This operation is immutable.
-    * 
+    *
     * @param currentFrame the current frame
-    * @param totalFrames number of total frames
+    * @param totalFrames  number of total frames
     * @return the optionally modified current frame
     */
    int updateCurrentFrame(int lastFrame, int currentFrame, int totalFrames, int origin);

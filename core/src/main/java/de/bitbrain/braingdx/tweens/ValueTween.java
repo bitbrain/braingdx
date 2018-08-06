@@ -21,9 +21,9 @@ import de.bitbrain.braingdx.util.ValueProvider;
 /**
  * Tweening accessor for values
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez <miguel-gonzalez@gmx.de>
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class ValueTween implements TweenAccessor<ValueProvider> {
 

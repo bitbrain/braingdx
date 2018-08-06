@@ -40,77 +40,76 @@ import java.util.Map;
  * <li>TiledMaps</li>
  * </ul>
  * In order to extend or change the list make use of the {@link SmartAssetLoaderConfiguration}.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  */
 public class SmartAssetLoader implements GameAssetLoader {
-	
-	/**
-	 * Defines how types and which types should get mapped.
-	 */
-	public static interface SmartAssetLoaderConfiguration {
-		Map<String, Class<?>> getClassMapping();
-	}
-	
-	private final SmartAssetLoaderConfiguration configuration;
-	private final Class<?> target;
-	
-	public static SmartAssetLoaderConfiguration defaultConfiguration() {
-		final Map<String, Class<?>> mapping = new HashMap<String, Class<?>>();
-		mapping.put("Textures", Texture.class);
-		mapping.put("Sounds", Sound.class);
-		mapping.put("Musics", Music.class);
-		mapping.put("BitmapFonts", BitmapFont.class);
-		mapping.put("Fonts", FreeTypeFontGenerator.class);
-		mapping.put("Particles", ParticleEffect.class);
-		mapping.put("TiledMaps", TiledMap.class);
-		return new SmartAssetLoaderConfiguration() {
-			@Override
-			public Map<String, Class<?>> getClassMapping() {
-				return mapping;
-			}			
-		};
-	}
-	
-	public SmartAssetLoader(Class<?> target) {
-		this(target, defaultConfiguration());
-	}
-	
-	public SmartAssetLoader(Class<?> target, SmartAssetLoaderConfiguration configuration) {
-		this.target = target;
-		this.configuration = configuration;
-	}
 
-	@Override
-	public void put(Map<String, Class<?>> assets) {
-		// for every sub-class, check for the given type
-		for (Class<?> subclass : target.getDeclaredClasses()) {
-			String categoryName = subclass.getSimpleName();
-			Class<?> assetClassType = configuration.getClassMapping().get(categoryName);
-			if (assetClassType != null) {
-				putMembers(subclass, assets, assetClassType);
-			} else {
-				Gdx.app.log("WARN", "Asset category " + categoryName + " not defined in SmartAssetLoaderConfiguration!");
-			}
-		}
-	}
-	
-	private void putMembers(Class<?> subclass, Map<String, Class<?>> assets, Class<?> assetClassType) {
-		for (Field field : subclass.getFields()) {
-			try {
-				Object path = field.get(null);
-				if (path instanceof String) {
-					assets.put((String)path, assetClassType);
-					Gdx.app.log("INFO", "Registering asset: path=" + path + ", class=" + assetClassType.getName());
-				} else {
-					Gdx.app.log("WARN", "Invalid property type in '" + subclass.getName() + "::" + field.getName() + "! Only java.lang.String is allowed.");
-				}
-			} catch (IllegalArgumentException e) {
-				Gdx.app.log("WARN", "Unable to load field value.");
-			} catch (IllegalAccessException e) {
-				Gdx.app.log("WARN", "Unable to load field value.");
-			}
-		}
-	}
+   private final SmartAssetLoaderConfiguration configuration;
+   private final Class<?> target;
+   public SmartAssetLoader(Class<?> target) {
+      this(target, defaultConfiguration());
+   }
+
+   public SmartAssetLoader(Class<?> target, SmartAssetLoaderConfiguration configuration) {
+      this.target = target;
+      this.configuration = configuration;
+   }
+
+   public static SmartAssetLoaderConfiguration defaultConfiguration() {
+      final Map<String, Class<?>> mapping = new HashMap<String, Class<?>>();
+      mapping.put("Textures", Texture.class);
+      mapping.put("Sounds", Sound.class);
+      mapping.put("Musics", Music.class);
+      mapping.put("BitmapFonts", BitmapFont.class);
+      mapping.put("Fonts", FreeTypeFontGenerator.class);
+      mapping.put("Particles", ParticleEffect.class);
+      mapping.put("TiledMaps", TiledMap.class);
+      return new SmartAssetLoaderConfiguration() {
+         @Override
+         public Map<String, Class<?>> getClassMapping() {
+            return mapping;
+         }
+      };
+   }
+
+   @Override
+   public void put(Map<String, Class<?>> assets) {
+      // for every sub-class, check for the given type
+      for (Class<?> subclass : target.getDeclaredClasses()) {
+         String categoryName = subclass.getSimpleName();
+         Class<?> assetClassType = configuration.getClassMapping().get(categoryName);
+         if (assetClassType != null) {
+            putMembers(subclass, assets, assetClassType);
+         } else {
+            Gdx.app.log("WARN", "Asset category " + categoryName + " not defined in SmartAssetLoaderConfiguration!");
+         }
+      }
+   }
+
+   private void putMembers(Class<?> subclass, Map<String, Class<?>> assets, Class<?> assetClassType) {
+      for (Field field : subclass.getFields()) {
+         try {
+            Object path = field.get(null);
+            if (path instanceof String) {
+               assets.put((String) path, assetClassType);
+               Gdx.app.log("INFO", "Registering asset: path=" + path + ", class=" + assetClassType.getName());
+            } else {
+               Gdx.app.log("WARN", "Invalid property type in '" + subclass.getName() + "::" + field.getName() + "! Only java.lang.String is allowed.");
+            }
+         } catch (IllegalArgumentException e) {
+            Gdx.app.log("WARN", "Unable to load field value.");
+         } catch (IllegalAccessException e) {
+            Gdx.app.log("WARN", "Unable to load field value.");
+         }
+      }
+   }
+
+   /**
+    * Defines how types and which types should get mapped.
+    */
+   public static interface SmartAssetLoaderConfiguration {
+      Map<String, Class<?>> getClassMapping();
+   }
 
 }

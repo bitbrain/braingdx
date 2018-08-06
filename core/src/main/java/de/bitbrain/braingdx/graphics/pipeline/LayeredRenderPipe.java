@@ -27,24 +27,19 @@ import de.bitbrain.braingdx.util.Resizeable;
 
 /**
  * Layered implementation of {@link RenderPipe}.
- * 
- * @TODO Fix ensure shader transparency.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
+ * @TODO Fix ensure shader transparency.
  */
 class LayeredRenderPipe implements RenderPipe, Disposable, Resizeable {
-   private RenderLayer renderLayer;
-
-   private ShaderManager shaderManager;
-
-   private FrameBuffer buffer;
-
    private final FrameBufferFactory bufferFactory;
-
+   private RenderLayer renderLayer;
+   private ShaderManager shaderManager;
+   private FrameBuffer buffer;
    private boolean enabled;
 
    LayeredRenderPipe(RenderLayer layer, PostProcessor processor, FrameBufferFactory factory,
-         PostProcessorEffect... effects) {
+                     PostProcessorEffect... effects) {
       this.renderLayer = layer;
       this.shaderManager = new ShaderManager(processor, effects);
       this.bufferFactory = factory;

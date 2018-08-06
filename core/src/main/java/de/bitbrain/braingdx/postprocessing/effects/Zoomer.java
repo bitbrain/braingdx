@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2012 bmanuel
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,9 @@ import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.postprocessing.filters.RadialBlur;
 import de.bitbrain.braingdx.postprocessing.filters.Zoom;
 
-/** Implements a zooming effect: either a radial blur filter or a zoom filter is used. */
+/**
+ * Implements a zooming effect: either a radial blur filter or a zoom filter is used.
+ */
 public final class Zoomer extends PostProcessorEffect {
    private boolean doRadial = false;
    private RadialBlur radialBlur = null;
@@ -30,12 +32,16 @@ public final class Zoomer extends PostProcessorEffect {
    private float oneOnW, oneOnH;
    private float userOriginX, userOriginY;
 
-   /** Creating a Zoomer specifying the radial blur quality will enable radial blur */
+   /**
+    * Creating a Zoomer specifying the radial blur quality will enable radial blur
+    */
    public Zoomer(int viewportWidth, int viewportHeight, RadialBlur.Quality quality) {
       setup(viewportWidth, viewportHeight, new RadialBlur(quality));
    }
 
-   /** Creating a Zoomer without any parameter will use plain simple zooming */
+   /**
+    * Creating a Zoomer without any parameter will use plain simple zooming
+    */
    public Zoomer(int viewportWidth, int viewportHeight) {
       setup(viewportWidth, viewportHeight, null);
    }
@@ -54,12 +60,16 @@ public final class Zoomer extends PostProcessorEffect {
       oneOnH = 1f / (float) viewportHeight;
    }
 
-   /** Specify the zoom origin, in screen coordinates. */
+   /**
+    * Specify the zoom origin, in screen coordinates.
+    */
    public void setOrigin(Vector2 o) {
       setOrigin(o.x, o.y);
    }
 
-   /** Specify the zoom origin, in screen coordinates. */
+   /**
+    * Specify the zoom origin, in screen coordinates.
+    */
    public void setOrigin(float x, float y) {
       userOriginX = x;
       userOriginY = y;
@@ -71,9 +81,11 @@ public final class Zoomer extends PostProcessorEffect {
       }
    }
 
-   public void setBlurStrength(float strength) {
+   public float getZoom() {
       if (doRadial) {
-         radialBlur.setStrength(strength);
+         return 1f / radialBlur.getZoom();
+      } else {
+         return 1f / zoom.getZoom();
       }
    }
 
@@ -85,20 +97,18 @@ public final class Zoomer extends PostProcessorEffect {
       }
    }
 
-   public float getZoom() {
-      if (doRadial) {
-         return 1f / radialBlur.getZoom();
-      } else {
-         return 1f / zoom.getZoom();
-      }
-   }
-
    public float getBlurStrength() {
       if (doRadial) {
          return radialBlur.getStrength();
       }
 
       return -1;
+   }
+
+   public void setBlurStrength(float strength) {
+      if (doRadial) {
+         radialBlur.setStrength(strength);
+      }
    }
 
    public float getOriginX() {

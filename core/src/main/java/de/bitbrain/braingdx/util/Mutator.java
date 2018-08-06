@@ -18,10 +18,10 @@ package de.bitbrain.braingdx.util;
 
 /**
  * A mutator mutates objects.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  */
 public interface Mutator<T> {
 
-	void mutate(T target);
+   void mutate(T target);
 }

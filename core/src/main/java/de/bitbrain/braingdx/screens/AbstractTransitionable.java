@@ -23,7 +23,7 @@ import de.bitbrain.braingdx.tweens.SharedTweenManager;
 
 /**
  * Abstract implementation of {@link Transitionable} which unifies tweening functionality.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0
  * @since 1.0
@@ -115,7 +115,9 @@ abstract class AbstractTransitionable implements Transitionable {
    }
 
    protected abstract void resetTarget();
+
    protected abstract Object getTarget();
+
    protected abstract int getTweenType();
 
 }
