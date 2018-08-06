@@ -42,9 +42,9 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
    @Override
    protected void onCreate(GameContext context) {
-	  context.getGameCamera().setBaseZoom(0.25f);
-	  context.getGameCamera().setSpeed(1.6f);
-	  context.getGameCamera().setZoomScale(0.001f);
+	  context.getGameCamera().setDefaultZoomFactor(0.25f);
+	  context.getGameCamera().setTargetTrackingSpeed(1.6f);
+	  context.getGameCamera().setZoomScalingFactor(0.001f);
       prepareResources(context);
       setupShaders(context);
 
@@ -53,7 +53,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
    private void prepareResources(GameContext context) {
       TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_1, TiledMap.class);
       context.getRenderPipeline().put(RenderPipeIds.BACKGROUND,
-            new TiledMapRenderer(map, (OrthographicCamera) context.getGameCamera().getInternal()));
+            new TiledMapRenderer(map, (OrthographicCamera) context.getGameCamera().getInternalCamera()));
       context.getLightingManager().setAmbientLight(new Color(0.1f, 0.05f, 0.3f, 0.4f));
       Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
       SpriteSheet sheet = new SpriteSheet(texture, 12, 8);
@@ -61,7 +61,7 @@ public class RPGScreen extends AbstractScreen<RPGTest> {
 
       factory = new NPCFactory(BLOCK_SIZE, context.getGameWorld());
       GameObject player = spawnObject(context, 10, 10, NPC.CITIZEN_MALE, new OrientationMovementController());
-      context.getGameCamera().setTarget(player);
+      context.getGameCamera().setTrackingTarget(player);
       final int NPCS = 25;
 
       for (int i = 0; i < NPCS; ++i) {

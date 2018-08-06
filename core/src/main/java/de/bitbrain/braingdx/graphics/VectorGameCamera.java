@@ -44,7 +44,7 @@ public class VectorGameCamera implements GameCamera {
    private BigDecimal speed = new BigDecimal(6.2f, PRECISION);
    private BigDecimal zoomScale = new BigDecimal(0.0025f, PRECISION);
    private boolean focusRequested = false;
-   private BigDecimal baseZoom = new BigDecimal(1, PRECISION);
+   private BigDecimal defaultZoom = new BigDecimal(1, PRECISION);
    private boolean worldBoundsStickiness = true;
    private boolean adjustedX = false;
    private boolean adjustedY = false;
@@ -57,15 +57,15 @@ public class VectorGameCamera implements GameCamera {
    }
 
    @Override
-   public void setTarget(GameObject target) {
-      setTarget(target, true);
+   public void setTrackingTarget(GameObject target) {
+      setTrackingTarget(target, true);
    }
 
    @Override
-   public void setTarget(GameObject target, boolean focus) {
+   public void setTrackingTarget(GameObject target, boolean focus) {
       this.target = target;
       if (focus) {
-         focus();
+         focusCenteredOnObject();
       }
    }
 
@@ -74,7 +74,7 @@ public class VectorGameCamera implements GameCamera {
       if (target == null)
          return;
       if (focusRequested) {
-         focus(target);
+         focusCenteredOnObject(target);
          focusRequested = false;
       } else {
          BigDecimal preciseDelta = BigDecimal.valueOf(delta);
@@ -105,7 +105,7 @@ public class VectorGameCamera implements GameCamera {
             camera.position.y = camTop.add(deltaY).floatValue();
          }
          if (!adjustedX && !adjustedY) {
-            camera.zoom = zoomScale.multiply(distance).add(baseZoom).floatValue();
+            camera.zoom = zoomScale.multiply(distance).add(defaultZoom).floatValue();
          }
       }
       adjustedX = false;
@@ -125,43 +125,43 @@ public class VectorGameCamera implements GameCamera {
    }
 
    @Override
-   public float getBaseZoom() {
-      return baseZoom.floatValue();
+   public float getDefaultZoomFactor() {
+      return defaultZoom.floatValue();
    }
 
    @Override
-   public void setBaseZoom(float zoom) {
-      this.baseZoom = new BigDecimal(zoom, PRECISION);
+   public void setDefaultZoomFactor(float zoom) {
+      this.defaultZoom = new BigDecimal(zoom, PRECISION);
    }
 
    @Override
    public void zoom(float amount) {
-      baseZoom = baseZoom.multiply(new BigDecimal(amount, PRECISION));
+      defaultZoom = defaultZoom.multiply(new BigDecimal(amount, PRECISION));
    }
 
    @Override
-   public void setSpeed(float speed) {
+   public void setTargetTrackingSpeed(float speed) {
       this.speed = new BigDecimal(Math.abs(speed), PRECISION);
    }
 
    @Override
-   public void setZoomScale(float zoomScale) {
+   public void setZoomScalingFactor(float zoomScale) {
       this.zoomScale = new BigDecimal(zoomScale, PRECISION);
    }
 
    @Override
-   public void focus(GameObject object) {
+   public void focusCenteredOnObject(GameObject object) {
       camera.position.x = object.getLeft() + object.getOffset().x + object.getWidth() / 2f;
       camera.position.y = object.getTop() + object.getOffset().y + object.getHeight() / 2f;
    }
 
    @Override
-   public void focus() {
+   public void focusCenteredOnObject() {
       focusRequested = true;
    }
 
    @Override
-   public Camera getInternal() {
+   public Camera getInternalCamera() {
       return camera;
    }
 
@@ -204,14 +204,14 @@ public class VectorGameCamera implements GameCamera {
       }
       if (!worldWidthTooSmall) {
          if (camLeft < 0f) {
-            if (camera.zoom > baseZoom.floatValue()) {
-               camera.zoom = baseZoom.floatValue();
+            if (camera.zoom > defaultZoom.floatValue()) {
+               camera.zoom = defaultZoom.floatValue();
             }
             camera.position.x = camWidthScaled / 2f;
             adjustedX = true;
          } else if (camRight > bounds.getWorldWidth()) {
-            if (camera.zoom > baseZoom.floatValue()) {
-               camera.zoom = baseZoom.floatValue();
+            if (camera.zoom > defaultZoom.floatValue()) {
+               camera.zoom = defaultZoom.floatValue();
             }
             camera.position.x = bounds.getWorldWidth() - camWidthScaled / 2f;
             adjustedX = true;
@@ -219,14 +219,14 @@ public class VectorGameCamera implements GameCamera {
       }
       if (!worldHeightTooSmall) {
          if (camTop < 0f) {
-            if (camera.zoom > baseZoom.floatValue()) {
-               camera.zoom = baseZoom.floatValue();
+            if (camera.zoom > defaultZoom.floatValue()) {
+               camera.zoom = defaultZoom.floatValue();
             }
             camera.position.y = camHeightScaled / 2f;
             adjustedY = true;
          } else if (camBottom > bounds.getWorldHeight()) {
-            if (camera.zoom > baseZoom.floatValue()) {
-               camera.zoom = baseZoom.floatValue();
+            if (camera.zoom > defaultZoom.floatValue()) {
+               camera.zoom = defaultZoom.floatValue();
             }
             camera.position.y = bounds.getWorldHeight() - camHeightScaled / 2f;
             adjustedY = true;

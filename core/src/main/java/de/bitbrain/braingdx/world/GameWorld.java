@@ -60,6 +60,16 @@ public class GameWorld implements Iterable<GameObject> {
       public float getWorldHeight() {
          return 0f;
       }
+
+      @Override
+      public float getWorldOffsetX() {
+         return 0;
+      }
+
+      @Override
+      public float getWorldOffsetY() {
+         return 0;
+      }
    };
 
    private OrthographicCamera camera;
@@ -171,7 +181,6 @@ public class GameWorld implements Iterable<GameObject> {
    /**
     * Updates and renders this world
     *
-    * @param batch the batch
     * @param delta frame delta
     */
    public void update(float delta) {
@@ -274,6 +283,10 @@ public class GameWorld implements Iterable<GameObject> {
       float getWorldWidth();
 
       float getWorldHeight();
+
+      float getWorldOffsetX();
+
+      float getWorldOffsetY();
    }
 
    /**

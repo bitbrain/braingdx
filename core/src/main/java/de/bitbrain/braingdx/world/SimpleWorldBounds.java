@@ -38,4 +38,14 @@ public class SimpleWorldBounds implements WorldBounds {
       return height;
    }
 
+   @Override
+   public float getWorldOffsetX() {
+      return 0;
+   }
+
+   @Override
+   public float getWorldOffsetY() {
+      return 0;
+   }
+
 }

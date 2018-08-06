@@ -79,7 +79,7 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
          objectColor.a = 1f;
          // object.setColor(objectColor);
       }
-      context.getGameCamera().setTarget(first);
+      context.getGameCamera().setTrackingTarget(first);
    }
 
    private void createButtonUI(GameContext context) {

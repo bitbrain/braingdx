@@ -249,7 +249,7 @@ public class AudioManagerImpl implements AudioManager {
    }
 
    private float computeVolume(float sourceX, float sourceY, float maxDistance) {
-      Camera camera = this.camera.getInternal();
+      Camera camera = this.camera.getInternalCamera();
       tmp.set(camera.position.x, camera.position.y, camera.position.z);
       tmp.x -= sourceX;
       tmp.y -= sourceY;
@@ -257,7 +257,7 @@ public class AudioManagerImpl implements AudioManager {
    }
 
    private float computePan(float sourceX, float sourceY, float maxDistance) {
-      Camera camera = this.camera.getInternal();
+      Camera camera = this.camera.getInternalCamera();
       if (camera != null) {
          tmp.set(camera.up);
          tmp.crs(camera.direction);

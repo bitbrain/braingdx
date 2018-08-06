@@ -95,14 +95,14 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
 
    @Override
    protected void onCreate(GameContext context) {
-	  context.getGameCamera().setBaseZoom(0.15f);
-	  context.getGameCamera().setSpeed(3.6f);
-	  context.getGameCamera().setZoomScale(0.001f);
+	  context.getGameCamera().setDefaultZoomFactor(0.15f);
+	  context.getGameCamera().setTargetTrackingSpeed(3.6f);
+	  context.getGameCamera().setZoomScalingFactor(0.001f);
       TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_2, TiledMap.class);
       final TiledMapManager tiledMapManager = context.getTiledMapManager();
       context.getLightingManager().setAmbientLight(new Color(0.2f, 0.3f, 0.6f, 0.4f));
       tiledMapManager.getAPI().setDebug(true);
-      tiledMapManager.load(map, context.getGameCamera().getInternal(), TiledMapType.ORTHOGONAL);
+      tiledMapManager.load(map, context.getGameCamera().getInternalCamera(), TiledMapType.ORTHOGONAL);
 
       player = null;
       for (GameObject o : context.getGameWorld()) {
@@ -113,7 +113,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
             player.setDimensions(player.getWidth() * 2f, player.getHeight());
          }
       }
-      context.getGameCamera().setTarget(player);
+      context.getGameCamera().setTrackingTarget(player);
 
       final Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);
       SpriteSheet sheet = new SpriteSheet(texture, 12, 8);

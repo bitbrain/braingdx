@@ -25,14 +25,14 @@ public interface GameCamera extends Resizeable {
     *
     * @param speed
     */
-   void setSpeed(float speed);
+   void setTargetTrackingSpeed(float speed);
 
    /**
     * Sets a new zoom scale factor
     *
     * @param zoomScale
     */
-   void setZoomScale(float zoomScale);
+   void setZoomScalingFactor(float zoomScale);
 
    /**
     * Enables or disables the camera to stick to the current
@@ -45,14 +45,14 @@ public interface GameCamera extends Resizeable {
     *
     * @return baseZoom
     */
-   float getBaseZoom();
+   float getDefaultZoomFactor();
 
    /**
     * Sets the base zoom
     *
     * @param zoom baseZoom
     */
-   void setBaseZoom(float zoom);
+   void setDefaultZoomFactor(float zoom);
 
    /**
     * Zooms the current baseZoom.
@@ -64,34 +64,34 @@ public interface GameCamera extends Resizeable {
    /**
     * Focuses directly on the target
     */
-   void focus();
+   void focusCenteredOnObject();
 
    /**
     * When no target is defined or the given object is the target, it focuses the
     * game camera onto the given object.
     */
-   void focus(GameObject object);
+   void focusCenteredOnObject(GameObject object);
 
    /**
     * Sets a new target. Focuses by default.
     *
     * @param target the target
     */
-   void setTarget(GameObject target);
+   void setTrackingTarget(GameObject target);
 
    /**
-    * Sets a new target and determines if focus or not.
+    * Sets a new target and determines if focusCenteredOnObject or not.
     *
     * @param target the target
-    * @param focus  focus target on attach
+    * @param focus  focusCenteredOnObject target on attach
     */
-   void setTarget(GameObject target, boolean focus);
+   void setTrackingTarget(GameObject target, boolean focus);
 
    /**
     * Provides the internal camera
     *
     * @return the internal camera object
     */
-   Camera getInternal();
+   Camera getInternalCamera();
 
 }
