@@ -1,9 +1,6 @@
 package de.bitbrain.braingdx.demo.discovery;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
+import de.bitbrain.braingdx.BrainGdxGame;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -11,7 +8,9 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 import org.reflections.util.FilterBuilder;
 
-import de.bitbrain.braingdx.BrainGdxGame;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AppDiscovery {
 

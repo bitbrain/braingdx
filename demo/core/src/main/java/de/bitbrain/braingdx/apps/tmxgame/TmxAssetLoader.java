@@ -1,13 +1,12 @@
 package de.bitbrain.braingdx.apps.tmxgame;
 
-import java.util.Map;
-
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
+
+import java.util.Map;
 
 public class TmxAssetLoader implements GameAssetLoader {
 

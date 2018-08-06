@@ -2,8 +2,6 @@ package de.bitbrain.braingdx.demo;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-
-import de.bitbrain.braingdx.apps.lighting.LightingManagerTest;
 import de.bitbrain.braingdx.apps.tmxgame.TmxTest;
 
 public class SimpleApp {

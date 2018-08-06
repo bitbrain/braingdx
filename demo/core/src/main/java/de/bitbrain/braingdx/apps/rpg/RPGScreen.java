@@ -1,14 +1,10 @@
 package de.bitbrain.braingdx.apps.rpg;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import de.bitbrain.braingdx.GameContext;
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
@@ -31,6 +27,9 @@ import de.bitbrain.braingdx.postprocessing.effects.Vignette;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.tmx.TiledMapRenderer;
 import de.bitbrain.braingdx.world.GameObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RPGScreen extends AbstractScreen<RPGTest> {
 

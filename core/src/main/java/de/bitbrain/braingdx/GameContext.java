@@ -34,16 +34,16 @@ import de.bitbrain.braingdx.world.GameWorld;
 /**
  * Provides access to the current game management.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public interface GameContext {
-	
+
    GameWorld getGameWorld();
 
    Stage getStage();
-   
+
    Stage getWorldStage();
 
    World getBox2DWorld();
@@ -69,8 +69,8 @@ public interface GameContext {
    ScreenTransitions getScreenTransitions();
 
    AudioManager getAudioManager();
-   
+
    GameEventManager getEventManager();
-   
+
    void updateAndRender(float delta);
 }

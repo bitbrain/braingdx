@@ -1,19 +1,13 @@
 package de.bitbrain.braingdx.demo;
 
+import com.badlogic.gdx.ApplicationListener;
+import de.bitbrain.braingdx.demo.discovery.AppDiscovery;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
-import com.badlogic.gdx.ApplicationListener;
-
-import de.bitbrain.braingdx.demo.discovery.AppDiscovery;
 
 public class AppBootstrapper {
 
@@ -24,6 +18,11 @@ public class AppBootstrapper {
    public AppBootstrapper() {
       executor = Executors.newCachedThreadPool();
       discovery = new AppDiscovery();
+   }
+
+   public static void main(String[] args) {
+      AppBootstrapper boot = new AppBootstrapper();
+      boot.run();
    }
 
    public void run() {
@@ -59,10 +58,5 @@ public class AppBootstrapper {
             AppRunner.run(clazz, executor);
          }
       };
-   }
-
-   public static void main(String[] args) {
-      AppBootstrapper boot = new AppBootstrapper();
-      boot.run();
    }
 }

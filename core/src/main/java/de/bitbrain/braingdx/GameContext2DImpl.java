@@ -53,178 +53,178 @@ import de.bitbrain.braingdx.world.GameWorld;
 
 /**
  * 2D Implementation of {@link GameContext}.
- * 
+ *
  * @author Miguel Gonzalez Sanchez
  * @since 0.1.0
  */
 public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 
-	private final GameWorld world;
-	private final BehaviorManager behaviorManager;
-	private final GameObjectRenderManager renderManager;
-	private final GameCamera gameCamera;
-	private final OrthographicCamera camera;
-	private final Batch batch;
-	private final Stage stage, worldStage;
-	private final RenderPipeline renderPipeline;
-	private final LightingManager lightingManager;
-	private final ParticleManager particleManager;
-	private final World boxWorld;
-	private final TiledMapManager tiledMapManager;
-	private final TweenManager tweenManager = SharedTweenManager.getInstance();
-	private final InputMultiplexer input;
-	private final GameEventManager eventManager;
-	private final AudioManager audioManager;
+   private final GameWorld world;
+   private final BehaviorManager behaviorManager;
+   private final GameObjectRenderManager renderManager;
+   private final GameCamera gameCamera;
+   private final OrthographicCamera camera;
+   private final Batch batch;
+   private final Stage stage, worldStage;
+   private final RenderPipeline renderPipeline;
+   private final LightingManager lightingManager;
+   private final ParticleManager particleManager;
+   private final World boxWorld;
+   private final TiledMapManager tiledMapManager;
+   private final TweenManager tweenManager = SharedTweenManager.getInstance();
+   private final InputMultiplexer input;
+   private final GameEventManager eventManager;
+   private final AudioManager audioManager;
 
-	public GameContext2DImpl(ViewportFactory viewportFactory, ShaderConfig shaderConfig) {
-		eventManager = new GameEventManagerImpl();
-		camera = new OrthographicCamera();
-		world = new GameWorld(camera);
-		behaviorManager = new BehaviorManager(world);
-		batch = new SpriteBatch();
-		input = new InputMultiplexer();
-		boxWorld = new World(Vector2.Zero, false);
-		lightingManager = new LightingManager(new RayHandler(boxWorld), camera);
-		renderManager = new GameObjectRenderManager(batch);
-		gameCamera = new VectorGameCamera(camera, world);
-		particleManager = new ParticleManager(behaviorManager);
-		stage = new Stage(viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-		Viewport worldStageViewport = viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		worldStageViewport.setCamera(camera);
-		worldStage = new Stage(worldStageViewport);
-		renderPipeline = new CombinedRenderPipelineFactory(//
-		      shaderConfig,//
-		      world,//
-		      lightingManager,//
-		      particleManager,//
-		      stage,//
-		      worldStage,//
-		      viewportFactory//
-		).create();
-		tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager, eventManager);
-		audioManager = new AudioManagerImpl(//
-		      gameCamera,//
-		      tweenManager,//
-		      SharedAssetManager.getInstance(),//
-		      world,//
-		      behaviorManager//
-		);
-		wire();
-	}
+   public GameContext2DImpl(ViewportFactory viewportFactory, ShaderConfig shaderConfig) {
+      eventManager = new GameEventManagerImpl();
+      camera = new OrthographicCamera();
+      world = new GameWorld(camera);
+      behaviorManager = new BehaviorManager(world);
+      batch = new SpriteBatch();
+      input = new InputMultiplexer();
+      boxWorld = new World(Vector2.Zero, false);
+      lightingManager = new LightingManager(new RayHandler(boxWorld), camera);
+      renderManager = new GameObjectRenderManager(batch);
+      gameCamera = new VectorGameCamera(camera, world);
+      particleManager = new ParticleManager(behaviorManager);
+      stage = new Stage(viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+      Viewport worldStageViewport = viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      worldStageViewport.setCamera(camera);
+      worldStage = new Stage(worldStageViewport);
+      renderPipeline = new CombinedRenderPipelineFactory(//
+            shaderConfig,//
+            world,//
+            lightingManager,//
+            particleManager,//
+            stage,//
+            worldStage,//
+            viewportFactory//
+      ).create();
+      tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager, eventManager);
+      audioManager = new AudioManagerImpl(//
+            gameCamera,//
+            tweenManager,//
+            SharedAssetManager.getInstance(),//
+            world,//
+            behaviorManager//
+      );
+      wire();
+   }
 
-	@Override
-	public GameWorld getGameWorld() {
-		return world;
-	}
+   @Override
+   public GameWorld getGameWorld() {
+      return world;
+   }
 
-	@Override
-	public Stage getWorldStage() {
-		return worldStage;
-	}
+   @Override
+   public Stage getWorldStage() {
+      return worldStage;
+   }
 
-	@Override
-	public Stage getStage() {
-		return stage;
-	}
+   @Override
+   public Stage getStage() {
+      return stage;
+   }
 
-	@Override
-	public RenderPipeline getRenderPipeline() {
-		return renderPipeline;
-	}
+   @Override
+   public RenderPipeline getRenderPipeline() {
+      return renderPipeline;
+   }
 
-	@Override
-	public World getBox2DWorld() {
-		return boxWorld;
-	}
+   @Override
+   public World getBox2DWorld() {
+      return boxWorld;
+   }
 
-	@Override
-	public ParticleManager getParticleManager() {
-		return particleManager;
-	}
+   @Override
+   public ParticleManager getParticleManager() {
+      return particleManager;
+   }
 
-	@Override
-	public TweenManager getTweenManager() {
-		return tweenManager;
-	}
+   @Override
+   public TweenManager getTweenManager() {
+      return tweenManager;
+   }
 
-	@Override
-	public BehaviorManager getBehaviorManager() {
-		return behaviorManager;
-	}
+   @Override
+   public BehaviorManager getBehaviorManager() {
+      return behaviorManager;
+   }
 
-	@Override
-	public GameObjectRenderManager getRenderManager() {
-		return renderManager;
-	}
+   @Override
+   public GameObjectRenderManager getRenderManager() {
+      return renderManager;
+   }
 
-	@Override
-	public GameCamera getGameCamera() {
-		return gameCamera;
-	}
+   @Override
+   public GameCamera getGameCamera() {
+      return gameCamera;
+   }
 
-	@Override
-	public LightingManager getLightingManager() {
-		return lightingManager;
-	}
+   @Override
+   public LightingManager getLightingManager() {
+      return lightingManager;
+   }
 
-	@Override
-	public InputMultiplexer getInput() {
-		return input;
-	}
+   @Override
+   public InputMultiplexer getInput() {
+      return input;
+   }
 
-	@Override
-	public TiledMapManager getTiledMapManager() {
-		return tiledMapManager;
-	}
+   @Override
+   public TiledMapManager getTiledMapManager() {
+      return tiledMapManager;
+   }
 
-	@Override
-	public ScreenTransitions getScreenTransitions() {
-		return ScreenTransitions.getInstance();
-	}
+   @Override
+   public ScreenTransitions getScreenTransitions() {
+      return ScreenTransitions.getInstance();
+   }
 
-	@Override
-	public AudioManager getAudioManager() {
-		return audioManager;
-	}
+   @Override
+   public AudioManager getAudioManager() {
+      return audioManager;
+   }
 
-	@Override
-	public void dispose() {
-		world.clear();
-		stage.dispose();
-		worldStage.dispose();
-		input.clear();
-		particleManager.dispose();
-		renderPipeline.dispose();
-		tweenManager.killAll();
-		renderManager.dispose();
-		eventManager.clear();
-	}
+   @Override
+   public void dispose() {
+      world.clear();
+      stage.dispose();
+      worldStage.dispose();
+      input.clear();
+      particleManager.dispose();
+      renderPipeline.dispose();
+      tweenManager.killAll();
+      renderManager.dispose();
+      eventManager.clear();
+   }
 
-	@Override
-	public void updateAndRender(float delta) {
-		tweenManager.update(delta);
-		gameCamera.update(delta);
-		stage.act(delta);
-		worldStage.act(delta);
-		batch.setProjectionMatrix(camera.combined);
-		renderPipeline.render(batch, delta);
-	}
+   @Override
+   public void updateAndRender(float delta) {
+      tweenManager.update(delta);
+      gameCamera.update(delta);
+      stage.act(delta);
+      worldStage.act(delta);
+      batch.setProjectionMatrix(camera.combined);
+      renderPipeline.render(batch, delta);
+   }
 
-	@Override
-	public void resize(int width, int height) {
-		stage.getViewport().update(width, height);
-		worldStage.getViewport().update(width, height);
-		renderPipeline.resize(width, height);
-		gameCamera.resize(width, height);
-	}
+   @Override
+   public void resize(int width, int height) {
+      stage.getViewport().update(width, height);
+      worldStage.getViewport().update(width, height);
+      renderPipeline.resize(width, height);
+      gameCamera.resize(width, height);
+   }
 
-	private void wire() {
-		world.addListener(new BehaviorManagerAdapter(behaviorManager));
-		world.addListener(new GameObjectRenderManagerAdapter(renderManager));
-		input.addProcessor(stage);
-		input.addProcessor(worldStage);
-		Gdx.input.setInputProcessor(input);
-	}
+   private void wire() {
+      world.addListener(new BehaviorManagerAdapter(behaviorManager));
+      world.addListener(new GameObjectRenderManagerAdapter(renderManager));
+      input.addProcessor(stage);
+      input.addProcessor(worldStage);
+      Gdx.input.setInputProcessor(input);
+   }
 
    @Override
    public GameEventManager getEventManager() {

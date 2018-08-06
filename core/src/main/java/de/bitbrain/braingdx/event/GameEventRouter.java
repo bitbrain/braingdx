@@ -3,7 +3,6 @@ package de.bitbrain.braingdx.event;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Rectangle;
-import de.bitbrain.braingdx.GameContext;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
@@ -17,21 +16,20 @@ import java.util.Set;
  * <p>
  * There are the following properties on any {@link de.bitbrain.braingdx.world.GameObject} which can be treated as an event:
  * <ul>
- *    <li><b>sticky</b> - sticky events do not disappear after a trigger and will be triggered after re-entering</li>
- *    <li><b>producer</b> - a custom producer type which overrides the default producer. The default producer is the game object colliding with the event object</li>
+ * <li><b>sticky</b> - sticky events do not disappear after a trigger and will be triggered after re-entering</li>
+ * <li><b>producer</b> - a custom producer type which overrides the default producer. The default producer is the game object colliding with the event object</li>
  * </ul>
  */
 public class GameEventRouter extends BehaviorAdapter {
 
    public static final String PRODUCER_PROPERTY = "producer";
    public static final String STICKY_PROPERTY = "sticky";
-
+   private final GameEventManager eventManager;
+   private final GameWorld gameWorld;
    private Rectangle sourceRect, targetRect;
    private GameEventFactory eventFactory;
    private Set<String> eventIds = new HashSet<String>();
    private Object[] identifiers;
-   private final GameEventManager eventManager;
-   private final GameWorld gameWorld;
 
    public GameEventRouter(GameEventManager eventManager, GameWorld gameWorld) {
       this.eventManager = eventManager;
@@ -60,7 +58,7 @@ public class GameEventRouter extends BehaviorAdapter {
          return;
       }
 
-      MapProperties properties = (MapProperties)source.getAttribute(MapProperties.class);
+      MapProperties properties = (MapProperties) source.getAttribute(MapProperties.class);
 
       if (properties.containsKey(PRODUCER_PROPERTY) && !properties.get(PRODUCER_PROPERTY).equals(target.getType())) {
          return;
@@ -84,7 +82,7 @@ public class GameEventRouter extends BehaviorAdapter {
             Gdx.app.log("WARN", "Unable to publish event for " + source + "! Not supported by EventFactory!");
          }
       }
-      if (properties.containsKey(STICKY_PROPERTY) && (Boolean)properties.get(STICKY_PROPERTY)) {
+      if (properties.containsKey(STICKY_PROPERTY) && (Boolean) properties.get(STICKY_PROPERTY)) {
          if (eventIds.contains(source.getId())) {
             eventIds.remove(source.getId());
          }

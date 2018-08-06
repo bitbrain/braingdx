@@ -29,20 +29,15 @@ import de.bitbrain.braingdx.world.GameWorld;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -51,27 +46,19 @@ import static org.mockito.Mockito.*;
  * Tests and verifies the integrity of the {@link TiledMapManager} implementation used within
  * braingdx.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 @RunWith(MockitoJUnitRunner.class)
 public class TiledMapManagerTest {
 
-   private class TestEvent implements GameEvent {
-
-   }
-
    @Mock
    private GameObjectRenderManager renderManager;
-
    @Mock
    private OrthographicCamera camera;
-
    private TiledMapManager tiledMapManager;
-
    private GameEventManager gameEventManager;
-
    private GameWorld world;
 
    @Before
@@ -476,10 +463,10 @@ public class TiledMapManagerTest {
     * Creates collisions on different layers
     * <p>
     * setup:
-    * 
+    *
     * <pre>
     * x x x x
-    * x c   x  
+    * x c   x
     * x a b x
     * x x x x
     * </pre>
@@ -499,5 +486,9 @@ public class TiledMapManagerTest {
 
    private TiledMap createSimple3x3Map() {
       return createSimple3x3Map(false);
+   }
+
+   private class TestEvent implements GameEvent {
+
    }
 }

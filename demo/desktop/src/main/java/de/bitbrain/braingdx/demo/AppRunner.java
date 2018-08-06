@@ -1,13 +1,13 @@
 package de.bitbrain.braingdx.demo;
 
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public final class AppRunner {
 

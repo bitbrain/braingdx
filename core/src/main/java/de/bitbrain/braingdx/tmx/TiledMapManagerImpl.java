@@ -27,17 +27,15 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.SimpleWorldBounds;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * Implementation of {@link TiledMapManager}.
  *
- * @since 1.0.0
- * @version 1.0.0
  * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class TiledMapManagerImpl implements TiledMapManager {
 

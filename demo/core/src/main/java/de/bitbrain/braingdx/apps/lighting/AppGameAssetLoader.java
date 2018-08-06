@@ -1,12 +1,11 @@
 package de.bitbrain.braingdx.apps.lighting;
 
-import java.util.Map;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
 import de.bitbrain.braingdx.apps.Assets;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
+
+import java.util.Map;
 
 public class AppGameAssetLoader implements GameAssetLoader {
 
