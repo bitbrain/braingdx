@@ -24,3 +24,11 @@ comment:
   layout: "header, diff"
   behavior: default
   require_changes: no
+
+ignore:
+  - "demo/**/*"
+  - "deployment/**/*"
+  - "core/src/main/java/de/bitbrain/braingdx/ai/**/*"
+  - "core/src/main/java/de/bitbrain/braingdx/postprocessing/**/*"
+  - "core/src/main/java/de/bitbrain/braingdx/tweens/**/*"
+  - "core/src/main/java/de/bitbrain/braingdx/screens/**/*"
