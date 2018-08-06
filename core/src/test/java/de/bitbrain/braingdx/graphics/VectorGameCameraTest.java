@@ -1,14 +1,15 @@
 package de.bitbrain.braingdx.graphics;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -20,30 +21,93 @@ public class VectorGameCameraTest {
    @Mock
    private GameWorld gameWorld;
 
-   @Mock
    private OrthographicCamera orthographicCamera;
 
    @Mock
    private GameWorld.WorldBounds bounds;
 
-   @InjectMocks
    private VectorGameCamera camera;
 
    @Before
    public void setup() {
-      when(gameWorld.getBounds()).thenReturn(bounds);
-      setBounds(0f, 0f, WORLD_WIDTH, WORLD_HEIGHT);
+      orthographicCamera = new OrthographicCamera();
+      camera = new VectorGameCamera(orthographicCamera, gameWorld);
    }
 
    @Test
-   public void testInBounds() {
-
+   public void testDefaultInitialization() {
+      setCameraBounds(0f, 0f, WORLD_WIDTH, WORLD_HEIGHT);
+      setWorldBounds(0f, 0f, WORLD_WIDTH, WORLD_HEIGHT);
+      camera.update(0f);
+      assertThat(orthographicCamera.position.len()).isZero();
+      assertThat(orthographicCamera.viewportWidth).isEqualTo(WORLD_WIDTH);
+      assertThat(orthographicCamera.viewportHeight).isEqualTo(WORLD_HEIGHT);
    }
 
-   private void setBounds(float x, float y, float width, float height) {
+   @Test
+   public void testSetDefaultZoom() {
+      final float FACTOR = 2;
+      setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH / FACTOR, WORLD_HEIGHT / FACTOR);
+      camera.setDefaultZoomFactor(0.5f);
+      camera.update(0f);
+
+      assertThat(orthographicCamera.position.len()).isZero();
+      assertThat(orthographicCamera.viewportWidth).isEqualTo(WORLD_WIDTH / FACTOR);
+      assertThat(orthographicCamera.viewportHeight).isEqualTo(WORLD_HEIGHT/ FACTOR);
+   }
+
+   @Test
+   public void testSetDefaultZoom_FocusCentered_NoTrackingTarget() {
+      final float FACTOR = 2;
+      setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH / FACTOR, WORLD_HEIGHT / FACTOR);
+      camera.setDefaultZoomFactor(0.5f);
+      camera.focusCentered();
+      camera.update(0f);
+
+      assertThat(orthographicCamera.position.x).isEqualTo(WORLD_WIDTH / FACTOR);
+      assertThat(orthographicCamera.position.y).isEqualTo(WORLD_HEIGHT / FACTOR);
+      assertThat(orthographicCamera.viewportWidth).isEqualTo(WORLD_WIDTH / FACTOR);
+      assertThat(orthographicCamera.viewportHeight).isEqualTo(WORLD_HEIGHT/ FACTOR);
+   }
+
+   @Test
+   public void testSetDefaultZoom_FocusCentered_WithTrackingTarget() {
+      final float FACTOR = 2;
+      final float OBJECT_LEFT = 0f;
+      final float OBJECT_TOP = 0f;
+      final float OBJECT_WIDTH = 128;
+      final float OBJECT_HEIGHT = 128;
+      setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH / FACTOR, WORLD_HEIGHT / FACTOR);
+
+      GameObject object = new GameObject();
+      object.setPosition(OBJECT_LEFT, OBJECT_TOP);
+      object.setDimensions(OBJECT_WIDTH, OBJECT_HEIGHT);
+
+      camera.setDefaultZoomFactor(0.5f);
+      camera.focusCentered(object);
+      camera.update(0f);
+
+      assertThat(orthographicCamera.position.x).isEqualTo(OBJECT_LEFT + OBJECT_WIDTH / FACTOR);
+      assertThat(orthographicCamera.position.y).isEqualTo(OBJECT_TOP + OBJECT_HEIGHT / FACTOR);
+      assertThat(orthographicCamera.viewportWidth).isEqualTo(WORLD_WIDTH / FACTOR);
+      assertThat(orthographicCamera.viewportHeight).isEqualTo(WORLD_HEIGHT/ FACTOR);
+   }
+
+   private void setCameraBounds(float x, float y, float width, float height) {
+      orthographicCamera.position.x = x;
+      orthographicCamera.position.y = y;
+      orthographicCamera.viewportWidth = width;
+      orthographicCamera.viewportHeight = height;
+   }
+
+   private void setWorldBounds(float x, float y, float width, float height) {
       when(bounds.getWorldOffsetX()).thenReturn(x);
       when(bounds.getWorldOffsetY()).thenReturn(y);
       when(bounds.getWorldWidth()).thenReturn(width);
       when(bounds.getWorldHeight()).thenReturn(height);
+      when(gameWorld.getBounds()).thenReturn(bounds);
    }
 }

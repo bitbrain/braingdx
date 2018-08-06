@@ -65,7 +65,7 @@ public class VectorGameCamera implements GameCamera {
    public void setTrackingTarget(GameObject target, boolean focus) {
       this.target = target;
       if (focus) {
-         focusCenteredOnObject();
+         focusCentered();
       }
    }
 
@@ -74,7 +74,7 @@ public class VectorGameCamera implements GameCamera {
       if (target == null)
          return;
       if (focusRequested) {
-         focusCenteredOnObject(target);
+         focusCentered(target);
          focusRequested = false;
       } else {
          BigDecimal preciseDelta = BigDecimal.valueOf(delta);
@@ -150,14 +150,19 @@ public class VectorGameCamera implements GameCamera {
    }
 
    @Override
-   public void focusCenteredOnObject(GameObject object) {
+   public void focusCentered(GameObject object) {
       camera.position.x = object.getLeft() + object.getOffset().x + object.getWidth() / 2f;
       camera.position.y = object.getTop() + object.getOffset().y + object.getHeight() / 2f;
    }
 
    @Override
-   public void focusCenteredOnObject() {
+   public void focusCentered() {
       focusRequested = true;
+      if (target == null) {
+         WorldBounds bounds = world.getBounds();
+         camera.position.x = bounds.getWorldOffsetX() + bounds.getWorldWidth() / 2f;
+         camera.position.y = bounds.getWorldOffsetY() + bounds.getWorldHeight() / 2f;
+      }
    }
 
    @Override

@@ -64,13 +64,13 @@ public interface GameCamera extends Resizeable {
    /**
     * Focuses directly on the target
     */
-   void focusCenteredOnObject();
+   void focusCentered();
 
    /**
     * When no target is defined or the given object is the target, it focuses the
     * game camera onto the given object.
     */
-   void focusCenteredOnObject(GameObject object);
+   void focusCentered(GameObject object);
 
    /**
     * Sets a new target. Focuses by default.
@@ -80,10 +80,10 @@ public interface GameCamera extends Resizeable {
    void setTrackingTarget(GameObject target);
 
    /**
-    * Sets a new target and determines if focusCenteredOnObject or not.
+    * Sets a new target and determines if focusCentered or not.
     *
     * @param target the target
-    * @param focus  focusCenteredOnObject target on attach
+    * @param focus  focusCentered target on attach
     */
    void setTrackingTarget(GameObject target, boolean focus);
 
