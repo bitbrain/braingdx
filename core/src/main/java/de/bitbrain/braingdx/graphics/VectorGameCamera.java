@@ -153,6 +153,9 @@ public class VectorGameCamera implements GameCamera {
    public void focusCentered(GameObject object) {
       camera.position.x = object.getLeft() + object.getOffset().x + object.getWidth() / 2f;
       camera.position.y = object.getTop() + object.getOffset().y + object.getHeight() / 2f;
+      if (worldBoundsStickiness) {
+         applyWorldBounds();
+      }
    }
 
    @Override
@@ -162,6 +165,9 @@ public class VectorGameCamera implements GameCamera {
          WorldBounds bounds = world.getBounds();
          camera.position.x = bounds.getWorldOffsetX() + bounds.getWorldWidth() / 2f;
          camera.position.y = bounds.getWorldOffsetY() + bounds.getWorldHeight() / 2f;
+      }
+      if (worldBoundsStickiness) {
+         applyWorldBounds();
       }
    }
 
@@ -185,8 +191,8 @@ public class VectorGameCamera implements GameCamera {
       final float camWidthScaled = camera.viewportWidth * camera.zoom;
       final float camHeightScaled = camera.viewportHeight * camera.zoom;
 
-      final boolean worldWidthTooSmall = camWidthScaled >= bounds.getWorldWidth();
-      final boolean worldHeightTooSmall = camHeightScaled >= bounds.getWorldHeight();
+      final boolean worldWidthTooSmall = camWidthScaled > bounds.getWorldWidth();
+      final boolean worldHeightTooSmall = camHeightScaled > bounds.getWorldHeight();
 
       final float camLeft = camera.position.x - camWidthScaled / 2f;
       final float camBottom = camera.position.y + camHeightScaled / 2f;

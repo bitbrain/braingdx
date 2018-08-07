@@ -7,9 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -21,6 +23,7 @@ public class VectorGameCameraTest {
    @Mock
    private GameWorld gameWorld;
 
+   @Spy
    private OrthographicCamera orthographicCamera;
 
    @Mock
@@ -30,8 +33,9 @@ public class VectorGameCameraTest {
 
    @Before
    public void setup() {
-      orthographicCamera = new OrthographicCamera();
       camera = new VectorGameCamera(orthographicCamera, gameWorld);
+      camera.setStickToWorldBounds(false);
+      doNothing().when(orthographicCamera).update();
    }
 
    @Test
@@ -85,8 +89,6 @@ public class VectorGameCameraTest {
       GameObject object = new GameObject();
       object.setPosition(OBJECT_LEFT, OBJECT_TOP);
       object.setDimensions(OBJECT_WIDTH, OBJECT_HEIGHT);
-
-      camera.setDefaultZoomFactor(0.5f);
       camera.focusCentered(object);
       camera.update(0f);
 
@@ -94,6 +96,33 @@ public class VectorGameCameraTest {
       assertThat(orthographicCamera.position.y).isEqualTo(OBJECT_TOP + OBJECT_HEIGHT / FACTOR);
       assertThat(orthographicCamera.viewportWidth).isEqualTo(WORLD_WIDTH / FACTOR);
       assertThat(orthographicCamera.viewportHeight).isEqualTo(WORLD_HEIGHT/ FACTOR);
+   }
+
+   @Test
+   public void testStickToBounds_TooSmallWidth_ShouldStickToWidth() {
+      final float FACTOR = 2;
+      final float OBJECT_LEFT = 0f;
+      final float OBJECT_TOP = 0f;
+      final float OBJECT_WIDTH = 128;
+      final float OBJECT_HEIGHT = 128;
+      setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH * FACTOR, WORLD_HEIGHT * FACTOR);
+
+      GameObject object = new GameObject();
+      object.setPosition(OBJECT_LEFT, OBJECT_TOP);
+      object.setDimensions(OBJECT_WIDTH, OBJECT_HEIGHT);
+
+      camera.setStickToWorldBounds(true);
+      camera.setTrackingTarget(object);
+      camera.focusCentered(object);
+      camera.update(0f);
+
+      assertThat(orthographicCamera.position.x).isEqualTo(WORLD_WIDTH / 2f);
+      assertThat(orthographicCamera.position.y).isEqualTo(WORLD_HEIGHT / 2f);
+      assertThat(orthographicCamera.viewportWidth * orthographicCamera.zoom)
+            .isEqualTo(WORLD_WIDTH);
+      assertThat(orthographicCamera.viewportHeight * orthographicCamera.zoom)
+            .isEqualTo(WORLD_HEIGHT);
    }
 
    private void setCameraBounds(float x, float y, float width, float height) {
