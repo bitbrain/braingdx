@@ -65,37 +65,38 @@ public class VectorGameCameraTest {
    public void testSetDefaultZoom_FocusCentered_NoTrackingTarget() {
       final float FACTOR = 2;
       setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
-      setCameraBounds(0f, 0f, WORLD_WIDTH / FACTOR, WORLD_HEIGHT / FACTOR);
+      setCameraBounds(0f, 0f, WORLD_WIDTH, WORLD_HEIGHT);
       camera.setDefaultZoomFactor(0.5f);
       camera.focusCentered();
       camera.update(0f);
 
       assertThat(orthographicCamera.position.x).isEqualTo(WORLD_WIDTH / FACTOR);
       assertThat(orthographicCamera.position.y).isEqualTo(WORLD_HEIGHT / FACTOR);
-      assertThat(orthographicCamera.viewportWidth).isEqualTo(WORLD_WIDTH / FACTOR);
-      assertThat(orthographicCamera.viewportHeight).isEqualTo(WORLD_HEIGHT/ FACTOR);
+      assertThat(orthographicCamera.viewportWidth * orthographicCamera.zoom).isEqualTo(WORLD_WIDTH / FACTOR);
+      assertThat(orthographicCamera.viewportHeight * orthographicCamera.zoom).isEqualTo(WORLD_HEIGHT / FACTOR);
    }
 
    @Test
    public void testSetDefaultZoom_FocusCentered_WithTrackingTarget() {
-      final float FACTOR = 2;
+      final float FACTOR = 2f;
       final float OBJECT_LEFT = 0f;
       final float OBJECT_TOP = 0f;
       final float OBJECT_WIDTH = 128;
       final float OBJECT_HEIGHT = 128;
       setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
-      setCameraBounds(0f, 0f, WORLD_WIDTH / FACTOR, WORLD_HEIGHT / FACTOR);
+      setCameraBounds(0f, 0f, WORLD_WIDTH, WORLD_HEIGHT);
 
       GameObject object = new GameObject();
       object.setPosition(OBJECT_LEFT, OBJECT_TOP);
       object.setDimensions(OBJECT_WIDTH, OBJECT_HEIGHT);
+      camera.setDefaultZoomFactor(1f / FACTOR);
       camera.focusCentered(object);
       camera.update(0f);
 
       assertThat(orthographicCamera.position.x).isEqualTo(OBJECT_LEFT + OBJECT_WIDTH / FACTOR);
       assertThat(orthographicCamera.position.y).isEqualTo(OBJECT_TOP + OBJECT_HEIGHT / FACTOR);
-      assertThat(orthographicCamera.viewportWidth).isEqualTo(WORLD_WIDTH / FACTOR);
-      assertThat(orthographicCamera.viewportHeight).isEqualTo(WORLD_HEIGHT/ FACTOR);
+      assertThat(orthographicCamera.viewportWidth * orthographicCamera.zoom).isEqualTo(WORLD_WIDTH / FACTOR);
+      assertThat(orthographicCamera.viewportHeight * orthographicCamera.zoom).isEqualTo(WORLD_HEIGHT / FACTOR);
    }
 
    @Test

@@ -132,6 +132,9 @@ public class VectorGameCamera implements GameCamera {
    @Override
    public void setDefaultZoomFactor(float zoom) {
       this.defaultZoom = new BigDecimal(zoom, PRECISION);
+      if (target == null) {
+         camera.zoom = zoom;
+      }
    }
 
    @Override
