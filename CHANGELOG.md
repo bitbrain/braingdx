@@ -1,6 +1,7 @@
 # Unreleased
 
 * [[#146](https://github.com/bitbrain/braingdx/issues/146)] introduced GWT math
+* [[#147](https://github.com/bitbrain/braingdx/issues/147)] introduced `BigDecimalVector2` math component
 
 # Version 0.2.17
 
