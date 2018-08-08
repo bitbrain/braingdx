@@ -1,3 +1,7 @@
+# Unreleased
+
+* [[#146](https://github.com/bitbrain/braingdx/issues/146)] introduced GWT math
+
 # Version 0.2.17
 
 * [[#140](https://github.com/bitbrain/braingdx/issues/140)] fix issue where tiled collisions were overriden and removed by other game objects

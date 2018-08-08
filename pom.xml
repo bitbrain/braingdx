@@ -47,6 +47,7 @@
       <libgdx.version>1.9.8</libgdx.version>
       <tween.version>6.3.3</tween.version>
       <box2dlights.version>1.5-SNAPSHOT</box2dlights.version>
+      <gwt-math.version>2.0.3</gwt-math.version>
       <junit.version>4.12</junit.version>
       <mockito.version>1.9.5</mockito.version>
       <assertj.version>2.6.0</assertj.version>
@@ -128,6 +129,11 @@
          <groupId>commons-collections</groupId>
          <artifactId>commons-collections</artifactId>
          <version>${apache.commons.collections.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>com.google.code.gwt-math</groupId>
+         <artifactId>gwt-math</artifactId>
+         <version>${gwt-math.version}</version>
       </dependency>
 
       <!-- TESTING -->
