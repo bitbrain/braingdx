@@ -18,6 +18,7 @@ package de.bitbrain.braingdx.graphics;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import de.bitbrain.braingdx.util.math.BigDecimalVector2;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.GameWorld.WorldBounds;
@@ -38,7 +39,7 @@ public class VectorGameCamera implements GameCamera {
 
    private final OrthographicCamera camera;
    private final GameWorld world;
-   private final Vector2 tmp = new Vector2();
+   private final BigDecimalVector2 tmp = new BigDecimalVector2();
    private BigDecimal velocityX, velocityY;
    private GameObject target;
    private BigDecimal speed = new BigDecimal(6.2f, PRECISION);
@@ -92,8 +93,8 @@ public class VectorGameCamera implements GameCamera {
             velocityY = top.add(height.divide(BigDecimal.valueOf(2.0))).subtract(camTop);
          }
 
-         tmp.set(velocityX.floatValue(), velocityY.floatValue());
-         BigDecimal distance = BigDecimal.valueOf(tmp.len());
+         tmp.set(velocityX, velocityY);
+         BigDecimal distance = tmp.len();
          BigDecimal overAllSpeed = distance.multiply(speed);
 
          BigDecimal deltaX = velocityX.multiply(overAllSpeed).multiply(preciseDelta);
