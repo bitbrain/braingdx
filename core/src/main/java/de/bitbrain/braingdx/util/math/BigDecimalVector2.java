@@ -1,5 +1,6 @@
 package de.bitbrain.braingdx.util.math;
 
+import ch.obermuhlner.math.big.BigDecimalMath;
 import com.badlogic.gdx.math.MathUtils;
 
 import java.io.Serializable;
@@ -11,8 +12,9 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
 
    private static final long serialVersionUID = 913902788239530931L;
 
-   private static final BigDecimal SQRT_DIG = new BigDecimal(150);
-   private static final BigDecimal SQRT_PRE = new BigDecimal(10).pow(SQRT_DIG.intValue());
+   private static final MathContext DEFAULT_MATH_CONTEXT = MathContext.UNLIMITED;
+   private static final BigDecimal SQRT_DIG = new BigDecimal(150, DEFAULT_MATH_CONTEXT);
+   private static final BigDecimal SQRT_PRE = new BigDecimal(10, DEFAULT_MATH_CONTEXT).pow(SQRT_DIG.intValue());
 
    public final static BigDecimalVector2 X = new BigDecimalVector2(1, 0);
    public final static BigDecimalVector2 Y = new BigDecimalVector2(0, 1);
@@ -33,7 +35,7 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
     * Constructs a new vector at (0,0)
     */
    public BigDecimalVector2() {
-      this(MathContext.DECIMAL128);
+      this(DEFAULT_MATH_CONTEXT);
    }
 
    public BigDecimalVector2(MathContext mathContext) {
@@ -49,7 +51,7 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
     * @param y The y-component
     */
    public BigDecimalVector2(float x, float y) {
-      this(MathContext.DECIMAL128);
+      this(DEFAULT_MATH_CONTEXT);
       this.x = new BigDecimal(x, mathContext);
       this.y = new BigDecimal(y, mathContext);
    }
@@ -60,7 +62,7 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
     * @param v The vector
     */
    public BigDecimalVector2(BigDecimalVector2 v) {
-      this(MathContext.DECIMAL128);
+      this(DEFAULT_MATH_CONTEXT);
       set(v);
    }
 
@@ -69,23 +71,13 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
       return new BigDecimalVector2(this);
    }
 
-   /**
-    * Uses Newton Raphson to compute the square root of a BigDecimal.
-    *
-    * @author Luciano Culacciatti
-    * @url http://www.codeproject.com/Tips/257031/Implementing-SqrtRoot-in-BigDecimal
-    */
-   public static BigDecimal sqrt(BigDecimal c, MathContext mathContext) {
-      return sqrtNewtonRaphson(c, new BigDecimal(1, mathContext), new BigDecimal(1).divide(SQRT_PRE, mathContext));
-   }
-
    public static BigDecimal len(BigDecimal x, BigDecimal y, MathContext mathContext) {
-      return sqrt(x.pow(2).add(y.pow(2)), mathContext);
+      return BigDecimalMath.sqrt(x.pow(2).add(y.pow(2)), mathContext);
    }
 
    @Override
    public BigDecimal len() {
-      return sqrt(x.pow(2).add(y.pow(2)), mathContext);
+      return BigDecimalMath.sqrt(x.pow(2).add(y.pow(2)), mathContext);
    }
 
    public static BigDecimal len2(BigDecimal x, BigDecimal y) {
@@ -131,8 +123,8 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
 
    @Override
    public BigDecimalVector2 sub(BigDecimalVector2 v) {
-      x = x.subtract(v.x);
-      y = y.subtract(v.y);
+      this.x = x.subtract(v.x);
+      this.y = y.subtract(v.y);
       return this;
    }
 
@@ -153,16 +145,16 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
    public BigDecimalVector2 nor() {
       BigDecimal len = len();
       if (len.signum() != 0) {
-         x = x.divide(len, mathContext);
-         y = y.divide(len, mathContext);
+         this.x = x.divide(len, mathContext);
+         this.y = y.divide(len, mathContext);
       }
       return this;
    }
 
    @Override
    public BigDecimalVector2 add(BigDecimalVector2 v) {
-      x = x.add(v.x);
-      y = y.add(v.y);
+      this.x = x.add(v.x);
+      this.y = y.add(v.y);
       return this;
    }
 
@@ -177,8 +169,8 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
 
    @Override
    public BigDecimalVector2 scl(BigDecimal scalar) {
-      x = x.multiply(scalar);
-      y = y.multiply(scalar);
+      this.x = x.multiply(scalar);
+      this.y = y.multiply(scalar);
       return this;
    }
 
@@ -200,77 +192,5 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
       float angle = (float) Math.atan2(y.floatValue(), x.floatValue()) * MathUtils.radiansToDegrees;
       if (angle < 0) angle += 360;
       return angle;
-   }
-
-   /**
-    * @return the angle in radians of this vector (point) relative to the x-axis. Angles are towards the positive y-axis.
-    * (typically counter-clockwise)
-    */
-   public float angleRad() {
-      return (float) Math.atan2(y.floatValue(), x.floatValue());
-   }
-
-   /**
-    * Sets the angle of the vector in degrees relative to the x-axis, towards the positive y-axis (typically counter-clockwise).
-    *
-    * @param degrees The angle in degrees to set.
-    */
-   public BigDecimalVector2 setAngle(float degrees) {
-      return setAngleRad(degrees * MathUtils.degreesToRadians);
-   }
-
-   /**
-    * Sets the angle of the vector in radians relative to the x-axis, towards the positive y-axis (typically counter-clockwise).
-    *
-    * @param radians The angle in radians to set.
-    */
-   public BigDecimalVector2 setAngleRad(float radians) {
-      this.set(len(), BigDecimal.ZERO);
-      this.rotateRad(radians);
-      return this;
-   }
-
-   /**
-    * Rotates the Vector2 by the given angle, counter-clockwise assuming the y-axis points up.
-    *
-    * @param degrees the angle in degrees
-    */
-   public BigDecimalVector2 rotate(float degrees) {
-      return rotateRad(degrees * MathUtils.degreesToRadians);
-   }
-
-   /**
-    * Rotates the Vector2 by the given angle, counter-clockwise assuming the y-axis points up.
-    *
-    * @param radians the angle in radians
-    */
-   public BigDecimalVector2 rotateRad(float radians) {
-      BigDecimal cos = new BigDecimal(Math.cos(radians));
-      BigDecimal sin = new BigDecimal(Math.sin(radians));
-
-      this.x = x.multiply(cos).subtract(y.multiply(sin));
-      this.y = y.multiply(sin).add(y.multiply(cos));
-
-      return this;
-   }
-
-   @Override
-   public BigDecimalVector2 setToRandomDirection() {
-      float theta = MathUtils.random(0f, MathUtils.PI2);
-      return this.set(new BigDecimal(MathUtils.cos(theta)), new BigDecimal(MathUtils.sin(theta)));
-   }
-
-   private static BigDecimal sqrtNewtonRaphson(BigDecimal c, BigDecimal xn, BigDecimal precision) {
-      BigDecimal fx = xn.pow(2).add(c.negate());
-      BigDecimal fpx = xn.multiply(new BigDecimal(2));
-      BigDecimal xn1 = fx.divide(fpx, 2 * SQRT_DIG.intValue(), RoundingMode.HALF_DOWN);
-      xn1 = xn.add(xn1.negate());
-      BigDecimal currentSquare = xn1.pow(2);
-      BigDecimal currentPrecision = currentSquare.subtract(c);
-      currentPrecision = currentPrecision.abs();
-      if (currentPrecision.compareTo(precision) <= -1) {
-         return xn1;
-      }
-      return sqrtNewtonRaphson(c, xn1, precision);
    }
 }

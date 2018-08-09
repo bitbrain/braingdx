@@ -63,11 +63,4 @@ public interface GenericVector<Vector extends GenericVector<Vector, Type>, Type>
     * @return This vector for chaining
     */
    Vector scl(Type scalar);
-
-   /**
-    * Sets this vector to the unit vector with a random direction
-    *
-    * @return This vector for chaining
-    */
-   Vector setToRandomDirection();
 }

@@ -149,6 +149,9 @@ public class VectorGameCamera implements GameCamera {
    public void setPosition(float x, float y) {
       this.camera.position.x = x;
       this.camera.position.y = y;
+      if (worldBoundsStickiness) {
+         applyWorldBounds();
+      }
    }
 
    @Override
