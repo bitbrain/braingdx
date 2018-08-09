@@ -1,7 +1,13 @@
 # Unreleased
 
+This release brings major improvements to the `GameCamera` logic and API within **braingdx**.
+
 * [[#146](https://github.com/bitbrain/braingdx/issues/146)] introduced GWT math
 * [[#147](https://github.com/bitbrain/braingdx/issues/147)] introduced `BigDecimalVector2` math component
+
+**Other fixes**
+
+* improve precision of `GameCamera` object tracking
 
 # Version 0.2.17
 

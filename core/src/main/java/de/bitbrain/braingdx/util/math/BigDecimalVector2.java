@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.MathUtils;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 
-// TODO
 public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimalVector2, BigDecimal> {
 
    private static final long serialVersionUID = 913902788239530931L;
@@ -17,6 +17,8 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
    public final static BigDecimalVector2 X = new BigDecimalVector2(1, 0);
    public final static BigDecimalVector2 Y = new BigDecimalVector2(0, 1);
    public final static BigDecimalVector2 Zero = new BigDecimalVector2(0, 0);
+
+   public final MathContext mathContext;
 
    /**
     * the x-component of this vector
@@ -31,6 +33,13 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
     * Constructs a new vector at (0,0)
     */
    public BigDecimalVector2() {
+      this(MathContext.DECIMAL128);
+   }
+
+   public BigDecimalVector2(MathContext mathContext) {
+      this.mathContext = mathContext;
+      this.x = new BigDecimal(0f, mathContext);
+      this.y = new BigDecimal(0f, mathContext);
    }
 
    /**
@@ -40,8 +49,9 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
     * @param y The y-component
     */
    public BigDecimalVector2(float x, float y) {
-      this.x = new BigDecimal(x);
-      this.y = new BigDecimal(y);
+      this(MathContext.DECIMAL128);
+      this.x = new BigDecimal(x, mathContext);
+      this.y = new BigDecimal(y, mathContext);
    }
 
    /**
@@ -50,6 +60,7 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
     * @param v The vector
     */
    public BigDecimalVector2(BigDecimalVector2 v) {
+      this(MathContext.DECIMAL128);
       set(v);
    }
 
@@ -64,17 +75,17 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
     * @author Luciano Culacciatti
     * @url http://www.codeproject.com/Tips/257031/Implementing-SqrtRoot-in-BigDecimal
     */
-   public static BigDecimal sqrt(BigDecimal c) {
-      return sqrtNewtonRaphson(c, new BigDecimal(1), new BigDecimal(1).divide(SQRT_PRE));
+   public static BigDecimal sqrt(BigDecimal c, MathContext mathContext) {
+      return sqrtNewtonRaphson(c, new BigDecimal(1, mathContext), new BigDecimal(1).divide(SQRT_PRE, mathContext));
    }
 
-   public static BigDecimal len(BigDecimal x, BigDecimal y) {
-      return sqrt(x.pow(2).add(y.pow(2)));
+   public static BigDecimal len(BigDecimal x, BigDecimal y, MathContext mathContext) {
+      return sqrt(x.pow(2).add(y.pow(2)), mathContext);
    }
 
    @Override
    public BigDecimal len() {
-      return sqrt(x.pow(2).add(y.pow(2)));
+      return sqrt(x.pow(2).add(y.pow(2)), mathContext);
    }
 
    public static BigDecimal len2(BigDecimal x, BigDecimal y) {
@@ -106,6 +117,18 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
       return this;
    }
 
+   public BigDecimalVector2 set(float x, float y) {
+      this.x = new BigDecimal(x, mathContext);
+      this.y = new BigDecimal(y, mathContext);
+      return this;
+   }
+
+   public BigDecimalVector2 set(double x, double y) {
+      this.x = new BigDecimal(x, mathContext);
+      this.y = new BigDecimal(y, mathContext);
+      return this;
+   }
+
    @Override
    public BigDecimalVector2 sub(BigDecimalVector2 v) {
       x = x.subtract(v.x);
@@ -130,8 +153,8 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
    public BigDecimalVector2 nor() {
       BigDecimal len = len();
       if (len.signum() != 0) {
-         x = x.divide(len);
-         y = y.divide(len);
+         x = x.divide(len, mathContext);
+         y = y.divide(len, mathContext);
       }
       return this;
    }
