@@ -41,14 +41,13 @@
    <!-- Properties -->
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <sdk.version>1.8</sdk.version>
+      <sdk.version>1.6</sdk.version>
       <maven.compiler.source>${sdk.version}</maven.compiler.source>
       <maven.compiler.target>${sdk.version}</maven.compiler.target>
       <libgdx.version>1.9.8</libgdx.version>
       <tween.version>6.3.3</tween.version>
       <box2dlights.version>1.5-SNAPSHOT</box2dlights.version>
       <gwt-math.version>2.0.3</gwt-math.version>
-      <bigmath.version>2.0.1</bigmath.version>
       <junit.version>4.12</junit.version>
       <mockito.version>1.9.5</mockito.version>
       <assertj.version>2.6.0</assertj.version>
@@ -135,11 +134,6 @@
          <groupId>com.google.code.gwt-math</groupId>
          <artifactId>gwt-math</artifactId>
          <version>${gwt-math.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>ch.obermuhlner</groupId>
-         <artifactId>big-math</artifactId>
-         <version>${bigmath.version}</version>
       </dependency>
 
       <!-- TESTING -->

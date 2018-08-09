@@ -1,6 +1,5 @@
 package de.bitbrain.braingdx.util.math;
 
-import ch.obermuhlner.math.big.BigDecimalMath;
 import com.badlogic.gdx.math.MathUtils;
 
 import java.io.Serializable;
@@ -72,12 +71,12 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
    }
 
    public static BigDecimal len(BigDecimal x, BigDecimal y, MathContext mathContext) {
-      return BigDecimalMath.sqrt(x.pow(2).add(y.pow(2)), mathContext);
+      return sqrt(x.pow(2).add(y.pow(2)), mathContext);
    }
 
    @Override
    public BigDecimal len() {
-      return BigDecimalMath.sqrt(x.pow(2).add(y.pow(2)), mathContext);
+      return sqrt(x.pow(2).add(y.pow(2)), mathContext);
    }
 
    public static BigDecimal len2(BigDecimal x, BigDecimal y) {
@@ -192,5 +191,29 @@ public class BigDecimalVector2 implements Serializable, GenericVector<BigDecimal
       float angle = (float) Math.atan2(y.floatValue(), x.floatValue()) * MathUtils.radiansToDegrees;
       if (angle < 0) angle += 360;
       return angle;
+   }
+
+   private static BigDecimal sqrtNewtonRaphson(BigDecimal c, BigDecimal xn, BigDecimal precision, MathContext mathContext) {
+      BigDecimal fx = xn.pow(2).add(c.negate());
+      BigDecimal fpx = xn.multiply(new BigDecimal(2, mathContext));
+      BigDecimal xn1 = fx.divide(fpx,2 * SQRT_DIG.intValue(),RoundingMode.HALF_DOWN);
+      xn1 = xn.add(xn1.negate());
+      BigDecimal currentSquare = xn1.pow(2);
+      BigDecimal currentPrecision = currentSquare.subtract(c);
+      currentPrecision = currentPrecision.abs();
+      if (currentPrecision.compareTo(precision) <= -1){
+         return xn1;
+      }
+      return sqrtNewtonRaphson(c, xn1, precision, mathContext);
+   }
+
+   /**
+    * Uses Newton Raphson to compute the square root of a BigDecimal.
+    *
+    * @author Luciano Culacciatti
+    * @url http://www.codeproject.com/Tips/257031/Implementing-SqrtRoot-in-BigDecimal
+    */
+   public static BigDecimal sqrt(BigDecimal c, MathContext mathContext) {
+      return sqrtNewtonRaphson(c,BigDecimal.ONE,BigDecimal.ONE.divide(SQRT_PRE, mathContext), mathContext);
    }
 }
