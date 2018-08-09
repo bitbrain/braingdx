@@ -1,6 +1,7 @@
 package de.bitbrain.braingdx.graphics;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector3;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 import org.junit.Before;
@@ -97,6 +98,34 @@ public class VectorGameCameraTest {
       assertThat(orthographicCamera.position.y).isEqualTo(OBJECT_TOP + OBJECT_HEIGHT / FACTOR);
       assertThat(orthographicCamera.viewportWidth * orthographicCamera.zoom).isEqualTo(WORLD_WIDTH / FACTOR);
       assertThat(orthographicCamera.viewportHeight * orthographicCamera.zoom).isEqualTo(WORLD_HEIGHT / FACTOR);
+   }
+
+   @Test
+   public void testTrackTarget_WithTrackingSpeed() {
+      setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH, WORLD_HEIGHT);
+      GameObject object = new GameObject();
+      camera.setTrackingTarget(object, false);
+      camera.setTargetTrackingSpeed(1f);
+      camera.setPosition(100f, 100f);
+      float initialDistance1 = camera.getDistanceTo(object);
+      camera.update(0.001f);
+      float moveDistance1 = camera.getDistanceTo(object);
+      assertThat(moveDistance1).isLessThan(initialDistance1);
+
+      camera.setTargetTrackingSpeed(2f);
+      camera.setPosition(100f, 100f);
+      camera.update(0.001f);
+      float moveDistance2 = camera.getDistanceTo(object);
+      assertThat(moveDistance2).isLessThan(moveDistance1);
+
+      // move the game object
+      object.setPosition(100f, 100f);
+      Vector3 oldPosition = camera.getPosition();
+      camera.update(0.001f);
+      Vector3 newPosition = camera.getPosition();
+      assertThat(oldPosition.x).isLessThan(newPosition.x);
+      assertThat(oldPosition.y).isLessThan(newPosition.y);
    }
 
    @Test

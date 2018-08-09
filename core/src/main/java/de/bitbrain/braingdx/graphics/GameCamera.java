@@ -1,6 +1,8 @@
 package de.bitbrain.braingdx.graphics;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.world.GameObject;
 
@@ -93,5 +95,45 @@ public interface GameCamera extends Resizeable {
     * @return the internal camera object
     */
    Camera getInternalCamera();
+
+   /**
+    * Sets the cameras position.
+    *
+    * @param x
+    * @param y
+    */
+   void setPosition(float x, float y);
+
+   /**
+    * Sets the cameras position.
+    */
+   Vector3 getPosition();
+
+   /**
+    * Gets the distance between the center of this camera and the target position.
+    *
+    * @param targetX target x
+    * @param targetY target y
+    * @return the distance
+    */
+   float getDistanceTo(float targetX, float targetY);
+
+   /**
+    * Gets the distance between the center of this camera and the center of the given game object.
+    *
+    * @param gameObject the game object
+    * @return the distance
+    */
+   float getDistanceTo(GameObject gameObject);
+
+   /**
+    * Returns the scaled width of this camera
+    */
+   float getScaledCameraWidth();
+
+   /**
+    * Returns the scaled height of this camera
+    */
+   float getScaledCameraHeight();
 
 }
