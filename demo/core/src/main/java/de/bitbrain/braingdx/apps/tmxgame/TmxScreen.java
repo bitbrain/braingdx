@@ -97,7 +97,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
    protected void onCreate(GameContext context) {
 	  context.getGameCamera().setDefaultZoomFactor(0.15f);
 	  context.getGameCamera().setTargetTrackingSpeed(2.6f);
-	  context.getGameCamera().setZoomScalingFactor(0.001f);
+	  context.getGameCamera().setZoomScalingFactor(0f);
       TiledMap map = SharedAssetManager.getInstance().get(Assets.RPG.MAP_2, TiledMap.class);
       final TiledMapManager tiledMapManager = context.getTiledMapManager();
       context.getLightingManager().setAmbientLight(new Color(0.2f, 0.3f, 0.6f, 0.4f));

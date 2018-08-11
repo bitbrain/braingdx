@@ -8,8 +8,6 @@ public class SimpleApp {
 
    public static void main(String args[]) {
       LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-      config.width = 1200;
-      config.height = 1000;
       new LwjglApplication(new TmxTest(), config);
    }
 

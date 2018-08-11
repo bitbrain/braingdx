@@ -293,6 +293,53 @@ public class VectorGameCameraTest {
       assertThat(camera.getPosition().y).isEqualTo(WORLD_Y + WORLD_HEIGHT - camera.getScaledCameraHeight() / 2f);
    }
 
+   @Test
+   public void testStickToBounds_TrackingTarget_MovingDown_shouldNotFlicker() {
+      // Initial setup
+      final int BLOCKS_SIZE = 16;
+      final int SCREEN_WIDTH = 1280;
+      final int SCREEN_HEIGHT = 1024;
+      final int WORLD_WIDTH = 128;
+      final int WORLD_HEIGHT = 128;
+
+      final float OBJECT_START_X = 0f;
+      final float OBJECT_START_Y  = 48f;
+
+      setWorldBounds(0, 0, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+      // Positioning the game object
+      GameObject object = new GameObject();
+      object.setPosition(OBJECT_START_X, OBJECT_START_Y);
+      object.setDimensions(BLOCKS_SIZE, BLOCKS_SIZE);
+
+      // Basic camera setup
+      camera.setStickToWorldBounds(true);
+      camera.setTrackingTarget(object);
+      camera.setDefaultZoomFactor(0.15f);
+      camera.setTargetTrackingSpeed(2.6f);
+      camera.setZoomScalingFactor(0f);
+      camera.focusCentered(object);
+      camera.update(1f);
+
+      // Test camera positioning
+      assertThat(camera.getPosition().x).isEqualTo(WORLD_WIDTH / 2f);
+      assertThat(camera.getPosition().y).isEqualTo(56.0f);
+      // Test camera down scaling
+      assertThat(camera.getScaledCameraWidth()).isEqualTo(WORLD_WIDTH);
+      assertThat(camera.getScaledCameraHeight()).isEqualTo(WORLD_HEIGHT / ((float)SCREEN_WIDTH / (float)SCREEN_HEIGHT));
+
+      // Move the game object down by one cell
+      object.setPosition(OBJECT_START_X, OBJECT_START_Y + BLOCKS_SIZE);
+
+      camera.update(1f);
+
+      assertThat(camera.getPosition().x).isEqualTo(WORLD_WIDTH / 2f);
+      assertThat(camera.getPosition().y).isEqualTo(76.8f);
+      camera.update(1f);
+      assertThat(camera.getPosition().y).isEqualTo(76.8f);
+   }
+
    private void setCameraBounds(float x, float y, float width, float height) {
       orthographicCamera.position.x = x;
       orthographicCamera.position.y = y;
