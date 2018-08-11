@@ -18,9 +18,6 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class VectorGameCameraTest {
 
-   private static final float WORLD_WIDTH = 500;
-   private static final float WORLD_HEIGHT = 800;
-
    @Mock
    private GameWorld gameWorld;
 
@@ -41,6 +38,8 @@ public class VectorGameCameraTest {
 
    @Test
    public void testDefaultInitialization() {
+      final float WORLD_WIDTH = 500;
+      final float WORLD_HEIGHT = 800;
       setCameraBounds(0f, 0f, WORLD_WIDTH, WORLD_HEIGHT);
       setWorldBounds(0f, 0f, WORLD_WIDTH, WORLD_HEIGHT);
       camera.update(0f);
@@ -51,6 +50,8 @@ public class VectorGameCameraTest {
 
    @Test
    public void testSetDefaultZoom() {
+      final float WORLD_WIDTH = 500;
+      final float WORLD_HEIGHT = 800;
       final float FACTOR = 2;
       setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
       setCameraBounds(0f, 0f, WORLD_WIDTH / FACTOR, WORLD_HEIGHT / FACTOR);
@@ -64,6 +65,8 @@ public class VectorGameCameraTest {
 
    @Test
    public void testSetDefaultZoom_FocusCentered_NoTrackingTarget() {
+      final float WORLD_WIDTH = 500;
+      final float WORLD_HEIGHT = 800;
       final float FACTOR = 2;
       setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
       setCameraBounds(0f, 0f, WORLD_WIDTH, WORLD_HEIGHT);
@@ -79,6 +82,8 @@ public class VectorGameCameraTest {
 
    @Test
    public void testSetDefaultZoom_FocusCentered_WithTrackingTarget() {
+      final float WORLD_WIDTH = 500;
+      final float WORLD_HEIGHT = 800;
       final float FACTOR = 2f;
       final float OBJECT_LEFT = 0f;
       final float OBJECT_TOP = 0f;
@@ -102,6 +107,8 @@ public class VectorGameCameraTest {
 
    @Test
    public void testTrackTarget_WithTrackingSpeed() {
+      final float WORLD_WIDTH = 500;
+      final float WORLD_HEIGHT = 800;
       setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
       setCameraBounds(0f, 0f, WORLD_WIDTH, WORLD_HEIGHT);
       GameObject object = new GameObject();
@@ -130,6 +137,8 @@ public class VectorGameCameraTest {
 
    @Test
    public void testStickToBounds_TooSmallWidth_ShouldStickToWidth() {
+      final float WORLD_WIDTH = 500;
+      final float WORLD_HEIGHT = 800;
       final float FACTOR = 2;
       final float OBJECT_LEFT = 0f;
       final float OBJECT_TOP = 0f;
@@ -147,12 +156,141 @@ public class VectorGameCameraTest {
       camera.focusCentered(object);
       camera.update(0f);
 
-      assertThat(orthographicCamera.position.x).isEqualTo(WORLD_WIDTH / 2f);
-      assertThat(orthographicCamera.position.y).isEqualTo(WORLD_HEIGHT / 2f);
-      assertThat(orthographicCamera.viewportWidth * orthographicCamera.zoom)
+      assertThat(camera.getPosition().x).isEqualTo(WORLD_WIDTH / 2f);
+      assertThat(camera.getPosition().y).isEqualTo(WORLD_HEIGHT / 2f);
+      assertThat(camera.getScaledCameraWidth())
             .isEqualTo(WORLD_WIDTH);
-      assertThat(orthographicCamera.viewportHeight * orthographicCamera.zoom)
+      assertThat(camera.getScaledCameraHeight())
             .isEqualTo(WORLD_HEIGHT);
+   }
+
+   @Test
+   public void testStickToBounds_TooSmallHeight_ShouldStickToHeight() {
+      final float WORLD_WIDTH = 800;
+      final float WORLD_HEIGHT = 500;
+      final float FACTOR = 2;
+      final float OBJECT_LEFT = 0f;
+      final float OBJECT_TOP = 0f;
+      final float OBJECT_WIDTH = 128;
+      final float OBJECT_HEIGHT = 128;
+      setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH * FACTOR, WORLD_HEIGHT * FACTOR);
+
+      GameObject object = new GameObject();
+      object.setPosition(OBJECT_LEFT, OBJECT_TOP);
+      object.setDimensions(OBJECT_WIDTH, OBJECT_HEIGHT);
+
+      camera.setStickToWorldBounds(true);
+      camera.setTrackingTarget(object);
+      camera.focusCentered(object);
+      camera.update(0f);
+
+      assertThat(camera.getPosition().x).isEqualTo(WORLD_WIDTH / 2f);
+      assertThat(camera.getPosition().y).isEqualTo(WORLD_HEIGHT / 2f);
+      assertThat(camera.getScaledCameraWidth())
+            .isEqualTo(WORLD_WIDTH);
+      assertThat(camera.getScaledCameraHeight())
+            .isEqualTo(WORLD_HEIGHT);
+   }
+
+   @Test
+   public void testStickToBounds_LeftTop() {
+      final float WORLD_X = 100;
+      final float WORLD_Y = 200;
+      final float WORLD_WIDTH = 800;
+      final float WORLD_HEIGHT = 500;
+      final float OBJECT_LEFT = 0f;
+      final float OBJECT_TOP = 0f;
+      final float OBJECT_WIDTH = 128;
+      final float OBJECT_HEIGHT = 128;
+      setWorldBounds(WORLD_X, WORLD_Y, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH / 2f, WORLD_HEIGHT / 2f);
+
+      GameObject object = new GameObject();
+      object.setPosition(OBJECT_LEFT, OBJECT_TOP);
+      object.setDimensions(OBJECT_WIDTH, OBJECT_HEIGHT);
+      camera.setStickToWorldBounds(true);
+      camera.setTrackingTarget(object);
+      camera.focusCentered(object);
+      camera.update(0f);
+
+      assertThat(camera.getPosition().x).isEqualTo(WORLD_X + camera.getScaledCameraWidth() / 2f);
+      assertThat(camera.getPosition().y).isEqualTo(WORLD_Y+ camera.getScaledCameraHeight() / 2f);
+   }
+
+   @Test
+   public void testStickToBounds_RightTop() {
+      final float WORLD_X = 100;
+      final float WORLD_Y = 200;
+      final float WORLD_WIDTH = 800;
+      final float WORLD_HEIGHT = 500;
+      final float OBJECT_LEFT = 1000f;
+      final float OBJECT_TOP = 0f;
+      final float OBJECT_WIDTH = 128;
+      final float OBJECT_HEIGHT = 128;
+      setWorldBounds(WORLD_X, WORLD_Y, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH / 2f, WORLD_HEIGHT / 2f);
+
+      GameObject object = new GameObject();
+      object.setPosition(OBJECT_LEFT, OBJECT_TOP);
+      object.setDimensions(OBJECT_WIDTH, OBJECT_HEIGHT);
+      camera.setStickToWorldBounds(true);
+      camera.setTrackingTarget(object);
+      camera.focusCentered(object);
+      camera.update(0f);
+
+      assertThat(camera.getPosition().x).isEqualTo(WORLD_X + WORLD_WIDTH - camera.getScaledCameraWidth() / 2f);
+      assertThat(camera.getPosition().y).isEqualTo(WORLD_Y+ camera.getScaledCameraHeight() / 2f);
+   }
+
+   @Test
+   public void testStickToBounds_BottomLeft() {
+      final float WORLD_X = 100;
+      final float WORLD_Y = 200;
+      final float WORLD_WIDTH = 800;
+      final float WORLD_HEIGHT = 500;
+      final float OBJECT_LEFT = 0f;
+      final float OBJECT_TOP = 1000f;
+      final float OBJECT_WIDTH = 128;
+      final float OBJECT_HEIGHT = 128;
+      setWorldBounds(WORLD_X, WORLD_Y, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH / 2f, WORLD_HEIGHT / 2f);
+
+      GameObject object = new GameObject();
+      object.setPosition(OBJECT_LEFT, OBJECT_TOP);
+      object.setDimensions(OBJECT_WIDTH, OBJECT_HEIGHT);
+      camera.setStickToWorldBounds(true);
+      camera.setTrackingTarget(object);
+      camera.focusCentered(object);
+      camera.update(0f);
+
+      assertThat(camera.getPosition().x).isEqualTo(WORLD_X + camera.getScaledCameraWidth() / 2f);
+      assertThat(camera.getPosition().y).isEqualTo(WORLD_Y + WORLD_HEIGHT - camera.getScaledCameraHeight() / 2f);
+   }
+
+   @Test
+   public void testStickToBounds_BottomRight() {
+      final float WORLD_X = 100;
+      final float WORLD_Y = 200;
+      final float WORLD_WIDTH = 800;
+      final float WORLD_HEIGHT = 500;
+      final float OBJECT_LEFT = 1000f;
+      final float OBJECT_TOP = 1000f;
+      final float OBJECT_WIDTH = 128;
+      final float OBJECT_HEIGHT = 128;
+      setWorldBounds(WORLD_X, WORLD_Y, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH / 2f, WORLD_HEIGHT / 2f);
+
+      GameObject object = new GameObject();
+      object.setPosition(OBJECT_LEFT, OBJECT_TOP);
+      object.setDimensions(OBJECT_WIDTH, OBJECT_HEIGHT);
+      camera.setStickToWorldBounds(true);
+      camera.setTrackingTarget(object);
+      camera.focusCentered(object);
+      camera.update(0f);
+
+      assertThat(camera.getPosition().x).isEqualTo(WORLD_X + WORLD_WIDTH - camera.getScaledCameraWidth() / 2f);
+      assertThat(camera.getPosition().y).isEqualTo(WORLD_Y + WORLD_HEIGHT - camera.getScaledCameraHeight() / 2f);
    }
 
    private void setCameraBounds(float x, float y, float width, float height) {
