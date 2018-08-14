@@ -26,6 +26,8 @@ import de.bitbrain.braingdx.world.GameWorld.WorldBounds;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import static de.bitbrain.braingdx.util.BitUtils.haveSameSign;
+
 /**
  * Using underlying vectors to calculate the camera tracking.
  *
@@ -35,7 +37,8 @@ import java.math.MathContext;
  */
 public class VectorGameCamera implements GameCamera {
 
-   private static final MathContext PRECISION = MathContext.DECIMAL128;
+   private static final MathContext PRECISION = MathContext.DECIMAL32;
+   private static final BigDecimal TWO = bigDecimalFromDouble(2);
 
    private final OrthographicCamera camera;
    private final GameWorld world;
@@ -47,6 +50,9 @@ public class VectorGameCamera implements GameCamera {
    private boolean focusRequested = false;
    private BigDecimal defaultZoom = new BigDecimal(1, PRECISION);
    private boolean worldBoundsStickiness = true;
+
+   private int correctionX = 0;
+   private int correctionY = 0;
 
    public VectorGameCamera(OrthographicCamera camera, GameWorld world) {
       this.camera = camera;
@@ -106,6 +112,9 @@ public class VectorGameCamera implements GameCamera {
    @Override
    public void zoom(float amount) {
       defaultZoom = defaultZoom.multiply(new BigDecimal(amount, PRECISION));
+      if (target == null) {
+         camera.zoom = defaultZoom.floatValue();
+      }
    }
 
    @Override
@@ -192,18 +201,18 @@ public class VectorGameCamera implements GameCamera {
    }
 
    private void applyTrackingVelocityAndZoom(float delta) {
-      BigDecimal preciseDelta = new BigDecimal(delta, PRECISION);
+      BigDecimal preciseDelta = bigDecimalFromDouble(delta);
 
-      BigDecimal targetLeft = new BigDecimal(target.getLeft() + target.getOffset().x, PRECISION);
-      BigDecimal targetWidth = new BigDecimal(target.getWidth(), PRECISION);
-      BigDecimal targetTop = new BigDecimal(target.getTop() + target.getOffset().y, PRECISION);
-      BigDecimal targetHeight = new BigDecimal(target.getHeight(), PRECISION);
+      BigDecimal targetLeft = bigDecimalFromDouble(target.getLeft() + target.getOffset().x);
+      BigDecimal targetWidth = bigDecimalFromDouble(target.getWidth());
+      BigDecimal targetTop = bigDecimalFromDouble(target.getTop() + target.getOffset().y);
+      BigDecimal targetHeight =bigDecimalFromDouble(target.getHeight());
 
-      BigDecimal cameraLeft = new BigDecimal(camera.position.x, PRECISION);
-      BigDecimal cameraTop = new BigDecimal(camera.position.y, PRECISION);
+      BigDecimal cameraLeft = bigDecimalFromDouble(camera.position.x);
+      BigDecimal cameraTop = bigDecimalFromDouble(camera.position.y);
 
-      velocityX = targetLeft.add(targetWidth.divide(BigDecimal.valueOf(2.0), PRECISION)).subtract(cameraLeft);
-      velocityY = targetTop.add(targetHeight.divide(BigDecimal.valueOf(2.0), PRECISION)).subtract(cameraTop);
+      velocityX = targetLeft.add(targetWidth.divide(TWO, PRECISION)).subtract(cameraLeft);
+      velocityY = targetTop.add(targetHeight.divide(TWO, PRECISION)).subtract(cameraTop);
 
       tmp.set(velocityX, velocityY);
       BigDecimal distance = tmp.len();
@@ -212,66 +221,81 @@ public class VectorGameCamera implements GameCamera {
       BigDecimal deltaY = velocityY.multiply(overAllSpeed).multiply(preciseDelta);
 
       camera.zoom = zoomScale.multiply(distance).add(defaultZoom).floatValue();
-      camera.position.x = cameraLeft.add(deltaX).floatValue();
-      camera.position.y = cameraTop.add(deltaY).floatValue();
+
+      if (correctionX == 0 || !haveSameSign(deltaX.floatValue(), correctionX)) {
+         camera.position.x = cameraLeft.add(deltaX).floatValue();
+         correctionX = 0;
+      }
+      if (correctionY == 0 || !haveSameSign(deltaY.floatValue(), correctionY)) {
+         camera.position.y = cameraTop.add(deltaY).floatValue();
+         correctionY = 0;
+      }
    }
 
    private void applyWorldBounds() {
-      BigDecimal worldLeft = new BigDecimal(world.getBounds().getWorldOffsetX(), PRECISION);
-      BigDecimal worldTop = new BigDecimal(world.getBounds().getWorldOffsetY(), PRECISION);
-      BigDecimal worldWidth = new BigDecimal(world.getBounds().getWorldWidth(), PRECISION);
-      BigDecimal worldHeight = new BigDecimal(world.getBounds().getWorldHeight(), PRECISION);
+      BigDecimal worldLeft = bigDecimalFromDouble(world.getBounds().getWorldOffsetX());
+      BigDecimal worldTop = bigDecimalFromDouble(world.getBounds().getWorldOffsetY());
+      BigDecimal worldWidth = bigDecimalFromDouble(world.getBounds().getWorldWidth());
+      BigDecimal worldHeight = bigDecimalFromDouble(world.getBounds().getWorldHeight());
 
-      BigDecimal cameraZoom = new BigDecimal(camera.zoom, PRECISION);
+      BigDecimal cameraZoom = bigDecimalFromDouble(camera.zoom);
 
-      BigDecimal cameraCenterX = new BigDecimal(camera.position.x, PRECISION);
-      BigDecimal cameraCenterY = new BigDecimal(camera.position.y, PRECISION);
-      BigDecimal cameraWidth = new BigDecimal(camera.viewportWidth, PRECISION);
-      BigDecimal cameraHeight = new BigDecimal(camera.viewportHeight, PRECISION);
-      BigDecimal cameraWidthScaled = new BigDecimal(camera.viewportWidth, PRECISION).multiply(cameraZoom);
-      BigDecimal cameraHeightScaled = new BigDecimal(camera.viewportHeight, PRECISION).multiply(cameraZoom);
+      BigDecimal cameraCenterX = bigDecimalFromDouble(camera.position.x);
+      BigDecimal cameraCenterY = bigDecimalFromDouble(camera.position.y);
+      BigDecimal cameraWidth = bigDecimalFromDouble(camera.viewportWidth);
+      BigDecimal cameraHeight = bigDecimalFromDouble(camera.viewportHeight);
+      BigDecimal cameraWidthScaled = bigDecimalFromDouble(camera.viewportWidth).multiply(cameraZoom);
+      BigDecimal cameraHeightScaled = bigDecimalFromDouble(camera.viewportHeight).multiply(cameraZoom);
 
-      BigDecimal cameraLeft = cameraCenterX.subtract(cameraWidthScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
-      BigDecimal cameraTop = cameraCenterY.subtract(cameraHeightScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
-      BigDecimal cameraRight = cameraCenterX.add(cameraWidthScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
-      BigDecimal cameraBottom = cameraCenterY.add(cameraHeightScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
+      BigDecimal cameraLeft = cameraCenterX.subtract(cameraWidthScaled.divide(TWO, PRECISION));
+      BigDecimal cameraTop = cameraCenterY.subtract(cameraHeightScaled.divide(TWO, PRECISION));
+      BigDecimal cameraRight = cameraCenterX.add(cameraWidthScaled.divide(TWO, PRECISION));
+      BigDecimal cameraBottom = cameraCenterY.add(cameraHeightScaled.divide(TWO, PRECISION));
 
-      if (cameraWidthScaled.compareTo(worldWidth) > 0) {
+      if (cameraWidthScaled.floatValue() > worldWidth.floatValue()) {
          camera.zoom = worldWidth.divide(cameraWidth, PRECISION).floatValue();
-         cameraZoom = new BigDecimal(camera.zoom, PRECISION);
-         cameraWidthScaled = new BigDecimal(camera.viewportWidth, PRECISION).multiply(cameraZoom);
-         cameraHeightScaled = new BigDecimal(camera.viewportHeight, PRECISION).multiply(cameraZoom);
-         cameraRight = cameraCenterX.add(cameraWidthScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
-         cameraTop = cameraCenterY.subtract(cameraHeightScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
-         cameraLeft = cameraCenterX.subtract(cameraWidthScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
-         cameraBottom = cameraCenterY.add(cameraHeightScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
+         cameraZoom = bigDecimalFromDouble(camera.zoom);
+         cameraWidthScaled = bigDecimalFromDouble(camera.viewportWidth).multiply(cameraZoom);
+         cameraHeightScaled = bigDecimalFromDouble(camera.viewportHeight).multiply(cameraZoom);
+         cameraRight = cameraCenterX.add(cameraWidthScaled.divide(TWO, PRECISION));
+         cameraTop = cameraCenterY.subtract(cameraHeightScaled.divide(TWO, PRECISION));
+         cameraLeft = cameraCenterX.subtract(cameraWidthScaled.divide(TWO, PRECISION));
+         cameraBottom = cameraCenterY.add(cameraHeightScaled.divide(TWO, PRECISION));
+         setDefaultZoomFactor(camera.zoom);
       }
-      if (cameraHeightScaled.compareTo(worldHeight) > 0) {
+      if (cameraHeightScaled.floatValue() > worldHeight.floatValue()) {
          float newZoom = worldHeight.divide(cameraHeight, PRECISION).floatValue();
          if (newZoom < camera.zoom) {
             camera.zoom = newZoom;
-            cameraZoom = new BigDecimal(camera.zoom, PRECISION);
-            cameraWidthScaled = new BigDecimal(camera.viewportWidth, PRECISION).multiply(cameraZoom);
-            cameraHeightScaled = new BigDecimal(camera.viewportHeight, PRECISION).multiply(cameraZoom);
-            cameraRight = cameraCenterX.add(cameraWidthScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
-            cameraTop = cameraCenterY.subtract(cameraHeightScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
-            cameraLeft = cameraCenterX.subtract(cameraWidthScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
-            cameraBottom = cameraCenterY.add(cameraHeightScaled.divide(new BigDecimal(2, PRECISION), PRECISION));
+            cameraZoom = bigDecimalFromDouble(camera.zoom);
+            cameraWidthScaled = bigDecimalFromDouble(camera.viewportWidth).multiply(cameraZoom);
+            cameraHeightScaled = bigDecimalFromDouble(camera.viewportHeight).multiply(cameraZoom);
+            cameraRight = cameraCenterX.add(cameraWidthScaled.divide(TWO, PRECISION));
+            cameraTop = cameraCenterY.subtract(cameraHeightScaled.divide(TWO, PRECISION));
+            cameraLeft = cameraCenterX.subtract(cameraWidthScaled.divide(TWO, PRECISION));
+            cameraBottom = cameraCenterY.add(cameraHeightScaled.divide(TWO, PRECISION));
+            setDefaultZoomFactor(camera.zoom);
          }
       }
 
       // 2. adjust camera position
-      if (cameraLeft.compareTo(worldLeft) < 0) {
-         camera.position.x = worldLeft.add(cameraWidthScaled.divide(new BigDecimal(2, PRECISION), PRECISION)).floatValue();
+      if (cameraLeft.floatValue() < worldLeft.floatValue()) {
+         camera.position.x = worldLeft.add(cameraWidthScaled.divide(TWO, PRECISION)).floatValue();
+         correctionX = -1;
+      } else if (cameraRight.floatValue() > worldLeft.add(worldWidth).floatValue()) {
+         camera.position.x = worldLeft.add(worldWidth).subtract(cameraWidthScaled.divide(TWO, PRECISION)).floatValue();
+         correctionX = 1;
       }
-      if (cameraRight.compareTo(worldLeft.add(worldWidth)) > 0) {
-         camera.position.x = worldLeft.add(worldWidth).subtract(cameraWidthScaled.divide(new BigDecimal(2, PRECISION), PRECISION)).floatValue();
+      if (cameraTop.floatValue() < worldTop.floatValue()) {
+         camera.position.y = worldTop.add(cameraHeightScaled.divide(TWO, PRECISION)).floatValue();
+         correctionY = -1;
+      } else if (cameraBottom.floatValue() > worldTop.add(worldHeight).floatValue()) {
+         camera.position.y = worldTop.add(worldHeight).subtract(cameraHeightScaled.divide(TWO, PRECISION)).floatValue();
+         correctionY = 1;
       }
-      if (cameraTop.compareTo(worldTop) < 0) {
-         camera.position.y = worldTop.add(cameraHeightScaled.divide(new BigDecimal(2, PRECISION), PRECISION)).floatValue();
-      }
-      if (cameraBottom.compareTo(worldTop.add(worldHeight)) > 0) {
-         camera.position.y = worldTop.add(worldHeight).subtract(cameraHeightScaled.divide(new BigDecimal(2, PRECISION), PRECISION)).floatValue();
-      }
+   }
+
+   private static BigDecimal bigDecimalFromDouble(double value) {
+      return new BigDecimal(Double.toString(value), PRECISION);
    }
 }
