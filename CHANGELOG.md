@@ -1,7 +1,8 @@
-# Unreleased
+# Version 0.3.0
 
 This release brings major improvements to the `GameCamera` logic and API within **braingdx**.
 
+* [[#102](https://github.com/bitbrain/braingdx/issues/129)] fixing stickiness of `GameCamera`
 * [[#129](https://github.com/bitbrain/braingdx/issues/129)] setting game camera attributes works now without a target attached
 * [[#145](https://github.com/bitbrain/braingdx/issues/145)] improve `GameCamera` API with additional methods to retrieve dimensions and position
 * [[#146](https://github.com/bitbrain/braingdx/issues/146)] introduced GWT math
