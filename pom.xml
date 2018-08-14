@@ -134,6 +134,7 @@
          <groupId>com.google.code.gwt-math</groupId>
          <artifactId>gwt-math</artifactId>
          <version>${gwt-math.version}</version>
+         <optional>true</optional>
       </dependency>
 
       <!-- TESTING -->
