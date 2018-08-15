@@ -1,3 +1,7 @@
+# Unreleased
+
+* [[#150](https://github.com/bitbrain/braingdx/issues/150)] changing world bounds should now reset camera stickiness 
+
 # Version 0.3.0
 
 This release brings major improvements to the `GameCamera` logic and API within **braingdx**.

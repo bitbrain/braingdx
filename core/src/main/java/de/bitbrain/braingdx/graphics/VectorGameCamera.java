@@ -17,6 +17,7 @@ package de.bitbrain.braingdx.graphics;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import de.bitbrain.braingdx.util.math.BigDecimalVector2;
 import de.bitbrain.braingdx.world.GameObject;
@@ -51,6 +52,9 @@ public class VectorGameCamera implements GameCamera {
    private BigDecimal defaultZoom = new BigDecimal(1, PRECISION);
    private boolean worldBoundsStickiness = true;
 
+   private final Rectangle previousWorldBounds = new Rectangle();
+   private final Rectangle currentWorldBounds = new Rectangle();
+
    private int correctionX = 0;
    private int correctionY = 0;
 
@@ -58,6 +62,7 @@ public class VectorGameCamera implements GameCamera {
       this.camera = camera;
       velocityX = new BigDecimal(0f);
       velocityY = new BigDecimal(0f);
+
       this.world = world;
    }
 
@@ -78,6 +83,16 @@ public class VectorGameCamera implements GameCamera {
    public void update(float delta) {
       if (target == null)
          return;
+      currentWorldBounds.set(
+            world.getBounds().getWorldOffsetX(),
+            world.getBounds().getWorldOffsetY(),
+            world.getBounds().getWorldWidth(),
+            world.getBounds().getWorldHeight()
+      );
+      if (!currentWorldBounds.equals(previousWorldBounds)) {
+         correctionX = 0;
+         correctionY = 0;
+      }
       if (focusRequested) {
          focusCentered(target);
          focusRequested = false;
@@ -88,6 +103,12 @@ public class VectorGameCamera implements GameCamera {
          applyWorldBounds();
       }
       camera.update();
+      previousWorldBounds.set(
+            world.getBounds().getWorldOffsetX(),
+            world.getBounds().getWorldOffsetY(),
+            world.getBounds().getWorldWidth(),
+            world.getBounds().getWorldHeight()
+      );
    }
 
    @Override
@@ -132,6 +153,8 @@ public class VectorGameCamera implements GameCamera {
       camera.position.x = object.getLeft() + object.getOffset().x + object.getWidth() / 2f;
       camera.position.y = object.getTop() + object.getOffset().y + object.getHeight() / 2f;
       if (worldBoundsStickiness) {
+         correctionX = 0;
+         correctionY = 0;
          applyWorldBounds();
       }
    }
@@ -145,6 +168,8 @@ public class VectorGameCamera implements GameCamera {
          camera.position.y = bounds.getWorldOffsetY() + bounds.getWorldHeight() / 2f;
       }
       if (worldBoundsStickiness) {
+         correctionX = 0;
+         correctionY = 0;
          applyWorldBounds();
       }
    }
