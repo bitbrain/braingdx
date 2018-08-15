@@ -1,4 +1,4 @@
-# Unreleased
+# Version 0.3.1
 
 * [[#150](https://github.com/bitbrain/braingdx/issues/150)] changing world bounds should now reset camera stickiness 
 
