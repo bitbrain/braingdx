@@ -62,7 +62,19 @@ public class AnimationRenderer implements GameObjectRenderer {
    public void render(GameObject object, Batch batch, float delta) {
       Animation animation = supplier.supplyFor(object);
 
-      animation.render(batch, object.getLeft() + object.getOffset().x + offset.x, object.getTop() + object.getOffset().y + offset.y,
-            object.getWidth() * scale.x, object.getHeight() * scale.y, delta, object.getColor());
+      float width = object.getWidth() * scale.x * object.getScale().x;
+      float height = object.getHeight() * scale.y * object.getScale().y;
+
+      float x = object.getLeft() + object.getOffset().x + offset.x;
+      float y = object.getTop() + object.getOffset().y + offset.y;
+
+      if (object.getScale().x < 0) {
+         x -= width;
+      }
+      if (object.getScale().y < 0) {
+         y -= height;
+      }
+
+      animation.render(batch, x, y, width, height, delta, object.getColor());
    }
 }
