@@ -1,3 +1,7 @@
+# Version 0.3.3
+
+* [[#107](https://github.com/bitbrain/braingdx/issues/107)] introduce TiledMap animations
+
 # Version 0.3.2
 
 * [[#151](https://github.com/bitbrain/braingdx/issues/151)] `GameObject` scaling does now affect animation rendering 

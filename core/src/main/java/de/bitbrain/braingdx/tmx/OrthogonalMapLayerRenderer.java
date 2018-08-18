@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.world.GameObject;
 
@@ -53,6 +54,7 @@ class OrthogonalMapLayerRenderer implements GameObjectRenderer {
       if (renderer == null) {
          renderer = new OrthogonalTiledMapRenderer(map, batch);
       }
+      AnimatedTiledMapTile.updateAnimationBaseTime();
       renderer.setView(camera);
       renderer.renderTileLayer(layer);
    }
