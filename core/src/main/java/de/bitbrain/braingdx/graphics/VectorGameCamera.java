@@ -15,6 +15,7 @@
 
 package de.bitbrain.braingdx.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
@@ -28,6 +29,9 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 import static de.bitbrain.braingdx.util.BitUtils.haveSameSign;
+import static java.lang.Double.isInfinite;
+import static java.lang.Double.isNaN;
+import static java.math.BigDecimal.ZERO;
 
 /**
  * Using underlying vectors to calculate the camera tracking.
@@ -46,7 +50,7 @@ public class VectorGameCamera implements GameCamera {
    private final BigDecimalVector2 tmp = new BigDecimalVector2();
    private BigDecimal velocityX, velocityY;
    private GameObject target;
-   private BigDecimal speed = new BigDecimal(6.2f, PRECISION);
+   private BigDecimal speed = new BigDecimal(0.001f, PRECISION);
    private BigDecimal zoomScale = new BigDecimal(0.0025f, PRECISION);
    private boolean focusRequested = false;
    private BigDecimal defaultZoom = new BigDecimal(1, PRECISION);
@@ -321,6 +325,10 @@ public class VectorGameCamera implements GameCamera {
    }
 
    private static BigDecimal bigDecimalFromDouble(double value) {
+      if (isInfinite(value) || isNaN(value)) {
+         Gdx.app.log("WARN", "target tracking speed of GameCamera is too high! This may cause rendering issues.");
+         return ZERO;
+      }
       return new BigDecimal(Double.toString(value), PRECISION);
    }
 }

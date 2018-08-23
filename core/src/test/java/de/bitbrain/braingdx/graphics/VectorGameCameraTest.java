@@ -294,6 +294,26 @@ public class VectorGameCameraTest {
       assertThat(camera.getPosition().y).isEqualTo(WORLD_Y + WORLD_HEIGHT - camera.getScaledCameraHeight() / 2f);
    }
 
+   @Test
+   public void testSmoothTransition_TwoPoints_NoNumberFormatException() {
+      float startX = 30.5455f;
+      float startY = 11.455002f;
+      float targetX = 36.25f;
+      float targetY = 60.75f;
+      setWorldBounds(0f, 0f, 400f, 400f);
+      GameObject object = new GameObject();
+      object.setPosition(startX, startY);
+      object.setDimensions(0f, 0f);
+      camera.setStickToWorldBounds(false);
+      camera.setTrackingTarget(object);
+      camera.focusCentered(object);
+      camera.update(0.1f);
+      object.setPosition(targetX, targetY);
+      for (int i = 0; i < 10; i++) {
+         camera.update(0.1f);
+      }
+   }
+
    @Ignore
    @Test
    public void testStickToBounds_TrackingTarget_MovingDown_shouldNotFlicker() {
