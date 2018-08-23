@@ -1,3 +1,8 @@
+# Version 0.3.4
+
+* [[#132](https://github.com/bitbrain/braingdx/issues/132)] fix `NumberFormatException` in `VectorGameCamera`
+* [[#153](https://github.com/bitbrain/braingdx/issues/153)] do not reset the particle emitter before `start()`
+
 # Version 0.3.3
 
 * [[#107](https://github.com/bitbrain/braingdx/issues/107)] introduce TiledMap animations

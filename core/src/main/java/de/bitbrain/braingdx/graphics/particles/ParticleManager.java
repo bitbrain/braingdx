@@ -104,7 +104,6 @@ public class ParticleManager implements Disposable {
       }
       InternalPooledEffect effect = new InternalPooledEffect(particleId, pool.obtain());
       effects.add(effect);
-      effect.effect.reset();
       effect.effect.start();
       return effect;
    }
