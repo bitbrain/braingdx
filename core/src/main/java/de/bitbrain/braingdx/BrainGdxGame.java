@@ -24,6 +24,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.graphics.GameCamera;
+import de.bitbrain.braingdx.graphics.VectorGameCamera;
 import de.bitbrain.braingdx.postprocessing.effects.*;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.tweens.*;
@@ -72,6 +74,7 @@ public abstract class BrainGdxGame extends Game {
       Tween.registerAccessor(Sprite.class, new SpriteTween());
       Tween.registerAccessor(Vector2.class, new VectorTween());
       Tween.registerAccessor(GameObject.class, new GameObjectTween());
+      Tween.registerAccessor(GameCamera.class, new GameCameraTween());
       // Shader tweens
       Tween.registerAccessor(Bloom.class, new BloomShaderTween());
       Tween.registerAccessor(CrtMonitor.class, new CrtMonitorShaderTween());

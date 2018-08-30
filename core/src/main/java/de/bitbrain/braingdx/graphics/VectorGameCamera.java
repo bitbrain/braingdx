@@ -225,6 +225,11 @@ public class VectorGameCamera implements GameCamera {
    }
 
    @Override
+   public float getTargetTrackingSpeed() {
+      return speed.floatValue();
+   }
+
+   @Override
    public void setStickToWorldBounds(boolean enabled) {
       this.worldBoundsStickiness = enabled;
    }

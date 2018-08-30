@@ -136,4 +136,9 @@ public interface GameCamera extends Resizeable {
     */
    float getScaledCameraHeight();
 
+   /**
+    * Returns the currently configured tracking speed
+    */
+   float getTargetTrackingSpeed();
+
 }

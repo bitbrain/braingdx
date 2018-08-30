@@ -1,3 +1,7 @@
+# Version 0.3.4.1
+
+* add `GameCameraTween`
+
 # Version 0.3.4
 
 * [[#132](https://github.com/bitbrain/braingdx/issues/132)] fix `NumberFormatException` in `VectorGameCamera`
