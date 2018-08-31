@@ -1,3 +1,7 @@
+# Unreleased
+
+* `ColorTransition` now properly applies custom colors
+
 # Version 0.3.4.1
 
 * add `GameCameraTween`

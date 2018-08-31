@@ -40,13 +40,13 @@ public class ColorTransition extends AbstractTransitionable implements RenderLay
    private Color color = Color.WHITE.cpy();
    private Color fadeToColor;
 
-   public ColorTransition(Color color) {
-      this.fadeToColor = color;
+   public ColorTransition(Color fadeToColor) {
+      this.color.a = 0f;
+      this.fadeToColor = fadeToColor;
    }
 
    public ColorTransition() {
-      color.a = 0f;
-      fadeToColor = Color.BLACK;
+      this(Color.BLACK);
    }
 
    @Override
