@@ -8,6 +8,9 @@ import de.bitbrain.braingdx.graphics.postprocessing.effects.Fxaa;
 import de.bitbrain.braingdx.graphics.postprocessing.effects.Vignette;
 import de.bitbrain.braingdx.graphics.postprocessing.effects.Zoomer;
 
+/**
+ * Provides factory methods to create a variety of shaders.
+ */
 public class ShaderManager {
 
    private final GameEventManager gameEventManager;
@@ -18,6 +21,11 @@ public class ShaderManager {
       this.settings = settings;
    }
 
+
+   /**
+    * Creates an anti-aliasing effect to reduce aliasing.
+    * It is recommended placing this effect always on top of other effects or layers.
+    */
    public AutoReloadPostProcessorEffect<Fxaa> createFxaaEffect() {
       return createEffect(new EffectFactory<Fxaa>() {
          @Override
@@ -27,6 +35,9 @@ public class ShaderManager {
       });
    }
 
+   /**
+    * Creates a bloom effect which blurs light parts and darkens dark parts.
+    */
    public AutoReloadPostProcessorEffect<Bloom> createBloomEffect() {
       return createEffect(new EffectFactory<Bloom>() {
          @Override
@@ -48,6 +59,9 @@ public class ShaderManager {
       });
    }
 
+   /**
+    * Creates an effect which darkens the corners of the screen.
+    */
    public AutoReloadPostProcessorEffect<Vignette> createVignetteEffect() {
       return createEffect(new EffectFactory<Vignette>() {
          @Override
@@ -68,6 +82,9 @@ public class ShaderManager {
       });
    }
 
+   /**
+    * Creates an effect which zooms in our out of the current scene with a blurred effect.
+    */
    public AutoReloadPostProcessorEffect<Zoomer> createZoomerEffect() {
       return createEffect(new EffectFactory<Zoomer>() {
          @Override
