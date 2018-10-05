@@ -18,8 +18,8 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderPipe;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.pipeline.layers.TextureRenderLayer;
 import de.bitbrain.braingdx.graphics.renderer.SpriteRenderer;
-import de.bitbrain.braingdx.postprocessing.effects.Bloom;
-import de.bitbrain.braingdx.postprocessing.effects.Fxaa;
+import de.bitbrain.braingdx.graphics.postprocessing.effects.Bloom;
+import de.bitbrain.braingdx.graphics.postprocessing.effects.Fxaa;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.world.GameObject;
 

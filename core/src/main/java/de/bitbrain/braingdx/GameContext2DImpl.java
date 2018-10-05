@@ -42,6 +42,8 @@ import de.bitbrain.braingdx.graphics.lighting.LightingManager;
 import de.bitbrain.braingdx.graphics.particles.ParticleManager;
 import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipelineFactory;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
+import de.bitbrain.braingdx.graphics.postprocessing.ShaderManager;
+import de.bitbrain.braingdx.graphics.shader.BatchPostProcessor;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.screens.ScreenTransitions;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
@@ -75,9 +77,13 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
    private final InputMultiplexer input;
    private final GameEventManager eventManager;
    private final AudioManager audioManager;
+   private final GameSettings settings;
+   private final ShaderManager shaderManager;
 
    public GameContext2DImpl(ViewportFactory viewportFactory, ShaderConfig shaderConfig) {
       eventManager = new GameEventManagerImpl();
+      settings = new GameSettings(eventManager);
+      shaderManager = new ShaderManager(eventManager, settings.getGraphics());
       camera = new OrthographicCamera();
       world = new GameWorld(camera);
       behaviorManager = new BehaviorManager(world);
@@ -108,7 +114,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
             SharedAssetManager.getInstance(),//
             world,//
             behaviorManager//
-      );
+      );      
       wire();
    }
 
@@ -229,5 +235,15 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
    @Override
    public GameEventManager getEventManager() {
       return eventManager;
+   }
+
+   @Override
+   public GameSettings getSettings() {
+      return settings;
+   }
+
+   @Override
+   public ShaderManager getShaderManager() {
+      return shaderManager;
    }
 }

@@ -20,9 +20,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.Disposable;
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
-import de.bitbrain.braingdx.graphics.shader.ShaderManager;
-import de.bitbrain.braingdx.postprocessing.PostProcessor;
-import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
+import de.bitbrain.braingdx.graphics.shader.BatchPostProcessor;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.util.Resizeable;
 
 /**
@@ -34,14 +34,14 @@ import de.bitbrain.braingdx.util.Resizeable;
 class LayeredRenderPipe implements RenderPipe, Disposable, Resizeable {
    private final FrameBufferFactory bufferFactory;
    private RenderLayer renderLayer;
-   private ShaderManager shaderManager;
+   private BatchPostProcessor batchPostProcessor;
    private FrameBuffer buffer;
    private boolean enabled;
 
    LayeredRenderPipe(RenderLayer layer, PostProcessor processor, FrameBufferFactory factory,
                      PostProcessorEffect... effects) {
       this.renderLayer = layer;
-      this.shaderManager = new ShaderManager(processor, effects);
+      this.batchPostProcessor = new BatchPostProcessor(processor, effects);
       this.bufferFactory = factory;
       this.setEnabled(true);
    }
@@ -57,7 +57,7 @@ class LayeredRenderPipe implements RenderPipe, Disposable, Resizeable {
    }
 
    public void render(Batch batch, float delta) {
-      if (shaderManager.hasEffects() && buffer != null) {
+      if (batchPostProcessor.hasEffects() && buffer != null) {
          renderOntoBuffer(batch, delta);
       } else {
          draw(batch, delta);
@@ -75,7 +75,7 @@ class LayeredRenderPipe implements RenderPipe, Disposable, Resizeable {
 
    @Override
    public void addEffects(PostProcessorEffect... effects) {
-      shaderManager.addEffects(effects);
+      batchPostProcessor.addEffects(effects);
    }
 
    @Override
@@ -87,9 +87,9 @@ class LayeredRenderPipe implements RenderPipe, Disposable, Resizeable {
    }
 
    private void renderOntoBuffer(Batch batch, float delta) {
-      shaderManager.begin();
+      batchPostProcessor.begin();
       renderLayer.render(batch, delta);
-      shaderManager.end(buffer);
+      batchPostProcessor.end(buffer);
    }
 
    private void blendAndDraw(Batch batch) {

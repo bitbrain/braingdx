@@ -16,7 +16,7 @@ package de.bitbrain.braingdx.graphics.pipeline;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
-import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.util.Resizeable;
 
 import java.util.Collection;

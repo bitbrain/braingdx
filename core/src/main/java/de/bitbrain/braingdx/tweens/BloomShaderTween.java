@@ -16,7 +16,7 @@
 package de.bitbrain.braingdx.tweens;
 
 import aurelienribon.tweenengine.TweenAccessor;
-import de.bitbrain.braingdx.postprocessing.effects.Bloom;
+import de.bitbrain.braingdx.graphics.postprocessing.effects.Bloom;
 
 public class BloomShaderTween implements TweenAccessor<Bloom> {
 

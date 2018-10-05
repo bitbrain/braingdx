@@ -23,8 +23,8 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Rectangle;
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
-import de.bitbrain.braingdx.postprocessing.PostProcessor;
-import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.util.ShaderLoader;
 
 import java.util.Collection;

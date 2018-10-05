@@ -16,7 +16,7 @@
 package de.bitbrain.braingdx.tweens;
 
 import aurelienribon.tweenengine.TweenAccessor;
-import de.bitbrain.braingdx.postprocessing.effects.CrtMonitor;
+import de.bitbrain.braingdx.graphics.postprocessing.effects.CrtMonitor;
 
 public class CrtMonitorShaderTween implements TweenAccessor<CrtMonitor> {
 

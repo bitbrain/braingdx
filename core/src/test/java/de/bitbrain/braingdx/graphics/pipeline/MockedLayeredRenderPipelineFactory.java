@@ -3,7 +3,7 @@ package de.bitbrain.braingdx.graphics.pipeline;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
-import de.bitbrain.braingdx.postprocessing.PostProcessor;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
 import org.mockito.Mockito;
 
 import static org.mockito.Mockito.mock;

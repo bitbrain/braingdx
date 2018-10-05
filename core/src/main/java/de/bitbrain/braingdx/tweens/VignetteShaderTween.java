@@ -16,7 +16,7 @@
 package de.bitbrain.braingdx.tweens;
 
 import aurelienribon.tweenengine.TweenAccessor;
-import de.bitbrain.braingdx.postprocessing.effects.Vignette;
+import de.bitbrain.braingdx.graphics.postprocessing.effects.Vignette;
 
 public class VignetteShaderTween implements TweenAccessor<Vignette> {
 

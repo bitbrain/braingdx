@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
-import de.bitbrain.braingdx.postprocessing.PostProcessor;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.util.ViewportFactory;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;

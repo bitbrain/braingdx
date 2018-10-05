@@ -1,7 +1,7 @@
 package de.bitbrain.braingdx.tweens;
 
 import aurelienribon.tweenengine.TweenAccessor;
-import de.bitbrain.braingdx.postprocessing.effects.MotionBlur;
+import de.bitbrain.braingdx.graphics.postprocessing.effects.MotionBlur;
 
 public class MotionBlurShaderTween implements TweenAccessor<MotionBlur> {
 

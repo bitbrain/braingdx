@@ -19,16 +19,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import de.bitbrain.braingdx.graphics.shader.ShaderManager;
-import de.bitbrain.braingdx.postprocessing.PostProcessor;
-import de.bitbrain.braingdx.postprocessing.PostProcessorEffect;
+import de.bitbrain.braingdx.graphics.shader.BatchPostProcessor;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.util.Resizeable;
 
 class CombinedRenderPipe implements RenderPipe, Resizeable {
 
    private final RenderLayer layer;
 
-   private final ShaderManager shaderManager;
+   private final BatchPostProcessor batchPostProcessor;
    private final OrthographicCamera camera;
    private final SpriteBatch batch;
    private boolean enabled = true;
@@ -36,7 +36,7 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
    public CombinedRenderPipe(RenderLayer layer, PostProcessor processor, OrthographicCamera camera, SpriteBatch batch,
                              PostProcessorEffect... effects) {
       this.layer = layer;
-      this.shaderManager = new ShaderManager(processor, effects);
+      this.batchPostProcessor = new BatchPostProcessor(processor, effects);
       this.camera = camera;
       this.batch = batch;
    }
@@ -53,19 +53,19 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
 
    @Override
    public void addEffects(PostProcessorEffect... effects) {
-      shaderManager.addEffects(effects);
+      batchPostProcessor.addEffects(effects);
    }
 
    public void render(Batch batch, float delta, FrameBuffer buffer) {
       if (isEnabled()) {
-         if (shaderManager.hasEffects()) {
-            shaderManager.begin();
+         if (batchPostProcessor.hasEffects()) {
+            batchPostProcessor.begin();
             this.batch.setProjectionMatrix(camera.combined);
             this.batch.begin();
             this.batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
             this.batch.end();
             layer.render(batch, delta);
-            shaderManager.end(buffer);
+            batchPostProcessor.end(buffer);
          } else {
             buffer.begin();
             layer.render(batch, delta);
