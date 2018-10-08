@@ -1,13 +1,10 @@
-# 1.3.6
-
-* [[#155](https://github.com/bitbrain/braingdx/issues/155)] introduced `Settings` and `GraphicsSettings`
-* [[#156](https://github.com/bitbrain/braingdx/issues/156)] created `GameInputAdapter` for better input handling
-* [[#157](https://github.com/bitbrain/braingdx/issues/157)] added `ShaderManager`
-
-# 1.3.5
+# Version 1.3.5
 
 * `ColorTransition` now properly applies custom colors
 * [[#135](https://github.com/bitbrain/braingdx/issues/135)] implement `GameInputAdapter`
+* [[#155](https://github.com/bitbrain/braingdx/issues/155)] introduced `Settings` and `GraphicsSettings`
+* [[#156](https://github.com/bitbrain/braingdx/issues/156)] created `GameInputAdapter` for better input handling
+* [[#157](https://github.com/bitbrain/braingdx/issues/157)] added `ShaderManager`
 
 # Version 0.3.4.1
 
