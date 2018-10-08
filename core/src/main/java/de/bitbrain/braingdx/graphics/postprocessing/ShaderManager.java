@@ -67,6 +67,8 @@ public class ShaderManager {
          @Override
          public Vignette create(Vignette original, int newWidth, int newHeight, GraphicsSettings settings) {
             Vignette vignette = new Vignette(newWidth, newHeight, false);
+            vignette.setX(newWidth / 2);
+            vignette.setY(newHeight / 2);
             if (original != null) {
                vignette.setCenter(original.getCenterX(), original.getCenterY());
                vignette.setCoords(original.getCoordsX(), original.getCoordsY());

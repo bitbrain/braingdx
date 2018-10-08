@@ -38,6 +38,7 @@ import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManagerAdapter;
 import de.bitbrain.braingdx.graphics.VectorGameCamera;
+import de.bitbrain.braingdx.graphics.event.GraphicsSettingsChangeEvent;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
 import de.bitbrain.braingdx.graphics.particles.ParticleManager;
 import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipelineFactory;
@@ -218,10 +219,11 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 
    @Override
    public void resize(int width, int height) {
+      gameCamera.resize(width, height);
+      renderPipeline.resize(width, height);
       stage.getViewport().update(width, height);
       worldStage.getViewport().update(width, height);
-      renderPipeline.resize(width, height);
-      gameCamera.resize(width, height);
+      eventManager.publish(new GraphicsSettingsChangeEvent());
    }
 
    private void wire() {
