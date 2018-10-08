@@ -1,4 +1,4 @@
-# Version 1.3.5
+# Version 0.3.5
 
 * `ColorTransition` now properly applies custom colors
 * [[#135](https://github.com/bitbrain/braingdx/issues/135)] implement `GameInputAdapter`
