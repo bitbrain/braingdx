@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import de.bitbrain.braingdx.event.GameEventListener;
 import de.bitbrain.braingdx.graphics.GraphicsSettings;
 import de.bitbrain.braingdx.graphics.event.GraphicsSettingsChangeEvent;
+import de.bitbrain.braingdx.util.Mutator;
 
 /**
  * Implementation of a {@link PostProcessorEffect} which automatically re-initialises itself after
@@ -16,14 +17,16 @@ public class AutoReloadPostProcessorEffect<T extends PostProcessorEffect> extend
    private T effect;
    private boolean disposed;
 
-   public AutoReloadPostProcessorEffect(EffectFactory<T> factory, GraphicsSettings settings) {
+   public AutoReloadPostProcessorEffect(EffectFactory<T> factory,  GraphicsSettings settings) {
       this.settings = settings;
       this.factory = factory;
       effect = factory.create(null, settings.getScaledRenderWidth(), settings.getScaledRenderHeight(), settings);
    }
 
-   public T getCurrentEffect() {
-      return effect;
+   public void mutate(Mutator<T> mutator) {
+      if (mutator != null) {
+         mutator.mutate(effect);
+      }
    }
 
    @Override
