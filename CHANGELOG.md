@@ -1,3 +1,7 @@
+# Version 0.3.6
+
+* [[#158](https://github.com/bitbrain/braingdx/issues/158)] simplify shader manager API
+
 # Version 0.3.5
 
 * `ColorTransition` now properly applies custom colors
