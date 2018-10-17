@@ -31,19 +31,37 @@ public final class Zoomer extends PostProcessorEffect {
    private Zoom zoom = null;
    private float oneOnW, oneOnH;
    private float userOriginX, userOriginY;
+   private float renderScale;
 
    /**
     * Creating a Zoomer specifying the radial blur quality will enable radial blur
     */
    public Zoomer(int viewportWidth, int viewportHeight, RadialBlur.Quality quality) {
+      this.renderScale = 1f;
       setup(viewportWidth, viewportHeight, new RadialBlur(quality));
    }
 
    /**
     * Creating a Zoomer without any parameter will use plain simple zooming
     */
-   public Zoomer(int viewportWidth, int viewportHeight) {
-      setup(viewportWidth, viewportHeight, null);
+   public Zoomer(Zoomer original, int viewportWidth, int viewportHeight, RadialBlur.Quality radialBlurQuality, float renderScale) {
+      this.renderScale = renderScale;
+      RadialBlur radialBlur = null;
+      if (original.radialBlur != null) {
+         radialBlur = new RadialBlur(radialBlurQuality);
+         radialBlur.setStrength(original.getBlurStrength());
+         radialBlur.setZoom(original.getZoom());
+      }
+      setup(viewportWidth, viewportHeight, radialBlur);
+      if (this.zoom != null) {
+         zoom.setZoom(original.getZoom());
+      }
+      setOrigin(original.getOriginX(), original.getOriginY());
+   }
+
+   public Zoomer(int viewportWidth, int viewportHeight, RadialBlur.Quality quality, float renderScale) {
+      this.renderScale = renderScale;
+      setup(viewportWidth, viewportHeight, new RadialBlur(quality));
    }
 
    private void setup(int viewportWidth, int viewportHeight, RadialBlur radialBlurFilter) {
@@ -56,8 +74,8 @@ public final class Zoomer extends PostProcessorEffect {
          zoom = new Zoom();
       }
 
-      oneOnW = 1f / (float) viewportWidth;
-      oneOnH = 1f / (float) viewportHeight;
+      oneOnW = 1f / (float)viewportWidth;
+      oneOnH = 1f / (float)viewportHeight;
    }
 
    /**
@@ -75,9 +93,9 @@ public final class Zoomer extends PostProcessorEffect {
       userOriginY = y;
 
       if (doRadial) {
-         radialBlur.setOrigin(x * oneOnW, 1f - y * oneOnH);
+         radialBlur.setOrigin(x * oneOnW * renderScale, 1f - y * oneOnH * renderScale);
       } else {
-         zoom.setOrigin(x * oneOnW, 1f - y * oneOnH);
+         zoom.setOrigin(x * oneOnW * renderScale, 1f - y * oneOnH * renderScale);
       }
    }
 
@@ -123,12 +141,10 @@ public final class Zoomer extends PostProcessorEffect {
    public void dispose() {
       if (radialBlur != null) {
          radialBlur.dispose();
-         radialBlur = null;
       }
 
       if (zoom != null) {
          zoom.dispose();
-         zoom = null;
       }
    }
 

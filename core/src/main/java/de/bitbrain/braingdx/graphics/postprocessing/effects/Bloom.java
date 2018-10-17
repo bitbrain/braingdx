@@ -35,6 +35,7 @@ public final class Bloom extends PostProcessorEffect {
    private Settings settings;
    private boolean blending = false;
    private int sfactor, dfactor;
+
    public Bloom(int fboWidth, int fboHeight) {
       pingPongBuffer = PostProcessor.newPingPongBuffer(fboWidth, fboHeight, PostProcessor.getFramebufferFormat(),
             false);
@@ -44,6 +45,17 @@ public final class Bloom extends PostProcessorEffect {
       combine = new Combine();
 
       setSettings(new Settings("default", 2, 0.277f, 1f, .85f, 1.1f, .85f));
+   }
+
+   public Bloom(Bloom original, int fboWidth, int fboHeight) {
+      pingPongBuffer = PostProcessor.newPingPongBuffer(fboWidth, fboHeight, PostProcessor.getFramebufferFormat(),
+            false);
+
+      blur = new Blur(fboWidth, fboHeight);
+      threshold = new Threshold();
+      combine = new Combine();
+
+      setSettings(new Settings("default", original.getBlurPasses(), original.getThreshold(), original.getBaseIntensity(), original.getBaseSaturation(), original.getBloomIntensity(), original.getBloomSaturation()));
    }
 
    @Override

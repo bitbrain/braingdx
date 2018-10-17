@@ -1,5 +1,6 @@
 package de.bitbrain.braingdx.graphics.postprocessing;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import de.bitbrain.braingdx.event.GameEventListener;
 import de.bitbrain.braingdx.graphics.GraphicsSettings;
@@ -15,7 +16,6 @@ public class AutoReloadPostProcessorEffect<T extends PostProcessorEffect> extend
    private final EffectFactory<T> factory;
    private final GraphicsSettings settings;
    private T effect;
-   private boolean disposed;
 
    public AutoReloadPostProcessorEffect(EffectFactory<T> factory,  GraphicsSettings settings) {
       this.settings = settings;
@@ -31,32 +31,24 @@ public class AutoReloadPostProcessorEffect<T extends PostProcessorEffect> extend
 
    @Override
    public void onEvent(GraphicsSettingsChangeEvent event) {
+      Gdx.app.debug("AutoReloadPostProcessorEffect", "graphic settings have changed, recalculating shader of type " + effect.getClass());
       effect.dispose();
       effect = factory.create(effect, settings.getScaledRenderWidth(), settings.getScaledRenderHeight(), settings);
    }
 
    @Override
    public void rebind() {
-      if (disposed) {
-         return;
-      }
       effect.rebind();
    }
 
    @Override
    public void render(FrameBuffer src, FrameBuffer dest) {
-      if (disposed) {
-         return;
-      }
       effect.render(src, dest);
    }
 
    @Override
    public void dispose() {
-      if (disposed) {
-         return;
-      }
+      Gdx.app.debug("AutoReloadPostProcessorEffect", "disposing effect");
       effect.dispose();
-      disposed = true;
    }
 }

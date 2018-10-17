@@ -1,3 +1,7 @@
+# Version 0.3.7
+
+* [[#159](https://github.com/bitbrain/braingdx/issues/159)] origin of `Zoomer` now applies correctly independent of render scale
+
 # Version 0.3.6
 
 * [[#158](https://github.com/bitbrain/braingdx/issues/158)] simplify shader manager API

@@ -1,5 +1,6 @@
 package de.bitbrain.braingdx.graphics.postprocessing;
 
+import com.badlogic.gdx.Gdx;
 import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.graphics.GraphicsSettings;
 import de.bitbrain.braingdx.graphics.event.GraphicsSettingsChangeEvent;
@@ -42,19 +43,10 @@ public class ShaderManager {
       return createEffect(new EffectFactory<Bloom>() {
          @Override
          public Bloom create(Bloom original, int newWidth, int newHeight, GraphicsSettings settings) {
-            Bloom bloom = new Bloom(newWidth, newHeight);
             if (original != null) {
-               bloom.setBaseIntesity(original.getBaseIntensity());
-               bloom.setBaseSaturation(original.getBaseSaturation());
-               bloom.setBloomIntesity(original.getBloomIntensity());
-               bloom.setBloomSaturation(original.getBloomSaturation());
-               bloom.setBlurAmount(original.getBlurAmount());
-               bloom.setBlurPasses(original.getBlurPasses());
-               bloom.setSettings(original.getSettings());
-               bloom.setBlurType(original.getBlurType());
-               bloom.setThreshold(original.getThreshold());
+               return new Bloom(original, newWidth, newHeight);
             }
-            return bloom;
+            return new Bloom(newWidth, newHeight);
          }
       });
    }
@@ -91,12 +83,11 @@ public class ShaderManager {
       return createEffect(new EffectFactory<Zoomer>() {
          @Override
          public Zoomer create(Zoomer original, int newWidth, int newHeight, GraphicsSettings settings) {
-            Zoomer zoomer = new Zoomer(newWidth, newHeight);
             if (original != null) {
-               zoomer.setBlurStrength(original.getBlurStrength());
-               zoomer.setZoom(original.getZoom());
-               zoomer.setOrigin(original.getOriginX(), original.getOriginY());
+               return new Zoomer(original, newWidth, newHeight, settings.getRadialBlurQuality(), settings.getRenderScale());
             }
+            Zoomer zoomer = new Zoomer(newWidth, newHeight, settings.getRadialBlurQuality(), settings.getRenderScale());
+            zoomer.setOrigin(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
             return zoomer;
          }
       });
