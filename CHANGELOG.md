@@ -1,3 +1,7 @@
+# Version 0.3.8
+
+* [[#161](https://github.com/bitbrain/braingdx/issues/161)] add `GameObject.removeAttribute` method. Additionally, `setAttribute(key, null)` will remove the attribute entirely now.
+
 # Version 0.3.7
 
 * [[#159](https://github.com/bitbrain/braingdx/issues/159)] origin of `Zoomer` now applies correctly independent of render scale

@@ -160,7 +160,15 @@ public class GameObject implements Pool.Poolable {
    }
 
    public void setAttribute(Object key, Object attribute) {
-      attributes.put(key, attribute);
+      if (attribute == null) {
+         removeAttribute(key);
+      } else {
+         attributes.put(key, attribute);
+      }
+   }
+
+   public void removeAttribute(Object key) {
+      attributes.remove(key);
    }
 
    public boolean hasAttribute(Object key) {
