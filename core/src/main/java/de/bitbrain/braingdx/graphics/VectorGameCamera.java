@@ -97,7 +97,7 @@ public class VectorGameCamera implements GameCamera {
          correctionX = 0;
          correctionY = 0;
       }
-      if (focusRequested) {
+      if (focusRequested || zoomScale.signum() == 0) {
          focusCentered(target);
          focusRequested = false;
       } else {
@@ -128,7 +128,7 @@ public class VectorGameCamera implements GameCamera {
 
    @Override
    public void setDefaultZoomFactor(float zoom) {
-      this.defaultZoom = new BigDecimal(zoom, PRECISION);
+      this.defaultZoom = new BigDecimal(String.valueOf(zoom), PRECISION);
       if (target == null) {
          camera.zoom = zoom;
       }
@@ -136,7 +136,7 @@ public class VectorGameCamera implements GameCamera {
 
    @Override
    public void zoom(float amount) {
-      defaultZoom = defaultZoom.multiply(new BigDecimal(amount, PRECISION));
+      defaultZoom = defaultZoom.multiply(new BigDecimal(String.valueOf(amount), PRECISION));
       if (target == null) {
          camera.zoom = defaultZoom.floatValue();
       }
@@ -254,7 +254,7 @@ public class VectorGameCamera implements GameCamera {
       BigDecimal deltaX = velocityX.multiply(overAllSpeed).multiply(preciseDelta);
       BigDecimal deltaY = velocityY.multiply(overAllSpeed).multiply(preciseDelta);
 
-      camera.zoom = zoomScale.multiply(distance).add(defaultZoom).floatValue();
+      camera.zoom = defaultZoom.add(zoomScale.multiply(distance)).floatValue();
 
       if (correctionX == 0 || !haveSameSign(deltaX.floatValue(), correctionX)) {
          camera.position.x = cameraLeft.add(deltaX).floatValue();

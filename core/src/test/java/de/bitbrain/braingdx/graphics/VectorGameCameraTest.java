@@ -295,6 +295,26 @@ public class VectorGameCameraTest {
    }
 
    @Test
+   public void testStickToBounds_WithZoom() {
+      setWorldBounds(0, 0, 100, 100);
+      setCameraBounds(0f, 0f, 100, 100);
+
+      GameObject object = new GameObject();
+      object.setPosition(0f, 0f);
+      object.setDimensions(10, 10);
+      camera.setStickToWorldBounds(true);
+      camera.setDefaultZoomFactor(0.5f);
+      camera.setTrackingTarget(object);
+      camera.focusCentered(object);
+      camera.update(0f);
+
+      assertThat(camera.getPosition().x).isEqualTo(25f);
+      assertThat(camera.getPosition().y).isEqualTo(25f);
+      assertThat(camera.getScaledCameraWidth()).isEqualTo(50);
+      assertThat(camera.getScaledCameraHeight()).isEqualTo(50);
+   }
+
+   @Test
    public void testSmoothTransition_TwoPoints_NoNumberFormatException() {
       float startX = 30.5455f;
       float startY = 11.455002f;
