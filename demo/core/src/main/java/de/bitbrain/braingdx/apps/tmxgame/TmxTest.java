@@ -15,7 +15,7 @@ public class TmxTest extends BrainGdxGame {
 
    @Override
    protected AbstractScreen<?> getInitialScreen() {
-      Gdx.graphics.setDisplayMode(1280, 1024, false);
+      Gdx.graphics.setWindowedMode(1024, 1024);
       return new TmxScreen(this);
    }
 }

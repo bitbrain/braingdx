@@ -24,7 +24,7 @@
          <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx</artifactId>
-            <version>1.6.4</version>
+            <version>${libgdx.version}</version>
          </dependency>
          <dependency>
             <groupId>io.github.bitbrain</groupId>
@@ -36,13 +36,13 @@
          <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx-backend-android</artifactId>
-            <version>1.6.4</version>
+            <version>${libgdx.version}</version>
          </dependency>
 
          <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx-platform</artifactId>
-            <version>1.6.4</version>
+            <version>${libgdx.version}</version>
             <classifier>natives-armeabi</classifier>
             <scope>provided</scope>
          </dependency>
@@ -52,20 +52,20 @@
          <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx-backend-lwjgl</artifactId>
-            <version>1.6.4</version>
+            <version>${libgdx.version}</version>
          </dependency>
 
          <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx-platform</artifactId>
-            <version>1.6.4</version>
+            <version>${libgdx.version}</version>
             <classifier>natives-desktop</classifier>
          </dependency>
 
          <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx-platform</artifactId>
-            <version>1.6.4</version>
+            <version>${libgdx.version}</version>
             <classifier>natives-armeabi-v7a</classifier>
             <scope>provided</scope>
          </dependency>
@@ -74,7 +74,7 @@
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx-box2d-platform</artifactId>
             <classifier>natives-desktop</classifier>
-            <version>1.6.4</version>
+            <version>${libgdx.version}</version>
             <scope>compile</scope>
          </dependency>
 
@@ -82,7 +82,7 @@
          <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx</artifactId>
-            <version>1.6.4</version>
+            <version>${libgdx.version}</version>
             <classifier>sources</classifier>
             <scope>provided</scope>
          </dependency>
@@ -90,7 +90,7 @@
          <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx-backend-gwt</artifactId>
-            <version>1.6.4</version>
+            <version>${libgdx.version}</version>
             <classifier>sources</classifier>
             <scope>provided</scope>
          </dependency>
@@ -98,7 +98,7 @@
          <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx-backend-gwt</artifactId>
-            <version>1.6.4</version>
+            <version>${libgdx.version}</version>
          </dependency>
 
          <!-- ios-specific dependencies -->
@@ -106,7 +106,7 @@
          <dependency>
             <groupId>com.badlogic.gdx</groupId>
             <artifactId>gdx-backend-ios</artifactId>
-            <version>1.6.4</version>
+            <version>${libgdx.version}</version>
          </dependency>
       </dependencies>
    </dependencyManagement>

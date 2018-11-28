@@ -44,7 +44,7 @@
       <sdk.version>1.6</sdk.version>
       <maven.compiler.source>${sdk.version}</maven.compiler.source>
       <maven.compiler.target>${sdk.version}</maven.compiler.target>
-      <libgdx.version>1.9.8</libgdx.version>
+      <libgdx.version>1.9.9</libgdx.version>
       <tween.version>6.3.3</tween.version>
       <box2dlights.version>1.5-SNAPSHOT</box2dlights.version>
       <gwt-math.version>2.0.3</gwt-math.version>

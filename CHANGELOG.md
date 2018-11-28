@@ -1,3 +1,7 @@
+# UNRELEASED 0.4.0
+
+* [[#46](https://github.com/bitbrain/braingdx/issues/46)] rewrote the entire animation API. It is now much more straight forward to define animations within **braingdx**
+
 # Version 0.3.8
 
 * [[#161](https://github.com/bitbrain/braingdx/issues/161)] add `GameObject.removeAttribute` method. Additionally, `setAttribute(key, null)` will remove the attribute entirely now.
