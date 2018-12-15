@@ -97,7 +97,7 @@ public class VectorGameCamera implements GameCamera {
          correctionX = 0;
          correctionY = 0;
       }
-      if (focusRequested || zoomScale.signum() == 0) {
+      if (focusRequested) {
          focusCentered(target);
          focusRequested = false;
       } else {

@@ -1,5 +1,6 @@
 package de.bitbrain.braingdx.graphics.animation;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -39,11 +40,13 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
 
    @Override
    public void render(GameObject object, Batch batch, float delta) {
+      batch.setColor(object.getColor());
       drawRegion(
             batch,
             retrieveRegionFor(object, delta),
             object
       );
+      batch.setColor(Color.WHITE);
    }
 
    private TextureRegion retrieveRegionFor(GameObject object, float delta) {
