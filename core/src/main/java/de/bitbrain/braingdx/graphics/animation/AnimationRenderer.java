@@ -63,9 +63,11 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
 
    private void drawRegion(Batch batch, TextureRegion region, GameObject object) {
       if (object.getWidth() != 0 && object.getHeight() != 0) {
+         float scalingOffsetX = object.getScale().x < 0 ? object.getWidth() * object.getScale().x : 0;
+         float scalingOffsetY = object.getScale().y < 0 ? object.getHeight() * object.getScale().y : 0;
          batch.draw(region,
-               object.getLeft() + object.getOffset().x,
-               object.getTop() + object.getOffset().y,
+               object.getLeft() + object.getOffset().x - scalingOffsetX,
+               object.getTop() + object.getOffset().y - scalingOffsetY,
                object.getWidth() * object.getScale().x,
                object.getHeight() * object.getScale().y
          );

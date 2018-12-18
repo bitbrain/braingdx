@@ -1,3 +1,7 @@
+# Version 0.4.1
+
+* fix rendering of animations on negative scaling
+
 # Version 0.4.0
 
 * [[#46](https://github.com/bitbrain/braingdx/issues/46)] rewrote the entire animation API. It is now much more straight forward to define animations within **braingdx**
