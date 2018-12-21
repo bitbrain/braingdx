@@ -33,7 +33,7 @@ import java.util.UUID;
  */
 public class GameObject implements Pool.Poolable {
 
-   private final Vector2 position, dimensions, lastPosition, offset;
+   private final Vector2 position, dimensions, lastPosition, offset, origin;
    private final Vector2 scale;
    private String id;
    private String internalId;
@@ -57,6 +57,7 @@ public class GameObject implements Pool.Poolable {
       lastPosition = new Vector2();
       offset = new Vector2();
       scale = new Vector2(1f, 1f);
+      origin = new Vector2();
       id = UUID.randomUUID().toString();
       internalId = UUID.randomUUID().toString();
       active = true;
@@ -90,6 +91,34 @@ public class GameObject implements Pool.Poolable {
       this.lastPosition.y = this.position.y;
    }
 
+   public void setLeft(float x) {
+      this.position.x = x;
+   }
+
+   public void setTop(float y) {
+      this.position.y = y;
+   }
+
+   public void setRight(float x) {
+      this.position.x = x - getWidth();
+   }
+
+   public void setBottom(float y) {
+      this.position.y = y - getHeight();
+   }
+
+   public void setOrigin(float x, float y) {
+      this.origin.set(x, y);
+   }
+
+   public float getOriginX() {
+      return origin.x;
+   }
+
+   public float getOriginY() {
+      return origin.y;
+   }
+
    public float getLeft() {
       return this.position.x;
    }
@@ -112,6 +141,14 @@ public class GameObject implements Pool.Poolable {
 
    public float getHeight() {
       return this.dimensions.y;
+   }
+
+   public float getLastLeft() {
+      return lastPosition.x;
+   }
+
+   public float getLastTop() {
+      return lastPosition.y;
    }
 
    public Vector2 getLastPosition() {
@@ -142,16 +179,37 @@ public class GameObject implements Pool.Poolable {
       color.set(r, g, b, a);
    }
 
-   public Vector2 getScale() {
-      return scale;
+   public float getScaleX() {
+      return scale.x;
+   }
+
+   public float getScaleY() {
+      return scale.y;
    }
 
    public void scale(float scale) {
       this.scale.scl(scale);
    }
 
-   public Vector2 getOffset() {
-      return offset;
+   public void setScaleX(float scaleX) {
+      this.scale.x = scaleX;
+   }
+
+   public void setScaleY(float scaleY) {
+      this.scale.y = scaleY;
+   }
+
+   public void setScale(float scale) {
+      this.scale.x = scale;
+      this.scale.y = scale;
+   }
+
+   public float getOffsetX() {
+      return offset.x;
+   }
+
+   public float getOffsetY() {
+      return offset.y;
    }
 
    public void setOffset(float x, float y) {
@@ -242,6 +300,8 @@ public class GameObject implements Pool.Poolable {
       attributes.clear();
       active = true;
       rotation = 0f;
+      origin.x = 0f;
+      origin.y = 0f;
    }
 
 
@@ -276,6 +336,4 @@ public class GameObject implements Pool.Poolable {
             + ", id=" + id + ", internalId=" + internalId + ", previousId=" + previousId + ", type=" + type + ", color="
             + color + ", zIndex=" + zIndex + ", active=" + active + "]";
    }
-
-
 }

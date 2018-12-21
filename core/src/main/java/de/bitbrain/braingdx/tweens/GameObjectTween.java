@@ -45,13 +45,13 @@ public class GameObjectTween implements TweenAccessor<GameObject> {
    public int getValues(GameObject target, int tweenType, float[] returnValues) {
       switch (tweenType) {
          case SCALE:
-            returnValues[0] = target.getScale().x;
+            returnValues[0] = target.getScaleX();
             return 1;
          case SCALE_X:
-            returnValues[0] = target.getScale().x;
+            returnValues[0] = target.getScaleX();
             return 1;
          case SCALE_Y:
-            returnValues[0] = target.getScale().y;
+            returnValues[0] = target.getScaleY();
             return 1;
          case POS_X:
             returnValues[0] = target.getLeft();
@@ -60,10 +60,10 @@ public class GameObjectTween implements TweenAccessor<GameObject> {
             returnValues[0] = target.getTop();
             return 1;
          case OFFSET_X:
-            returnValues[0] = target.getOffset().x;
+            returnValues[0] = target.getOffsetX();
             return 1;
          case OFFSET_Y:
-            returnValues[0] = target.getOffset().y;
+            returnValues[0] = target.getOffsetY();
             return 1;
          case ALPHA:
          case R:
@@ -78,14 +78,14 @@ public class GameObjectTween implements TweenAccessor<GameObject> {
    public void setValues(GameObject target, int tweenType, float[] newValues) {
       switch (tweenType) {
          case SCALE:
-            target.getScale().x = newValues[0];
-            target.getScale().y = newValues[0];
+            target.setScaleX(newValues[0]);
+            target.setScaleY(newValues[0]);
             break;
          case SCALE_X:
-            target.getScale().x = newValues[0];
+            target.setScaleX(newValues[0]);
             break;
          case SCALE_Y:
-            target.getScale().y = newValues[0];
+            target.setScaleY(newValues[0]);
             break;
          case POS_X:
             target.setPosition(newValues[0], target.getTop());
@@ -100,10 +100,10 @@ public class GameObjectTween implements TweenAccessor<GameObject> {
             colorTween.setValues(target.getColor(), tweenType, newValues);
             break;
          case OFFSET_X:
-            target.setOffset(newValues[0], target.getOffset().y);
+            target.setOffset(newValues[0], target.getOffsetY());
             break;
          case OFFSET_Y:
-            target.setOffset(target.getOffset().x, newValues[0]);
+            target.setOffset(target.getOffsetX(), newValues[0]);
             break;
       }
    }

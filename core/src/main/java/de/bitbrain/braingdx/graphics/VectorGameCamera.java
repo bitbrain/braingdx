@@ -154,8 +154,8 @@ public class VectorGameCamera implements GameCamera {
 
    @Override
    public void focusCentered(GameObject object) {
-      camera.position.x = object.getLeft() + object.getOffset().x + object.getWidth() / 2f;
-      camera.position.y = object.getTop() + object.getOffset().y + object.getHeight() / 2f;
+      camera.position.x = object.getLeft() + object.getOffsetX() + object.getWidth() / 2f;
+      camera.position.y = object.getTop() + object.getOffsetY() + object.getHeight() / 2f;
       if (worldBoundsStickiness) {
          correctionX = 0;
          correctionY = 0;
@@ -237,9 +237,9 @@ public class VectorGameCamera implements GameCamera {
    private void applyTrackingVelocityAndZoom(float delta) {
       BigDecimal preciseDelta = bigDecimalFromDouble(delta);
 
-      BigDecimal targetLeft = bigDecimalFromDouble(target.getLeft() + target.getOffset().x);
+      BigDecimal targetLeft = bigDecimalFromDouble(target.getLeft() + target.getOffsetX());
       BigDecimal targetWidth = bigDecimalFromDouble(target.getWidth());
-      BigDecimal targetTop = bigDecimalFromDouble(target.getTop() + target.getOffset().y);
+      BigDecimal targetTop = bigDecimalFromDouble(target.getTop() + target.getOffsetY());
       BigDecimal targetHeight =bigDecimalFromDouble(target.getHeight());
 
       BigDecimal cameraLeft = bigDecimalFromDouble(camera.position.x);

@@ -52,8 +52,8 @@ public class PointLightBehavior extends BehaviorAdapter {
    @Override
    public void update(GameObject source, float delta) {
       super.update(source, delta);
-      light.setPosition(source.getLeft() + source.getOffset().x + source.getWidth() / 2f,
-            source.getTop() + source.getOffset().y + source.getHeight() / 2f);
+      light.setPosition(source.getLeft() + source.getOffsetX() + source.getWidth() / 2f,
+            source.getTop() + source.getOffsetY() + source.getHeight() / 2f);
    }
 
    @Override

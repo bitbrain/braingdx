@@ -65,13 +65,13 @@ public class SpriteRenderer implements GameObjectRenderManager.GameObjectRendere
 
    @Override
    public void render(GameObject object, Batch batch, float delta) {
-      sprite.setPosition(object.getLeft() + object.getOffset().x + offset.x,
-            object.getTop() + object.getOffset().y + offset.y);
+      sprite.setPosition(object.getLeft() + object.getOffsetX() + offset.x,
+            object.getTop() + object.getOffsetY() + offset.y);
       sprite.setSize(object.getWidth(), object.getHeight());
       sprite.setColor(object.getColor());
       sprite.setRotation(object.getRotation());
       sprite.setOrigin(object.getWidth() / 2f, object.getHeight() / 2f);
-      sprite.setScale(object.getScale().x, object.getScale().y);
+      sprite.setScale(object.getScaleX(), object.getScaleY());
       sprite.draw(batch, 1f);
    }
 }
