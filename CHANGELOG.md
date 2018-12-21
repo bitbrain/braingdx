@@ -1,3 +1,9 @@
+# Version 0.4.2
+
+* [[#168](https://github.com/bitbrain/braingdx/issues/168)] introduce scaling by `GameObject` origin
+* changed method signatures of `GameObject` getters and added additional getters
+* `AnimationRenderer` now uses `Sprite` to render `TextureRegion` frames
+
 # Version 0.4.1
 
 * fix rendering of animations on negative scaling

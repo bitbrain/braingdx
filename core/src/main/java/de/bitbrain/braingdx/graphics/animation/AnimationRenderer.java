@@ -3,6 +3,7 @@ package de.bitbrain.braingdx.graphics.animation;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameObject;
@@ -27,15 +28,16 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
 
    private final AnimationConfig config;
    private final AnimationCache animationCache;
+   private final Sprite sprite;
 
    public AnimationRenderer(AnimationSpriteSheet spriteSheet, AnimationConfig config) {
       this.config = config;
       this.animationCache = new AnimationCache(spriteSheet, config);
+      this.sprite = new Sprite();
    }
 
    @Override
    public void init() {
-
    }
 
    @Override
@@ -62,17 +64,16 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
    }
 
    private void drawRegion(Batch batch, TextureRegion region, GameObject object) {
-      if (object.getWidth() != 0 && object.getHeight() != 0) {
-         float scalingOffsetX = object.getScaleX() < 0 ? object.getWidth() * object.getScaleX() : 0;
-         float scalingOffsetY = object.getScaleY() < 0 ? object.getHeight() * object.getScaleY() : 0;
-         batch.draw(region,
-               object.getLeft() + object.getOffsetX() - scalingOffsetX,
-               object.getTop() + object.getOffsetY() - scalingOffsetY,
-               object.getWidth() * object.getScaleX(),
-               object.getHeight() * object.getScaleY()
-         );
-      } else {
-         batch.draw(region, object.getLeft(), object.getTop());
-      }
+      sprite.setRegion(region);
+      sprite.setOrigin(object.getOriginX(), object.getOriginY());
+      sprite.setColor(object.getColor());
+      sprite.setBounds(
+            object.getLeft() + object.getOffsetX(),
+            object.getTop() + object.getOffsetY(),
+            object.getWidth(),
+            object.getHeight()
+      );
+      sprite.setScale(object.getScaleX(), object.getScaleY());
+      sprite.draw(batch);
    }
 }
