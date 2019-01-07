@@ -12,14 +12,14 @@ import java.util.Map;
  * This cache is intelligent and automatically detects if directions have changed and
  * it applies updates to animation attributes dynamically.
  */
-class AnimationCache {
+public class AnimationCache {
 
    private final Map<Object, Animation<TextureRegion>> animations = new HashMap<Object, Animation<TextureRegion>>();
    private final AnimationSpriteSheet spriteSheet;
    private final AnimationConfig config;
    private final Map<Object, AnimationFrames.Direction> directionMap = new HashMap<Object, AnimationFrames.Direction>();
 
-   AnimationCache(AnimationSpriteSheet spriteSheet, AnimationConfig config) {
+   public AnimationCache(AnimationSpriteSheet spriteSheet, AnimationConfig config) {
       this.spriteSheet = spriteSheet;
       this.config = config;
    }

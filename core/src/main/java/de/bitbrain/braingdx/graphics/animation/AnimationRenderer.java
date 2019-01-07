@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
+import de.bitbrain.braingdx.util.Enabler;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -22,6 +23,20 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class AnimationRenderer implements GameObjectRenderManager.GameObjectRenderer {
 
+   private static final Enabler<GameObject> DEFAULT_ENABLER = new Enabler<GameObject>() {
+      @Override
+      public boolean isEnabledFor(GameObject target) {
+         return true;
+      }
+   };
+
+   private static final AnimationTypeResolver<GameObject> DEFAULT_ANIMATION_TYPE_RESOLVER = new AnimationTypeResolver<GameObject>() {
+      @Override
+      public Object getAnimationType(GameObject object) {
+         return object.getType();
+      }
+   };
+
    private class AnimationState {
       public float stateTime;
    }
@@ -29,11 +44,27 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
    private final AnimationConfig config;
    private final AnimationCache animationCache;
    private final Sprite sprite;
+   private final AnimationTypeResolver<GameObject> animationTypeResolver;
+   private final Enabler<GameObject> animationEnabler;
+
+   public AnimationRenderer(AnimationSpriteSheet spriteSheet, AnimationConfig config, Enabler<GameObject> animationEnabler) {
+      this(spriteSheet, config, DEFAULT_ANIMATION_TYPE_RESOLVER, animationEnabler);
+   }
 
    public AnimationRenderer(AnimationSpriteSheet spriteSheet, AnimationConfig config) {
+      this(spriteSheet, config, DEFAULT_ANIMATION_TYPE_RESOLVER, DEFAULT_ENABLER);
+   }
+
+   public AnimationRenderer(AnimationSpriteSheet spriteSheet, AnimationConfig config, AnimationTypeResolver<GameObject> animationTypeResolver) {
+      this(spriteSheet, config, animationTypeResolver, DEFAULT_ENABLER);
+   }
+
+   public AnimationRenderer(AnimationSpriteSheet spriteSheet, AnimationConfig config, AnimationTypeResolver<GameObject> animationTypeResolver, Enabler<GameObject> animationEnabler) {
       this.config = config;
       this.animationCache = new AnimationCache(spriteSheet, config);
       this.sprite = new Sprite();
+      this.animationTypeResolver = animationTypeResolver;
+      this.animationEnabler = animationEnabler;
    }
 
    @Override
@@ -52,13 +83,11 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
    }
 
    private TextureRegion retrieveRegionFor(GameObject object, float delta) {
-      Object currentAnimationType = config
-            .getAnimationTypeResolver()
-            .getAnimationType(object);
+      Object currentAnimationType = animationTypeResolver.getAnimationType(object);
       AnimationState state = (AnimationState) object.getOrSetAttribute(AnimationState.class, new AnimationState());
       state.stateTime += delta;
       Animation<TextureRegion> animation = animationCache.getAnimation(currentAnimationType);
-      boolean animationEnabled = config.getAnimationEnabler().isEnabledFor(object);
+      boolean animationEnabled = animationEnabler.isEnabledFor(object);
       AnimationFrames frames = config.getFrames(currentAnimationType);
       return animation.getKeyFrame(animationEnabled ? state.stateTime : frames.getDuration() * frames.getResetIndex());
    }

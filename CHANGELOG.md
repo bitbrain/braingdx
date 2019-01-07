@@ -1,3 +1,7 @@
+# UNRELEASED Version 0.4.3
+
+* [[#171](https://github.com/bitbrain/braingdx/issues/171)] make animation API independent of `GameObject` class
+
 # Version 0.4.2
 
 * [[#168](https://github.com/bitbrain/braingdx/issues/168)] introduce scaling by `GameObject` origin
