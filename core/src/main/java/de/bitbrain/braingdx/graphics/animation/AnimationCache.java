@@ -24,7 +24,7 @@ public class AnimationCache {
       this.config = config;
    }
 
-   Animation<TextureRegion> getAnimation(Object animationType) {
+   public Animation<TextureRegion> getAnimation(Object animationType) {
       Animation<TextureRegion> animation = animations.get(animationType);
       if (animation == null || hasDirectionChanged(animationType)) {
          TextureRegion[] regions = getRegionsForType(animationType);

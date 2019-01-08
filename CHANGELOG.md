@@ -1,6 +1,7 @@
-# UNRELEASED Version 0.4.3
+# Version 0.4.3
 
 * [[#171](https://github.com/bitbrain/braingdx/issues/171)] make animation API independent of `GameObject` class
+* [[#170](https://github.com/bitbrain/braingdx/issues/170)] introduce `AnimationDrawable` class
 
 # Version 0.4.2
 
