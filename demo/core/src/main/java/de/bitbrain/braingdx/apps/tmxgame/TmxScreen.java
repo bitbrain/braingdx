@@ -114,7 +114,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
          if (o.getType().equals("CLERIC_MALE")) {
             player = o;
             player.setDimensions(player.getWidth() * 2f, player.getHeight());
-            player.getScale().y = 2f;
+            player.setScaleY(2f);
          }
       }
       context.getGameCamera().setTrackingTarget(player);
@@ -141,18 +141,6 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
       spriteSheet = new AnimationSpriteSheet(texture, 32, 48);
       for (NPC npc : NPC.values()) {
          AnimationConfig config = AnimationConfig.builder()
-               .animationTypeResolver(new AnimationTypeResolver<GameObject>() {
-                  @Override
-                  public Object getAnimationType(GameObject object) {
-                     return object.getAttribute(Orientation.class);
-                  }
-               })
-               .enabler(new Enabler<GameObject>() {
-                  @Override
-                  public boolean isEnabledFor(GameObject target) {
-                     return target.getOffset().len() > 0;
-                  }
-               })
                .registerFrames(Orientation.DOWN, AnimationFrames.builder()
                      .frames(3)
                      .playMode(Animation.PlayMode.LOOP_PINGPONG)
@@ -186,7 +174,17 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
                      .resetIndex(1)
                      .build())
                .build();
-         context.getRenderManager().register(npc.name(), new AnimationRenderer(spriteSheet, config));
+         context.getRenderManager().register(npc.name(), new AnimationRenderer(spriteSheet, config, new AnimationTypeResolver<GameObject>() {
+            @Override
+            public Object getAnimationType(GameObject object) {
+               return object.getAttribute(Orientation.class);
+            }
+         }, new Enabler<GameObject>() {
+            @Override
+            public boolean isEnabledFor(GameObject target) {
+               return target.getOffsetX() > 0 || target.getOffsetY() > 0;
+            }
+         }));
       }
 
    }

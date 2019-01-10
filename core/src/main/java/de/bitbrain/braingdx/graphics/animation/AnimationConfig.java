@@ -7,7 +7,7 @@ import de.bitbrain.braingdx.world.GameObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AnimationConfig<T> {
+public class AnimationConfig {
 
    private Map<Object, AnimationFrames> framesMap;
 
@@ -19,7 +19,7 @@ public class AnimationConfig<T> {
       return new AnimationConfigBuilder();
    }
 
-   public AnimationFrames getFrames(Object type) {
+   AnimationFrames getFrames(Object type) {
       AnimationFrames frames = framesMap.get(type);
       if (frames == null) {
          throw new GdxRuntimeException("No animation frames configured for type=" + type);
