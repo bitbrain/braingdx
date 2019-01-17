@@ -19,6 +19,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pool;
+import de.bitbrain.braingdx.util.Mutator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,8 +37,6 @@ public class GameObject implements Pool.Poolable {
    private final Vector2 position, dimensions, lastPosition, offset, origin;
    private final Vector2 scale;
    private String id;
-   private String internalId;
-   private String previousId;
    private Object type;
    private Color color = Color.WHITE.cpy();
    private float rotation;
@@ -50,6 +49,30 @@ public class GameObject implements Pool.Poolable {
 
    private boolean persistent;
 
+   private final Mutator<GameObject> mutator = new Mutator<GameObject>() {
+      @Override
+      public void mutate(GameObject target) {
+         target.lastPosition.x = lastPosition.x;
+         target.lastPosition.y = lastPosition.y;
+         target.position.x = position.x;
+         target.position.y = position.y;
+         target.dimensions.x = dimensions.x;
+         target.dimensions.y = dimensions.y;
+         target.offset.x = offset.x;
+         target.offset.y = offset.y;
+         target.zIndex = zIndex;
+         target.scale.set(scale.x, scale.y);
+         target.color = color.cpy();
+         target.attributes.putAll(attributes);
+         target.active = active;
+         target.rotation = rotation;
+         target.origin.x = origin.x;
+         target.origin.y = origin.y;
+         target.type = type;
+         target.persistent = persistent;
+      }
+   };
+
    public GameObject() {
       attributes = new HashMap<Object, Object>();
       position = new Vector2();
@@ -59,8 +82,17 @@ public class GameObject implements Pool.Poolable {
       scale = new Vector2(1f, 1f);
       origin = new Vector2();
       id = UUID.randomUUID().toString();
-      internalId = UUID.randomUUID().toString();
       active = true;
+   }
+
+   public GameObject copy() {
+      GameObject object = new GameObject();
+      mutator().mutate(object);
+      return object;
+   }
+
+   public Mutator<GameObject> mutator() {
+      return mutator;
    }
 
    public Object getType() {
@@ -293,7 +325,6 @@ public class GameObject implements Pool.Poolable {
       offset.x = 0;
       offset.y = 0;
       zIndex = 0;
-      previousId = id;
       id = UUID.randomUUID().toString();
       scale.set(1f, 1f);
       color = Color.WHITE.cpy();
@@ -302,8 +333,9 @@ public class GameObject implements Pool.Poolable {
       rotation = 0f;
       origin.x = 0f;
       origin.y = 0f;
+      type = null;
+      persistent = false;
    }
-
 
    @Override
    public int hashCode() {
@@ -333,7 +365,7 @@ public class GameObject implements Pool.Poolable {
    @Override
    public String toString() {
       return "GameObject [position=" + position + ", dimensions=" + dimensions + ", lastPosition=" + lastPosition
-            + ", id=" + id + ", internalId=" + internalId + ", previousId=" + previousId + ", type=" + type + ", color="
+            + ", id=" + id + ", type=" + type + ", color="
             + color + ", zIndex=" + zIndex + ", active=" + active + "]";
    }
 }

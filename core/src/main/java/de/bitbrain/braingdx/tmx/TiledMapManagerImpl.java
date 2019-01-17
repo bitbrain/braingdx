@@ -24,6 +24,7 @@ import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.event.GameEventRouter;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
+import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.SimpleWorldBounds;
 
@@ -50,6 +51,26 @@ public class TiledMapManagerImpl implements TiledMapManager {
    private final AStarPathFinder pathFinder;
    private final GameEventManager gameEventManager;
    private final GameEventRouter router;
+   private final GameEventRouter.GameEventInfoExtractor infoExtractor = new GameEventRouter.GameEventInfoExtractor() {
+
+      @Override
+      public boolean isSticky(GameObject object) {
+         if (!object.hasAttribute(MapProperties.class)) {
+            return false;
+         }
+         MapProperties properties = (MapProperties)object.getAttribute(MapProperties.class);
+         return properties.get(Constants.STICKY, false, Boolean.class);
+      }
+
+      @Override
+      public String getProducer(GameObject object) {
+         if (!object.hasAttribute(MapProperties.class)) {
+            return null;
+         }
+         MapProperties properties = (MapProperties)object.getAttribute(MapProperties.class);
+         return properties.get(Constants.PRODUCER, null, String.class);
+      }
+   };
 
    public TiledMapManagerImpl(BehaviorManager behaviorManager, GameWorld gameWorld,
                               GameObjectRenderManager renderManager, GameEventManager gameEventManager) {
@@ -58,7 +79,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
       this.gameWorld = gameWorld;
       this.renderManager = renderManager;
       this.state = new State();
-      this.router = new GameEventRouter(gameEventManager, gameWorld);
+      this.router = new GameEventRouter(gameEventManager, gameWorld, infoExtractor);
       this.api = new TiledMapAPIImpl(state, gameWorld, router, gameEventManager);
       this.populator = new StatePopulator(renderManager, gameWorld, api, behaviorManager, gameEventManager);
       this.gameObjectUpdater = new GameObjectUpdater(api, state, gameEventManager);

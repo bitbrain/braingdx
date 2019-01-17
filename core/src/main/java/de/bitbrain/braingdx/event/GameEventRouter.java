@@ -1,7 +1,6 @@
 package de.bitbrain.braingdx.event;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Rectangle;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.world.GameObject;
@@ -22,20 +21,25 @@ import java.util.Set;
  */
 public class GameEventRouter extends BehaviorAdapter {
 
-   public static final String PRODUCER_PROPERTY = "producer";
-   public static final String STICKY_PROPERTY = "sticky";
+   public interface GameEventInfoExtractor {
+      boolean isSticky(GameObject object);
+      String getProducer(GameObject object);
+   }
+
    private final GameEventManager eventManager;
    private final GameWorld gameWorld;
    private Rectangle sourceRect, targetRect;
    private GameEventFactory eventFactory;
    private Set<String> eventIds = new HashSet<String>();
    private Object[] identifiers;
+   private final GameEventInfoExtractor extractor;
 
-   public GameEventRouter(GameEventManager eventManager, GameWorld gameWorld) {
+   public GameEventRouter(GameEventManager eventManager, GameWorld gameWorld, GameEventInfoExtractor extractor) {
       this.eventManager = eventManager;
       this.gameWorld = gameWorld;
       this.sourceRect = new Rectangle();
       this.targetRect = new Rectangle();
+      this.extractor = extractor;
    }
 
    public void setEventFactory(GameEventFactory eventFactory) {
@@ -58,9 +62,9 @@ public class GameEventRouter extends BehaviorAdapter {
          return;
       }
 
-      MapProperties properties = (MapProperties) source.getAttribute(MapProperties.class);
+      String producer = extractor.getProducer(source);
 
-      if (properties.containsKey(PRODUCER_PROPERTY) && !properties.get(PRODUCER_PROPERTY).equals(target.getType())) {
+      if (producer != null && !producer.equals(target.getType())) {
          return;
       }
 
@@ -82,7 +86,7 @@ public class GameEventRouter extends BehaviorAdapter {
             Gdx.app.log("WARN", "Unable to publish event for " + source + "! Not supported by EventFactory!");
          }
       }
-      if (properties.containsKey(STICKY_PROPERTY) && (Boolean) properties.get(STICKY_PROPERTY)) {
+      if (extractor.isSticky(source)) {
          if (eventIds.contains(source.getId())) {
             eventIds.remove(source.getId());
          }

@@ -1,3 +1,8 @@
+# Version 0.4.4
+
+* [[#172](https://github.com/bitbrain/braingdx/issues/172)] fix `NullPointerException` in `GameEventRouter`
+* removed `internalId` and `previousId` from `GameObject`
+
 # Version 0.4.3
 
 * [[#171](https://github.com/bitbrain/braingdx/issues/171)] make animation API independent of `GameObject` class
