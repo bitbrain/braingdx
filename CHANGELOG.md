@@ -1,3 +1,7 @@
+# Version 0.4.4.1
+
+* fix a bug within `ColouredRenderLayer` so it resizes correctly
+
 # Version 0.4.4
 
 * [[#172](https://github.com/bitbrain/braingdx/issues/172)] fix `NullPointerException` in `GameEventRouter`
