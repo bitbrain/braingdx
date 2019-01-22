@@ -1,3 +1,7 @@
+# Version 0.4.5
+
+* `spawnEffect` now returns an `ParticleEffect` object respectively
+
 # Version 0.4.4.1
 
 * fix a bug within `ColouredRenderLayer` so it resizes correctly

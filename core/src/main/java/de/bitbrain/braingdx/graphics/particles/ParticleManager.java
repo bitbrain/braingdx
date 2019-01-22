@@ -78,9 +78,10 @@ public class ParticleManager implements Disposable {
       }, object);
    }
 
-   public void spawnEffect(String assetEffectId, float worldX, float worldY) {
+   public ParticleEffect spawnEffect(String assetEffectId, float worldX, float worldY) {
       InternalPooledEffect internal = ensureEffect(assetEffectId);
       internal.effect.setPosition(worldX, worldY);
+      return internal.effect;
    }
 
    @Override
