@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.GameContext;
 import de.bitbrain.braingdx.GameContext2DImpl;
-import de.bitbrain.braingdx.graphics.pipeline.ColoredRenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.layers.ColoredRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.util.ViewportFactory;

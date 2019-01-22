@@ -1,4 +1,4 @@
-package de.bitbrain.braingdx.graphics.pipeline;
+package de.bitbrain.braingdx.graphics.pipeline.layers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
+import de.bitbrain.braingdx.graphics.pipeline.AbstractRenderLayer;
+import de.bitbrain.braingdx.util.Resizeable;
 
-public class ColoredRenderLayer extends AbstractRenderLayer implements Disposable {
+public class ColoredRenderLayer extends AbstractRenderLayer implements Disposable, Resizeable {
 
    private Color color = Color.WHITE;
 
@@ -50,4 +52,8 @@ public class ColoredRenderLayer extends AbstractRenderLayer implements Disposabl
       texture.dispose();
    }
 
+   @Override
+   public void resize(int width, int height) {
+      camera.setToOrtho(false, width, height);
+   }
 }
