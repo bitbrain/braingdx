@@ -17,6 +17,7 @@ package de.bitbrain.braingdx.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -41,8 +42,8 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
    private final ViewportFactory viewportFactory = new ViewportFactory() {
 
       @Override
-      public Viewport create(int width, int height) {
-         return getViewport(width, height);
+      public Viewport create(int width, int height, Camera camera) {
+         return getViewport(width, height, camera);
       }
 
    };
@@ -115,8 +116,8 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
       return new ShaderConfig();
    }
 
-   protected Viewport getViewport(int width, int height) {
-      return new ScreenViewport();
+   protected Viewport getViewport(int width, int height, Camera camera) {
+      return new ScreenViewport(camera);
    }
 
    @Override

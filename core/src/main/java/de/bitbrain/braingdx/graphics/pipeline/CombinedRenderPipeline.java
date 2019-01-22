@@ -59,12 +59,10 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
    private final ShaderConfig config;
    private final SpriteBatch internalBatch;
-   private final ViewportFactory viewportFactory;
    private FrameBuffer buffer;
    private OrthographicCamera camera;
-   private Viewport viewport;
 
-   public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera, ViewportFactory viewportFactory) {
+   public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
          @Override
@@ -72,10 +70,10 @@ public class CombinedRenderPipeline implements RenderPipeline {
             return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
          }
 
-      }, internalBatch, camera, viewportFactory);
+      }, internalBatch, camera);
    }
 
-   public CombinedRenderPipeline(ShaderConfig config, ViewportFactory viewportFactory) {
+   public CombinedRenderPipeline(ShaderConfig config) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
          @Override
@@ -83,11 +81,11 @@ public class CombinedRenderPipeline implements RenderPipeline {
             return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
          }
 
-      }, new SpriteBatch(), new OrthographicCamera(), viewportFactory);
+      }, new SpriteBatch(), new OrthographicCamera());
    }
 
    CombinedRenderPipeline(ShaderConfig config, PostProcessor processor, FrameBufferFactory factory,
-                          SpriteBatch internalBatch, OrthographicCamera camera, ViewportFactory viewportFactory) {
+                          SpriteBatch internalBatch, OrthographicCamera camera) {
       this.config = config;
       ShaderLoader.BasePath = this.config.basePath;
       ShaderLoader.PathResolver = this.config.pathResolver;
@@ -95,7 +93,6 @@ public class CombinedRenderPipeline implements RenderPipeline {
       this.bufferFactory = factory;
       this.internalBatch = internalBatch;
       this.camera = camera;
-      this.viewportFactory = viewportFactory;
    }
 
    @Override
@@ -119,7 +116,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
    @Override
    public void put(String id, RenderLayer layer, PostProcessorEffect... effects) {
-      CombinedRenderPipe pipe = new CombinedRenderPipe(layer, processor, camera, internalBatch, effects);
+      CombinedRenderPipe pipe = new CombinedRenderPipe(layer, processor, internalBatch, effects);
       orderedPipes.put(id, pipe);
    }
 
@@ -130,7 +127,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
          Gdx.app.error("FATAL", "Unable add layer '" + id + "'!");
          return;
       }
-      orderedPipes.put(index + 1, id, new CombinedRenderPipe(layer, processor, camera, internalBatch, effects));
+      orderedPipes.put(index + 1, id, new CombinedRenderPipe(layer, processor, internalBatch, effects));
    }
 
    @Override
@@ -140,7 +137,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
          Gdx.app.error("FATAL", "Unable add layer '" + id + "'!");
          return;
       }
-      orderedPipes.put(index > 0 ? index - 1 : index, id, new CombinedRenderPipe(layer, processor, camera, internalBatch, effects));
+      orderedPipes.put(index > 0 ? index - 1 : index, id, new CombinedRenderPipe(layer, processor, internalBatch, effects));
    }
 
    @Override
@@ -157,12 +154,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
    @SuppressWarnings("unchecked")
    @Override
    public void render(Batch batch, float delta) {
-      if (viewport == null) {
-         this.viewport = viewportFactory.create((int) camera.viewportWidth, (int) camera.viewportHeight);
-         this.viewport.setCamera(camera);
-      }
       clearBuffer();
-      viewport.update((int) camera.viewportWidth, (int) camera.viewportHeight);
       for (CombinedRenderPipe pipe : (Collection<CombinedRenderPipe>) orderedPipes.values()) {
          pipe.beforeRender();
          pipe.render(batch, delta, buffer);

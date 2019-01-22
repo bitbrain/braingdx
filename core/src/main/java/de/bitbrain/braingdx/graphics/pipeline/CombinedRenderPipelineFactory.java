@@ -27,22 +27,19 @@ public class CombinedRenderPipelineFactory implements RenderPipelineFactory {
 
    private final Stage worldStage;
 
-   private final ViewportFactory viewportFactory;
-
    public CombinedRenderPipelineFactory(ShaderConfig config, GameWorld world, LightingManager lightingManager, ParticleManager particleManager,
-                                        Stage stage, Stage worldStage, ViewportFactory viewportFactory) {
+                                        Stage stage, Stage worldStage) {
       this.config = config;
       this.world = world;
       this.lightingManager = lightingManager;
       this.particleManager = particleManager;
       this.stage = stage;
       this.worldStage = worldStage;
-      this.viewportFactory = viewportFactory;
    }
 
    @Override
    public RenderPipeline create() {
-      RenderPipeline pipeline = new CombinedRenderPipeline(config, viewportFactory);
+      RenderPipeline pipeline = new CombinedRenderPipeline(config);
       pipeline.put(RenderPipeIds.BACKGROUND, new AbstractRenderLayer() {
          @Override
          public void render(Batch batch, float delta) {

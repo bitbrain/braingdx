@@ -26,6 +26,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.audio.AudioManager;
@@ -44,7 +46,6 @@ import de.bitbrain.braingdx.graphics.particles.ParticleManager;
 import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipelineFactory;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.postprocessing.ShaderManager;
-import de.bitbrain.braingdx.graphics.shader.BatchPostProcessor;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.screens.ScreenTransitions;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
@@ -67,6 +68,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
    private final GameObjectRenderManager renderManager;
    private final GameCamera gameCamera;
    private final OrthographicCamera camera;
+   private final OrthographicCamera uiCamera;
    private final Batch batch;
    private final Stage stage, worldStage;
    private final RenderPipeline renderPipeline;
@@ -86,6 +88,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
       settings = new GameSettings(eventManager);
       shaderManager = new ShaderManager(eventManager, settings.getGraphics());
       camera = new OrthographicCamera();
+      uiCamera = new OrthographicCamera();
       world = new GameWorld(camera);
       behaviorManager = new BehaviorManager(world);
       batch = new SpriteBatch();
@@ -95,18 +98,15 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
       renderManager = new GameObjectRenderManager(batch);
       gameCamera = new VectorGameCamera(camera, world);
       particleManager = new ParticleManager(behaviorManager);
-      stage = new Stage(viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-      Viewport worldStageViewport = viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-      worldStageViewport.setCamera(camera);
-      worldStage = new Stage(worldStageViewport);
+      stage = new Stage(viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), uiCamera));
+      worldStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera));
       renderPipeline = new CombinedRenderPipelineFactory(//
             shaderConfig,//
             world,//
             lightingManager,//
             particleManager,//
             stage,//
-            worldStage,//
-            viewportFactory//
+            worldStage
       ).create();
       tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager, eventManager);
       audioManager = new AudioManagerImpl(//
@@ -211,6 +211,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
    public void updateAndRender(float delta) {
       tweenManager.update(delta);
       gameCamera.update(delta);
+      uiCamera.update();
       stage.act(delta);
       worldStage.act(delta);
       batch.setProjectionMatrix(camera.combined);
@@ -221,8 +222,9 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
    public void resize(int width, int height) {
       gameCamera.resize(width, height);
       renderPipeline.resize(width, height);
-      stage.getViewport().update(width, height);
-      worldStage.getViewport().update(width, height);
+      uiCamera.setToOrtho(false, width, height);
+      stage.getViewport().update(width, height, true);
+      worldStage.getViewport().update(width, height, true);
       eventManager.publish(new GraphicsSettingsChangeEvent());
    }
 

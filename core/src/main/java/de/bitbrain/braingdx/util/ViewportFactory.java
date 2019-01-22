@@ -15,6 +15,7 @@
 
 package de.bitbrain.braingdx.util;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
@@ -24,5 +25,5 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public interface ViewportFactory {
 
-   Viewport create(int width, int height);
+   Viewport create(int width, int height, Camera camera);
 }

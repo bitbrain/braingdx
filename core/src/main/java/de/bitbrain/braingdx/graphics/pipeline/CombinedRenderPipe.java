@@ -29,15 +29,13 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
    private final RenderLayer layer;
 
    private final BatchPostProcessor batchPostProcessor;
-   private final OrthographicCamera camera;
    private final SpriteBatch batch;
    private boolean enabled = true;
 
-   public CombinedRenderPipe(RenderLayer layer, PostProcessor processor, OrthographicCamera camera, SpriteBatch batch,
+   public CombinedRenderPipe(RenderLayer layer, PostProcessor processor, SpriteBatch batch,
                              PostProcessorEffect... effects) {
       this.layer = layer;
       this.batchPostProcessor = new BatchPostProcessor(processor, effects);
-      this.camera = camera;
       this.batch = batch;
    }
 
@@ -60,7 +58,6 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
       if (isEnabled()) {
          if (batchPostProcessor.hasEffects()) {
             batchPostProcessor.begin();
-            this.batch.setProjectionMatrix(camera.combined);
             this.batch.begin();
             this.batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
             this.batch.end();
@@ -80,7 +77,6 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
 
    @Override
    public void resize(int width, int height) {
-      camera.setToOrtho(true, width, height);
       if (layer instanceof Resizeable) {
          ((Resizeable) layer).resize(width, height);
       }

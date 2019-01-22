@@ -56,6 +56,9 @@ public final class Zoomer extends PostProcessorEffect {
       if (this.zoom != null) {
          zoom.setZoom(original.getZoom());
       }
+      if (radialBlur == null && this.zoom != null) {
+         setup(viewportWidth, viewportHeight, new RadialBlur(radialBlurQuality));
+      }
       setOrigin(original.getOriginX(), original.getOriginY());
    }
 
