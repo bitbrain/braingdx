@@ -78,3 +78,7 @@ This software is licensed under the [Apache 2 License](LICENSE).
 
 I would like to thank [Mario Zechner](https://twitter.com/badlogicgames) and the [libgdx](https://libgdx.badlogicgames.com/) community for developing such an amazing framework to work with.
 Also special thanks to [Aurelien Ribon](http://www.aurelienribon.com/blog/projects/universal-tween-engine) for creating a Java tween engine which can be used all over the place. This project also includes his work.
+
+# Social
+
+![follow-me](https://img.shields.io/twitter/follow/bitbrain_.svg?logo=twitter&style=for-the-badge)
