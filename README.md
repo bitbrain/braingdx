@@ -81,4 +81,4 @@ Also special thanks to [Aurelien Ribon](http://www.aurelienribon.com/blog/projec
 
 # Social
 
-![follow-me](https://img.shields.io/twitter/follow/bitbrain_.svg?logo=twitter&style=for-the-badge)
+[![follow-me](https://img.shields.io/twitter/follow/bitbrain_.svg?logo=twitter&style=for-the-badge)](https://twitter.com/bitbrain_)
