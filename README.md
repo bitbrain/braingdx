@@ -2,9 +2,9 @@
 -
 :video_game: Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
 
-[![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=master)](https://travis-ci.org/bitbrain/braingdx)
-[![mavencentral](https://maven-badges.herokuapp.com/maven-central/io.github.bitbrain/braingdx-core/badge.svg)](https://search.maven.org/search?q=g:io.github.bitbrain%20AND%20a:braingdx-core&core=gav) [![javadoc](https://img.shields.io/badge/javadoc-latest-ff00c0.svg)](http://bitbrain.github.io/braingdx/docs/latest/) [![codecov](https://codecov.io/gh/bitbrain/braingdx/branch/master/graph/badge.svg)](https://codecov.io/gh/bitbrain/braingdx)
-[![license](https://img.shields.io/github/license/bitbrain/braingdx.svg)](LICENSE.MD)
+[![Build Status](https://img.shields.io/travis/bitbrain/braingdx/master.svg?logo=travis&style=for-the-badge)](https://travis-ci.org/bitbrain/braingdx)
+[![mavencentral](https://img.shields.io/maven-central/v/io.github.bitbrain/braingdx-core.svg?colorB=blue&style=for-the-badge)](https://search.maven.org/search?q=g:io.github.bitbrain%20AND%20a:braingdx-core&core=gav) [![javadoc](https://img.shields.io/badge/javadoc-latest-pink.svg?style=for-the-badge)](http://bitbrain.github.io/braingdx/docs/latest/) [![codecov](https://img.shields.io/codecov/c/github/bitbrain/braingdx/master.svg?logo=codecov&style=for-the-badge)](https://codecov.io/gh/bitbrain/braingdx)
+[![license](https://img.shields.io/github/license/bitbrain/braingdx.svg?style=for-the-badge)](LICENSE.MD)
 
 **:space_invader: [Features](#features) |**
 **:package: [Installation](#installation) |**
