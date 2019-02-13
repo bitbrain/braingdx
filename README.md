@@ -41,7 +41,7 @@ This framework provides:
 
 This framework is currently developed by a single person. Pull requests are very welcome! The following roadmap is planned for the first 1.0 release of this framework:
 
-![roadmap](roadmap.svg)
+![milestones](milestones.svg)
 
 # Installation
 
