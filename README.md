@@ -2,9 +2,9 @@
 -
 :video_game: Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
 
-[![Build Status](https://travis-ci.org/bitbrain/braingdx.svg?branch=master)](https://travis-ci.org/bitbrain/braingdx)
-[![mavencentral](https://maven-badges.herokuapp.com/maven-central/io.github.bitbrain/braingdx-core/badge.svg)](https://search.maven.org/search?q=g:io.github.bitbrain%20AND%20a:braingdx-core&core=gav) [![javadoc](https://img.shields.io/badge/javadoc-latest-ff00c0.svg)](http://bitbrain.github.io/braingdx/docs/latest/) [![codecov](https://codecov.io/gh/bitbrain/braingdx/branch/master/graph/badge.svg)](https://codecov.io/gh/bitbrain/braingdx)
-[![license](https://img.shields.io/github/license/bitbrain/braingdx.svg)](LICENSE.MD)
+[![Build Status](https://img.shields.io/travis/bitbrain/braingdx/master.svg?logo=travis&style=flat-square)](https://travis-ci.org/bitbrain/braingdx)
+[![mavencentral](https://img.shields.io/maven-central/v/io.github.bitbrain/braingdx-core.svg?colorB=blue&style=flat-square)](https://search.maven.org/search?q=g:io.github.bitbrain%20AND%20a:braingdx-core&core=gav) [![javadoc](https://img.shields.io/badge/javadoc-latest-pink.svg?style=flat-square)](http://bitbrain.github.io/braingdx/docs/latest/) [![codecov](https://img.shields.io/codecov/c/github/bitbrain/braingdx/master.svg?logo=codecov&style=flat-square)](https://codecov.io/gh/bitbrain/braingdx)
+[![license](https://img.shields.io/github/license/bitbrain/braingdx.svg?style=flat-square)](LICENSE.MD)
 
 **:space_invader: [Features](#features) |**
 **:package: [Installation](#installation) |**
@@ -78,3 +78,7 @@ This software is licensed under the [Apache 2 License](LICENSE).
 
 I would like to thank [Mario Zechner](https://twitter.com/badlogicgames) and the [libgdx](https://libgdx.badlogicgames.com/) community for developing such an amazing framework to work with.
 Also special thanks to [Aurelien Ribon](http://www.aurelienribon.com/blog/projects/universal-tween-engine) for creating a Java tween engine which can be used all over the place. This project also includes his work.
+
+# Social
+
+[![follow-me](https://img.shields.io/twitter/follow/bitbrain_.svg?logo=twitter&style=for-the-badge)](https://twitter.com/bitbrain_)
