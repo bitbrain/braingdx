@@ -1,3 +1,7 @@
+# Version 0.4.6
+
+* add new utility class `GameObjectUtils`
+
 # Version 0.4.5
 
 * `spawnEffect` now returns an `ParticleEffect` object respectively
