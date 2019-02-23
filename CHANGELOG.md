@@ -1,3 +1,7 @@
+# Version 0.4.7
+
+* add offset to `AnimationRenderer`
+
 # Version 0.4.6
 
 * add new utility class `GameObjectUtils`

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.util.Enabler;
 import de.bitbrain.braingdx.world.GameObject;
@@ -46,6 +47,7 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
    private final Sprite sprite;
    private final AnimationTypeResolver<GameObject> animationTypeResolver;
    private final Enabler<GameObject> animationEnabler;
+   private final Vector2 offset = new Vector2();
 
    public AnimationRenderer(AnimationSpriteSheet spriteSheet, AnimationConfig config, Enabler<GameObject> animationEnabler) {
       this(spriteSheet, config, DEFAULT_ANIMATION_TYPE_RESOLVER, animationEnabler);
@@ -82,6 +84,11 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
       batch.setColor(Color.WHITE);
    }
 
+   public AnimationRenderer offset(float x, float y) {
+      this.offset.set(x, y);
+      return this;
+   }
+
    private TextureRegion retrieveRegionFor(GameObject object, float delta) {
       Object currentAnimationType = animationTypeResolver.getAnimationType(object);
       AnimationState state = (AnimationState) object.getOrSetAttribute(AnimationState.class, new AnimationState());
@@ -97,8 +104,8 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
       sprite.setOrigin(object.getOriginX(), object.getOriginY());
       sprite.setColor(object.getColor());
       sprite.setBounds(
-            object.getLeft() + object.getOffsetX(),
-            object.getTop() + object.getOffsetY(),
+            object.getLeft() + object.getOffsetX() + offset.x,
+            object.getTop() + object.getOffsetY() + offset.y,
             object.getWidth(),
             object.getHeight()
       );
