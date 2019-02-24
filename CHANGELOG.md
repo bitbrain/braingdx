@@ -1,3 +1,7 @@
+# Version 0.4.8
+
+* add `setAlpha` to `AnimationDrawable`
+
 # Version 0.4.7
 
 * add offset to `AnimationRenderer`

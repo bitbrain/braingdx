@@ -130,11 +130,6 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
       AStarRenderer renderer = new AStarRenderer(context.getTiledMapManager(), context.getEventManager());
       context.getRenderPipeline().putAfter(RenderPipeIds.LIGHTING, "astar", renderer);
    }
-   
-   @Override
-	protected Viewport getViewport(int width, int height) {
-		return new FillViewport(width, height);
-	}
 
 	private void setupAnimations(GameContext context) {
       final Texture texture = SharedAssetManager.getInstance().get(Assets.RPG.CHARACTER_TILESET);

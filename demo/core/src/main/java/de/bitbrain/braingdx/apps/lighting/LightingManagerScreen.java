@@ -105,9 +105,4 @@ public class LightingManagerScreen extends AbstractScreen<LightingManagerTest> {
       }
       context.getStage().addActor(group);
    }
-   
-   @Override
-   protected Viewport getViewport(int width, int height) {
-      return new FitViewport(width, height);
-   }
 }

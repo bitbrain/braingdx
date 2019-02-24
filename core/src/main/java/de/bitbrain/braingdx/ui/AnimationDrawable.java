@@ -14,13 +14,17 @@ public class AnimationDrawable extends BaseDrawable {
 
    private final AnimationCache animationCache;
    private final Sprite sprite;
-   private Color color = Color.WHITE;
+   private Color color = Color.WHITE.cpy();
 
    private float stateTime;
 
    public AnimationDrawable(AnimationSpriteSheet spriteSheet, AnimationConfig config) {
       this.animationCache = new AnimationCache(spriteSheet, config);
       this.sprite = new Sprite();
+   }
+
+   public void setAlpha(float alpha) {
+      color.a = alpha;
    }
 
    @Override
