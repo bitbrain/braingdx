@@ -1,4 +1,4 @@
-# UNRELEASED Version 0.4.9
+# Version 0.4.9
 
 * [[#175](https://github.com/bitbrain/braingdx/issues/175)] remove `MovementController` API
 * [[#176](https://github.com/bitbrain/braingdx/issues/176)] improve deferred loading and unloading of behaviors and game objects
