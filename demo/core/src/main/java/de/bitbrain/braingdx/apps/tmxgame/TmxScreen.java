@@ -4,10 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bitbrain.braingdx.GameContext;
 import de.bitbrain.braingdx.ai.pathfinding.Path;
 import de.bitbrain.braingdx.apps.Assets;
@@ -22,16 +19,12 @@ import de.bitbrain.braingdx.graphics.animation.*;
 import de.bitbrain.braingdx.graphics.lighting.PointLightBehavior;
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
-import de.bitbrain.braingdx.input.OrientationMovementController;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.tmx.TiledMapEvents;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
 import de.bitbrain.braingdx.tmx.TiledMapType;
 import de.bitbrain.braingdx.util.Enabler;
 import de.bitbrain.braingdx.world.GameObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class TmxScreen extends AbstractScreen<TmxTest> {
 
@@ -121,8 +114,7 @@ public class TmxScreen extends AbstractScreen<TmxTest> {
 
       setupAnimations(context);
 
-      OrientationMovementController controller = new OrientationMovementController();
-      RasteredMovementBehavior behavior = new RasteredMovementBehavior(controller, tiledMapManager.getAPI())
+      RasteredMovementBehavior behavior = new RasteredMovementBehavior(tiledMapManager.getAPI())
             .interval(0.3f)
             .rasterSize(tiledMapManager.getAPI().getCellWidth(), tiledMapManager.getAPI().getCellHeight());
       context.getBehaviorManager().apply(behavior, player);

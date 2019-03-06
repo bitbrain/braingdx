@@ -33,7 +33,6 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
    public static final Orientation DEFAULT_DIRECTION = Orientation.DOWN;
    private final TweenManager tweenManager = SharedTweenManager.getInstance();
    private final DeltaTimer timer = new DeltaTimer(DEFAULT_INTERVAL);
-   private final MovementController<Orientation> controller;
    private final TiledMapAPI api;
    private final List<RasteredMovementListener> listeners = new ArrayList<RasteredMovementListener>();
    private float rasterWidth = DEFAULT_RASTER_SIZE;
@@ -43,9 +42,7 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
    private boolean wasMoving = false;
    private GameObject source;
    private TweenEquation ease = TweenEquations.easeNone;
-   public RasteredMovementBehavior(MovementController<Orientation> controller,
-                                   TiledMapAPI api) {
-      this.controller = controller;
+   public RasteredMovementBehavior(TiledMapAPI api) {
       this.api = api;
    }
 
@@ -136,7 +133,6 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
          moving = false;
       }
       wasMoving = moving;
-      controller.update(this, delta);
       source.setAttribute(Movement.class, this);
    }
 
@@ -175,7 +171,7 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
       return timer.reached(interval);
    }
 
-   public static interface RasteredMovementListener {
+   public interface RasteredMovementListener {
       void moveBefore(GameObject object, float moveX, float moveY, float duration);
 
       void moveAfter(GameObject object);

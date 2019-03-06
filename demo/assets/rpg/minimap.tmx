@@ -52,19 +52,16 @@
   </object>
   <object id="5" type="EXPLORER_FEMALE" x="96" y="80" width="16" height="16">
    <properties>
-    <property name="movement" value="de.bitbrain.braingdx.behavior.movement.RandomOrientationMovementController"/>
    </properties>
   </object>
   <object id="6" type="PRIEST_MALE" x="48" y="112" width="16" height="16">
    <properties>
     <property name="collision" type="bool" value="true"/>
-    <property name="movement" value="de.bitbrain.braingdx.behavior.movement.RandomOrientationMovementController"/>
    </properties>
   </object>
   <object id="7" type="EXPLORER_MALE" x="80" y="96" width="16" height="16">
    <properties>
     <property name="collision" type="bool" value="true"/>
-    <property name="movement" value="de.bitbrain.braingdx.behavior.movement.RandomOrientationMovementController"/>
    </properties>
   </object>
   <object id="8" type="event" x="48.3636" y="32.3636" width="14.9091" height="15.0909"/>

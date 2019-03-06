@@ -1,3 +1,7 @@
+# UNRELEASED Version 0.4.9
+
+* [[#175](https://github.com/bitbrain/braingdx/issues/175)] remove `MovementController` API
+
 # Version 0.4.8
 
 * add `setAlpha` to `AnimationDrawable`
