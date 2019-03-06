@@ -1,8 +1,8 @@
 package de.bitbrain.braingdx.behavior;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import de.bitbrain.braingdx.util.GdxUtils;
+import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 import org.junit.Before;
@@ -16,6 +16,14 @@ import static org.mockito.Mockito.mock;
 @RunWith(MockitoJUnitRunner.class)
 public class BehaviorManagerTest {
 
+   private class UpdateableBehavior extends BehaviorAdapter implements Updateable {
+
+      @Override
+      public void update(float delta) {
+
+      }
+   }
+
    private BehaviorManager manager;
    private GameWorld world;
 
@@ -23,7 +31,31 @@ public class BehaviorManagerTest {
    public void beforeTest() {
       world = new GameWorld(mock(OrthographicCamera.class));
       manager = new BehaviorManager(world);
-      Gdx.app = mock(Application.class);
+      world.addListener(new BehaviorManagerAdapter(manager));
+      GdxUtils.mockApplicationContext();
+   }
+
+   @Test
+   public void testUpdateWithLocalBehavior() {
+      UpdateableBehavior mockBehavior = Mockito.mock(UpdateableBehavior.class);
+      GameObject mockObject = world.addObject();
+      manager.apply(mockBehavior, mockObject);
+      manager.update(1f);
+      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(1f);
+      world.remove(mockObject);
+      manager.update(2f);
+      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(2f);
+   }
+
+   @Test
+   public void testUpdateWithGlobalBehavior() {
+      UpdateableBehavior mockBehavior = Mockito.mock(UpdateableBehavior.class);
+      manager.apply(mockBehavior);
+      manager.update(1f);
+      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(1f);
+      manager.remove(mockBehavior);
+      manager.update(2f);
+      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(2f);
    }
 
    @Test

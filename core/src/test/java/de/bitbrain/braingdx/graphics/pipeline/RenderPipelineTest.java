@@ -5,6 +5,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import de.bitbrain.braingdx.util.GdxUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +35,7 @@ public class RenderPipelineTest {
    @Parameters
    public static Collection<RenderPipelineFactory[]> getParams() {
       List<RenderPipelineFactory[]> params = new ArrayList<RenderPipelineFactory[]>();
-      Gdx.app = mock(Application.class);
+      GdxUtils.mockApplicationContext();
       Gdx.gl = mock(GL20.class);
       when(Gdx.app.getType()).thenReturn(ApplicationType.Desktop);
       //params.add(new RenderPipelineFactory[] { new MockedLayeredRenderPipelineFactory() });

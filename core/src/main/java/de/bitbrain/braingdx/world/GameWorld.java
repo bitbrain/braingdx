@@ -36,8 +36,6 @@ public class GameWorld implements Iterable<GameObject> {
     * the default cache size this world uses
     */
    public static final int DEFAULT_CACHE_SIZE = 512;
-   private final List<GameObject> removals = new ArrayList<GameObject>();
-   private final List<GameObject> additions = new ArrayList<GameObject>();
    private final List<GameObject> objects = new ArrayList<GameObject>();
    private final Map<String, GameObject> identityMap = new HashMap<String, GameObject>();
    private final List<GameObject> unmodifiableObjects;
@@ -163,7 +161,15 @@ public class GameWorld implements Iterable<GameObject> {
       }
       if (lazy) {
          Gdx.app.debug("DEBUG", String.format("GameWorld - requested addition for new game object %s", object));
-         additions.add(object);
+         Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+               objects.add(object);
+               for (GameWorldListener l : listeners) {
+                  l.onAdd(object);
+               }
+            }
+         });
       } else {
          Gdx.app.debug("DEBUG", String.format("GameWorld - added new game object %s", object));
          objects.add(object);
@@ -184,14 +190,6 @@ public class GameWorld implements Iterable<GameObject> {
     * @param delta frame delta
     */
    public void update(float delta) {
-      for (GameObject addition : additions) {
-         Gdx.app.debug("DEBUG", String.format("GameWorld - added new game object %s", addition));
-         objects.add(addition);
-         for (GameWorldListener l : listeners) {
-            l.onAdd(addition);
-         }
-      }
-      additions.clear();
       Collections.sort(objects, comparator);
       for (GameObject object : objects) {
          if (!bounds.isInBounds(object, camera) && !object.isPersistent()) {
@@ -212,10 +210,6 @@ public class GameWorld implements Iterable<GameObject> {
             }
          }
       }
-      for (final GameObject removal : removals) {
-         removeInternally(removal);
-      }
-      removals.clear();
    }
 
    public GameObject getObjectById(String id) {
@@ -237,7 +231,6 @@ public class GameWorld implements Iterable<GameObject> {
    public void clear() {
       pool.clear();
       objects.clear();
-      removals.clear();
       identityMap.clear();
       for (GameWorldListener l : listeners) {
          l.onClear();
@@ -255,11 +248,17 @@ public class GameWorld implements Iterable<GameObject> {
     *
     * @param objects
     */
-   public void remove(GameObject... objects) {
-      for (final GameObject object : objects) {
-         Gdx.app.debug("DEBUG", String.format("GameWorld - requested lazy removal of game object %s", object));
-         removals.add(object);
-      }
+   public void remove(final GameObject... objects) {
+      Gdx.app.postRunnable(new Runnable() {
+         @Override
+         public void run() {
+            for (final GameObject object : objects) {
+               Gdx.app.debug("DEBUG", String.format("GameWorld - requested removal of game object %s", object));
+               removeInternally(object);
+            }
+         }
+      });
+
    }
 
    private void removeInternally(GameObject object) {
@@ -277,7 +276,7 @@ public class GameWorld implements Iterable<GameObject> {
    /**
     * Describes when a game object is in bounds.
     */
-   public static interface WorldBounds {
+   public interface WorldBounds {
       boolean isInBounds(GameObject object, OrthographicCamera camera);
 
       float getWorldWidth();

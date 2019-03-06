@@ -1,9 +1,10 @@
 package de.bitbrain.braingdx.behavior;
 
+import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld.GameWorldListener;
 
-public class BehaviorManagerAdapter extends GameWorldListener {
+public class BehaviorManagerAdapter extends GameWorldListener implements Updateable {
 
    private BehaviorManager behaviorManager;
 
@@ -31,5 +32,10 @@ public class BehaviorManagerAdapter extends GameWorldListener {
    @Override
    public void onClear() {
       behaviorManager.clear();
+   }
+
+   @Override
+   public void update(float delta) {
+      behaviorManager.update(delta);
    }
 }

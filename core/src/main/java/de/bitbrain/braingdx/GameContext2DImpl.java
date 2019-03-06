@@ -47,6 +47,7 @@ import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipelineFactory;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.postprocessing.ShaderManager;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
+import de.bitbrain.braingdx.input.UpdateableInputMultiplexer;
 import de.bitbrain.braingdx.screens.ScreenTransitions;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
 import de.bitbrain.braingdx.tmx.TiledMapManagerImpl;
@@ -77,7 +78,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
    private final World boxWorld;
    private final TiledMapManager tiledMapManager;
    private final TweenManager tweenManager = SharedTweenManager.getInstance();
-   private final InputMultiplexer input;
+   private final UpdateableInputMultiplexer input;
    private final GameEventManager eventManager;
    private final AudioManager audioManager;
    private final GameSettings settings;
@@ -92,7 +93,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
       world = new GameWorld(camera);
       behaviorManager = new BehaviorManager(world);
       batch = new SpriteBatch();
-      input = new InputMultiplexer();
+      input = new UpdateableInputMultiplexer();
       boxWorld = new World(Vector2.Zero, false);
       lightingManager = new LightingManager(new RayHandler(boxWorld), camera);
       renderManager = new GameObjectRenderManager(batch);
@@ -209,6 +210,8 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 
    @Override
    public void updateAndRender(float delta) {
+      input.update(delta);
+      behaviorManager.update(delta);
       tweenManager.update(delta);
       gameCamera.update(delta);
       uiCamera.update();

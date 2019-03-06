@@ -24,6 +24,7 @@ import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
 import de.bitbrain.braingdx.event.*;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
+import de.bitbrain.braingdx.util.GdxUtils;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 import org.junit.Before;
@@ -65,7 +66,7 @@ public class TiledMapManagerTest {
    public void beforeTest() {
       world = new GameWorld(camera);
       gameEventManager = new GameEventManagerImpl();
-      Gdx.app = mock(Application.class);
+      GdxUtils.mockApplicationContext();
       BehaviorManager behaviorManager = new BehaviorManager(world);
       world.addListener(new BehaviorManagerAdapter(behaviorManager));
       tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager, gameEventManager) {

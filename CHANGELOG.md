@@ -1,6 +1,8 @@
 # UNRELEASED Version 0.4.9
 
 * [[#175](https://github.com/bitbrain/braingdx/issues/175)] remove `MovementController` API
+* [[#176](https://github.com/bitbrain/braingdx/issues/176)] improve deferred loading and unloading of behaviors and game objects
+* [[#177](https://github.com/bitbrain/braingdx/issues/177)] introduce new `Updateable` interface which can be applied on `Behavior` and `InputProcessor` implementations
 
 # Version 0.4.8
 

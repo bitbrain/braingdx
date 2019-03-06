@@ -1,8 +1,7 @@
 package de.bitbrain.braingdx.world;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import de.bitbrain.braingdx.util.GdxUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameWorldTest {
@@ -22,7 +20,7 @@ public class GameWorldTest {
 
    @Before
    public void beforeTest() {
-      Gdx.app = mock(Application.class);
+      GdxUtils.mockApplicationContext();
       world = new GameWorld(camera);
    }
 
