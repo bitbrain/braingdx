@@ -115,6 +115,11 @@
          <version>${libgdx.version}</version>
       </dependency>
       <dependency>
+         <groupId>com.badlogicgames.gdx</groupId>
+         <artifactId>gdx-controllers</artifactId>
+         <version>${libgdx.version}</version>
+      </dependency>
+      <dependency>
          <groupId>org.mini2Dx</groupId>
          <artifactId>universal-tween-engine</artifactId>
          <version>${tween.version}</version>

@@ -18,7 +18,6 @@ package de.bitbrain.braingdx;
 import aurelienribon.tweenengine.TweenManager;
 import box2dLight.RayHandler;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,8 +26,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.audio.AudioManagerImpl;
@@ -47,7 +44,8 @@ import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipelineFactory;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.postprocessing.ShaderManager;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
-import de.bitbrain.braingdx.input.UpdateableInputMultiplexer;
+import de.bitbrain.braingdx.input.InputManager;
+import de.bitbrain.braingdx.input.InputManagerImpl;
 import de.bitbrain.braingdx.screens.ScreenTransitions;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
 import de.bitbrain.braingdx.tmx.TiledMapManagerImpl;
@@ -78,7 +76,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
    private final World boxWorld;
    private final TiledMapManager tiledMapManager;
    private final TweenManager tweenManager = SharedTweenManager.getInstance();
-   private final UpdateableInputMultiplexer input;
+   private final InputManagerImpl inputManager;
    private final GameEventManager eventManager;
    private final AudioManager audioManager;
    private final GameSettings settings;
@@ -93,7 +91,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
       world = new GameWorld(camera);
       behaviorManager = new BehaviorManager(world);
       batch = new SpriteBatch();
-      input = new UpdateableInputMultiplexer();
+      inputManager = new InputManagerImpl();
       boxWorld = new World(Vector2.Zero, false);
       lightingManager = new LightingManager(new RayHandler(boxWorld), camera);
       renderManager = new GameObjectRenderManager(batch);
@@ -176,8 +174,8 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
    }
 
    @Override
-   public InputMultiplexer getInput() {
-      return input;
+   public InputManager getInputManager() {
+      return inputManager;
    }
 
    @Override
@@ -200,7 +198,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
       world.clear();
       stage.dispose();
       worldStage.dispose();
-      input.clear();
+      inputManager.dispose();
       particleManager.dispose();
       renderPipeline.dispose();
       tweenManager.killAll();
@@ -210,7 +208,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
 
    @Override
    public void updateAndRender(float delta) {
-      input.update(delta);
+      inputManager.update(delta);
       behaviorManager.update(delta);
       tweenManager.update(delta);
       gameCamera.update(delta);
@@ -234,9 +232,9 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
    private void wire() {
       world.addListener(new BehaviorManagerAdapter(behaviorManager));
       world.addListener(new GameObjectRenderManagerAdapter(renderManager));
-      input.addProcessor(stage);
-      input.addProcessor(worldStage);
-      Gdx.input.setInputProcessor(input);
+      inputManager.register(stage);
+      inputManager.register(worldStage);
+      Gdx.input.setInputProcessor(inputManager.getMultiplexer());
    }
 
    @Override

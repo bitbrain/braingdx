@@ -1,5 +1,6 @@
 # UNRELEASED Version 0.4.10
 
+* [[#180](https://github.com/bitbrain/braingdx/issues/180)] add controller support to `InputManager`
 * cleaning up `ActorTween` API
 
 # Version 0.4.9
