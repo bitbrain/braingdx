@@ -141,4 +141,12 @@ public interface GameCamera extends Resizeable {
     */
    float getTargetTrackingSpeed();
 
+   /**
+    * Applies screen shake to this camera.
+    *
+    * @param strength the strength of the effect
+    * @param duration the length of the effect in seconds
+    */
+   void shake(float strength, float duration);
+
 }

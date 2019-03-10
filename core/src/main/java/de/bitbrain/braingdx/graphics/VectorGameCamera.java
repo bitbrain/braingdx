@@ -15,11 +15,18 @@
 
 package de.bitbrain.braingdx.graphics;
 
+import aurelienribon.tweenengine.BaseTween;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.TweenEquations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
+import de.bitbrain.braingdx.tweens.VectorTween;
 import de.bitbrain.braingdx.util.math.BigDecimalVector2;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
@@ -27,6 +34,7 @@ import de.bitbrain.braingdx.world.GameWorld.WorldBounds;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Random;
 
 import static de.bitbrain.braingdx.util.BitUtils.haveSameSign;
 import static java.lang.Double.isInfinite;
@@ -44,6 +52,8 @@ public class VectorGameCamera implements GameCamera {
 
    private static final MathContext PRECISION = MathContext.DECIMAL32;
    private static final BigDecimal TWO = bigDecimalFromDouble(2);
+   // Interval in miliseconds between each movement
+   public static final float STEP_INTERVAL = 0.05f;
 
    private final OrthographicCamera camera;
    private final GameWorld world;
@@ -59,8 +69,18 @@ public class VectorGameCamera implements GameCamera {
    private final Rectangle previousWorldBounds = new Rectangle();
    private final Rectangle currentWorldBounds = new Rectangle();
 
+   private final Vector2 shake = new Vector2(), lastShake = new Vector2();
+
    private int correctionX = 0;
    private int correctionY = 0;
+
+   private final Random random = new Random();
+
+   static {
+      // it is important to tell Universal Tween Engine how
+      // to translate the camera movement
+      Tween.registerAccessor(Vector2.class, new VectorTween());
+   }
 
    public VectorGameCamera(OrthographicCamera camera, GameWorld world) {
       this.camera = camera;
@@ -85,34 +105,39 @@ public class VectorGameCamera implements GameCamera {
 
    @Override
    public void update(float delta) {
-      if (target == null)
-         return;
-      currentWorldBounds.set(
-            world.getBounds().getWorldOffsetX(),
-            world.getBounds().getWorldOffsetY(),
-            world.getBounds().getWorldWidth(),
-            world.getBounds().getWorldHeight()
-      );
-      if (!currentWorldBounds.equals(previousWorldBounds)) {
-         correctionX = 0;
-         correctionY = 0;
+      camera.position.x -= lastShake.x;
+      camera.position.y -= lastShake.y;
+      if (target != null) {
+         currentWorldBounds.set(
+               world.getBounds().getWorldOffsetX(),
+               world.getBounds().getWorldOffsetY(),
+               world.getBounds().getWorldWidth(),
+               world.getBounds().getWorldHeight()
+         );
+         if (!currentWorldBounds.equals(previousWorldBounds)) {
+            correctionX = 0;
+            correctionY = 0;
+         }
+         if (focusRequested) {
+            focusCentered(target);
+            focusRequested = false;
+         } else {
+            applyTrackingVelocityAndZoom(delta);
+         }
+         if (worldBoundsStickiness) {
+            applyWorldBounds();
+         }
+         previousWorldBounds.set(
+               world.getBounds().getWorldOffsetX(),
+               world.getBounds().getWorldOffsetY(),
+               world.getBounds().getWorldWidth(),
+               world.getBounds().getWorldHeight()
+         );
       }
-      if (focusRequested) {
-         focusCentered(target);
-         focusRequested = false;
-      } else {
-         applyTrackingVelocityAndZoom(delta);
-      }
-      if (worldBoundsStickiness) {
-         applyWorldBounds();
-      }
+      camera.position.x += shake.x;
+      camera.position.y += shake.y;
       camera.update();
-      previousWorldBounds.set(
-            world.getBounds().getWorldOffsetX(),
-            world.getBounds().getWorldOffsetY(),
-            world.getBounds().getWorldWidth(),
-            world.getBounds().getWorldHeight()
-      );
+      lastShake.set(shake);
    }
 
    @Override
@@ -227,6 +252,43 @@ public class VectorGameCamera implements GameCamera {
    @Override
    public float getTargetTrackingSpeed() {
       return speed.floatValue();
+   }
+
+   @Override
+   public void shake(float strength, float duration) {
+// Calculate the number of steps to take until radius is 0
+      final int STEPS = Math.round(duration / STEP_INTERVAL);
+      // Radius reduction on each iteration
+      final float STRENGTH_STEP = strength / STEPS;
+      // Do not forget to kill previous animations!
+      SharedTweenManager.getInstance().killTarget(shake);
+      for (int step = 0; step < STEPS; ++step) {
+         // Step 1: Let's find a random angle
+         double angle = Math.toRadians(random.nextFloat() * 360f);
+         float x = (float) Math.floor(strength * Math.cos(angle));
+         float y = (float) Math.floor(strength * Math.sin(angle));
+
+         final int finalStep = step;
+
+         // Step 2: ease to the calculated point. Do not forget to set
+         // delay!
+         Tween.to(shake, VectorTween.POS_X, STEP_INTERVAL).delay(step * STEP_INTERVAL).target(x)
+               .setCallback(new TweenCallback() {
+                  @Override
+                  public void onEvent(int i, BaseTween<?> baseTween) {
+                     if (finalStep == STEPS - 1) {
+                        shake.set(0f, 0f);
+                     }
+                  }
+               })
+               .setCallbackTriggers(TweenCallback.COMPLETE)
+               .ease(TweenEquations.easeInOutCubic).start(SharedTweenManager.getInstance());
+         Tween.to(shake, VectorTween.POS_Y, STEP_INTERVAL).delay(step * STEP_INTERVAL).target(y)
+               .ease(TweenEquations.easeInOutCubic).start(SharedTweenManager.getInstance());
+
+         // Step 3: reduce the radius of the screen shake circle
+         strength -= STRENGTH_STEP;
+      }
    }
 
    @Override
