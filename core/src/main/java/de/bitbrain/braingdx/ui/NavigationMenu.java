@@ -112,9 +112,7 @@ public class NavigationMenu<T extends Button> extends Table implements Navigatea
          public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
             if (!element.isDisabled() && !element.isChecked()) {
                super.enter(event, x, y, pointer, fromActor);
-               // TODO play hover sound
                setChecked(buttons.indexOf(element));
-
             }
          }
       });

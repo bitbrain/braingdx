@@ -1,4 +1,4 @@
-# UNRELEASED Version 0.4.10
+# Version 0.4.10
 
 * [[#178](https://github.com/bitbrain/braingdx/issues/178)] add `shake()` method to `GameCamera` to shake the screen
 * [[#179](https://github.com/bitbrain/braingdx/issues/179)] implement `NavigationMenu` class, including controller and keyboard handlers
