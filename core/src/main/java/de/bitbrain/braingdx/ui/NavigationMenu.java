@@ -23,80 +23,47 @@ public class NavigationMenu<T extends Button> extends Table implements Navigatea
       public boolean vertical = true;
    }
 
-   public static class TextButtonFactory implements ButtonFactory<TextButton> {
-      private final TextButton.TextButtonStyle style;
-
-      public TextButtonFactory(TextButton.TextButtonStyle style) {
-         this.style = style;
-      }
-
-      @Override
-      public TextButton createButton() {
-         return new TextButton("", style);
-      }
-   }
-
-   public static class ImageButtonFactory implements ButtonFactory<ImageButton> {
-      private final ImageButton.ImageButtonStyle style;
-
-      public ImageButtonFactory(ImageButton.ImageButtonStyle style) {
-         this.style = style;
-      }
-
-      @Override
-      public ImageButton createButton() {
-         return new ImageButton(style);
-      }
-   }
-
-   public interface ButtonFactory<T extends Button> {
-      T createButton();
-   }
-
    private List<Button> buttons = new ArrayList<Button>();
 
    private int currentCheckIndex = -1;
 
    private final NavigationMenuStyle style;
-   private final ButtonFactory<T> buttonFactory;
 
-   public NavigationMenu(ButtonFactory<T> buttonFactory) {
-      this(buttonFactory, new NavigationMenuStyle());
+   public NavigationMenu() {
+      this(new NavigationMenuStyle());
    }
 
-   public NavigationMenu(ButtonFactory<T> buttonFactory, NavigationMenuStyle style) {
-      this.buttonFactory = buttonFactory;
+   public NavigationMenu(NavigationMenuStyle style) {
       this.style = style;
 
       setTouchable(Touchable.childrenOnly);
    }
 
-   public Cell<T> add(final ClickListener listener) {
-      final T element = buttonFactory.createButton();
-      element.addCaptureListener(new ClickListener() {
+   public Cell<T> add(final T button, final ClickListener listener) {
+      button.addCaptureListener(new ClickListener() {
          @Override
          public void clicked(InputEvent event, float x, float y) {
-            if (!element.isDisabled()) {
+            if (!button.isDisabled()) {
                listener.clicked(event, x, y);
             }
          }
 
          @Override
          public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-            if (!element.isDisabled()) {
+            if (!button.isDisabled()) {
                listener.enter(event, x, y, pointer, fromActor);
             }
          }
 
          @Override
          public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-            if (!element.isDisabled()) {
+            if (!button.isDisabled()) {
                listener.exit(event, x, y, pointer, toActor);
             }
          }
       });
 
-      Cell<T> cell = center().add(element);
+      Cell<T> cell = center().add(button);
       if (style.vertical) {
          row();
       }
@@ -107,16 +74,16 @@ public class NavigationMenu<T extends Button> extends Table implements Navigatea
             cell.padLeft(style.padding);
          }
       }
-      element.addCaptureListener(new ClickListener() {
+      button.addCaptureListener(new ClickListener() {
          @Override
          public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-            if (!element.isDisabled() && !element.isChecked()) {
+            if (!button.isDisabled() && !button.isChecked()) {
                super.enter(event, x, y, pointer, fromActor);
-               setChecked(buttons.indexOf(element));
+               setChecked(buttons.indexOf(button));
             }
          }
       });
-      buttons.add(element);
+      buttons.add(button);
       validateCheckState();
       return cell;
    }

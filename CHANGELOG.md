@@ -1,3 +1,7 @@
+# Version 0.4.11
+
+* improve API around `NavigationMenu`
+
 # Version 0.4.10
 
 * [[#178](https://github.com/bitbrain/braingdx/issues/178)] add `shake()` method to `GameCamera` to shake the screen
