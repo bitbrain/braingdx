@@ -24,7 +24,7 @@ In Java world, we game developers already have [libgdx](https://libgdx.badlogicg
 
 This framework provides:
 
-* **Scene transitions** how to switch between screens by applying different and custom animations *(not yet implemented)*
+* **Scene transitions** how to switch between screens by applying different and custom animations
 * **Tweening pipeline** Using [Universal Tween Engine](https://github.com/AurelienRibon/universal-tween-engine) to make the most of animations in a few lines.
 * **World rendering pipeline** no more custom Java classes for game entities. *brainGDX* offers a way to add objects to a game world, handle physics, collision detection and updating out of the box.
 * **Lighting** brainGDX comes with [Box2DLights](https://github.com/libgdx/box2dlights) under the hood. Apply and configure dynamic lighting even for your entities.
@@ -32,8 +32,8 @@ This framework provides:
 * **Parallaxing** beautiful parallax scrolling effects await you in this framework.
 * **Scene shaders** apply different shaders like Bloom, Antialiasing or Vignette effects to your scenes.
 * **3D audio support** apply 3D sound effects and set sound sources in your world. Additionally, apply sound sources to moving game objects, fade in between music etc.
-* **Controller support for components** plug in your controller and go ahead. No more configuration hell! *(not yet implemented)*
-* **Actor library (button menu, nameplates, tooltips)** ever wanted to write an RPG or just show little tooltips on the screen? brainGDX provides several UI components for your needs. *(not yet implemented)*
+* **Controller support for components** plug in your controller and go ahead. No more configuration hell!
+* **Actor library (button menu, nameplates, tooltips)** ever wanted to write an RPG or just show little tooltips on the screen? brainGDX provides several UI components for your needs.
 * **Extended Tiled Map support** Ever wanted to write a multi-layered game by using the map editor of your choice? brainGDX provides a framework to render and handle multi-layered 2D maps
 * **Entity behaviors** brainGDX comes with a various palette of inbuilt entity behaviors, such as flickering torch lights, WASD movement, random movement or directional movement.
 
