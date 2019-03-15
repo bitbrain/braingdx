@@ -85,6 +85,26 @@ public class LayeredRenderPipeline implements RenderPipeline {
    }
 
    @Override
+   public void remove(String existingSourceId) {
+      throw new UnsupportedOperationException("Not implemented yet!");
+   }
+
+   @Override
+   public void setEffects(String existingSourceId, PostProcessorEffect... effects) {
+      throw new UnsupportedOperationException("Not implemented yet!");
+   }
+
+   @Override
+   public void moveBefore(String existingSourceId, String existingTargetId) {
+      throw new UnsupportedOperationException("Not implemented yet!");
+   }
+
+   @Override
+   public void moveAfter(String existingSourceId, String existingTargetId) {
+      throw new UnsupportedOperationException("Not implemented yet!");
+   }
+
+   @Override
    public RenderPipe getPipe(String id) {
       return pipes.get(id);
    }

@@ -1,6 +1,7 @@
 # UNRELEASED Version 0.4.12
 
 * [[#131](https://github.com/bitbrain/braingdx/issues/131)] fix `IllegalStateException` when window size is scaled down to 0
+* [[#152](https://github.com/bitbrain/braingdx/issues/152)] extend `RenderPipeline` API by new methods
 
 # Version 0.4.11
 

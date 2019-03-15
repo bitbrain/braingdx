@@ -24,9 +24,11 @@ import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
  */
 public interface RenderPipe {
 
-   public boolean isEnabled();
+   boolean isEnabled();
 
    void setEnabled(boolean enabled);
 
    void addEffects(PostProcessorEffect... effects);
+
+   void setEffects(PostProcessorEffect[] effects);
 }

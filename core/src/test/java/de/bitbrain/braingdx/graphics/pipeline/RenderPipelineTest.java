@@ -1,6 +1,5 @@
 package de.bitbrain.braingdx.graphics.pipeline;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -104,6 +103,57 @@ public class RenderPipelineTest {
       pipeline.put("c", mock(RenderLayer.class));
       pipeline.put("c", mock(RenderLayer.class));
       assertEquals(pipeline.getPipeIds().size(), 3);
-
    }
+
+   @Test
+   public void testMoveBefore_Swap() {
+      pipeline.put("a", mock(RenderLayer.class));
+      pipeline.put("b", mock(RenderLayer.class));
+      pipeline.moveBefore("b", "a");
+      assertThat(pipeline.getPipeIds()).containsExactly("b", "a");
+   }
+
+   @Test
+   public void testMoveBefore_DifferentLayer() {
+      pipeline.put("a", mock(RenderLayer.class));
+      pipeline.put("b", mock(RenderLayer.class));
+      pipeline.put("c", mock(RenderLayer.class));
+      pipeline.moveBefore("c", "b");
+      assertThat(pipeline.getPipeIds()).containsExactly("a", "c", "b");
+   }
+
+   @Test
+   public void testMoveAfter_Swap() {
+      pipeline.put("a", mock(RenderLayer.class));
+      pipeline.put("b", mock(RenderLayer.class));
+      pipeline.moveAfter("a", "b");
+      assertThat(pipeline.getPipeIds()).containsExactly("b", "a");
+   }
+
+   @Test
+   public void testMoveAfter_DifferentLayer() {
+      pipeline.put("a", mock(RenderLayer.class));
+      pipeline.put("b", mock(RenderLayer.class));
+      pipeline.put("c", mock(RenderLayer.class));
+      pipeline.moveAfter("c", "a");
+      assertThat(pipeline.getPipeIds()).containsExactly("a", "c", "b");
+   }
+
+   @Test
+   public void testRemove_Empty() {
+      // No exception expected!
+      pipeline.remove("doesNotExist");
+   }
+
+   @Test
+   public void testRemove_Existing() {
+      pipeline.put("a", mock(RenderLayer.class));
+      pipeline.put("b", mock(RenderLayer.class));
+      pipeline.put("c", mock(RenderLayer.class));
+      pipeline.remove("b");
+      assertThat(pipeline.getPipeIds()).containsExactly("a", "c");
+      pipeline.remove("a");
+      assertThat(pipeline.getPipeIds()).containsExactly("c");
+   }
+
 }

@@ -29,15 +29,86 @@ import java.util.Collection;
  */
 public interface RenderPipeline extends Disposable, Resizeable {
 
-   public void put(String id, RenderLayer layer, PostProcessorEffect... effects);
+   /**
+    * Registers a new {@link RenderLayer} to this pipeline
+    *
+    * @param id a unique id of the layer
+    * @param layer the layer object
+    * @param effects additional shader effects to apply to the given layer
+    */
+   void put(String id, RenderLayer layer, PostProcessorEffect... effects);
 
-   public void putAfter(String existing, String id, RenderLayer layer, PostProcessorEffect... effects);
+   /**
+    * Registers a new {@link RenderLayer} to this pipeline, placed above the existing layer
+    *
+    * @param existingSourceId an existing layer
+    * @param id a unique id of the layer
+    * @param layer the layer object
+    * @param effects additional shader effects to apply to the given layer
+    */
+   void putAfter(String existingSourceId, String id, RenderLayer layer, PostProcessorEffect... effects);
 
-   public void putBefore(String existing, String id, RenderLayer layer, PostProcessorEffect... effects);
+   /**
+    * Registers a new {@link RenderLayer} to this pipeline, placed beneath the existing layer
+    *
+    * @param existingSourceId an existing layer
+    * @param id a unique id of the layer
+    * @param layer the layer object
+    * @param effects additional shader effects to apply to the given layer
+    */
+   void putBefore(String existingSourceId, String id, RenderLayer layer, PostProcessorEffect... effects);
 
-   public RenderPipe getPipe(String id);
+   /**
+    * Removes an existing render layer from this pipeline.
+    *
+    * @param existingSourceId an existing layer id
+    */
+   void remove(String existingSourceId);
 
-   public Collection<String> getPipeIds();
+   /**
+    * Override all effects on a given layer
+    *
+    * @param existingSourceId an existing layer
+    * @param effects additional shader effects to apply to the given layer
+    */
+   void setEffects(String existingSourceId, PostProcessorEffect... effects);
 
-   public void render(Batch batch, float delta);
+   /**
+    * Moves an existing layer right beneath another existing layer
+    *
+    * @param existingSourceId an existing layer
+    * @param existingTargetId an existing layer
+    */
+   void moveBefore(String existingSourceId, String existingTargetId);
+
+   /**
+    * Moves an existing layer right above another existing layer
+    *
+    * @param existingSourceId an existing layer
+    * @param existingTargetId an existing layer
+    */
+   void moveAfter(String existingSourceId, String existingTargetId);
+
+   /**
+    * Returns an registered render pipe
+    *
+    * @param existingSourceId an existing layer
+    * @return an existing {@link RenderPipe}
+    */
+   RenderPipe getPipe(String existingSourceId);
+
+   /**
+    * Returns an ordered collection of all registered layers
+    *
+    * @return an ordered collection of Strings
+    */
+   Collection<String> getPipeIds();
+
+   /**
+    * Renders this pipeline onto the screen
+    *
+    * @param batch a given batch
+    * @param delta the frame delta
+    */
+   void render(Batch batch, float delta);
 }

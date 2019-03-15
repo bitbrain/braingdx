@@ -80,4 +80,11 @@ public class BatchPostProcessor {
          effect.setEnabled(enabled);
       }
    }
+
+   public void clear() {
+      for (PostProcessorEffect effect : effects) {
+         effect.dispose();
+      }
+      effects.clear();
+   }
 }

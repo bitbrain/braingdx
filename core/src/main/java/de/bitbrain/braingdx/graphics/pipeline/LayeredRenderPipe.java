@@ -79,6 +79,12 @@ class LayeredRenderPipe implements RenderPipe, Disposable, Resizeable {
    }
 
    @Override
+   public void setEffects(PostProcessorEffect[] effects) {
+      batchPostProcessor.clear();
+      batchPostProcessor.addEffects(effects);
+   }
+
+   @Override
    public void dispose() {
       buffer.dispose();
       if (renderLayer instanceof Disposable) {

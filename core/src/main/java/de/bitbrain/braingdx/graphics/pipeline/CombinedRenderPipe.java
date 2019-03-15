@@ -15,7 +15,6 @@
 
 package de.bitbrain.braingdx.graphics.pipeline;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -51,6 +50,12 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
 
    @Override
    public void addEffects(PostProcessorEffect... effects) {
+      batchPostProcessor.addEffects(effects);
+   }
+
+   @Override
+   public void setEffects(PostProcessorEffect[] effects) {
+      batchPostProcessor.clear();
       batchPostProcessor.addEffects(effects);
    }
 

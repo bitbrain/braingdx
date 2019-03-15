@@ -145,6 +145,61 @@ public class CombinedRenderPipeline implements RenderPipeline {
    }
 
    @Override
+   public void remove(String existingSourceId) {
+      int index = orderedPipes.indexOf(existingSourceId);
+      if (index < 0) {
+         Gdx.app.error("FATAL", "Unable remove layer '" + existingSourceId + "'!");
+         return;
+      }
+      orderedPipes.remove(existingSourceId);
+   }
+
+   @Override
+   public void setEffects(String existingSourceId, PostProcessorEffect... effects) {
+      int index = orderedPipes.indexOf(existingSourceId);
+      if (index < 0) {
+         Gdx.app.error("FATAL", "Unable remove layer '" + existingSourceId + "'!");
+         return;
+      }
+      getPipe(existingSourceId).setEffects(effects);
+   }
+
+   @Override
+   public void moveBefore(String existingSourceId, String existingTargetId) {
+      RenderPipe sourcePipe = getPipe(existingSourceId);
+      if (sourcePipe == null) {
+         Gdx.app.error("FATAL", "source pipe does not exist!");
+         return;
+      }
+      RenderPipe targetPipe = getPipe(existingTargetId);
+      if (targetPipe == null) {
+         Gdx.app.error("FATAL", "target pipe does not exist!");
+         return;
+      }
+      remove(existingSourceId);
+      int index = orderedPipes.indexOf(existingTargetId);
+      orderedPipes.put(index, existingSourceId, sourcePipe);
+
+   }
+
+   @Override
+   public void moveAfter(String existingSourceId, String existingTargetId) {
+      RenderPipe sourcePipe = getPipe(existingSourceId);
+      if (sourcePipe == null) {
+         Gdx.app.error("FATAL", "source pipe does not exist!");
+         return;
+      }
+      RenderPipe targetPipe = getPipe(existingTargetId);
+      if (targetPipe == null) {
+         Gdx.app.error("FATAL", "target pipe does not exist!");
+         return;
+      }
+      remove(existingSourceId);
+      int index = orderedPipes.indexOf(existingTargetId);
+      orderedPipes.put(index + 1, existingSourceId, sourcePipe);
+   }
+
+   @Override
    public RenderPipe getPipe(String id) {
       return (RenderPipe) (orderedPipes.containsKey(id) ? orderedPipes.get(id) : null);
    }
