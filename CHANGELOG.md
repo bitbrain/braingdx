@@ -1,3 +1,7 @@
+# UNRELEASED Version 0.4.12
+
+* [[#131](https://github.com/bitbrain/braingdx/issues/131)] fix `IllegalStateException` when window size is scaled down to 0
+
 # Version 0.4.11
 
 * improve API around `NavigationMenu`

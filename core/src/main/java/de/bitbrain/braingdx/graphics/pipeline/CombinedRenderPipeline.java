@@ -25,13 +25,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.util.ShaderLoader;
-import de.bitbrain.braingdx.util.ViewportFactory;
 import org.apache.commons.collections.map.ListOrderedMap;
 
 import java.util.Collection;
@@ -67,6 +65,9 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
          @Override
          public FrameBuffer create(int width, int height) {
+            if (width < 1 || height < 1) {
+               return null;
+            }
             return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
          }
 
@@ -78,6 +79,9 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
          @Override
          public FrameBuffer create(int width, int height) {
+            if (width < 1 || height < 1) {
+               return null;
+            }
             return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
          }
 
@@ -154,6 +158,9 @@ public class CombinedRenderPipeline implements RenderPipeline {
    @SuppressWarnings("unchecked")
    @Override
    public void render(Batch batch, float delta) {
+      if (buffer == null) {
+         return;
+      }
       clearBuffer();
       for (CombinedRenderPipe pipe : (Collection<CombinedRenderPipe>) orderedPipes.values()) {
          pipe.beforeRender();
@@ -167,9 +174,11 @@ public class CombinedRenderPipeline implements RenderPipeline {
    }
 
    private void clearBuffer() {
-      buffer.begin();
-      Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
-      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-      buffer.end();
+      if (buffer != null) {
+         buffer.begin();
+         Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+         buffer.end();
+      }
    }
 }
