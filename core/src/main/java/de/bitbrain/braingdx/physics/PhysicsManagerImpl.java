@@ -20,12 +20,11 @@ public class PhysicsManagerImpl implements PhysicsManager, Updateable, Disposabl
    private int positionIterations = 10;
    private int velocityIterations = 10;
 
-   public PhysicsManagerImpl(GameWorld gameWorld, BehaviorManager behaviorManager) {
+   public PhysicsManagerImpl(World physicsWorld, GameWorld gameWorld, BehaviorManager behaviorManager) {
       this.gameWorld = gameWorld;
       this.behaviorManager = behaviorManager;
-      physicsWorld = new World(gravity, true);
+      this.physicsWorld = physicsWorld;
    }
-
 
    @Override
    public void dispose() {
@@ -39,8 +38,6 @@ public class PhysicsManagerImpl implements PhysicsManager, Updateable, Disposabl
 
    @Override
    public Body addBody(final BodyDef bodyDef, FixtureDef fixtureDef, Object type) {
-      Body body = physicsWorld.createBody(bodyDef);
-      body.createFixture(fixtureDef);
       GameObject object = gameWorld.addObject(new Mutator<GameObject>() {
          @Override
          public void mutate(GameObject target) {
@@ -48,31 +45,34 @@ public class PhysicsManagerImpl implements PhysicsManager, Updateable, Disposabl
          }
       });
       object.setType(type);
-      behaviorManager.apply(new BodyPhysicsBehavior(body), object);
-      body.setUserData(object);
-      return body;
+      return attachBody(bodyDef, fixtureDef, object);
    }
 
    @Override
    public Body addBody(final BodyDef bodyDef, float width, float height, Object type) {
-      final Body body = physicsWorld.createBody(bodyDef);
-      PolygonShape shape = new PolygonShape();
-      shape.setAsBox(width / 2f, height / 2f);
-      FixtureDef fixtureDef = new FixtureDef();
-      fixtureDef.shape = shape;
-      fixtureDef.density = 1f;
-      body.createFixture(fixtureDef);
       GameObject object = gameWorld.addObject(new Mutator<GameObject>() {
          @Override
          public void mutate(GameObject target) {
             target.setPosition(bodyDef.position.x, bodyDef.position.y);
          }
       });
+      FixtureDef fixtureDef = new FixtureDef();
+      PolygonShape shape = new PolygonShape();
+      shape.setAsBox(width / 2f, height / 2f);
+      fixtureDef.shape = shape;
+      fixtureDef.density = 1f;
       object.setType(type);
       object.setDimensions(width, height);
-      behaviorManager.apply(new BodyPhysicsBehavior(body), object);
-      body.setUserData(object);
-      shape.dispose();
+      return attachBody(bodyDef, fixtureDef, object);
+   }
+
+   @Override
+   public Body attachBody(BodyDef bodyDef, FixtureDef fixtureDef, GameObject gameObject) {
+      final Body body = physicsWorld.createBody(bodyDef);
+      body.createFixture(fixtureDef);
+      behaviorManager.apply(new BodyPhysicsBehavior(body), gameObject);
+      body.setUserData(gameObject);
+      fixtureDef.shape.dispose();
       return body;
    }
 

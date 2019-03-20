@@ -36,6 +36,7 @@ public class BodyPhysicsBehavior extends BehaviorAdapter {
          Shape shape = fixture.getShape();
          if (!(shape instanceof PolygonShape)) {
             source.setDimensions(shape.getRadius() * 2f, shape.getRadius() * 2f);
+            source.setPosition(body.getPosition().x - shape.getRadius(), body.getPosition().y - shape.getRadius());
          }
       }
    }

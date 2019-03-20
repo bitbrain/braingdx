@@ -95,13 +95,14 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
       behaviorManager = new BehaviorManager(world);
       batch = new SpriteBatch();
       inputManager = new InputManagerImpl();
-      boxWorld = new World(Vector2.Zero, false);
-      lightingManager = new LightingManager(new RayHandler(boxWorld), camera);
       renderManager = new GameObjectRenderManager(batch);
       gameCamera = new VectorGameCamera(camera, world);
       particleManager = new ParticleManager(behaviorManager);
       stage = new Stage(viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), uiCamera));
       worldStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera));
+      boxWorld = new World(Vector2.Zero, true);
+      physicsManager = new PhysicsManagerImpl(boxWorld, world, behaviorManager);
+      lightingManager = new LightingManager(new RayHandler(boxWorld), camera);
       renderPipeline = new CombinedRenderPipelineFactory(//
             shaderConfig,//
             world,//
@@ -118,7 +119,6 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
             world,//
             behaviorManager//
       );
-      physicsManager = new PhysicsManagerImpl(world, behaviorManager);
       wire();
    }
 
