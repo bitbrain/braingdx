@@ -1,4 +1,7 @@
-# UNRELEASED Version 0.4.12
+# Version 0.5.0
+
+**The physics update** - this update introduces a brand new`PhysicsManager` which Box2D integration out-of-the-box. Additionally,
+this update fixes some older bugs as well, such as particle emission issues.
 
 * [[#70](https://github.com/bitbrain/braingdx/issues/70)] integrate Box2D support via `PhysicsManager` accessible via `GameContext`
 * [[#131](https://github.com/bitbrain/braingdx/issues/131)] fix `IllegalStateException` when window size is scaled down to 0
