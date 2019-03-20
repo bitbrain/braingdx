@@ -45,7 +45,7 @@ public class GameWorld implements Iterable<GameObject> {
    private WorldBounds bounds = new WorldBounds() {
 
       @Override
-      public boolean isInBounds(GameObject object, OrthographicCamera camera) {
+      public boolean isInBounds(GameObject object) {
          return true;
       }
 
@@ -192,7 +192,7 @@ public class GameWorld implements Iterable<GameObject> {
    public void update(float delta) {
       Collections.sort(objects, comparator);
       for (GameObject object : objects) {
-         if (!bounds.isInBounds(object, camera) && !object.isPersistent()) {
+         if (!bounds.isInBounds(object) && !object.isPersistent()) {
             Gdx.app.debug("DEBUG", String.format("GameWorld - object %s is out of bounds! Remove...", object));
             remove(object);
             continue;
@@ -277,7 +277,7 @@ public class GameWorld implements Iterable<GameObject> {
     * Describes when a game object is in bounds.
     */
    public interface WorldBounds {
-      boolean isInBounds(GameObject object, OrthographicCamera camera);
+      boolean isInBounds(GameObject object);
 
       float getWorldWidth();
 

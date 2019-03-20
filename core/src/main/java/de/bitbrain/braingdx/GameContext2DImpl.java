@@ -46,6 +46,8 @@ import de.bitbrain.braingdx.graphics.postprocessing.ShaderManager;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.input.InputManager;
 import de.bitbrain.braingdx.input.InputManagerImpl;
+import de.bitbrain.braingdx.physics.PhysicsManager;
+import de.bitbrain.braingdx.physics.PhysicsManagerImpl;
 import de.bitbrain.braingdx.screens.ScreenTransitions;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
 import de.bitbrain.braingdx.tmx.TiledMapManagerImpl;
@@ -81,6 +83,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
    private final AudioManager audioManager;
    private final GameSettings settings;
    private final ShaderManager shaderManager;
+   private final PhysicsManagerImpl physicsManager;
 
    public GameContext2DImpl(ViewportFactory viewportFactory, ShaderConfig shaderConfig) {
       eventManager = new GameEventManagerImpl();
@@ -114,7 +117,8 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
             SharedAssetManager.getInstance(),//
             world,//
             behaviorManager//
-      );      
+      );
+      physicsManager = new PhysicsManagerImpl(world, behaviorManager);
       wire();
    }
 
@@ -204,10 +208,12 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
       tweenManager.killAll();
       renderManager.dispose();
       eventManager.clear();
+      physicsManager.dispose();
    }
 
    @Override
    public void updateAndRender(float delta) {
+      physicsManager.update(delta);
       inputManager.update(delta);
       behaviorManager.update(delta);
       tweenManager.update(delta);
@@ -250,5 +256,10 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
    @Override
    public ShaderManager getShaderManager() {
       return shaderManager;
+   }
+
+   @Override
+   public PhysicsManager getPhysicsManager() {
+      return physicsManager;
    }
 }

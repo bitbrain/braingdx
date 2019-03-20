@@ -47,13 +47,14 @@ public class BehaviorManager {
    }
 
    public void apply(final Behavior behavior, final GameObject source) {
+      final String id = source.getId();
       Gdx.app.postRunnable(new Runnable() {
          @Override
          public void run() {
-            List<Behavior> behaviors = localBehaviors.get(source.getId());
+            List<Behavior> behaviors = localBehaviors.get(id);
             if (behaviors == null) {
                behaviors = new ArrayList<Behavior>();
-               localBehaviors.put(source.getId(), behaviors);
+               localBehaviors.put(id, behaviors);
             }
             behaviors.add(behavior);
             if (behavior instanceof Updateable) {
@@ -92,10 +93,11 @@ public class BehaviorManager {
    }
 
    public void remove(final GameObject source) {
+      final String id = source.getId();
       Gdx.app.postRunnable(new Runnable() {
          @Override
          public void run() {
-            List<Behavior> behaviors = localBehaviors.remove(source.getId());
+            List<Behavior> behaviors = localBehaviors.remove(id);
             if (behaviors != null) {
                for (Behavior behavior : behaviors) {
                   if (behavior instanceof Updateable) {
