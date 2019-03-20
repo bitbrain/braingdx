@@ -1,6 +1,5 @@
 package de.bitbrain.braingdx.world;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import de.bitbrain.braingdx.world.GameWorld.WorldBounds;
 
@@ -20,12 +19,12 @@ public class SimpleWorldBounds implements WorldBounds {
    }
 
    @Override
-   public boolean isInBounds(GameObject object, OrthographicCamera camera) {
+   public boolean isInBounds(GameObject object) {
       target.x = object.getLeft();
       target.y = object.getTop();
       target.width = object.getWidth();
       target.height = object.getHeight();
-      return rect.contains(target) || target.overlaps(target);
+      return rect.contains(target) || rect.overlaps(target);
    }
 
    @Override
