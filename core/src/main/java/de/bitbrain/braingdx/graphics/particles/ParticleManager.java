@@ -39,7 +39,6 @@ import java.util.Set;
 public class ParticleManager implements Disposable {
 
    private final Set<InternalPooledEffect> effects = new HashSet<InternalPooledEffect>();
-   private final Set<InternalPooledEffect> removals = new HashSet<InternalPooledEffect>();
    private final Map<String, ParticleEffectPool> pools = new HashMap<String, ParticleEffectPool>();
    private final BehaviorManager behaviorManager;
    public ParticleManager(BehaviorManager behaviorManager) {
@@ -47,16 +46,17 @@ public class ParticleManager implements Disposable {
    }
 
    public void draw(Batch batch, float delta) {
-      for (InternalPooledEffect internal : effects) {
+      for (final InternalPooledEffect internal : effects) {
          if (internal.effect.isComplete()) {
-            removals.add(internal);
+            Gdx.app.postRunnable(new Runnable() {
+               @Override
+               public void run() {
+                  freeEffect(internal);
+               }
+            });
          }
          internal.effect.draw(batch, delta);
       }
-      for (InternalPooledEffect internal : removals) {
-         freeEffect(internal);
-      }
-      removals.clear();
    }
 
    public void attachEffect(String assetEffectId, GameObject object, final float offsetX, final float offsetY) {
@@ -93,7 +93,6 @@ public class ParticleManager implements Disposable {
       }
       effects.clear();
       pools.clear();
-      removals.clear();
    }
 
    private InternalPooledEffect ensureEffect(String particleId) {
@@ -112,7 +111,7 @@ public class ParticleManager implements Disposable {
    private void freeEffect(InternalPooledEffect effect) {
       ParticleEffectPool pool = pools.get(effect.assetId);
       if (pool != null) {
-         effect.effect.free();
+         effect.effect.reset();
          effects.remove(effect);
          pool.free(effect.effect);
       } else {

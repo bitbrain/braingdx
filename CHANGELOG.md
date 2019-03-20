@@ -3,7 +3,7 @@
 * [[#70](https://github.com/bitbrain/braingdx/issues/70)] integrate Box2D support via `PhysicsManager` accessible via `GameContext`
 * [[#131](https://github.com/bitbrain/braingdx/issues/131)] fix `IllegalStateException` when window size is scaled down to 0
 * [[#152](https://github.com/bitbrain/braingdx/issues/152)] extend `RenderPipeline` API by new methods
-* [[#152](https://github.com/bitbrain/braingdx/issues/152)] extend `RenderPipeline` API by new methods
+* [[#153](https://github.com/bitbrain/braingdx/issues/153)] fix an issue where particle effects where emitted twice
 * [[#182](https://github.com/bitbrain/braingdx/issues/182)] fix collision bug within `SimpleWorldBounds`
 
 # Version 0.4.11
