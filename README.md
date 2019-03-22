@@ -32,6 +32,7 @@ This framework provides:
 * **Tweening pipeline** Using [Universal Tween Engine](https://github.com/AurelienRibon/universal-tween-engine) to make the most of animations in a few lines.
 * **World rendering pipeline** no more custom Java classes for game entities. *brainGDX* offers a way to add objects to a game world, handle physics, collision detection and updating out of the box.
 * **Lighting** brainGDX comes with [Box2DLights](https://github.com/libgdx/box2dlights) under the hood. Apply and configure dynamic lighting even for your entities.
+* **Physics** this framework has Box2D support out of the box!
 * **Particles** a game is no game without proper particles. brainGDX comes with full particle support. Attach particles to entities, apply behaviors to particles or define particle fields and effects out of the box.
 * **Parallaxing** beautiful parallax scrolling effects await you in this framework.
 * **Scene shaders** apply different shaders like Bloom, Antialiasing or Vignette effects to your scenes.
