@@ -18,7 +18,11 @@
 
 > Another game development framework? Really?! 🤔
 
-In Java world, we game developers already have [libgdx](https://libgdx.badlogicgames.com/) in order to create beautiful, feature-rich games. It allows us to be highly flexible how we design our game, however it is not ideal for small game jams. Especially in the first hours time is spent on wiring everything together, creating game object classes, setting up lighting, physics, tweening, writing shaders and particle management as well as sound manipulation. From experience, this can take several hours which is costly, especially on small 24 hour game jams. You could move away from Java and use a popular game engine instead, but we Java developers like it simple and we do *not* want to give up on Java! Alternatively, all the boilerplate work should be done for you - and this is where **braingdx** comes into play!
+In Java world, we game developers already have [libgdx](https://libgdx.badlogicgames.com/) in order to create beautiful, feature-rich games. It allows us to be highly flexible how we design our game, however it is not ideal for small game jams. Especially in the first hours time is spent on wiring everything together, creating game object classes, setting up lighting, physics, tweening, writing shaders and particle management as well as sound manipulation. 
+
+From experience, this can take several hours which is costly, especially on small 24 hour game jams. You could move away from Java and use a popular game engine instead, but we Java developers like it simple and we do *not* want to give up on Java! Alternatively, all the boilerplate work should be done for you - and this is where **braingdx** comes into play!
+
+This framework does not replace [libgdx](https://libgdx.badlogicgames.com/) but gives your game superpowers!
 
 # Features
 
