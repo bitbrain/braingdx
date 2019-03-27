@@ -30,6 +30,13 @@ public interface GameCamera extends Resizeable {
    void setTargetTrackingSpeed(float speed);
 
    /**
+    * Sets a new speed value
+    *
+    * @param speed
+    */
+   void setTargetTrackingSpeed(float speedX, float speedY);
+
+   /**
     * Sets a new zoom scale factor
     *
     * @param zoomScale
@@ -140,6 +147,10 @@ public interface GameCamera extends Resizeable {
     * Returns the currently configured tracking speed
     */
    float getTargetTrackingSpeed();
+
+   float getTargetTrackingSpeedX();
+
+   float getTargetTrackingSpeedY();
 
    /**
     * Applies screen shake to this camera.

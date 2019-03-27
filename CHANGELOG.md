@@ -1,3 +1,7 @@
+# Version 0.5.1
+
+* [[#184](https://github.com/bitbrain/braingdx/issues/184)] implement concept of vertical and horizontal camera speed
+
 # Version 0.5.0
 
 **The physics update** - this update introduces a brand new`PhysicsManager` which Box2D integration out-of-the-box. Additionally,

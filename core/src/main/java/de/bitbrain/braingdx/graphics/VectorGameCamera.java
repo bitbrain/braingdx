@@ -60,7 +60,8 @@ public class VectorGameCamera implements GameCamera {
    private final BigDecimalVector2 tmp = new BigDecimalVector2();
    private BigDecimal velocityX, velocityY;
    private GameObject target;
-   private BigDecimal speed = new BigDecimal(0.001f, PRECISION);
+   private BigDecimal speedX = new BigDecimal(0.001f, PRECISION);
+   private BigDecimal speedY = new BigDecimal(0.001f, PRECISION);
    private BigDecimal zoomScale = new BigDecimal(0.0025f, PRECISION);
    private boolean focusRequested = false;
    private BigDecimal defaultZoom = new BigDecimal(1, PRECISION);
@@ -169,7 +170,13 @@ public class VectorGameCamera implements GameCamera {
 
    @Override
    public void setTargetTrackingSpeed(float speed) {
-      this.speed = new BigDecimal(Math.abs(speed), PRECISION);
+      setTargetTrackingSpeed(speed, speed);
+   }
+
+   @Override
+   public void setTargetTrackingSpeed(float speedX, float speedY) {
+      this.speedX = new BigDecimal(Math.abs(speedX), PRECISION);
+      this.speedY = new BigDecimal(Math.abs(speedY), PRECISION);
    }
 
    @Override
@@ -251,7 +258,17 @@ public class VectorGameCamera implements GameCamera {
 
    @Override
    public float getTargetTrackingSpeed() {
-      return speed.floatValue();
+      return getTargetTrackingSpeedX();
+   }
+
+   @Override
+   public float getTargetTrackingSpeedX() {
+      return speedX.floatValue();
+   }
+
+   @Override
+   public float getTargetTrackingSpeedY() {
+      return speedY.floatValue();
    }
 
    @Override
@@ -312,9 +329,10 @@ public class VectorGameCamera implements GameCamera {
 
       tmp.set(velocityX, velocityY);
       BigDecimal distance = tmp.len();
-      BigDecimal overAllSpeed = distance.multiply(speed);
-      BigDecimal deltaX = velocityX.multiply(overAllSpeed).multiply(preciseDelta);
-      BigDecimal deltaY = velocityY.multiply(overAllSpeed).multiply(preciseDelta);
+      BigDecimal overAllSpeedX = distance.multiply(speedX);
+      BigDecimal overAllSpeedY = distance.multiply(speedY);
+      BigDecimal deltaX = velocityX.multiply(overAllSpeedX).multiply(preciseDelta);
+      BigDecimal deltaY = velocityY.multiply(overAllSpeedY).multiply(preciseDelta);
 
       camera.zoom = defaultZoom.add(zoomScale.multiply(distance)).floatValue();
 
