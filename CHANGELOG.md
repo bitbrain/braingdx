@@ -1,3 +1,7 @@
+# Version 0.5.2
+
+* fixed an issue where behaviours would not get removed on attached particle effects which are not continuous.
+
 # Version 0.5.1
 
 * [[#184](https://github.com/bitbrain/braingdx/issues/184)] implement concept of vertical and horizontal camera speed

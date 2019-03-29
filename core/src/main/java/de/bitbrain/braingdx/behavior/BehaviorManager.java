@@ -92,6 +92,20 @@ public class BehaviorManager {
       });
    }
 
+   public void remove(final GameObject source, final Behavior behavior) {
+      final String id = source.getId();
+      Gdx.app.postRunnable(new Runnable() {
+         @Override
+         public void run() {
+            List<Behavior> behaviors = localBehaviors.get(id);
+            if (behaviors != null && behaviors.contains(behavior)) {
+               behaviors.remove(behavior);
+               behavior.onDetach(source);
+            }
+         }
+      });
+   }
+
    public void remove(final GameObject source) {
       final String id = source.getId();
       Gdx.app.postRunnable(new Runnable() {

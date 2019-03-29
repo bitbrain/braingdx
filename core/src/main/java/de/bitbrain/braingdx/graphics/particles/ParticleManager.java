@@ -70,7 +70,7 @@ public class ParticleManager implements Disposable {
          @Override
          public void update(GameObject source, float delta) {
             if (effect.effect.isComplete() && effects.contains(effect)) {
-               freeEffect(effect);
+               behaviorManager.remove(source, this);
             } else {
                effect.effect.setPosition(source.getLeft() + offsetX, source.getTop() + offsetY);
             }
