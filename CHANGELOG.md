@@ -1,3 +1,7 @@
+# Version 0.5.3
+
+* add sound styles to `NavigationMenu`
+
 # Version 0.5.2
 
 * fixed an issue where behaviours would not get removed on attached particle effects which are not continuous.

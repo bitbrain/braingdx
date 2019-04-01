@@ -1,5 +1,6 @@
 package de.bitbrain.braingdx.ui;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -21,6 +22,8 @@ public class NavigationMenu<T extends Button> extends Table implements Navigatea
       public boolean checkMode = false;
       public float padding;
       public boolean vertical = true;
+      public Sound hoverSound = null;
+      public Sound enterSound = null;
    }
 
    private List<Button> buttons = new ArrayList<Button>();
@@ -108,6 +111,9 @@ public class NavigationMenu<T extends Button> extends Table implements Navigatea
                cl.clicked(new InputEvent(), 0f, 0f);
             }
          }
+         if (style.enterSound != null) {
+            style.enterSound.play();
+         }
          button.setChecked(true);
       }
    }
@@ -126,6 +132,9 @@ public class NavigationMenu<T extends Button> extends Table implements Navigatea
       for (int i = 0; i < buttons.size(); ++i) {
          Button button = buttons.get(i);
          button.setChecked(i == index);
+      }
+      if (currentCheckIndex >= 0 && index != currentCheckIndex && style.hoverSound != null) {
+         style.hoverSound.play();
       }
       currentCheckIndex = index;
    }
