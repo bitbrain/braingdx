@@ -24,6 +24,8 @@ From experience, this can take several hours which is costly, especially on smal
 
 This framework does not replace [libgdx](https://libgdx.badlogicgames.com/) but gives your game superpowers!
 
+![rpg](rpg.gif)
+
 # Features
 
 This framework provides:
@@ -41,6 +43,8 @@ This framework provides:
 * **Actor library (button menu, nameplates, tooltips)** ever wanted to write an RPG or just show little tooltips on the screen? brainGDX provides several UI components for your needs.
 * **Extended Tiled Map support** Ever wanted to write a multi-layered game by using the map editor of your choice? brainGDX provides a framework to render and handle multi-layered 2D maps
 * **Entity behaviors** brainGDX comes with a various palette of inbuilt entity behaviors, such as flickering torch lights, WASD movement, random movement or directional movement.
+
+![physics](physics.gif)
 
 ## Roadmap
 
