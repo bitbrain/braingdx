@@ -23,6 +23,15 @@ public interface GameCamera extends Resizeable {
    void update(float delta);
 
    /**
+    * Sets a new threshold to where the camera should stop tracking.
+    * The distance also takes camera zoom into account.
+    * Defaults to 0.
+    *
+    * @param distanceThreshold
+    */
+   void setDistanceStoppingThreshold(float distanceThreshold);
+
+   /**
     * Sets a new speed value
     *
     * @param speed

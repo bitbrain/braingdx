@@ -14,11 +14,17 @@
  */
 package de.bitbrain.braingdx.graphics.lighting;
 
+import aurelienribon.tweenengine.BaseTween;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenCallback;
+import aurelienribon.tweenengine.TweenEquation;
 import box2dLight.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import de.bitbrain.braingdx.tweens.ColorTween;
+import de.bitbrain.braingdx.tweens.SharedTweenManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +45,7 @@ public class LightingManager {
    private final Map<String, ConeLight> coneLights = new HashMap<String, ConeLight>();
    private final OrthographicCamera camera;
    private final LightFactory lightFactory;
+   private Color ambientLightColor = Color.WHITE.cpy();
    private int rays;
 
    public LightingManager(RayHandler rayHandler, OrthographicCamera camera) {
@@ -73,7 +80,7 @@ public class LightingManager {
       this.handler = rayHandler;
       this.camera = camera;
       setConfig(new LightingConfig());
-      setAmbientLight(Color.WHITE);
+      setAmbientLight(Color.WHITE.cpy());
       this.lightFactory = lightFactory;
    }
 
@@ -86,8 +93,32 @@ public class LightingManager {
       this.rays = lightingConfig.rays;
    }
 
-   public void setAmbientLight(Color color) {
-      handler.setAmbientLight(color);
+   public void setAmbientLight(Color ambientLightColor) {
+      this.ambientLightColor = ambientLightColor.cpy();
+      handler.setAmbientLight(ambientLightColor);
+   }
+
+   /**
+    * Sets a new ambient light with a fading transition.
+    */
+   public void setAmbientLight(Color color, float interval, TweenEquation equation) {
+      SharedTweenManager.getInstance().killTarget(ambientLightColor);
+      Tween.to(ambientLightColor, ColorTween.R, interval)
+            .target(color.r)
+            .ease(equation)
+            .start(SharedTweenManager.getInstance());
+      Tween.to(ambientLightColor, ColorTween.G, interval)
+            .target(color.g)
+            .ease(equation)
+            .start(SharedTweenManager.getInstance());
+      Tween.to(ambientLightColor, ColorTween.B, interval)
+            .target(color.b)
+            .ease(equation)
+            .start(SharedTweenManager.getInstance());
+      Tween.to(ambientLightColor, ColorTween.A, interval)
+            .target(color.a)
+            .ease(equation)
+            .start(SharedTweenManager.getInstance());
    }
 
    public PointLight addPointLight(String id, Vector2 pos, float distance, Color color) {
@@ -172,6 +203,7 @@ public class LightingManager {
    }
 
    void beforeRender() {
+      handler.setAmbientLight(ambientLightColor);
       handler.setCombinedMatrix(camera);
       handler.update();
       handler.prepareRender();

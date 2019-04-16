@@ -83,6 +83,8 @@ public class VectorGameCamera implements GameCamera {
       Tween.registerAccessor(Vector2.class, new VectorTween());
    }
 
+   private float distanceThreshold = 0;
+
    public VectorGameCamera(OrthographicCamera camera, GameWorld world) {
       this.camera = camera;
       velocityX = new BigDecimal(0f);
@@ -139,6 +141,11 @@ public class VectorGameCamera implements GameCamera {
       camera.position.y += shake.y;
       camera.update();
       lastShake.set(shake);
+   }
+
+   @Override
+   public void setDistanceStoppingThreshold(float distanceThreshold) {
+      this.distanceThreshold = distanceThreshold;
    }
 
    @Override
@@ -328,7 +335,13 @@ public class VectorGameCamera implements GameCamera {
       velocityY = targetTop.add(targetHeight.divide(TWO, PRECISION)).subtract(cameraTop);
 
       tmp.set(velocityX, velocityY);
+
       BigDecimal distance = tmp.len();
+
+      if (distance.floatValue() < (distanceThreshold * camera.zoom)) {
+         distance = ZERO;
+      }
+
       BigDecimal overAllSpeedX = distance.multiply(speedX);
       BigDecimal overAllSpeedY = distance.multiply(speedY);
       BigDecimal deltaX = velocityX.multiply(overAllSpeedX).multiply(preciseDelta);

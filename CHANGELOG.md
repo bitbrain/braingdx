@@ -1,3 +1,8 @@
+# Version 0.5.4
+
+* [[#185](https://github.com/bitbrain/braingdx/issues/185)] add new `setDistanceStoppingThreshold` method to `GameCamera` which allows defining a threshold to avoid flickering
+* add a new overloaded `setAmbientLight` method to `LightingManager` which allows fading the ambient light
+
 # Version 0.5.3
 
 * add sound styles to `NavigationMenu`
