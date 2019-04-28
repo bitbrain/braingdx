@@ -59,6 +59,9 @@ public class CombinedRenderPipeline implements RenderPipeline {
    private final SpriteBatch internalBatch;
    private FrameBuffer buffer;
    private OrthographicCamera camera;
+   private boolean hasEffects;
+   private int bufferWidth;
+   private int bufferHeight;
 
    public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
@@ -114,7 +117,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
       if (buffer != null) {
          buffer.dispose();
       }
-      buffer = bufferFactory.create(width, height);
+      this.bufferWidth = width;
+      this.bufferHeight = height;
       camera.setToOrtho(true, width, height);
    }
 
@@ -122,6 +126,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
    public void put(String id, RenderLayer layer, PostProcessorEffect... effects) {
       CombinedRenderPipe pipe = new CombinedRenderPipe(layer, processor, internalBatch, effects);
       orderedPipes.put(id, pipe);
+      this.hasEffects = hasEffects || effects.length > 0;
    }
 
    @Override
@@ -132,6 +137,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
          return;
       }
       orderedPipes.put(index + 1, id, new CombinedRenderPipe(layer, processor, internalBatch, effects));
+      this.hasEffects = hasEffects || effects.length > 0;
    }
 
    @Override
@@ -142,6 +148,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
          return;
       }
       orderedPipes.put(index > 0 ? index - 1 : index, id, new CombinedRenderPipe(layer, processor, internalBatch, effects));
+      this.hasEffects = hasEffects || effects.length > 0;
    }
 
    @Override
@@ -152,6 +159,13 @@ public class CombinedRenderPipeline implements RenderPipeline {
          return;
       }
       orderedPipes.remove(existingSourceId);
+      for (Object o : orderedPipes.valueList()) {
+         CombinedRenderPipe pipe = (CombinedRenderPipe)o;
+         if (pipe.hasEffects()) {
+            return;
+         }
+      }
+      this.hasEffects = false;
    }
 
    @Override
@@ -162,6 +176,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
          return;
       }
       getPipe(existingSourceId).setEffects(effects);
+      orderedPipes.remove(existingSourceId);
    }
 
    @Override
@@ -200,8 +215,12 @@ public class CombinedRenderPipeline implements RenderPipeline {
    }
 
    @Override
-   public RenderPipe getPipe(String id) {
-      return (RenderPipe) (orderedPipes.containsKey(id) ? orderedPipes.get(id) : null);
+   public void addEffects(String existingSourceId, PostProcessorEffect... effects) {
+      RenderPipe pipe = getPipe(existingSourceId);
+      if (pipe != null) {
+         pipe.addEffects(effects);
+         this.hasEffects = hasEffects || effects.length > 0;
+      }
    }
 
    @SuppressWarnings("unchecked")
@@ -213,19 +232,24 @@ public class CombinedRenderPipeline implements RenderPipeline {
    @SuppressWarnings("unchecked")
    @Override
    public void render(Batch batch, float delta) {
-      if (buffer == null) {
-         return;
+      if (buffer == null && hasEffects) {
+         buffer = bufferFactory.create(this.bufferWidth, this.bufferHeight);
+      } else if (buffer != null && !hasEffects) {
+         buffer.dispose();
+         buffer = null;
       }
       clearBuffer();
       for (CombinedRenderPipe pipe : (Collection<CombinedRenderPipe>) orderedPipes.values()) {
          pipe.beforeRender();
          pipe.render(batch, delta, buffer);
       }
-      internalBatch.setProjectionMatrix(camera.combined);
-      internalBatch.begin();
-      internalBatch.setColor(Color.WHITE);
-      internalBatch.draw(buffer.getColorBufferTexture(), 0f, 0f);
-      internalBatch.end();
+      if (hasEffects) {
+         internalBatch.setProjectionMatrix(camera.combined);
+         internalBatch.begin();
+         internalBatch.setColor(Color.WHITE);
+         internalBatch.draw(buffer.getColorBufferTexture(), 0f, 0f);
+         internalBatch.end();
+      }
    }
 
    private void clearBuffer() {
@@ -235,5 +259,9 @@ public class CombinedRenderPipeline implements RenderPipeline {
          Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
          buffer.end();
       }
+   }
+
+   private RenderPipe getPipe(String id) {
+      return (RenderPipe) (orderedPipes.containsKey(id) ? orderedPipes.get(id) : null);
    }
 }

@@ -105,8 +105,8 @@ public class LayeredRenderPipeline implements RenderPipeline {
    }
 
    @Override
-   public RenderPipe getPipe(String id) {
-      return pipes.get(id);
+   public void addEffects(String existingSourceId, PostProcessorEffect... effects) {
+      throw new UnsupportedOperationException("Not implemented yet!");
    }
 
    @Override

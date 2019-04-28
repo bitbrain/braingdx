@@ -31,4 +31,6 @@ public interface RenderPipe {
    void addEffects(PostProcessorEffect... effects);
 
    void setEffects(PostProcessorEffect[] effects);
+
+   boolean hasEffects();
 }

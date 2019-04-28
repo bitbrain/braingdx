@@ -51,7 +51,7 @@ public class RenderPipelineTest {
    public void testAddLayer() {
       final String id = "my-id";
       pipeline.put(id, mock(RenderLayer.class));
-      assertThat(pipeline.getPipe(id)).isNotNull();
+      assertThat(pipeline.getPipeIds()).contains("my-id");
    }
 
    @Test

@@ -1,3 +1,10 @@
+# Version 0.5.5
+
+* [[#187](https://github.com/bitbrain/braingdx/issues/187)] do not create frame buffers when no shaders are being used
+* remove `RenderPipeline.getPipe` method
+* add `RenderPipeline.addEffects` method
+* add `RenderPipe.hasEffects` method
+
 # Version 0.5.4
 
 * [[#185](https://github.com/bitbrain/braingdx/issues/185)] add new `setDistanceStoppingThreshold` method to `GameCamera` which allows defining a threshold to avoid flickering

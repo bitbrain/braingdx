@@ -59,9 +59,16 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
       batchPostProcessor.addEffects(effects);
    }
 
+   @Override
+   public boolean hasEffects() {
+      return batchPostProcessor.hasEffects();
+   }
+
    public void render(Batch batch, float delta, FrameBuffer buffer) {
       if (isEnabled()) {
-         if (batchPostProcessor.hasEffects()) {
+         if (buffer == null) {
+            layer.render(batch, delta);
+         } else if (batchPostProcessor.hasEffects()) {
             batchPostProcessor.begin();
             this.batch.begin();
             this.batch.draw(buffer.getColorBufferTexture(), 0f, 0f);

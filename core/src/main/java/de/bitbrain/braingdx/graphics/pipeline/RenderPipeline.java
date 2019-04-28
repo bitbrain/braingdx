@@ -17,6 +17,7 @@ package de.bitbrain.braingdx.graphics.pipeline;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
+import de.bitbrain.braingdx.graphics.postprocessing.filters.CrtScreen;
 import de.bitbrain.braingdx.util.Resizeable;
 
 import java.util.Collection;
@@ -95,7 +96,7 @@ public interface RenderPipeline extends Disposable, Resizeable {
     * @param existingSourceId an existing layer
     * @return an existing {@link RenderPipe}
     */
-   RenderPipe getPipe(String existingSourceId);
+   void addEffects(String existingSourceId, PostProcessorEffect... effects);
 
    /**
     * Returns an ordered collection of all registered layers
