@@ -19,10 +19,12 @@ import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquation;
 import box2dLight.*;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import de.bitbrain.braingdx.tweens.ColorTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 
@@ -35,7 +37,7 @@ import java.util.Map;
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-public class LightingManager {
+public class LightingManager implements Disposable {
 
    private static final int DEFAULT_RAYS = 80;
    private final RayHandler handler;
@@ -47,6 +49,8 @@ public class LightingManager {
    private final LightFactory lightFactory;
    private Color ambientLightColor = Color.WHITE.cpy();
    private int rays;
+
+   private boolean disposed = false;
 
    public LightingManager(RayHandler rayHandler, OrthographicCamera camera) {
       this(rayHandler, camera, new LightFactory() {
@@ -154,40 +158,52 @@ public class LightingManager {
       return light;
    }
 
-   public boolean removePointLight(String id) {
-      PointLight light = pointLights.remove(id);
-      if (light != null) {
-         light.remove();
-         return true;
-      }
-      return false;
+   public void removePointLight(final String id) {
+      Gdx.app.postRunnable(new Runnable() {
+         @Override
+         public void run() {
+            PointLight light = pointLights.remove(id);
+            if (light != null) {
+               light.remove();
+            }
+         }
+      });
    }
 
-   public boolean removeDirectionalLight(String id) {
-      DirectionalLight light = dirLights.remove(id);
-      if (light != null) {
-         light.remove();
-         return true;
-      }
-      return false;
+   public void removeDirectionalLight(final String id) {
+      Gdx.app.postRunnable(new Runnable() {
+         @Override
+         public void run() {
+            DirectionalLight light = dirLights.remove(id);
+            if (light != null) {
+               light.remove();
+            }
+         }
+      });
    }
 
-   public boolean removeChainLight(String id) {
-      ChainLight light = chainLights.remove(id);
-      if (light != null) {
-         light.remove();
-         return true;
-      }
-      return false;
+   public void removeChainLight(final String id) {
+      Gdx.app.postRunnable(new Runnable() {
+         @Override
+         public void run() {
+            ChainLight light = chainLights.remove(id);
+            if (light != null) {
+               light.remove();
+            }
+         }
+      });
    }
 
-   public boolean removeConeLight(String id) {
-      ConeLight light = coneLights.remove(id);
-      if (light != null) {
-         light.remove();
-         return true;
-      }
-      return false;
+   public void removeConeLight(final String id) {
+      Gdx.app.postRunnable(new Runnable() {
+         @Override
+         public void run() {
+            ConeLight light = coneLights.remove(id);
+            if (light != null) {
+               light.remove();
+            }
+         }
+      });
    }
 
    public void clear() {
@@ -198,11 +214,17 @@ public class LightingManager {
       handler.removeAll();
    }
 
-   void render(Batch batch, float delta) {
+   void render() {
+      if (disposed) {
+         return;
+      }
       handler.renderOnly();
    }
 
    void beforeRender() {
+      if (disposed) {
+         return;
+      }
       handler.setAmbientLight(ambientLightColor);
       handler.setCombinedMatrix(camera);
       handler.update();
@@ -211,6 +233,14 @@ public class LightingManager {
 
    void resize(int width, int height) {
       handler.resizeFBO(width, height);
+   }
+
+   @Override
+   public void dispose() {
+      if (!disposed) {
+         handler.dispose();
+         disposed = true;
+      }
    }
 
    public static interface LightFactory {

@@ -1,3 +1,7 @@
+# Version 0.5.6
+
+* [[#190](https://github.com/bitbrain/braingdx/issues/190)] fix a crash due to box2dlights ray handler not being disposed
+
 # Version 0.5.5
 
 * [[#187](https://github.com/bitbrain/braingdx/issues/187)] do not create frame buffers when no shaders are being used

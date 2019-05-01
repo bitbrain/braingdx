@@ -2,6 +2,8 @@ package de.bitbrain.braingdx.graphics.lighting;
 
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -11,13 +13,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LightingManagerTest {
@@ -26,31 +29,41 @@ public class LightingManagerTest {
    private RayHandler rayHandler;
 
    @Mock
-   private OrthographicCamera camera;
+   private LightFactory lightFactory;
 
    @Mock
-   private LightFactory lightFactory;
+   PointLight pointLightMock;
 
    @InjectMocks
    private LightingManager lightingManager;
 
    @Before
    public void beforeTest() {
-      PointLight pointLightMock = mock(PointLight.class);
       when(lightFactory.newPointLight(any(RayHandler.class), anyInt(), any(Color.class), anyFloat(), anyFloat(), anyFloat())).thenReturn(pointLightMock);
+      Application mockApp = mock(Application.class);
+      Gdx.app = mockApp;
+      doAnswer(new Answer<Void>() {
+         @Override
+         public Void answer(InvocationOnMock invocation) {
+            ((Runnable)invocation.getArguments()[0]).run();
+            return null;
+         }
+      }).when(mockApp).postRunnable(any(Runnable.class));
    }
 
    @Test
    public void testRemoveLight_Point() {
       lightingManager.addPointLight("pointlight", new Vector2(), 0f, Color.WHITE);
-      assertTrue(lightingManager.removePointLight("pointlight"));
+      lightingManager.removePointLight("pointlight");
+      verify(pointLightMock, times(1)).remove();
    }
 
    @Test
    public void testClear() {
       lightingManager.addPointLight("", new Vector2(), 0f, Color.WHITE);
       lightingManager.clear();
-      assertFalse(lightingManager.removePointLight("pointlight"));
+      lightingManager.removePointLight("pointlight");
+      verify(pointLightMock, never()).remove();
    }
 
 }

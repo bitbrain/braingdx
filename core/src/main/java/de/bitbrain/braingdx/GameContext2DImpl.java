@@ -209,6 +209,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
       renderManager.dispose();
       eventManager.clear();
       physicsManager.dispose();
+      lightingManager.dispose();
    }
 
    @Override

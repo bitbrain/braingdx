@@ -19,7 +19,7 @@ public class LightingManagerRenderLayer implements RenderLayer, Resizeable {
 
    @Override
    public void render(Batch batch, float delta) {
-      manager.render(batch, delta);
+      manager.render();
    }
 
    @Override
