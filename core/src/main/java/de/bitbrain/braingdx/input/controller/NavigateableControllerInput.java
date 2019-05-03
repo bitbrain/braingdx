@@ -40,11 +40,11 @@ public class NavigateableControllerInput extends ControllerAdapter {
 
    @Override
    public boolean povMoved(Controller controller, int povIndex, PovDirection value) {
-      if (value == PovDirection.north) {
+      if (value == PovDirection.north || value == PovDirection.west) {
          navigateable.previous();
          return true;
       }
-      if (value == PovDirection.south) {
+      if (value == PovDirection.south || value == PovDirection.east) {
          navigateable.next();
          return true;
       }

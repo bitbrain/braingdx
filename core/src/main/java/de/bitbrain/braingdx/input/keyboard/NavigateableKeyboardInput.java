@@ -17,11 +17,11 @@ public class NavigateableKeyboardInput extends InputAdapter {
 
    @Override
    public boolean keyDown(int keycode) {
-      if (keycode == Input.Keys.S || keycode == Input.Keys.DOWN) {
+      if (keycode == Input.Keys.S || keycode == Input.Keys.DOWN || keycode == Input.Keys.A || keycode == Input.Keys.LEFT) {
          navigateable.next();
          return true;
       }
-      if (keycode == Input.Keys.W || keycode == Input.Keys.UP) {
+      if (keycode == Input.Keys.W || keycode == Input.Keys.UP || keycode == Input.Keys.D || keycode == Input.Keys.RIGHT) {
          navigateable.previous();
          return true;
       }
