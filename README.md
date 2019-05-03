@@ -72,6 +72,9 @@ compile "io.github.bitbrain:braingdx-core:$braingdxVersion:sources"
 compile "io.github.bitbrain:braingdx-core:$braingdxVersion:javadoc"
 ```
 Replace `$brainGdxVersion` with the version on Maven Central.
+
+**Important!** This framework requires `box2dlights > 1.5.x` which automatically comes with this framework as a dependency. Make sure to remove any `box2dlights` dependencies from your core setup which are <1.5!
+
 After that you are ready to go!
 Learn [here](https://github.com/bitbrain/braingdx/wiki) how to integrate **braingdx** into your **libgdx** game!
 
