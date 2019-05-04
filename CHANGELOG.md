@@ -1,3 +1,8 @@
+# Version 0.5.7
+
+* deleted `GameInputAdaptr` - use `GestureListener` via libgdx instead
+* implemented additional input variations for `Navigateable`
+
 # Version 0.5.6
 
 * [[#190](https://github.com/bitbrain/braingdx/issues/190)] fix a crash due to box2dlights ray handler not being disposed
@@ -5,18 +10,18 @@
 # Version 0.5.5
 
 * [[#187](https://github.com/bitbrain/braingdx/issues/187)] do not create frame buffers when no shaders are being used
-* remove `RenderPipeline.getPipe` method
-* add `RenderPipeline.addEffects` method
-* add `RenderPipe.hasEffects` method
+* removed `RenderPipeline.getPipe` method
+* added `RenderPipeline.addEffects` method
+* added `RenderPipe.hasEffects` method
 
 # Version 0.5.4
 
-* [[#185](https://github.com/bitbrain/braingdx/issues/185)] add new `setDistanceStoppingThreshold` method to `GameCamera` which allows defining a threshold to avoid flickering
-* add a new overloaded `setAmbientLight` method to `LightingManager` which allows fading the ambient light
+* [[#185](https://github.com/bitbrain/braingdx/issues/185)] added new `setDistanceStoppingThreshold` method to `GameCamera` which allows defining a threshold to avoid flickering
+* added a new overloaded `setAmbientLight` method to `LightingManager` which allows fading the ambient light
 
 # Version 0.5.3
 
-* add sound styles to `NavigationMenu`
+* added sound styles to `NavigationMenu`
 
 # Version 0.5.2
 
