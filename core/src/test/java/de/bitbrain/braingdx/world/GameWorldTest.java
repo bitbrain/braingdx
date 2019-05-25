@@ -2,11 +2,15 @@ package de.bitbrain.braingdx.world;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import de.bitbrain.braingdx.util.GdxUtils;
+import de.bitbrain.braingdx.util.Mutator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.Comparator;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -73,5 +77,59 @@ public class GameWorldTest {
       world.addListener(fakeIdSupplier);
       world.update(0f);
       assertThat(object.getId()).isEqualTo(fakeIdSupplier.getCurrentId());
+   }
+
+   @Test
+   public void testGetObjects() {
+      GameObject object1 = world.addObject(new Mutator<GameObject>() {
+         @Override
+         public void mutate(GameObject target) {
+            target.setLeft(10);
+         }
+      });
+      GameObject object2 = world.addObject(new Mutator<GameObject>() {
+         @Override
+         public void mutate(GameObject target) {
+            target.setLeft(30);
+         }
+      });
+      GameObject object3 = world.addObject(new Mutator<GameObject>() {
+         @Override
+         public void mutate(GameObject target) {
+            target.setLeft(20);
+         }
+      });
+      List<GameObject> sorted = world.getObjects();
+      assertThat(sorted).containsExactly(object1, object2, object3);
+   }
+
+   @Test
+   public void testGetObjectsSorted() {
+      GameObject object1 = world.addObject(new Mutator<GameObject>() {
+         @Override
+         public void mutate(GameObject target) {
+            target.setLeft(10);
+         }
+      });
+      GameObject object2 = world.addObject(new Mutator<GameObject>() {
+         @Override
+         public void mutate(GameObject target) {
+            target.setLeft(30);
+         }
+      });
+      GameObject object3 = world.addObject(new Mutator<GameObject>() {
+         @Override
+         public void mutate(GameObject target) {
+            target.setLeft(20);
+         }
+      });
+      List<GameObject> sorted = world.getObjects(new Comparator<GameObject>() {
+
+         @Override
+         public int compare(GameObject o1, GameObject o2) {
+            return (int) (o1.getLeft() - o2.getLeft());
+         }
+      });
+      assertThat(sorted).containsExactly(object1, object3, object2);
    }
 }

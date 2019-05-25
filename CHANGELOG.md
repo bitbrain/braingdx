@@ -1,3 +1,7 @@
+# Version 0.5.8
+
+* add new `getObjects` method to `GameWorld`
+
 # Version 0.5.7
 
 * deleted `GameInputAdaptr` - use `GestureListener` via libgdx instead

@@ -212,8 +212,31 @@ public class GameWorld implements Iterable<GameObject> {
       }
    }
 
+   /**
+    * Gets an object by id
+    */
    public GameObject getObjectById(String id) {
       return identityMap.get(id);
+   }
+
+   /**
+    * Returns a list of all objects within this world.
+    */
+   public List<GameObject> getObjects() {
+      return getObjects(null);
+   }
+
+
+   /**
+    * Returns a list of all objects within this world, ordered by the comparator provided. The comparator
+    * can be null.
+    */
+   public List<GameObject> getObjects(Comparator<GameObject> comparator) {
+      List<GameObject> result = new ArrayList<GameObject>(objects);
+      if (comparator != null) {
+         Collections.sort(result, comparator);
+      }
+      return result;
    }
 
    /**
