@@ -1,6 +1,9 @@
-# UNRELEASED Version 0.5.9
+# Version 0.5.9
+
+This version introduces string manipulation with additional tween engine support:
 
 * [[#196](https://github.com/bitbrain/braingdx/issues/196)] implement `StringRandomizer`
+* implement `StringRandomizerTween`
 
 # Version 0.5.8
 

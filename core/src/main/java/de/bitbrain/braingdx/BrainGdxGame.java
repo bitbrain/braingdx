@@ -28,6 +28,8 @@ import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.postprocessing.effects.*;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.tweens.*;
+import de.bitbrain.braingdx.util.StringRandomizer;
+import de.bitbrain.braingdx.util.ValueProvider;
 import de.bitbrain.braingdx.world.GameObject;
 
 import java.util.HashMap;
@@ -74,6 +76,8 @@ public abstract class BrainGdxGame extends Game {
       Tween.registerAccessor(Vector2.class, new VectorTween());
       Tween.registerAccessor(GameObject.class, new GameObjectTween());
       Tween.registerAccessor(GameCamera.class, new GameCameraTween());
+      Tween.registerAccessor(StringRandomizer.class, new StringRandomizerTween());
+      Tween.registerAccessor(ValueProvider.class, new ValueTween());
       // Shader tweens
       Tween.registerAccessor(Bloom.class, new BloomShaderTween());
       Tween.registerAccessor(CrtMonitor.class, new CrtMonitorShaderTween());
