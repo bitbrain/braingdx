@@ -1,3 +1,7 @@
+# UNRELEASED Version 0.5.9
+
+* [[#196](https://github.com/bitbrain/braingdx/issues/196)] implement `StringRandomizer`
+
 # Version 0.5.8
 
 * add new `getObjects` method to `GameWorld`
