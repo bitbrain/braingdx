@@ -28,6 +28,13 @@ public class StringRandomizerTest {
    }
 
    @Test
+   public void testRandomize_FixedSeed() {
+      StringRandomizer randomizer = new StringRandomizer("asdfasdf", "01", "asdf");
+      String randomized = randomizer.randomize();
+      assertThat(randomized).isEqualTo("01df0sd0");
+   }
+
+   @Test
    public void testRandomize_Blank() {
       StringRandomizer randomizer = new StringRandomizer(" ", "0");
       String randomized = randomizer.randomize();

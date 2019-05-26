@@ -1,3 +1,7 @@
+# Version 0.5.10
+
+* add additional constructor to `StringRandomizer` in order to provide a fixed seed
+
 # Version 0.5.9
 
 This version introduces string manipulation with additional tween engine support:

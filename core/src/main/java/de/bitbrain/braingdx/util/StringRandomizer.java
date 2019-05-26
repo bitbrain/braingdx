@@ -1,6 +1,7 @@
 package de.bitbrain.braingdx.util;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import static java.lang.Math.max;
@@ -16,12 +17,35 @@ public class StringRandomizer {
    private final String text;
    private final int nativeLength;
    private final String pool;
+   private final Random random;
 
    private float factor = 0.5f;
 
+   /**
+    * Initialises this object with a static seed.
+    *
+    * @param text the text to randomize
+    * @param pool the pool to retrieve masks from
+    * @param seed a static seed to generate randomness from
+    */
+   public StringRandomizer(String text, String pool, String seed) {
+      this(text, pool, new Random(seed.hashCode()));
+   }
+
+   /**
+    * Initialises this object with a dynamic seed.
+    *
+    * @param text the text to randomize
+    * @param pool the pool to retrieve masks from
+    */
    public StringRandomizer(String text, String pool) {
+      this(text, pool, new Random());
+   }
+
+   private StringRandomizer(String text, String pool, Random random) {
       this.text = text;
       this.pool = pool;
+      this.random = random;
       this.nativeLength = computeNativeLength(text);
    }
 
@@ -88,7 +112,7 @@ public class StringRandomizer {
 
    /* returns a random index on the string provided */
    private int getRandomIndex(String string) {
-      return (int) (Math.random() * string.length());
+      return (int) (random.nextFloat() * string.length());
    }
 
    /* returns a random character of the string provided */
