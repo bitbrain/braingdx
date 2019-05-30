@@ -15,9 +15,11 @@ public class GraphicsSettings {
 
    private static final String RADIAL_BLUR_QUALITY = "radialBlurQuality";
    private static final String RENDER_SCALE = "renderScale";
+   private static final String PARTICLE_MULTIPLIER = "particleMultiplier";
 
    private RadialBlur.Quality radialBlurQuality;
    private float renderScale;
+   private float particleMultiplier;
 
    private final GameEventManager gameEventManager;
 
@@ -27,12 +29,14 @@ public class GraphicsSettings {
       String radialBlurName = prefs.getString(RADIAL_BLUR_QUALITY, RadialBlur.Quality.Medium.name());
       radialBlurQuality = RadialBlur.Quality.valueOf(radialBlurName);
       renderScale = prefs.getFloat(RENDER_SCALE, 1f);
+      particleMultiplier = prefs.getFloat(PARTICLE_MULTIPLIER, 1f);
    }
 
    public void save() {
       Preferences prefs = getPreferences();
       prefs.putString(RADIAL_BLUR_QUALITY, radialBlurQuality.name());
       prefs.putFloat(RENDER_SCALE, renderScale);
+      prefs.putFloat(PARTICLE_MULTIPLIER, particleMultiplier);
       prefs.flush();
    }
 
@@ -42,6 +46,15 @@ public class GraphicsSettings {
 
    public int getScaledRenderHeight() {
       return floor(Gdx.graphics.getHeight() * renderScale);
+   }
+
+   public float getParticleMultiplier() {
+      return particleMultiplier;
+   }
+
+   public GraphicsSettings setParticleMultiplier(float multiplier) {
+      this.particleMultiplier = multiplier;
+      return this;
    }
 
    public RadialBlur.Quality getRadialBlurQuality() {

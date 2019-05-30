@@ -1,3 +1,7 @@
+# Version 0.5.11
+
+* add new `particleMultiplier` to `GraphicsSettings` in order to dynamically control the amount of all particles
+
 # Version 0.5.10
 
 * add additional constructor to `StringRandomizer` in order to provide a fixed seed

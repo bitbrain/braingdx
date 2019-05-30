@@ -19,16 +19,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.utils.Disposable;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
+import de.bitbrain.braingdx.graphics.GraphicsSettings;
 import de.bitbrain.braingdx.world.GameObject;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import static java.lang.Math.ceil;
 
 /**
  * Manages particle effects.
@@ -41,8 +45,11 @@ public class ParticleManager implements Disposable {
    private final Set<InternalPooledEffect> effects = new HashSet<InternalPooledEffect>();
    private final Map<String, ParticleEffectPool> pools = new HashMap<String, ParticleEffectPool>();
    private final BehaviorManager behaviorManager;
-   public ParticleManager(BehaviorManager behaviorManager) {
+   private final GraphicsSettings settings;
+
+   public ParticleManager(BehaviorManager behaviorManager, GraphicsSettings settings) {
       this.behaviorManager = behaviorManager;
+      this.settings = settings;
    }
 
    public void draw(Batch batch, float delta) {
@@ -103,6 +110,7 @@ public class ParticleManager implements Disposable {
          pools.put(particleId, pool);
       }
       InternalPooledEffect effect = new InternalPooledEffect(particleId, pool.obtain());
+      applySettingsToEffect(effect.effect);
       effects.add(effect);
       effect.effect.start();
       return effect;
@@ -116,6 +124,13 @@ public class ParticleManager implements Disposable {
          pool.free(effect.effect);
       } else {
          Gdx.app.error("Particles", "Unable to release effect " + effect.assetId + ". No pool available!");
+      }
+   }
+
+   private void applySettingsToEffect(ParticleEffectPool.PooledEffect effect) {
+      for (ParticleEmitter emitter : effect.getEmitters()) {
+         emitter.setMinParticleCount((int) ceil(emitter.getMinParticleCount() * settings.getParticleMultiplier()));
+         emitter.setMaxParticleCount((int) ceil(emitter.getMaxParticleCount() * settings.getParticleMultiplier()));
       }
    }
 
