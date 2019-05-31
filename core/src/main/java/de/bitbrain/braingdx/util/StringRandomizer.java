@@ -80,6 +80,9 @@ public class StringRandomizer {
       while (visitedIndices.contains(index)) {
          index = getRandomTextIndex();
       }
+      if (index < 0) {
+         return;
+      }
       visitedIndices.add(index);
       builder.replace(index, index + 1, character);
    }
