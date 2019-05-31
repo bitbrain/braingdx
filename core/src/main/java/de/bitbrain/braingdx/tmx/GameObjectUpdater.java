@@ -21,6 +21,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.event.GameEventManager;
+import de.bitbrain.braingdx.util.Factory;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -31,6 +32,35 @@ import de.bitbrain.braingdx.world.GameObject;
  * @since 1.0.0
  */
 class GameObjectUpdater extends BehaviorAdapter {
+
+   private class IndexFactory implements Factory<Integer> {
+
+      float value;
+      float cellSize;
+
+      public IndexFactory() {
+
+      }
+
+      @Override
+      public Integer create() {
+         return IndexCalculator.calculateIndex(value, cellSize);
+      }
+   }
+
+   private class LayerIndexFactory implements Factory<Integer> {
+
+      GameObject object;
+
+      @Override
+      public Integer create() {
+         return api.lastLayerIndexOf(object);
+      }
+   }
+
+   private final IndexFactory indexFactory = new IndexFactory();
+
+   private final LayerIndexFactory layerIndexFactory = new LayerIndexFactory();
 
    private final TiledMapAPI api;
 
@@ -81,13 +111,18 @@ class GameObjectUpdater extends BehaviorAdapter {
       // and last position is not occupied
       Vector2 lastPosition = object.getLastPosition();
       currentPosition.set(object.getLeft(), object.getTop());
-      int lastLayerIndex = (Integer) object.getOrSetAttribute("lastLayerIndex", api.lastLayerIndexOf(object));
+      layerIndexFactory.object = object;
+      int lastLayerIndex = object.getOrSetAttribute("lastLayerIndex", layerIndexFactory);
       int currentLayerIndex = api.layerIndexOf(object);
       if (lastLayerIndex != currentLayerIndex || !currentPosition.equals(lastPosition)) {
          Gdx.app.debug("TiledMapAPI", "Updating collision of " + object);
          // Object has moved, now check if last position is already occupied
-         int lastTileX = (Integer) object.getOrSetAttribute("lastTileX", IndexCalculator.calculateIndex(lastPosition.x, api.getCellWidth()));
-         int lastTileY = (Integer) object.getOrSetAttribute("lastTileY", IndexCalculator.calculateIndex(lastPosition.y, api.getCellHeight()));
+         indexFactory.value = lastPosition.x;
+         indexFactory.cellSize = api.getCellWidth();
+         int lastTileX = object.getOrSetAttribute("lastTileX", indexFactory);
+         indexFactory.value = lastPosition.y;
+         indexFactory.cellSize = api.getCellHeight();
+         int lastTileY = object.getOrSetAttribute("lastTileY", indexFactory);
          GameObject occupant = api.getGameObjectAt(lastTileX, lastTileY, lastLayerIndex);
 
          // clear last collision

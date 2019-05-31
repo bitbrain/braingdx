@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.util.Enabler;
+import de.bitbrain.braingdx.util.Factory;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -41,6 +42,14 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
    private class AnimationState {
       public float stateTime;
    }
+
+   private final Factory<AnimationState> animationStateFactory = new Factory<AnimationState>() {
+
+      @Override
+      public AnimationState create() {
+         return new AnimationState();
+      }
+   };
 
    private final AnimationConfig config;
    private final AnimationCache animationCache;
@@ -91,7 +100,7 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
 
    private TextureRegion retrieveRegionFor(GameObject object, float delta) {
       Object currentAnimationType = animationTypeResolver.getAnimationType(object);
-      AnimationState state = (AnimationState) object.getOrSetAttribute(AnimationState.class, new AnimationState());
+      AnimationState state = object.getOrSetAttribute(AnimationState.class, animationStateFactory);
       state.stateTime += delta;
       Animation<TextureRegion> animation = animationCache.getAnimation(currentAnimationType);
       boolean animationEnabled = animationEnabler.isEnabledFor(object);

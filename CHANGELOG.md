@@ -1,3 +1,8 @@
+# Version 0.5.13
+
+* only create animation states dynamically whenever they are required
+* only compute tmx layer indices whenever they are required
+
 # Version 0.5.12
 
 * only create `AStarPathFinder` when it is actually used to reduce memory footprint
