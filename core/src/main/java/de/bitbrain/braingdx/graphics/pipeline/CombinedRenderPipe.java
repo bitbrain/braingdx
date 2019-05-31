@@ -93,4 +93,11 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
          ((Resizeable) layer).resize(width, height);
       }
    }
+
+   @Override
+   public String toString() {
+      return "CombinedRenderPipe{" +
+            "layer=" + layer.getClass().getName() +
+            '}';
+   }
 }

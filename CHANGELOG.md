@@ -1,3 +1,9 @@
+# Version 0.5.12
+
+* only create `AStarPathFinder` when it is actually used to reduce memory footprint
+* significantly reduce memory footprint of `TiledMapManager` by dynamically creating cell states at runtime 
+* implement `toString()` method of `CombinedRenderPipe`
+
 # Version 0.5.11
 
 * add new `particleMultiplier` to `GraphicsSettings` in order to dynamically control the amount of all particles

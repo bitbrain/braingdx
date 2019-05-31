@@ -43,8 +43,6 @@ import java.util.UUID;
  */
 class StatePopulator {
 
-   private static final boolean DEFAULT_COLLISION = false;
-
    private final GameObjectRenderManager renderManager;
    private final GameWorld gameWorld;
    private final TiledMapAPI api;
@@ -63,6 +61,7 @@ class StatePopulator {
    public void populate(TiledMap tiledMap, State state, Camera camera, MapLayerRendererFactory rendererFactory,
                         TiledMapConfig config) {
       MapLayers mapLayers = tiledMap.getLayers();
+      state.setNumberOfLayers(mapLayers.getCount());
       handleMapProperties(tiledMap.getProperties(), state, config);
       List<String> layerIds = new ArrayList<String>();
       int lastTileLayerIndex = 0;
@@ -205,15 +204,20 @@ class StatePopulator {
       } else if (collisionObject instanceof String) {
          collisionLayer = Boolean.valueOf((String) collisionObject);
       }
-      CellState cellState = state.getState(x, y, layerIndex);
       // Inherit the collision from the previous layer, if and only if
       // the current layer is non-collision by default
-      if (layerIndex > 0 && !collisionLayer && state.getState(x, y, layerIndex - 1).isCollision()) {
+      boolean isCollision = layerIndex > 0 && !collisionLayer && state.getState(x, y, layerIndex - 1).isCollision();
+      if (isCollision) {
+         CellState cellState = state.getState(x, y, layerIndex);
          cellState.setCollision(true);
       } else if (cell != null) {
          TiledMapTile tile = cell.getTile();
          if (tile != null) {
             MapProperties properties = tile.getProperties();
+            if (!properties.getKeys().hasNext()) {
+               return;
+            }
+            CellState cellState = state.getState(x, y, layerIndex);
             cellState.setProperties(properties);
             if (properties.containsKey(Constants.COLLISION)) {
                Object collisionProperty = properties.get(Constants.COLLISION);
@@ -224,14 +228,8 @@ class StatePopulator {
                   collision = Boolean.valueOf(collisionProperty.toString());
                }
                cellState.setCollision(collision);
-            } else {
-               cellState.setCollision(DEFAULT_COLLISION);
             }
-         } else {
-            cellState.setCollision(DEFAULT_COLLISION);
          }
-      } else {
-         cellState.setCollision(DEFAULT_COLLISION);
       }
    }
 }

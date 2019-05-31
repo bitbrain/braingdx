@@ -32,7 +32,7 @@ public class AStarPathFinder implements PathFinder {
    /**
     * The maximum depth of search we're willing to accept before giving up
     */
-   private int maxSearchDistance;
+   private short maxSearchDistance;
 
    /**
     * The complete set of nodes across the map
@@ -54,7 +54,7 @@ public class AStarPathFinder implements PathFinder {
     * @param maxSearchDistance The maximum depth we'll search before giving up
     * @param allowDiagMovement True if the search should try diaganol movement
     */
-   public AStarPathFinder(TiledMapAPI map, int maxSearchDistance, boolean allowDiagMovement) {
+   public AStarPathFinder(TiledMapAPI map, short maxSearchDistance, boolean allowDiagMovement) {
       this(map, maxSearchDistance, allowDiagMovement, new ClosestHeuristic());
    }
 
@@ -66,7 +66,7 @@ public class AStarPathFinder implements PathFinder {
     * @param maxSearchDistance The maximum depth we'll search before giving up
     * @param allowDiagMovement True if the search should try diaganol movement
     */
-   public AStarPathFinder(TiledMapAPI map, int maxSearchDistance, boolean allowDiagMovement, AStarHeuristic heuristic) {
+   public AStarPathFinder(TiledMapAPI map, short maxSearchDistance, boolean allowDiagMovement, AStarHeuristic heuristic) {
       this.heuristic = heuristic;
       this.map = map;
       this.maxSearchDistance = maxSearchDistance;
@@ -76,8 +76,8 @@ public class AStarPathFinder implements PathFinder {
 
    public void refresh() {
       nodes = new Node[map.getNumberOfColumns()][map.getNumberOfRows()];
-      for (int x = 0; x < map.getNumberOfColumns(); x++) {
-         for (int y = 0; y < map.getNumberOfRows(); y++) {
+      for (short x = 0; x < map.getNumberOfColumns(); x++) {
+         for (short y = 0; y < map.getNumberOfRows(); y++) {
             nodes[x][y] = new Node(x, y);
          }
       }
@@ -394,11 +394,11 @@ public class AStarPathFinder implements PathFinder {
       /**
        * The x coordinate of the node
        */
-      private int x;
+      private short x;
       /**
        * The y coordinate of the node
        */
-      private int y;
+      private short y;
       /**
        * The path cost for this node
        */
@@ -414,7 +414,7 @@ public class AStarPathFinder implements PathFinder {
       /**
        * The search depth of this node
        */
-      private int depth;
+      private short depth;
 
       /**
        * Create a new node
@@ -422,7 +422,7 @@ public class AStarPathFinder implements PathFinder {
        * @param x The x coordinate of the node
        * @param y The y coordinate of the node
        */
-      public Node(int x, int y) {
+      public Node(short x, short y) {
          this.x = x;
          this.y = y;
       }
@@ -433,8 +433,8 @@ public class AStarPathFinder implements PathFinder {
        * @param parent The parent node which lead us to this node
        * @return The depth we have no reached in searching
        */
-      public int setParent(Node parent) {
-         depth = parent.depth + 1;
+      public short setParent(Node parent) {
+         depth = (short) (parent.depth + 1);
          this.parent = parent;
 
          return depth;

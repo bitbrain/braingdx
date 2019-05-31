@@ -264,7 +264,7 @@ public class TiledMapManagerTest {
       final TiledMapAPI api = tiledMapManager.getAPI();
       tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
       final GameObject objectA = api.getGameObjectAt(0, 1, 0);
-      api.setLayerIndex(objectA, 2);
+      api.setLayerIndex(objectA, 6);
    }
 
    @Test

@@ -33,11 +33,12 @@ class State {
 
    private List<String> layerIds = Collections.emptyList();
    private Integer[][] heightMap;
-   private Map<Integer, CellState[][]> stateMap = Collections.emptyMap();
+   private final Map<String, CellState> stateMap = new HashMap<String, CellState>();
    private int mapIndexHeight;
    private int mapIndexWidth;
    private float cellWidth = 1f;
    private float cellHeight = 1f;
+   private int numberOfLayers;
 
    public List<String> getLayerIds() {
       return layerIds;
@@ -45,6 +46,10 @@ class State {
 
    public void setLayerIds(List<String> layerIds) {
       layerIds = Collections.unmodifiableList(layerIds);
+   }
+
+   public void setNumberOfLayers(int numberOfLayers) {
+      this.numberOfLayers = numberOfLayers;
    }
 
    public Integer[][] getHeightMap() {
@@ -84,6 +89,9 @@ class State {
    }
 
    public CellState getState(int tileX, int tileY, int layerIndex) {
+      if (layerIndex >= numberOfLayers) {
+         throw new TiledMapException("Invalid state! Layer with index=" + layerIndex + " does not exist. Highest is " + numberOfLayers);
+      }
       if (tileX >= getMapIndexWidth()) {
          tileX = getMapIndexWidth() - 1;
       } else if (tileX < 0) {
@@ -94,19 +102,13 @@ class State {
       } else if (tileY < 0) {
          tileY = 0;
       }
-
-      if (stateMap.isEmpty()) {
-         stateMap = new HashMap<Integer, CellState[][]>();
+      String key = layerIndex +"_" + tileX + "_" + tileY;
+      CellState state = stateMap.get(key);
+      if (state == null) {
+         state = new CellState();
+         stateMap.put(key, state);
       }
-      CellState[][] states = stateMap.get(layerIndex);
-      if (states == null) {
-         states = new CellState[getMapIndexWidth()][getMapIndexHeight()];
-         stateMap.put(layerIndex, states);
-      }
-      if (states[tileX][tileY] == null) {
-         states[tileX][tileY] = new CellState();
-      }
-      return states[tileX][tileY];
+      return state;
    }
 
    public void setIndexDimensions(int indexX, int indexY) {
@@ -118,11 +120,10 @@ class State {
       heightMap = null;
       layerIds = Collections.emptyList();
       stateMap.clear();
-      stateMap = Collections.emptyMap();
    }
 
    public int getNumberOfLayers() {
-      return stateMap.keySet().size();
+      return this.numberOfLayers;
    }
 
    public static class CellState {

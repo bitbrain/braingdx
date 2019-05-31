@@ -48,7 +48,7 @@ public class TiledMapManagerImpl implements TiledMapManager {
    private final State state;
    private final StatePopulator populator;
    private final Map<TiledMapType, MapLayerRendererFactory> factories;
-   private final AStarPathFinder pathFinder;
+   private AStarPathFinder pathFinder;
    private final GameEventManager gameEventManager;
    private final GameEventRouter router;
    private final GameEventRouter.GameEventInfoExtractor infoExtractor = new GameEventRouter.GameEventInfoExtractor() {
@@ -84,7 +84,6 @@ public class TiledMapManagerImpl implements TiledMapManager {
       this.populator = new StatePopulator(renderManager, gameWorld, api, behaviorManager, gameEventManager);
       this.gameObjectUpdater = new GameObjectUpdater(api, state, gameEventManager);
       this.factories = createFactories();
-      this.pathFinder = new AStarPathFinder(api, 100, false);
    }
 
    @Override
@@ -98,7 +97,9 @@ public class TiledMapManagerImpl implements TiledMapManager {
       populator.populate(tiledMap, state, camera, factories.get(type), config);
       gameWorld.setBounds(new SimpleWorldBounds(api.getWorldWidth(), api.getWorldHeight()));
       gameEventManager.publish(new TiledMapEvents.AfterLoadEvent(tiledMap, api));
-      pathFinder.refresh();
+      if (pathFinder != null) {
+         pathFinder.refresh();
+      }
    }
 
    @Override
@@ -151,6 +152,9 @@ public class TiledMapManagerImpl implements TiledMapManager {
 
    @Override
    public PathFinder getPathFinder() {
+      if (pathFinder == null) {
+         this.pathFinder = new AStarPathFinder(api, (short)100, false);
+      }
       return this.pathFinder;
    }
 
