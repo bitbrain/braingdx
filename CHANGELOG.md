@@ -1,3 +1,11 @@
+# Version 0.5.14
+
+Further improvements on memory heap footprint:
+
+* remove `BigDecimalVector2`
+* add `DoubleVector2`
+* replace `BigDecimal` with `double` for camera tracking and camera alignment
+
 # Version 0.5.13
 
 * only create animation states dynamically whenever they are required
