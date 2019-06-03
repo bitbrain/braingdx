@@ -31,9 +31,9 @@ import java.util.Map.Entry;
  */
 public class BehaviorManager {
 
-   private final Set<Behavior> globalBehaviors;
+   private final List<Behavior> globalBehaviors;
 
-   private final Set<Updateable> updateables;
+   private final List<Updateable> updateables;
 
    private final Map<String, List<Behavior>> localBehaviors;
 
@@ -41,8 +41,8 @@ public class BehaviorManager {
 
    public BehaviorManager(GameWorld world) {
       this.world = world;
-      globalBehaviors = new HashSet<Behavior>();
-      updateables = new HashSet<Updateable>();
+      globalBehaviors = new ArrayList<Behavior>();
+      updateables = new ArrayList<Updateable>();
       localBehaviors = new HashMap<String, List<Behavior>>();
    }
 
@@ -128,22 +128,22 @@ public class BehaviorManager {
    }
 
    public void update(float delta) {
-      for (Updateable updateable : updateables) {
-         updateable.update(delta);
+      for (int i = 0; i < updateables.size(); ++i) {
+         updateables.get(i).update(delta);
       }
    }
 
    public void updateGlobally(GameObject source, float delta) {
-      for (Behavior behavior : globalBehaviors) {
-         behavior.update(source, delta);
+      for (int i = 0; i < globalBehaviors.size(); ++i) {
+         globalBehaviors.get(i).update(source, delta);
       }
    }
 
    public void updateLocally(GameObject source, float delta) {
       List<Behavior> behaviors = localBehaviors.get(source.getId());
       if (behaviors != null) {
-         for (Behavior behavior : behaviors) {
-            behavior.update(source, delta);
+         for (int i = 0; i < behaviors.size(); ++i) {
+            behaviors.get(i).update(source, delta);
          }
       }
 
@@ -152,15 +152,15 @@ public class BehaviorManager {
    public void updateLocallyCompared(GameObject source, GameObject target, float delta) {
       List<Behavior> behaviors = localBehaviors.get(source.getId());
       if (behaviors != null) {
-         for (Behavior behavior : behaviors) {
-            behavior.update(source, target, delta);
+         for (int i = 0; i < behaviors.size(); ++i) {
+            behaviors.get(i).update(source, target, delta);
          }
       }
    }
 
    public void updateGloballyCompared(GameObject source, GameObject target, float delta) {
-      for (Behavior behavior : globalBehaviors) {
-         behavior.update(source, target, delta);
+      for (int i = 0; i < globalBehaviors.size(); ++i) {
+         globalBehaviors.get(i).update(source, target, delta);
       }
    }
 

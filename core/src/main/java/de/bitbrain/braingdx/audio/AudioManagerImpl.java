@@ -16,6 +16,7 @@
 package de.bitbrain.braingdx.audio;
 
 import aurelienribon.tweenengine.*;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -127,10 +128,14 @@ public class AudioManagerImpl implements AudioManager {
       for (Entry<String, Music> musicEntry : musicObjects.entrySet()) {
          GameObject object = gameWorld.getObjectById(musicEntry.getKey());
          if (object != null) {
-            Gdx.app.debug("AudioManager", "Remove music object " + object);
+            if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+               Gdx.app.debug("AudioManager", "Remove music object " + object);
+            }
             gameWorld.remove(object);
          } else {
-            Gdx.app.debug("AudioManager", "Unable to remove music object - not found!");
+            if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+               Gdx.app.debug("AudioManager", "Unable to remove music object - not found!");
+            }
          }
          musicEntry.getValue().stop();
          musicEntry.getValue().setPosition(0f);

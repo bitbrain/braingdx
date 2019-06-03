@@ -1,3 +1,7 @@
+# Version 0.5.15
+
+* reduce memory footprint by only calling `GameObject.toString()` when debug level is active
+
 # Version 0.5.14
 
 Further improvements on memory heap footprint:

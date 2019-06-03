@@ -15,6 +15,7 @@
 
 package de.bitbrain.braingdx.world;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.Pool;
@@ -41,7 +42,7 @@ public class GameWorld implements Iterable<GameObject> {
    private final List<GameObject> unmodifiableObjects;
    private final Pool<GameObject> pool;
    private final Comparator<GameObject> comparator = new ZIndexComparator();
-   private final Set<GameWorldListener> listeners = new HashSet<GameWorldListener>();
+   private final List<GameWorldListener> listeners = new ArrayList<GameWorldListener>();
    private WorldBounds bounds = new WorldBounds() {
 
       @Override
@@ -148,7 +149,9 @@ public class GameWorld implements Iterable<GameObject> {
     * @return newly created game object
     */
    public GameObject addObject(Mutator<GameObject> mutator, boolean lazy) {
-      Gdx.app.debug("DEBUG", "GameWorld - obtaining new object...");
+      if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+         Gdx.app.debug("DEBUG", "GameWorld - obtaining new object...");
+      }
       final GameObject object = pool.obtain();
       if (identityMap.containsKey(object.getId())) {
          Gdx.app.error("FATAL", String.format(
@@ -160,21 +163,25 @@ public class GameWorld implements Iterable<GameObject> {
          return object;
       }
       if (lazy) {
-         Gdx.app.debug("DEBUG", String.format("GameWorld - requested addition for new game object %s", object));
+         if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+            Gdx.app.debug("DEBUG", String.format("GameWorld - requested addition for new game object %s", object));
+         }
          Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
                objects.add(object);
-               for (GameWorldListener l : listeners) {
-                  l.onAdd(object);
+               for (int i = 0; i < listeners.size(); ++i) {
+                  listeners.get(i).onAdd(object);
                }
             }
          });
       } else {
-         Gdx.app.debug("DEBUG", String.format("GameWorld - added new game object %s", object));
+         if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+            Gdx.app.debug("DEBUG", String.format("GameWorld - added new game object %s", object));
+         }
          objects.add(object);
-         for (GameWorldListener l : listeners) {
-            l.onAdd(object);
+         for (int i = 0; i < listeners.size(); ++i) {
+            listeners.get(i).onAdd(object);
          }
       }
       if (mutator != null) {
@@ -191,20 +198,22 @@ public class GameWorld implements Iterable<GameObject> {
     */
    public void update(float delta) {
       Collections.sort(objects, comparator);
-      for (GameObject object : objects) {
+      for (int i = 0; i < objects.size(); ++i) {
+         GameObject object = objects.get(i);
          if (!bounds.isInBounds(object) && !object.isPersistent()) {
             Gdx.app.debug("DEBUG", String.format("GameWorld - object %s is out of bounds! Remove...", object));
             remove(object);
             continue;
          }
-         for (GameWorldListener l : listeners) {
-            l.onUpdate(object, delta);
+         for (int listenerIndex = 0; listenerIndex < listeners.size(); ++listenerIndex) {
+            listeners.get(listenerIndex).onUpdate(object, delta);
          }
          if (object.isActive()) {
-            for (GameObject other : objects) {
+            for (int otherObjIndex = 0; otherObjIndex < objects.size(); ++otherObjIndex) {
+               GameObject other = objects.get(otherObjIndex);
                if (other.isActive() && !object.getId().equals(other.getId())) {
-                  for (GameWorldListener l : listeners) {
-                     l.onUpdate(object, other, delta);
+                  for (int listenerIndex = 0; listenerIndex < listeners.size(); ++listenerIndex) {
+                     listeners.get(listenerIndex).onUpdate(object, other, delta);
                   }
                }
             }
@@ -276,7 +285,9 @@ public class GameWorld implements Iterable<GameObject> {
          @Override
          public void run() {
             for (final GameObject object : objects) {
-               Gdx.app.debug("DEBUG", String.format("GameWorld - requested removal of game object %s", object));
+               if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+                  Gdx.app.debug("DEBUG", String.format("GameWorld - requested removal of game object %s", object));
+               }
                removeInternally(object);
             }
          }
@@ -285,12 +296,14 @@ public class GameWorld implements Iterable<GameObject> {
    }
 
    private void removeInternally(GameObject object) {
-      Gdx.app.debug("DEBUG", String.format("%s - GameWorld - removing game object %s", System.nanoTime(), object));
+      if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+         Gdx.app.debug("DEBUG", String.format("%s - GameWorld - removing game object %s", System.nanoTime(), object));
+      }
       if (identityMap.remove(object.getId()) == null) {
          Gdx.app.error("FATAL", String.format("%s - GameWorld - game object %s does not exist.", System.nanoTime(), object));
       }
-      for (GameWorldListener l : listeners) {
-         l.onRemove(object);
+      for (int i = 0; i < listeners.size(); ++i) {
+         listeners.get(i).onRemove(object);
       }
       pool.free(object);
       objects.remove(object);

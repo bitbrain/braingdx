@@ -32,7 +32,9 @@ import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.util.ShaderLoader;
 import org.apache.commons.collections.map.ListOrderedMap;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Combined implementation of {@link RenderPipeline}. This pipeline will bake together all layers
@@ -50,6 +52,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
    private static final boolean isDesktop = (Gdx.app.getType() == Application.ApplicationType.Desktop);
 
    private final ListOrderedMap orderedPipes = new ListOrderedMap();
+   private final List<CombinedRenderPipe> pipes = new ArrayList<CombinedRenderPipe>();
 
    private final PostProcessor processor;
 
@@ -110,8 +113,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
    @SuppressWarnings("unchecked")
    @Override
    public void resize(int width, int height) {
-      for (CombinedRenderPipe pipe : (Collection<CombinedRenderPipe>) orderedPipes.values()) {
-         pipe.resize(width, height);
+      for (int i = 0; i < pipes.size(); ++i) {
+         pipes.get(i).resize(width, height);
       }
       processor.setViewport(new Rectangle(0f, 0f, width, height));
       if (buffer != null) {
@@ -127,6 +130,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
       CombinedRenderPipe pipe = new CombinedRenderPipe(layer, processor, internalBatch, effects);
       orderedPipes.put(id, pipe);
       this.hasEffects = hasEffects || effects.length > 0;
+      pipes.clear();
+      pipes.addAll(orderedPipes.valueList());
    }
 
    @Override
@@ -138,6 +143,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
       }
       orderedPipes.put(index + 1, id, new CombinedRenderPipe(layer, processor, internalBatch, effects));
       this.hasEffects = hasEffects || effects.length > 0;
+      pipes.clear();
+      pipes.addAll(orderedPipes.valueList());
    }
 
    @Override
@@ -149,6 +156,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
       }
       orderedPipes.put(index > 0 ? index - 1 : index, id, new CombinedRenderPipe(layer, processor, internalBatch, effects));
       this.hasEffects = hasEffects || effects.length > 0;
+      pipes.clear();
+      pipes.addAll(orderedPipes.valueList());
    }
 
    @Override
@@ -166,6 +175,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
          }
       }
       this.hasEffects = false;
+      pipes.clear();
+      pipes.addAll(orderedPipes.valueList());
    }
 
    @Override
@@ -177,6 +188,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
       }
       getPipe(existingSourceId).setEffects(effects);
       orderedPipes.remove(existingSourceId);
+      pipes.clear();
+      pipes.addAll(orderedPipes.valueList());
    }
 
    @Override
@@ -194,7 +207,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
       remove(existingSourceId);
       int index = orderedPipes.indexOf(existingTargetId);
       orderedPipes.put(index, existingSourceId, sourcePipe);
-
+      pipes.clear();
+      pipes.addAll(orderedPipes.valueList());
    }
 
    @Override
@@ -212,6 +226,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
       remove(existingSourceId);
       int index = orderedPipes.indexOf(existingTargetId);
       orderedPipes.put(index + 1, existingSourceId, sourcePipe);
+      pipes.clear();
+      pipes.addAll(orderedPipes.valueList());
    }
 
    @Override
@@ -239,7 +255,8 @@ public class CombinedRenderPipeline implements RenderPipeline {
          buffer = null;
       }
       clearBuffer();
-      for (CombinedRenderPipe pipe : (Collection<CombinedRenderPipe>) orderedPipes.values()) {
+      for (int i = 0; i < pipes.size(); ++i) {
+         CombinedRenderPipe pipe = pipes.get(i);
          pipe.beforeRender();
          pipe.render(batch, delta, buffer);
       }

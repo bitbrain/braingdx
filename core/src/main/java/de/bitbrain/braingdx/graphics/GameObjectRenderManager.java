@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public class GameObjectRenderManager implements Disposable {
 
-   private static Map<Object, GameObjectRenderer> rendererMap = new HashMap<Object, GameObjectRenderer>();
+   private final Map<Object, GameObjectRenderer> rendererMap = new HashMap<Object, GameObjectRenderer>();
 
    private final Batch batch;
 
@@ -77,7 +77,7 @@ public class GameObjectRenderManager implements Disposable {
       rendererMap.clear();
    }
 
-   public static interface GameObjectRenderer {
+   public interface GameObjectRenderer {
 
       void init();
 
@@ -101,8 +101,8 @@ public class GameObjectRenderManager implements Disposable {
 
       @Override
       public void render(GameObject object, Batch batch, float delta) {
-         for (GameObjectRenderer renderer : renderers) {
-            renderer.render(object, batch, delta);
+         for (int i = 0; i < renderers.length; ++i) {
+            renderers[i].render(object, batch, delta);
          }
       }
 

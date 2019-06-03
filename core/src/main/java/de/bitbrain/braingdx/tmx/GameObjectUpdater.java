@@ -115,7 +115,9 @@ class GameObjectUpdater extends BehaviorAdapter {
       int lastLayerIndex = object.getOrSetAttribute("lastLayerIndex", layerIndexFactory);
       int currentLayerIndex = api.layerIndexOf(object);
       if (lastLayerIndex != currentLayerIndex || !currentPosition.equals(lastPosition)) {
-         Gdx.app.debug("TiledMapAPI", "Updating collision of " + object);
+         if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+            Gdx.app.debug("TiledMapAPI", "Updating collision of " + object);
+         }
          // Object has moved, now check if last position is already occupied
          indexFactory.value = lastPosition.x;
          indexFactory.cellSize = api.getCellWidth();
@@ -134,7 +136,9 @@ class GameObjectUpdater extends BehaviorAdapter {
             }
          }
 
-         Gdx.app.debug("TiledMapAPI", "Cleared collision at x=" + lastTileX + " y=" + lastTileY + " layer=" + lastLayerIndex);
+         if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+            Gdx.app.debug("TiledMapAPI", "Cleared collision at x=" + lastTileX + " y=" + lastTileY + " layer=" + lastLayerIndex);
+         }
          // Update current collision
          if (!object.equals(occupant) && object.isActive()) {
             if (!api.isExclusiveCollision(object.getLeft(), object.getTop(), currentLayerIndex, object)) {
@@ -155,7 +159,9 @@ class GameObjectUpdater extends BehaviorAdapter {
          }
       }
       if (lastLayerIndex != currentLayerIndex) {
-         Gdx.app.debug("TiledMapAPI", "Tiled map layer change of " + object + " from " + lastLayerIndex + " -> " + currentLayerIndex);
+         if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+            Gdx.app.debug("TiledMapAPI", "Tiled map layer change of " + object + " from " + lastLayerIndex + " -> " + currentLayerIndex);
+         }
          gameEventManager.publish(new TiledMapEvents.OnLayerChangeEvent(lastLayerIndex, currentLayerIndex, object, api));
 
       }
