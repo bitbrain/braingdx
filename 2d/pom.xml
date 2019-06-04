@@ -17,8 +17,7 @@
       <dependency>
          <groupId>io.github.bitbrain</groupId>
          <artifactId>braingdx-core</artifactId>
-         <version>${project.version}</version>
-         <scope>compile</scope>
+         <version>1.0.0-SNAPSHOT</version>
       </dependency>
    </dependencies>
 </project>
