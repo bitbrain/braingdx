@@ -33,6 +33,8 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 class GameObjectUpdater extends BehaviorAdapter {
 
+   private static final String FALSE = "false";
+
    private class IndexFactory implements Factory<Integer> {
 
       float value;
@@ -98,11 +100,12 @@ class GameObjectUpdater extends BehaviorAdapter {
       if (object.hasAttribute(MapProperties.class)) {
          MapProperties mapProperties = (MapProperties) object.getAttribute(MapProperties.class);
          // Do not update objects which have a false collision
-         if (mapProperties.containsKey("collision")) {
-            if (mapProperties.get("collision") instanceof Boolean && !(Boolean) mapProperties.get("collision")) {
+         if (mapProperties.containsKey(Constants.COLLISION)) {
+            Object collision = mapProperties.get(Constants.COLLISION);
+            if (collision.equals(Boolean.FALSE)) {
                return;
             }
-            if (mapProperties.get("collision") instanceof String && mapProperties.get("collision").equals("false")) {
+            if (collision.equals(FALSE)) {
                return;
             }
          }
@@ -112,7 +115,7 @@ class GameObjectUpdater extends BehaviorAdapter {
       Vector2 lastPosition = object.getLastPosition();
       currentPosition.set(object.getLeft(), object.getTop());
       layerIndexFactory.object = object;
-      int lastLayerIndex = object.getOrSetAttribute("lastLayerIndex", layerIndexFactory);
+      int lastLayerIndex = object.getOrSetAttribute(Constants.LAST_LAYER_INDEX, layerIndexFactory);
       int currentLayerIndex = api.layerIndexOf(object);
       if (lastLayerIndex != currentLayerIndex || !currentPosition.equals(lastPosition)) {
          if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
@@ -121,10 +124,10 @@ class GameObjectUpdater extends BehaviorAdapter {
          // Object has moved, now check if last position is already occupied
          indexFactory.value = lastPosition.x;
          indexFactory.cellSize = api.getCellWidth();
-         int lastTileX = object.getOrSetAttribute("lastTileX", indexFactory);
+         int lastTileX = object.getOrSetAttribute(Constants.LAST_TILE_X, indexFactory);
          indexFactory.value = lastPosition.y;
          indexFactory.cellSize = api.getCellHeight();
-         int lastTileY = object.getOrSetAttribute("lastTileY", indexFactory);
+         int lastTileY = object.getOrSetAttribute(Constants.LAST_TILE_Y, indexFactory);
          GameObject occupant = api.getGameObjectAt(lastTileX, lastTileY, lastLayerIndex);
 
          // clear last collision
@@ -170,9 +173,9 @@ class GameObjectUpdater extends BehaviorAdapter {
          int yIndex = IndexCalculator.calculateIndex(currentPosition.y, api.getCellHeight());
          gameEventManager.publish(new TiledMapEvents.OnEnterCellEvent(xIndex, yIndex, object, api));
       }
-      object.setAttribute("lastTileX", IndexCalculator.calculateIndex(object.getLeft(), api.getCellWidth()));
-      object.setAttribute("lastTileY", IndexCalculator.calculateIndex(object.getTop(), api.getCellHeight()));
-      object.setAttribute("lastLayerIndex", api.layerIndexOf(object));
+      object.setAttribute(Constants.LAST_TILE_X, IndexCalculator.calculateIndex(object.getLeft(), api.getCellWidth()));
+      object.setAttribute(Constants.LAST_TILE_Y, IndexCalculator.calculateIndex(object.getTop(), api.getCellHeight()));
+      object.setAttribute(Constants.LAST_LAYER_INDEX, api.layerIndexOf(object));
    }
 
    private void updateLayerIndex(GameObject object) {

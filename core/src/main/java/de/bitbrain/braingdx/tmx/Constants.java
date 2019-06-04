@@ -35,4 +35,6 @@ interface Constants {
    String COLOR = "color";
    String STICKY = "sticky";
    String PRODUCER = "producer";
+   Object LAST_TILE_X = "lastTileX";
+   Object LAST_TILE_Y = "lastTileY";
 }
