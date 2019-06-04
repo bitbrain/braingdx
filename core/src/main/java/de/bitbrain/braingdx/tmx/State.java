@@ -45,7 +45,7 @@ class State {
    }
 
    public void setLayerIds(List<String> layerIds) {
-      layerIds = Collections.unmodifiableList(layerIds);
+      this.layerIds = Collections.unmodifiableList(layerIds);
    }
 
    public void setNumberOfLayers(int numberOfLayers) {

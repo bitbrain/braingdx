@@ -120,8 +120,8 @@ public class TiledMapManagerImpl implements TiledMapManager {
    private void clear() {
       gameEventManager.publish(new TiledMapEvents.BeforeUnloadEvent(api));
       behaviorManager.remove(gameObjectUpdater);
-      gameWorld.clear();
       for (String id : state.getLayerIds()) {
+         gameWorld.clearGroup(id);
          renderManager.unregister(id);
       }
       state.clear();

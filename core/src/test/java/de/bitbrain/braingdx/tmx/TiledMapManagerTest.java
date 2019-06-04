@@ -15,8 +15,6 @@
 
 package de.bitbrain.braingdx.tmx;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
@@ -34,7 +32,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -459,6 +456,24 @@ public class TiledMapManagerTest {
       // Verify that everything is back to normal
       assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
       assertThat(tiledMapManager.getAPI().isCollision(0, 1, 0)).isTrue();
+   }
+
+   @Test
+   public void load_withSimple3x3Map_shouldOnlyUnloadRelevantObjects() {
+      TiledMap map = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1, true)
+                  .addCell(1, 0)
+                  .addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player").build())
+            .build();
+      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      world.update(0f);
+      GameObject remainer = world.addObject();
+      assertThat(world.size()).isEqualTo(4);
+      tiledMapManager.dispose();
+      assertThat(world.getObjects()).containsExactly(remainer);
    }
 
    /**

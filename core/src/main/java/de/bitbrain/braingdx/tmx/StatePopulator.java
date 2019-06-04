@@ -22,6 +22,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
@@ -64,26 +65,25 @@ class StatePopulator {
       state.setNumberOfLayers(mapLayers.getCount());
       handleMapProperties(tiledMap.getProperties(), state, config);
       List<String> layerIds = new ArrayList<String>();
-      int lastTileLayerIndex = 0;
+      int lastTileLayerIndex = -1;
+      String lastLayerId = null;
       for (int i = 0; i < mapLayers.getCount(); ++i) {
          MapLayer mapLayer = mapLayers.get(i);
          if (mapLayer instanceof TiledMapTileLayer) {
-            if (i > 0) {
-               lastTileLayerIndex++;
-            }
-            String layerId = handleTiledMapTileLayer((TiledMapTileLayer) mapLayer, i, tiledMap, camera, rendererFactory,
+            lastTileLayerIndex++;
+            lastLayerId = handleTiledMapTileLayer((TiledMapTileLayer) mapLayer, i, tiledMap, camera, rendererFactory,
                   config);
-            layerIds.add(layerId);
+            layerIds.add(lastLayerId);
             populateStaticMapData(lastTileLayerIndex, (TiledMapTileLayer) mapLayer, state, config);
          } else {
             // Not a tiledlayer so consider it as an object layer
-            handleObjectLayer(lastTileLayerIndex, mapLayer, state, config);
+            handleObjectLayer(lastLayerId, lastTileLayerIndex, mapLayer, state, config);
          }
       }
-      state.setLayerIds(layerIds);
 
       // Add debug layer
-      handleDebugTileLayer(state, camera, rendererFactory, config);
+      layerIds.add(handleDebugTileLayer(state, camera, rendererFactory));
+      state.setLayerIds(layerIds);
    }
 
    private void handleMapProperties(MapProperties properties, State state, TiledMapConfig config) {
@@ -91,12 +91,15 @@ class StatePopulator {
             properties.get(config.get(Constants.HEIGHT), Integer.class));
    }
 
-   private void handleObjectLayer(int layerIndex, MapLayer layer, State state, TiledMapConfig config) {
+   private void handleObjectLayer(String lastLayerId, int layerIndex, MapLayer layer, State state, TiledMapConfig config) {
+      if (layerIndex < 0) {
+         throw new GdxRuntimeException("Unable to load tiled map! At least a single tiled layer is required!");
+      }
       MapObjects mapObjects = layer.getObjects();
       for (int objectIndex = 0; objectIndex < mapObjects.getCount(); ++objectIndex) {
          MapObject mapObject = mapObjects.get(objectIndex);
          MapProperties objectProperties = mapObject.getProperties();
-         GameObject gameObject = gameWorld.addObject();
+         GameObject gameObject = gameWorld.addObject(lastLayerId);
          final float x = objectProperties.get(config.get(Constants.X), Float.class);
          final float y = objectProperties.get(config.get(Constants.Y), Float.class);
          final float w = objectProperties.get(config.get(Constants.WIDTH), Float.class);
@@ -139,11 +142,11 @@ class StatePopulator {
    }
 
    private String handleDebugTileLayer(State state, Camera camera,
-                                       MapLayerRendererFactory rendererFactory, TiledMapConfig config) {
+                                       MapLayerRendererFactory rendererFactory) {
       GameObjectRenderer renderer = rendererFactory.createDebug(api, state, camera);
       String id = UUID.randomUUID().toString();
       renderManager.register(id, renderer);
-      GameObject layerObject = gameWorld.addObject();
+      GameObject layerObject = gameWorld.addObject(id);
       layerObject.setActive(false);
       layerObject.setPersistent(true);
       layerObject.setType(id);
@@ -158,7 +161,7 @@ class StatePopulator {
       GameObjectRenderer renderer = rendererFactory.create(index, tiledMap, camera);
       String id = UUID.randomUUID().toString();
       renderManager.register(id, renderer);
-      GameObject layerObject = gameWorld.addObject();
+      GameObject layerObject = gameWorld.addObject(id);
       layerObject.setActive(false);
       layerObject.setPersistent(true);
       layerObject.setType(id);

@@ -1,3 +1,7 @@
+# Version 0.5.17
+
+* [[#98](https://github.com/bitbrain/braingdx/issues/98)] only remove relevant objects from the world when disposing the tiled manager
+
 # Version 0.5.16
 
 * remove `Iterable` interface from `GameWorld`

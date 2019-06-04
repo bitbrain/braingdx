@@ -143,6 +143,15 @@ public class GameWorld {
     *
     * @return newly created game object
     */
+   public GameObject addObject(Mutator<GameObject> mutator, boolean lazy) {
+      return addObject(DEFAULT_GROUP_ID, mutator, lazy);
+   }
+
+   /**
+    * Adds a new game object to the game world and provides it.
+    *
+    * @return newly created game object
+    */
    public GameObject addObject(boolean lazy) {
       return addObject(DEFAULT_GROUP_ID, lazy);
    }
