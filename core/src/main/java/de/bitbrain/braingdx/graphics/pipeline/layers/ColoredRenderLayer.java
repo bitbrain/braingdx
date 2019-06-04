@@ -6,13 +6,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
-import de.bitbrain.braingdx.graphics.pipeline.AbstractRenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 import de.bitbrain.braingdx.util.Resizeable;
 
-public class ColoredRenderLayer extends AbstractRenderLayer implements Disposable, Resizeable {
+public class ColoredRenderLayer implements Disposable, Resizeable, RenderLayer {
 
    private Color color = Color.WHITE;
 
@@ -39,7 +38,7 @@ public class ColoredRenderLayer extends AbstractRenderLayer implements Disposabl
    }
 
    @Override
-   public void render(Batch batch, float delta) {
+   public void render(float delta) {
       this.batch.setColor(color);
       this.batch.setProjectionMatrix(camera.combined);
       this.batch.begin();

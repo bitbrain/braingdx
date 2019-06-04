@@ -15,7 +15,6 @@
 
 package de.bitbrain.braingdx.graphics.pipeline;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
@@ -64,27 +63,24 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
       return batchPostProcessor.hasEffects();
    }
 
-   public void render(Batch batch, float delta, FrameBuffer buffer) {
+   @Override
+   public void render(float delta, FrameBuffer buffer) {
       if (isEnabled()) {
          if (buffer == null) {
-            layer.render(batch, delta);
+            layer.render(delta);
          } else if (batchPostProcessor.hasEffects()) {
             batchPostProcessor.begin();
             this.batch.begin();
             this.batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
             this.batch.end();
-            layer.render(batch, delta);
+            layer.render(delta);
             batchPostProcessor.end(buffer);
          } else {
             buffer.begin();
-            layer.render(batch, delta);
+            layer.render(delta);
             buffer.end();
          }
       }
-   }
-
-   public void beforeRender() {
-      layer.beforeRender();
    }
 
    @Override

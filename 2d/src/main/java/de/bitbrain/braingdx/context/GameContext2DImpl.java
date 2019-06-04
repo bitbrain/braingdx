@@ -30,11 +30,16 @@ import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.VectorGameCamera;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
+import de.bitbrain.braingdx.graphics.lighting.LightingManagerRenderLayer;
 import de.bitbrain.braingdx.graphics.particles.ParticleManager;
+import de.bitbrain.braingdx.graphics.particles.ParticleManagerRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipeline2DFactory;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.pipeline.layers.ColoredRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
+import de.bitbrain.braingdx.graphics.pipeline.layers.StageRenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.layers.WorldRenderLayer;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.physics.PhysicsManager;
 import de.bitbrain.braingdx.physics.PhysicsManagerImpl;
@@ -67,7 +72,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
       super(shaderConfig, viewportFactory, new ArgumentFactory<GameContext, GameCamera>() {
          @Override
          public GameCamera create(GameContext context) {
-            return new VectorGameCamera((OrthographicCamera) context.getGameCamera(), context.getGameWorld());
+            return new VectorGameCamera(new OrthographicCamera(), context.getGameWorld());
          }
       });
       coloredRenderLayer = new ColoredRenderLayer();
@@ -86,6 +91,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
             (OrthographicCamera) getGameCamera().getInternalCamera()
       );
       renderPipeline = new CombinedRenderPipeline2DFactory(batch).create(this);
+      configurePipeline(renderPipeline, this);
       tiledMapManager = new TiledMapManagerImpl(
             getBehaviorManager(),
             getGameWorld(),
@@ -163,5 +169,24 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    @Override
    public PhysicsManager getPhysicsManager() {
       return physicsManager;
+   }
+
+   private void configurePipeline(RenderPipeline pipeline, GameContext2D context) {
+      pipeline.put(RenderPipeIds.BACKGROUND, new RenderLayer() {
+         @Override
+         public void render(float delta) {
+         }
+      });
+      pipeline.put(RenderPipeIds.FOREGROUND, new RenderLayer() {
+         @Override
+         public void render(float delta) {
+            // noOp
+         }
+      });
+      pipeline.put(RenderPipeIds.WORLD, new WorldRenderLayer(context.getGameWorld(), batch));
+      pipeline.put(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(context.getLightingManager()));
+      pipeline.put(RenderPipeIds.PARTICLES, new ParticleManagerRenderLayer(context.getParticleManager(), batch));
+      pipeline.put(RenderPipeIds.WORLD_UI, new StageRenderLayer(context.getWorldStage()));
+      pipeline.put(RenderPipeIds.UI, new StageRenderLayer(context.getStage()));
    }
 }

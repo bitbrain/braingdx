@@ -1,10 +1,9 @@
 package de.bitbrain.braingdx.graphics.pipeline.layers;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import de.bitbrain.braingdx.graphics.pipeline.AbstractRenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 
-public class StageRenderLayer extends AbstractRenderLayer {
+public class StageRenderLayer implements RenderLayer {
 
    private final Stage stage;
 
@@ -13,7 +12,7 @@ public class StageRenderLayer extends AbstractRenderLayer {
    }
 
    @Override
-   public void render(Batch batch, float delta) {
+   public void render(float delta) {
       stage.draw();
    }
 

@@ -12,18 +12,15 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 public class ParticleManagerRenderLayer implements RenderLayer {
 
    private final ParticleManager manager;
+   private final Batch batch;
 
-   public ParticleManagerRenderLayer(ParticleManager manager) {
+   public ParticleManagerRenderLayer(ParticleManager manager, Batch batch) {
       this.manager = manager;
+      this.batch = batch;
    }
 
    @Override
-   public void beforeRender() {
-      // noOp
-   }
-
-   @Override
-   public void render(Batch batch, float delta) {
+   public void render(float delta) {
       batch.begin();
       manager.draw(batch, delta);
       batch.end();

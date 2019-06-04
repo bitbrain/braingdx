@@ -14,6 +14,7 @@
  */
 package de.bitbrain.braingdx.graphics.pipeline;
 
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 
 /**
@@ -23,6 +24,8 @@ import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
  * @version 1.0.0
  */
 public interface RenderPipe {
+
+   void render(float delta, FrameBuffer buffer);
 
    boolean isEnabled();
 

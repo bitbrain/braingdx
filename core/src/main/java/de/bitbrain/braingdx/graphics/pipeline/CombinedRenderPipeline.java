@@ -259,8 +259,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
       clearBuffer();
       for (int i = 0; i < pipes.size(); ++i) {
          CombinedRenderPipe pipe = pipes.get(i);
-         pipe.beforeRender();
-         pipe.render(batch, delta, buffer);
+         pipe.render(delta, buffer);
       }
       if (hasEffects) {
          internalBatch.setProjectionMatrix(camera.combined);

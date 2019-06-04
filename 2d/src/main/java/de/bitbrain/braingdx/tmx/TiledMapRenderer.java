@@ -33,13 +33,7 @@ public class TiledMapRenderer implements RenderLayer {
    }
 
    @Override
-   public void beforeRender() {
-      // TODO Auto-generated method stub
-
-   }
-
-   @Override
-   public void render(Batch batch, float delta) {
+   public void render(float delta) {
       mapRenderer.setView(camera);
       mapRenderer.render();
    }

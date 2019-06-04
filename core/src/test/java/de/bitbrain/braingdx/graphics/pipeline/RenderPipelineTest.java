@@ -3,8 +3,7 @@ package de.bitbrain.braingdx.graphics.pipeline;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import de.bitbrain.braingdx.utils.GdxUtils;
+import de.bitbrain.braingdx.util.GdxUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +19,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -39,7 +36,6 @@ public class RenderPipelineTest {
       GdxUtils.mockApplicationContext();
       Gdx.gl = mock(GL20.class);
       when(Gdx.app.getType()).thenReturn(ApplicationType.Desktop);
-      //params.add(new RenderPipelineFactory[] { new MockedLayeredRenderPipelineFactory() });
       params.add(new RenderPipelineFactory[]{new MockedCombinedRenderPipelineFactory()});
       return params;
    }
@@ -83,9 +79,9 @@ public class RenderPipelineTest {
       pipeline.resize(0, 0);
       pipeline.render(0f);
       InOrder order = Mockito.inOrder(layerA, layerB, layerC);
-      order.verify(layerA, Mockito.calls(1)).render(any(Batch.class), eq(0f));
-      order.verify(layerB, Mockito.calls(1)).render(any(Batch.class),  eq(0f));
-      order.verify(layerC, Mockito.calls(1)).render(any(Batch.class),  eq(0f));
+      order.verify(layerA, Mockito.calls(1)).render(0f);
+      order.verify(layerB, Mockito.calls(1)).render(0f);
+      order.verify(layerC, Mockito.calls(1)).render(0f);
    }
 
    @Test

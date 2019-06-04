@@ -12,16 +12,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package de.bitbrain.braingdx.graphics.pipeline;
 
 /**
- * Abstract implementation of {@link RenderLayer}.
+ * A render layer which is rendered during the render pipeline process.
+ *
+ * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
  */
-public abstract class AbstractRenderLayer implements RenderLayer {
+public interface RenderLayer {
 
-   @Override
-   public void beforeRender() {
-      // noOp
-   }
+   /**
+    * Renders the layer with the given batch and delta.
+    *
+    * @param delta frame delta
+    */
+   void render(float delta);
 }

@@ -63,6 +63,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame, C extends GameConte
 
    @Override
    public final void show() {
+      ScreenTransitions.init(game, this);
       gameContext = contextFactory.create(this);
       onCreate(gameContext);
    }
