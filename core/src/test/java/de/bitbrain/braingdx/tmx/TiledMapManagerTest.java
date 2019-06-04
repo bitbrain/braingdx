@@ -34,6 +34,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -64,7 +65,7 @@ public class TiledMapManagerTest {
 
    @Before
    public void beforeTest() {
-      world = new GameWorld(camera);
+      world = new GameWorld();
       gameEventManager = new GameEventManagerImpl();
       GdxUtils.mockApplicationContext();
       BehaviorManager behaviorManager = new BehaviorManager(world);
@@ -129,7 +130,7 @@ public class TiledMapManagerTest {
       GameObject objectA = null;
       GameObject objectB = null;
 
-      for (GameObject object : world) {
+      for (GameObject object : world.getObjects()) {
          if (object.getType().equals(typeA)) {
             objectA = object;
          } else if (object.getType().equals(typeB)) {
@@ -295,7 +296,7 @@ public class TiledMapManagerTest {
             return new Object[]{"event"};
          }
       });
-      for (GameObject o : world) {
+      for (GameObject o : world.getObjects()) {
          if (o.getType().equals("player")) {
             // move player to event
             o.setPosition(0, 0);
@@ -336,7 +337,7 @@ public class TiledMapManagerTest {
             return new Object[]{"event"};
          }
       });
-      for (GameObject o : world) {
+      for (GameObject o : world.getObjects()) {
          if (o.getType().equals("player") || o.getType().equals("another_player")) {
             // move player to event
             o.setPosition(0, 0);
@@ -377,7 +378,7 @@ public class TiledMapManagerTest {
             return new Object[]{"event"};
          }
       });
-      for (GameObject o : world) {
+      for (GameObject o : world.getObjects()) {
          if (o.getType().equals("player") || o.getType().equals("another_player")) {
             // move player to event
             o.setPosition(0, 0);
@@ -396,7 +397,7 @@ public class TiledMapManagerTest {
       tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
       world.update(0f);
       assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
-      for (GameObject o : world) {
+      for (GameObject o : world.getObjects()) {
          if (o.getType().equals("player")) {
             o.setPosition(1, 0);
          }
@@ -414,7 +415,7 @@ public class TiledMapManagerTest {
       tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
       world.update(0f);
       assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
-      for (GameObject o : world) {
+      for (GameObject o : world.getObjects()) {
          if (o.getType().equals("player")) {
             o.setPosition(1, 0);
             o.setPosition(0, 1);
@@ -440,7 +441,7 @@ public class TiledMapManagerTest {
       // Check for normal collision setup
       assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
       assertThat(tiledMapManager.getAPI().isCollision(0, 1, 0)).isTrue();
-      for (GameObject o : world) {
+      for (GameObject o : world.getObjects()) {
          if (o.getType().equals("player")) {
             o.setPosition(0, 1);
          }
@@ -449,7 +450,7 @@ public class TiledMapManagerTest {
       // Verify collision has moved
       assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isFalse();
       assertThat(tiledMapManager.getAPI().isCollision(0, 1, 0)).isTrue();
-      for (GameObject o : world) {
+      for (GameObject o : world.getObjects()) {
          if (o.getType().equals("player")) {
             o.setPosition(0, 0);
          }

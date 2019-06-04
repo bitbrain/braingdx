@@ -22,6 +22,8 @@ import de.bitbrain.braingdx.event.GameEventRouter;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
+import java.util.List;
+
 /**
  * Implementation of {@link TiledMapAPI}.
  *
@@ -104,7 +106,9 @@ class TiledMapAPIImpl implements TiledMapAPI {
 
    @Override
    public GameObject getGameObjectAt(int tileX, int tileY, int layer) {
-      for (GameObject worldObject : gameWorld) {
+      List<GameObject> objects = gameWorld.getObjects();
+      for (int i = 0; i < objects.size(); ++i) {
+         GameObject worldObject = objects.get(i);
          int objectTileX = IndexCalculator.calculateXIndex(worldObject, state);
          int objectTileY = IndexCalculator.calculateYIndex(worldObject, state);
          int layerIndex = layerIndexOf(worldObject);

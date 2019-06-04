@@ -17,8 +17,8 @@ package de.bitbrain.braingdx.world;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.Pool;
+import de.bitbrain.braingdx.util.Group;
 import de.bitbrain.braingdx.util.Mutator;
 import de.bitbrain.braingdx.util.ZIndexComparator;
 
@@ -31,15 +31,16 @@ import java.util.*;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class GameWorld implements Iterable<GameObject> {
+public class GameWorld {
+
+   public static final String DEFAULT_GROUP_ID = "GlobalGameWorldGroup";
 
    /**
     * the default cache size this world uses
     */
    public static final int DEFAULT_CACHE_SIZE = 512;
-   private final List<GameObject> objects = new ArrayList<GameObject>();
+   private final Group<Object, GameObject> objects = new Group<Object, GameObject>();
    private final Map<String, GameObject> identityMap = new HashMap<String, GameObject>();
-   private final List<GameObject> unmodifiableObjects;
    private final Pool<GameObject> pool;
    private final Comparator<GameObject> comparator = new ZIndexComparator();
    private final List<GameWorldListener> listeners = new ArrayList<GameWorldListener>();
@@ -71,15 +72,11 @@ public class GameWorld implements Iterable<GameObject> {
       }
    };
 
-   private OrthographicCamera camera;
-
-   public GameWorld(OrthographicCamera camera) {
-      this(camera, DEFAULT_CACHE_SIZE);
+   public GameWorld() {
+      this(DEFAULT_CACHE_SIZE);
    }
 
-   public GameWorld(OrthographicCamera camera, int cacheSize) {
-      unmodifiableObjects = Collections.unmodifiableList(objects);
-      this.camera = camera;
+   public GameWorld(int cacheSize) {
       this.pool = new Pool<GameObject>(cacheSize) {
          @Override
          protected GameObject newObject() {
@@ -119,8 +116,26 @@ public class GameWorld implements Iterable<GameObject> {
     *
     * @return newly created game object
     */
+   public GameObject addObject(Object group) {
+      return addObject(group, false);
+   }
+
+   /**
+    * Adds a new game object to the game world and provides it.
+    *
+    * @return newly created game object
+    */
    public GameObject addObject() {
-      return addObject(null, false);
+      return addObject(DEFAULT_GROUP_ID, false);
+   }
+
+   /**
+    * Adds a new game object to the game world and provides it.
+    *
+    * @return newly created game object
+    */
+   public GameObject addObject(Object group, boolean lazy) {
+      return addObject(group, null, lazy);
    }
 
    /**
@@ -129,7 +144,7 @@ public class GameWorld implements Iterable<GameObject> {
     * @return newly created game object
     */
    public GameObject addObject(boolean lazy) {
-      return addObject(null, lazy);
+      return addObject(DEFAULT_GROUP_ID, lazy);
    }
 
    /**
@@ -139,7 +154,7 @@ public class GameWorld implements Iterable<GameObject> {
     * @return newly created game object
     */
    public GameObject addObject(Mutator<GameObject> mutator) {
-      return addObject(mutator, false);
+      return addObject(DEFAULT_GROUP_ID, mutator, false);
    }
 
    /**
@@ -148,7 +163,17 @@ public class GameWorld implements Iterable<GameObject> {
     * @param mutator the mutator which might change the GameObject
     * @return newly created game object
     */
-   public GameObject addObject(Mutator<GameObject> mutator, boolean lazy) {
+   public GameObject addObject(Object group, Mutator<GameObject> mutator) {
+      return addObject(group, mutator, false);
+   }
+
+   /**
+    * Adds a new game object to the game world with a custom ID
+    *
+    * @param mutator the mutator which might change the GameObject
+    * @return newly created game object
+    */
+   public GameObject addObject(final Object group, Mutator<GameObject> mutator, boolean lazy) {
       if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
          Gdx.app.debug("DEBUG", "GameWorld - obtaining new object...");
       }
@@ -162,6 +187,10 @@ public class GameWorld implements Iterable<GameObject> {
          );
          return object;
       }
+      if (mutator != null) {
+         mutator.mutate(object);
+      }
+      identityMap.put(object.getId(), object);
       if (lazy) {
          if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
             Gdx.app.debug("DEBUG", String.format("GameWorld - requested addition for new game object %s", object));
@@ -169,7 +198,7 @@ public class GameWorld implements Iterable<GameObject> {
          Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-               objects.add(object);
+               objects.addToGroup(group, object);
                for (int i = 0; i < listeners.size(); ++i) {
                   listeners.get(i).onAdd(object);
                }
@@ -179,15 +208,11 @@ public class GameWorld implements Iterable<GameObject> {
          if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
             Gdx.app.debug("DEBUG", String.format("GameWorld - added new game object %s", object));
          }
-         objects.add(object);
+         objects.addToGroup(group, object);
          for (int i = 0; i < listeners.size(); ++i) {
             listeners.get(i).onAdd(object);
          }
       }
-      if (mutator != null) {
-         mutator.mutate(object);
-      }
-      identityMap.put(object.getId(), object);
       return object;
    }
 
@@ -197,9 +222,10 @@ public class GameWorld implements Iterable<GameObject> {
     * @param delta frame delta
     */
    public void update(float delta) {
-      Collections.sort(objects, comparator);
-      for (int i = 0; i < objects.size(); ++i) {
-         GameObject object = objects.get(i);
+      List<GameObject> allObjects = objects.getAll();
+      Collections.sort(allObjects, comparator);
+      for (int i = 0; i < allObjects.size(); ++i) {
+         GameObject object = allObjects.get(i);
          if (!bounds.isInBounds(object) && !object.isPersistent()) {
             Gdx.app.debug("DEBUG", String.format("GameWorld - object %s is out of bounds! Remove...", object));
             remove(object);
@@ -209,8 +235,8 @@ public class GameWorld implements Iterable<GameObject> {
             listeners.get(listenerIndex).onUpdate(object, delta);
          }
          if (object.isActive()) {
-            for (int otherObjIndex = 0; otherObjIndex < objects.size(); ++otherObjIndex) {
-               GameObject other = objects.get(otherObjIndex);
+            for (int otherObjIndex = 0; otherObjIndex < allObjects.size(); ++otherObjIndex) {
+               GameObject other = allObjects.get(otherObjIndex);
                if (other.isActive() && !object.getId().equals(other.getId())) {
                   for (int listenerIndex = 0; listenerIndex < listeners.size(); ++listenerIndex) {
                      listeners.get(listenerIndex).onUpdate(object, other, delta);
@@ -241,7 +267,7 @@ public class GameWorld implements Iterable<GameObject> {
     * can be null.
     */
    public List<GameObject> getObjects(Comparator<GameObject> comparator) {
-      List<GameObject> result = new ArrayList<GameObject>(objects);
+      List<GameObject> result = new ArrayList<GameObject>(objects.getAll());
       if (comparator != null) {
          Collections.sort(result, comparator);
       }
@@ -254,7 +280,7 @@ public class GameWorld implements Iterable<GameObject> {
     * @return
     */
    public int size() {
-      return objects.size();
+      return objects.getAll().size();
    }
 
    /**
@@ -270,9 +296,19 @@ public class GameWorld implements Iterable<GameObject> {
       Gdx.app.debug("DEBUG", "GameWorld - Cleared all game objects!");
    }
 
-   @Override
-   public Iterator<GameObject> iterator() {
-      return unmodifiableObjects.iterator();
+   public void clearGroup(Object groupKey) {
+      List<GameObject> group = objects.getGroup(groupKey);
+      if (group != null) {
+         group = new ArrayList<GameObject>(group);
+         for (int i = 0; i < group.size(); i++) {
+            removeInternally(group.get(i));
+         }
+         objects.clearGroup(groupKey);
+      }
+   }
+
+   public List<GameObject> getGroup(Object groupKey) {
+      return objects.getGroup(groupKey);
    }
 
    /**
@@ -305,8 +341,8 @@ public class GameWorld implements Iterable<GameObject> {
       for (int i = 0; i < listeners.size(); ++i) {
          listeners.get(i).onRemove(object);
       }
-      pool.free(object);
       objects.remove(object);
+      pool.free(object);
    }
 
    /**

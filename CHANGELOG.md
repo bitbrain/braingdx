@@ -1,3 +1,9 @@
+# Version 0.5.16
+
+* remove `Iterable` interface from `GameWorld`
+* add new `Group` utility
+* [[#96](https://github.com/bitbrain/braingdx/issues/96)] introduce game object groups accessible via `GameWorld`
+
 # Version 0.5.15
 
 * reduce memory footprint by only calling `GameObject.toString()` when debug level is active

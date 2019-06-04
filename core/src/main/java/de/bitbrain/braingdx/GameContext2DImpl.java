@@ -91,7 +91,7 @@ public class GameContext2DImpl implements GameContext, Disposable, Resizeable {
       shaderManager = new ShaderManager(eventManager, settings.getGraphics());
       camera = new OrthographicCamera();
       uiCamera = new OrthographicCamera();
-      world = new GameWorld(camera);
+      world = new GameWorld();
       behaviorManager = new BehaviorManager(world);
       batch = new SpriteBatch();
       inputManager = new InputManagerImpl();

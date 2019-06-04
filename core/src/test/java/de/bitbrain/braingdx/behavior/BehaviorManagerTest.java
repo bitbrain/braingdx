@@ -29,7 +29,7 @@ public class BehaviorManagerTest {
 
    @Before
    public void beforeTest() {
-      world = new GameWorld(mock(OrthographicCamera.class));
+      world = new GameWorld();
       manager = new BehaviorManager(world);
       world.addListener(new BehaviorManagerAdapter(manager));
       GdxUtils.mockApplicationContext();
