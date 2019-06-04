@@ -31,11 +31,6 @@ import de.bitbrain.braingdx.tweens.SharedTweenManager;
 abstract class AbstractTransitionable implements Transitionable {
 
    @Override
-   public void beforeRender() {
-      // noOp
-   }
-
-   @Override
    public void in() {
       in(null, DEFAULT_DURATION);
    }

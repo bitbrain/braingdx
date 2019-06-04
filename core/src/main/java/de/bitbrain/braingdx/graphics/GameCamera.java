@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.world.GameObject;
+import de.bitbrain.braingdx.world.GameWorld;
 
 /**
  * Tracks a camera and make it following a target
@@ -13,14 +14,7 @@ import de.bitbrain.braingdx.world.GameObject;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface GameCamera extends Resizeable {
-
-   /**
-    * Updates the tracker in a frame step
-    *
-    * @param delta the frame delta
-    */
-   void update(float delta);
+public interface GameCamera {
 
    /**
     * Sets a new threshold to where the camera should stop tracking.
@@ -40,8 +34,6 @@ public interface GameCamera extends Resizeable {
 
    /**
     * Sets a new speed value
-    *
-    * @param speed
     */
    void setTargetTrackingSpeed(float speedX, float speedY);
 
@@ -169,4 +161,7 @@ public interface GameCamera extends Resizeable {
     */
    void shake(float strength, float duration);
 
+   void update(float delta);
+
+   void resize(int width, int height);
 }

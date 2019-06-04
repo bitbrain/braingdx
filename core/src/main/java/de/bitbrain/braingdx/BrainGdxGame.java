@@ -53,7 +53,7 @@ public abstract class BrainGdxGame extends Game {
 
    protected abstract GameAssetLoader getAssetLoader();
 
-   protected abstract AbstractScreen<?> getInitialScreen();
+   protected abstract AbstractScreen<?, ?> getInitialScreen();
 
    private void loadAssets() {
       final AssetManager assetManager = SharedAssetManager.getInstance();

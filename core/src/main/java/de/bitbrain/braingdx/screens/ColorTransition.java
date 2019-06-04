@@ -23,7 +23,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
-import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
 import de.bitbrain.braingdx.tweens.ColorTween;
 
 /**
@@ -33,7 +32,7 @@ import de.bitbrain.braingdx.tweens.ColorTween;
  * @version 1.0
  * @since 1.0
  */
-public class ColorTransition extends AbstractTransitionable implements RenderLayer, Disposable {
+public class ColorTransition extends AbstractTransitionable implements Disposable {
 
    private SpriteBatch batch = new SpriteBatch();
    private Texture texture;
@@ -49,12 +48,6 @@ public class ColorTransition extends AbstractTransitionable implements RenderLay
       this(Color.BLACK);
    }
 
-   @Override
-   public void beforeRender() {
-      // noOp
-   }
-
-   @Override
    public void render(Batch batch, float delta) {
       if (texture == null) {
          initTexture();

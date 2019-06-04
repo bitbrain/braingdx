@@ -16,7 +16,6 @@
 package de.bitbrain.braingdx.screens;
 
 import de.bitbrain.braingdx.BrainGdxGame;
-import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 
 /**
  * Screen transition utilities.
@@ -31,15 +30,12 @@ public class ScreenTransitions {
 
    private final BrainGdxGame game;
 
-   private final AbstractScreen<?> from;
-
-   private final RenderPipeline renderPipeline;
+   private final AbstractScreen<?, ?> from;
 
    private final ColorTransition defaultTransition = new ColorTransition();
 
-   private ScreenTransitions(BrainGdxGame game, RenderPipeline renderPipeline, AbstractScreen<?> from) {
+   private ScreenTransitions(BrainGdxGame game,  AbstractScreen<?, ?> from) {
       this.game = game;
-      this.renderPipeline = renderPipeline;
       this.from = from;
    }
 
@@ -47,8 +43,8 @@ public class ScreenTransitions {
       return INSTANCE;
    }
 
-   static void init(BrainGdxGame game, RenderPipeline renderPipeline, AbstractScreen<?> from) {
-      INSTANCE = new ScreenTransitions(game, renderPipeline, from);
+   static void init(BrainGdxGame game,  AbstractScreen<?, ?> from) {
+      INSTANCE = new ScreenTransitions(game, from);
    }
 
    public void in(float duration) {
@@ -72,7 +68,6 @@ public class ScreenTransitions {
    }
 
    public void in(Transitionable transition, TransitionCallback callback, float duration) {
-      renderPipeline.put(ScreenTransitions.class.getSimpleName(), transition);
       transition.in(callback, duration);
    }
 
@@ -84,11 +79,11 @@ public class ScreenTransitions {
       out(Transitionable.DEFAULT_DURATION);
    }
 
-   public void out(AbstractScreen<?> to, float duration) {
+   public void out(AbstractScreen<?, ?> to, float duration) {
       out(defaultTransition, null, to, duration);
    }
 
-   public void out(TransitionCallback callback, AbstractScreen<?> to, float duration) {
+   public void out(TransitionCallback callback, AbstractScreen<?, ?> to, float duration) {
       out(defaultTransition, callback, to, duration);
    }
 
@@ -97,7 +92,6 @@ public class ScreenTransitions {
    }
 
    public void outIn(Transitionable transition, TransitionCallback callback, float duration) {
-      renderPipeline.put(ScreenTransitions.class.getSimpleName(), transition);
       defaultTransition.outIn(callback, duration);
    }
 
@@ -117,13 +111,12 @@ public class ScreenTransitions {
       outIn(defaultTransition, null, Transitionable.DEFAULT_DURATION);
    }
 
-   public void out(Transitionable transition, final AbstractScreen<?> to, float duration) {
+   public void out(Transitionable transition, final AbstractScreen<?, ?> to, float duration) {
       out(transition, null, to, duration);
    }
 
-   public void out(Transitionable transition, final TransitionCallback callback, final AbstractScreen<?> to,
+   public void out(Transitionable transition, final TransitionCallback callback, final AbstractScreen<?, ?> to,
                    float duration) {
-      renderPipeline.put(ScreenTransitions.class.getSimpleName(), transition);
       transition.out(new TransitionCallback() {
          @Override
          public void beforeTransition() {

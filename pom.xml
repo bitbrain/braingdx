@@ -69,6 +69,7 @@
    <!-- Module definitions -->
    <modules>
       <module>core</module>
+      <module>2d</module>
    </modules>
 
    <profiles>

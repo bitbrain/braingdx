@@ -8,6 +8,7 @@ import de.bitbrain.braingdx.graphics.postprocessing.effects.Bloom;
 import de.bitbrain.braingdx.graphics.postprocessing.effects.Fxaa;
 import de.bitbrain.braingdx.graphics.postprocessing.effects.Vignette;
 import de.bitbrain.braingdx.graphics.postprocessing.effects.Zoomer;
+import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 
 /**
  * Provides factory methods to create a variety of shaders.
@@ -16,12 +17,17 @@ public class ShaderManager {
 
    private final GameEventManager gameEventManager;
    private final GraphicsSettings settings;
+   private final ShaderConfig config;
 
-   public ShaderManager(GameEventManager gameEventManager, GraphicsSettings settings) {
+   public ShaderManager(ShaderConfig config, GameEventManager gameEventManager, GraphicsSettings settings) {
+      this.config = config;
       this.gameEventManager = gameEventManager;
       this.settings = settings;
    }
 
+   public ShaderConfig getConfig() {
+      return config;
+   }
 
    /**
     * Creates an anti-aliasing effect to reduce aliasing.

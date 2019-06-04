@@ -15,8 +15,6 @@
 
 package de.bitbrain.braingdx.screens;
 
-import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
-
 /**
  * Allows transitions.
  *
@@ -24,7 +22,7 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
  * @version 1.0
  * @since 1.0
  */
-public interface Transitionable extends RenderLayer {
+public interface Transitionable {
 
    /**
     * The default fade duration.

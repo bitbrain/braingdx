@@ -23,11 +23,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bitbrain.braingdx.BrainGdxGame;
-import de.bitbrain.braingdx.GameContext;
-import de.bitbrain.braingdx.GameContext2DImpl;
-import de.bitbrain.braingdx.graphics.pipeline.layers.ColoredRenderLayer;
-import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
+import de.bitbrain.braingdx.context.GameContext;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
+import de.bitbrain.braingdx.util.ArgumentFactory;
+import de.bitbrain.braingdx.util.Factory;
 import de.bitbrain.braingdx.util.ViewportFactory;
 
 /**
@@ -37,7 +36,7 @@ import de.bitbrain.braingdx.util.ViewportFactory;
  * @version 1.0.0
  * @since 1.0.0
  */
-public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
+public abstract class AbstractScreen<T extends BrainGdxGame, C extends GameContext> implements Screen {
 
    private final ViewportFactory viewportFactory = new ViewportFactory() {
 
@@ -47,13 +46,15 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
       }
 
    };
+
    private T game;
    private Color backgroundColor = Color.BLACK.cpy();
-   private ColoredRenderLayer coloredRenderLayer;
-   private GameContext2DImpl gameContext2D;
+   private C gameContext;
+   private ArgumentFactory<AbstractScreen, C> contextFactory;
 
-   public AbstractScreen(T game) {
+   public AbstractScreen(T game, ArgumentFactory<AbstractScreen, C> contextFactory) {
       this.game = game;
+      this.contextFactory = contextFactory;
    }
 
    public T getGame() {
@@ -62,10 +63,8 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
    @Override
    public final void show() {
-      coloredRenderLayer = new ColoredRenderLayer();
-      gameContext2D = new GameContext2DImpl(viewportFactory, getShaderConfig());
-      ScreenTransitions.init(game, gameContext2D.getRenderPipeline(), this);
-      onCreate(gameContext2D);
+      gameContext = contextFactory.create(this);
+      onCreate(gameContext);
    }
 
    @Override
@@ -73,22 +72,12 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
       Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       onUpdate(delta);
-      gameContext2D.updateAndRender(delta);
+      gameContext.updateAndRender(delta);
    }
 
    @Override
    public final void resize(int width, int height) {
-      gameContext2D.resize(width, height);
-   }
-
-   public Color getBackgroundColor() {
-      return backgroundColor;
-   }
-
-   public void setBackgroundColor(Color color) {
-      this.backgroundColor = color;
-      coloredRenderLayer.setColor(color);
-      gameContext2D.getRenderPipeline().put(RenderPipeIds.BACKGROUND, coloredRenderLayer);
+      gameContext.resize(width, height);
    }
 
    @Override
@@ -106,22 +95,26 @@ public abstract class AbstractScreen<T extends BrainGdxGame> implements Screen {
 
    }
 
-   protected abstract void onCreate(GameContext context);
+   protected abstract void onCreate(C context);
 
    protected void onUpdate(float delta) {
       // noOp
    }
 
-   protected ShaderConfig getShaderConfig() {
+   public ViewportFactory getViewportFactory() {
+      return viewportFactory;
+   }
+
+   public ShaderConfig getShaderConfig() {
       return new ShaderConfig();
    }
 
-   protected Viewport getViewport(int width, int height, Camera camera) {
+   public Viewport getViewport(int width, int height, Camera camera) {
       return new ScreenViewport(camera);
    }
 
    @Override
    public void dispose() {
-      gameContext2D.dispose();
+      gameContext.dispose();
    }
 }
