@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
+import de.bitbrain.braingdx.graphics.renderer.GameObject2DRenderer;
 import de.bitbrain.braingdx.util.Enabler;
 import de.bitbrain.braingdx.util.Factory;
 import de.bitbrain.braingdx.world.GameObject;
@@ -23,7 +23,7 @@ import de.bitbrain.braingdx.world.GameObject;
  * @author Miguel Gonzalez Sanchez
  * @since 0.4.0
  */
-public class AnimationRenderer implements GameObjectRenderManager.GameObjectRenderer {
+public class AnimationRenderer extends GameObject2DRenderer {
 
    private static final Enabler<GameObject> DEFAULT_ENABLER = new Enabler<GameObject>() {
       @Override
@@ -76,10 +76,6 @@ public class AnimationRenderer implements GameObjectRenderManager.GameObjectRend
       this.sprite = new Sprite();
       this.animationTypeResolver = animationTypeResolver;
       this.animationEnabler = animationEnabler;
-   }
-
-   @Override
-   public void init() {
    }
 
    @Override

@@ -9,11 +9,11 @@ import de.bitbrain.braingdx.util.ArgumentFactory;
 
 public abstract class BrainGdxScreen2D<T extends BrainGdxGame> extends AbstractScreen<T, GameContext2D> {
 
-   public BrainGdxScreen2D(T game) {
+   public BrainGdxScreen2D(final T game) {
       super(game, new ArgumentFactory<AbstractScreen, GameContext2D>() {
          @Override
          public GameContext2D create(AbstractScreen screen) {
-            return new GameContext2DImpl(screen.getViewportFactory(), new ShaderConfig());
+            return new GameContext2DImpl(screen.getViewportFactory(), new ShaderConfig(), game, screen);
          }
       });
    }

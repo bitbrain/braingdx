@@ -60,14 +60,13 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
    private final ShaderConfig config;
    private final SpriteBatch internalBatch;
-   private final Batch batch;
    private FrameBuffer buffer;
    private OrthographicCamera camera;
    private boolean hasEffects;
    private int bufferWidth;
    private int bufferHeight;
 
-   public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera, Batch batch) {
+   public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
          @Override
@@ -78,10 +77,10 @@ public class CombinedRenderPipeline implements RenderPipeline {
             return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
          }
 
-      }, internalBatch, camera, batch);
+      }, internalBatch, camera);
    }
 
-   public CombinedRenderPipeline(ShaderConfig config, Batch batch) {
+   public CombinedRenderPipeline(ShaderConfig config) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
          @Override
@@ -92,11 +91,11 @@ public class CombinedRenderPipeline implements RenderPipeline {
             return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
          }
 
-      }, new SpriteBatch(), new OrthographicCamera(), batch);
+      }, new SpriteBatch(), new OrthographicCamera());
    }
 
    CombinedRenderPipeline(ShaderConfig config, PostProcessor processor, FrameBufferFactory factory,
-                          SpriteBatch internalBatch, OrthographicCamera camera, Batch batch) {
+                          SpriteBatch internalBatch, OrthographicCamera camera) {
       this.config = config;
       ShaderLoader.BasePath = this.config.basePath;
       ShaderLoader.PathResolver = this.config.pathResolver;
@@ -104,7 +103,6 @@ public class CombinedRenderPipeline implements RenderPipeline {
       this.bufferFactory = factory;
       this.internalBatch = internalBatch;
       this.camera = camera;
-      this.batch = batch;
    }
 
    @Override

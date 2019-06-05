@@ -26,7 +26,6 @@ import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.context.GameContext;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.util.ArgumentFactory;
-import de.bitbrain.braingdx.util.Factory;
 import de.bitbrain.braingdx.util.ViewportFactory;
 
 /**
@@ -63,7 +62,6 @@ public abstract class AbstractScreen<T extends BrainGdxGame, C extends GameConte
 
    @Override
    public final void show() {
-      ScreenTransitions.init(game, this);
       gameContext = contextFactory.create(this);
       onCreate(gameContext);
    }

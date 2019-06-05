@@ -21,7 +21,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
-import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
+import de.bitbrain.braingdx.graphics.renderer.GameObject2DRenderer;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -31,7 +31,7 @@ import de.bitbrain.braingdx.world.GameObject;
  * @version 1.0.0
  * @since 1.0.0
  */
-class OrthogonalMapLayerRenderer implements GameObjectRenderer {
+class OrthogonalMapLayerRenderer extends GameObject2DRenderer {
 
    private final TiledMapTileLayer layer;
    private final OrthographicCamera camera;
@@ -42,11 +42,6 @@ class OrthogonalMapLayerRenderer implements GameObjectRenderer {
       layer = (TiledMapTileLayer) map.getLayers().get(layerIndex);
       this.camera = camera;
       this.map = map;
-   }
-
-   @Override
-   public void init() {
-      // noOp
    }
 
    @Override

@@ -15,8 +15,9 @@
 
 package de.bitbrain.braingdx.graphics;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.world.GameObject;
 
 import java.util.HashMap;
@@ -31,12 +32,16 @@ import java.util.Map;
  */
 public class GameObjectRenderManager implements Disposable {
 
-   private final Map<Object, GameObjectRenderer> rendererMap = new HashMap<Object, GameObjectRenderer>();
+   private final Map<Object, GameObjectRenderer<?>> rendererMap = new HashMap<Object, GameObjectRenderer<?>>();
+   private final Map<Class<?>, BatchResolver<?>> batchResolverMap = new HashMap<Class<?>, BatchResolver<?>>();
 
-   private final Batch batch;
-
-   public GameObjectRenderManager(Batch batch) {
-      this.batch = batch;
+   public GameObjectRenderManager(BatchResolver<?> ... resolvers) {
+      if (resolvers.length < 1) {
+         throw new GdxRuntimeException("Unable to create " + GameObjectRenderManager.class.getName() + " no batch resolvers provided.");
+      }
+      for (BatchResolver resolver : resolvers) {
+         batchResolverMap.put(resolver.getBatchClass(), resolver);
+      }
    }
 
    /**
@@ -45,20 +50,25 @@ public class GameObjectRenderManager implements Disposable {
     * @param gameObjectRenderers renderers
     * @return a new combined {@link GameObjectRenderer}
     */
-   public static GameObjectRenderer combine(GameObjectRenderer... gameObjectRenderers) {
-      return new CombinedGameObjectRenderer(gameObjectRenderers);
+   public static <T> GameObjectRenderer combine(GameObjectRenderer<T>... gameObjectRenderers) {
+      return new CombinedGameObjectRenderer<T>(gameObjectRenderers);
    }
 
    public void render(GameObject object, float delta) {
       final GameObjectRenderer renderer = rendererMap.get(object.getType());
       if (renderer != null) {
+         BatchResolver<?> batchResolver = batchResolverMap.get(renderer.getBatchClass());
+         if (batchResolver == null) {
+            throw new GdxRuntimeException("Unable to render type=" + object.getType()
+                  + "! Renderer=" + renderer + " provided but no batch resolver registered.");
+         }
+         Object batch = batchResolver.getBatch();
          renderer.render(object, batch, delta);
       }
    }
 
-   public void register(Object gameObjectType, GameObjectRenderer renderer) {
+   public void register(Object gameObjectType, GameObjectRenderer<?> renderer) {
       if (!rendererMap.containsKey(gameObjectType)) {
-         renderer.init();
          rendererMap.put(gameObjectType, renderer);
       }
    }
@@ -77,32 +87,28 @@ public class GameObjectRenderManager implements Disposable {
       rendererMap.clear();
    }
 
-   public interface GameObjectRenderer {
-
-      void init();
-
-      void render(GameObject object, Batch batch, float delta);
+   public interface GameObjectRenderer<BatchType> {
+      Class<BatchType> getBatchClass();
+      void render(GameObject object, BatchType batchType, float delta);
    }
 
-   static class CombinedGameObjectRenderer implements GameObjectRenderer {
+   static class CombinedGameObjectRenderer<BatchType> implements GameObjectRenderer<BatchType> {
 
-      private final GameObjectRenderer[] renderers;
+      private final GameObjectRenderer<BatchType>[] renderers;
 
       public CombinedGameObjectRenderer(GameObjectRenderer... gameObjectRenderers) {
          this.renderers = gameObjectRenderers;
       }
 
       @Override
-      public void init() {
-         for (GameObjectRenderer renderer : renderers) {
-            renderer.init();
-         }
+      public Class<BatchType> getBatchClass() {
+         return renderers[0].getBatchClass();
       }
 
       @Override
-      public void render(GameObject object, Batch batch, float delta) {
+      public void render(GameObject object, BatchType batchType, float delta) {
          for (int i = 0; i < renderers.length; ++i) {
-            renderers[i].render(object, batch, delta);
+            renderers[i].render(object, batchType, delta);
          }
       }
 

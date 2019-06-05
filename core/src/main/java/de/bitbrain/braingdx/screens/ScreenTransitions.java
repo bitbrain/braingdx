@@ -26,25 +26,15 @@ import de.bitbrain.braingdx.BrainGdxGame;
  */
 public class ScreenTransitions {
 
-   private static ScreenTransitions INSTANCE;
-
    private final BrainGdxGame game;
 
    private final AbstractScreen<?, ?> from;
 
    private final ColorTransition defaultTransition = new ColorTransition();
 
-   private ScreenTransitions(BrainGdxGame game,  AbstractScreen<?, ?> from) {
+   public ScreenTransitions(BrainGdxGame game, AbstractScreen<?, ?> from) {
       this.game = game;
       this.from = from;
-   }
-
-   public static ScreenTransitions getInstance() {
-      return INSTANCE;
-   }
-
-   static void init(BrainGdxGame game,  AbstractScreen<?, ?> from) {
-      INSTANCE = new ScreenTransitions(game, from);
    }
 
    public void in(float duration) {

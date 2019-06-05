@@ -25,7 +25,7 @@ public class MockedCombinedRenderPipelineFactory implements RenderPipelineFactor
       when(factory.create(Mockito.anyInt(), Mockito.anyInt())).thenReturn(buffer);
       when(buffer.getColorBufferTexture()).thenReturn(mockTexture);
       return new CombinedRenderPipeline(config, processorMock, factory, mock(SpriteBatch.class),
-            mock(OrthographicCamera.class), mock(Batch.class));
+            mock(OrthographicCamera.class));
    }
 
 }

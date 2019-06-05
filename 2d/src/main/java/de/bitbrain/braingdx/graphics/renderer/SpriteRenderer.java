@@ -21,7 +21,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
-import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -31,27 +30,27 @@ import de.bitbrain.braingdx.world.GameObject;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class SpriteRenderer implements GameObjectRenderManager.GameObjectRenderer {
+public class SpriteRenderer extends GameObject2DRenderer {
 
    private final AssetManager assets = SharedAssetManager.getInstance();
    private final Vector2 offset = new Vector2();
    protected Sprite sprite;
    private String textureId;
    private Texture texture;
+   private final Batch batch;
 
-   public SpriteRenderer(String textureId) {
+   public SpriteRenderer(String textureId, Batch batch) {
       this.textureId = textureId;
-   }
-
-   public SpriteRenderer(Texture texture) {
-      this.texture = texture;
-   }
-
-   @Override
-   public void init() {
+      this.batch = batch;
       if (textureId != null) {
          texture = assets.get(textureId, Texture.class);
       }
+      sprite = new Sprite(texture);
+   }
+
+   public SpriteRenderer(Texture texture, Batch batch) {
+      this.texture = texture;
+      this.batch = batch;
       sprite = new Sprite(texture);
    }
 

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.graphics.GraphicsFactory;
+import de.bitbrain.braingdx.graphics.renderer.GameObject2DRenderer;
 import de.bitbrain.braingdx.world.GameObject;
 
 public class OrthogonalMapLayerRendererFactory implements MapLayerRendererFactory {
@@ -25,12 +26,11 @@ public class OrthogonalMapLayerRendererFactory implements MapLayerRendererFactor
       if (!(camera instanceof OrthographicCamera)) {
          throw new RuntimeException("OrthographicCamera must be provided for Orthographic TiledMaps!");
       }
-      return new GameObjectRenderer() {
+      return new GameObject2DRenderer() {
 
          private Texture texture;
 
-         @Override
-         public void init() {
+         {
             Color color = new Color(Color.PINK);
             color.a = 0.2f;
             texture = GraphicsFactory.createTexture(2, 2, color);
