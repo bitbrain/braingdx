@@ -161,7 +161,10 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       behaviorManager.update(delta);
       tweenManager.update(delta);
       gameCamera.update(delta);
+      renderManager.beforeRender();
+      world.update(delta);
       stage.act(delta);
+      renderPipeline.render(delta);
    }
 
    @Override

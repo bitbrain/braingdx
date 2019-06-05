@@ -4,5 +4,7 @@ public interface BatchResolver<T> {
    void beforeRender();
    Class<T> getBatchClass();
    T getBatch();
+   void begin();
+   void end();
 
 }

@@ -28,4 +28,14 @@ public class SpriteBatchResolver implements BatchResolver<Batch> {
    public Batch getBatch() {
       return batch;
    }
+
+   @Override
+   public void begin() {
+      batch.begin();
+   }
+
+   @Override
+   public void end() {
+      batch.end();
+   }
 }

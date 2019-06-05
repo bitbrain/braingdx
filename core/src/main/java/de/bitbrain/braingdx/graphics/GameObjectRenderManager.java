@@ -34,8 +34,10 @@ public class GameObjectRenderManager implements Disposable {
 
    private final Map<Object, GameObjectRenderer<?>> rendererMap = new HashMap<Object, GameObjectRenderer<?>>();
    private final Map<Class<?>, BatchResolver<?>> batchResolverMap = new HashMap<Class<?>, BatchResolver<?>>();
+   private final BatchResolver<?>[] allbatchResolvers;
 
    public GameObjectRenderManager(BatchResolver<?> ... resolvers) {
+      this.allbatchResolvers = resolvers;
       if (resolvers.length < 1) {
          throw new GdxRuntimeException("Unable to create " + GameObjectRenderManager.class.getName() + " no batch resolvers provided.");
       }
@@ -54,6 +56,12 @@ public class GameObjectRenderManager implements Disposable {
       return new CombinedGameObjectRenderer<T>(gameObjectRenderers);
    }
 
+   public void beforeRender() {
+      for (BatchResolver<?> resolver : allbatchResolvers) {
+         resolver.beforeRender();
+      }
+   }
+
    public void render(GameObject object, float delta) {
       final GameObjectRenderer renderer = rendererMap.get(object.getType());
       if (renderer != null) {
@@ -62,8 +70,10 @@ public class GameObjectRenderManager implements Disposable {
             throw new GdxRuntimeException("Unable to render type=" + object.getType()
                   + "! Renderer=" + renderer + " provided but no batch resolver registered.");
          }
+         batchResolver.begin();
          Object batch = batchResolver.getBatch();
          renderer.render(object, batch, delta);
+         batchResolver.end();
       }
    }
 

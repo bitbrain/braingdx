@@ -110,6 +110,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
             getRenderManager(),
             getEventManager()
       );
+      wire();
    }
 
    @Override
@@ -153,6 +154,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    }
 
    public void updateAndRender(float delta) {
+      super.updateAndRender(delta);
       physicsManager.update(delta);
       worldStage.act(delta);
       renderPipeline.render(delta);
