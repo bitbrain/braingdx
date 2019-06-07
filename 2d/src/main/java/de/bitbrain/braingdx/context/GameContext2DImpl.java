@@ -86,7 +86,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
       super(shaderConfig, viewportFactory, GAME_CAMERA_FACTORY, game, screen, BATCH_RESOLVER_FACTORY);
       coloredRenderLayer = new ColoredRenderLayer();
       particleManager = new ParticleManager(getBehaviorManager(), getSettings().getGraphics());
-      worldStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera()));
+      worldStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), getGameCamera().getInternalCamera()));
       boxWorld = new World(Vector2.Zero, true);
       physicsManager = new PhysicsManagerImpl(
             boxWorld,

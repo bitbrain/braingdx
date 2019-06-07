@@ -12,12 +12,21 @@
    <artifactId>braingdx-2d</artifactId>
    <name>BrainGDX 2d project</name>
    <description>2D project of BrainGDX</description>
+
+   <properties>
+      <box2dlights.version>1.5-SNAPSHOT</box2dlights.version>
+   </properties>
    
    <dependencies>
       <dependency>
          <groupId>io.github.bitbrain</groupId>
          <artifactId>braingdx-core</artifactId>
          <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+         <groupId>com.badlogicgames.box2dlights</groupId>
+         <artifactId>box2dlights</artifactId>
+         <version>${box2dlights.version}</version>
       </dependency>
    </dependencies>
 </project>
