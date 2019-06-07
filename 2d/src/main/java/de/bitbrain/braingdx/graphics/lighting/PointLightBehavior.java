@@ -36,13 +36,13 @@ public class PointLightBehavior extends BehaviorAdapter {
 
    private String lightId;
 
-   private LightingManagerImpl lightingManager;
+   private LightingManager lightingManager;
 
    private Color color;
 
    private float distance;
 
-   public PointLightBehavior(Color color, float distance, LightingManagerImpl lightingManager) {
+   public PointLightBehavior(Color color, float distance, LightingManager lightingManager) {
       this.color = color;
       this.distance = distance;
       this.lightingManager = lightingManager;

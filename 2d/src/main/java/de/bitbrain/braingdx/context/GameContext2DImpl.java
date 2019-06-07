@@ -30,6 +30,7 @@ import de.bitbrain.braingdx.graphics.BatchResolver;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.SpriteBatchResolver;
 import de.bitbrain.braingdx.graphics.VectorGameCamera;
+import de.bitbrain.braingdx.graphics.lighting.LightingManager;
 import de.bitbrain.braingdx.graphics.lighting.LightingManagerImpl;
 import de.bitbrain.braingdx.graphics.lighting.LightingManagerRenderLayer;
 import de.bitbrain.braingdx.graphics.particles.ParticleManager;
@@ -123,7 +124,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    }
 
    @Override
-   public LightingManagerImpl getLightingManager() {
+   public LightingManager getLightingManager() {
       return lightingManager;
    }
 
@@ -180,7 +181,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
          }
       });
       pipeline.put(RenderPipeIds.WORLD, new GameObjectRenderLayer(context.getRenderManager()));
-      pipeline.put(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(context.getLightingManager()));
+      pipeline.put(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(lightingManager));
       pipeline.put(RenderPipeIds.PARTICLES, new ParticleManagerRenderLayer(context.getParticleManager()));
       pipeline.put(RenderPipeIds.WORLD_UI, new StageRenderLayer(context.getWorldStage()));
       pipeline.put(RenderPipeIds.UI, new StageRenderLayer(context.getStage()));

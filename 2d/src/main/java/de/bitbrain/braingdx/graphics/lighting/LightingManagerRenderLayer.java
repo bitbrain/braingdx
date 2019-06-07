@@ -14,9 +14,9 @@ public class LightingManagerRenderLayer extends RenderLayer2D implements Resizea
 
    @Override
    public void render(Batch batch, float delta) {
-      batch.end();
+      //batch.end();
       manager.render();
-      batch.begin();
+     // batch.begin();
    }
 
    @Override
