@@ -30,7 +30,7 @@ import de.bitbrain.braingdx.graphics.BatchResolver;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.SpriteBatchResolver;
 import de.bitbrain.braingdx.graphics.VectorGameCamera;
-import de.bitbrain.braingdx.graphics.lighting.LightingManager;
+import de.bitbrain.braingdx.graphics.lighting.LightingManagerImpl;
 import de.bitbrain.braingdx.graphics.lighting.LightingManagerRenderLayer;
 import de.bitbrain.braingdx.graphics.particles.ParticleManager;
 import de.bitbrain.braingdx.graphics.particles.ParticleManagerRenderLayer;
@@ -59,7 +59,7 @@ import de.bitbrain.braingdx.util.ViewportFactory;
 public class GameContext2DImpl extends GameContextImpl implements GameContext2D, Disposable, Resizeable {
 
    private final Stage worldStage;
-   private final LightingManager lightingManager;
+   private final LightingManagerImpl lightingManager;
    private final ParticleManager particleManager;
    private final World boxWorld;
    private final TiledMapManager tiledMapManager;
@@ -93,7 +93,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
             getGameWorld(),
             getBehaviorManager()
       );
-      lightingManager = new LightingManager(
+      lightingManager = new LightingManagerImpl(
             new RayHandler(boxWorld),
             (OrthographicCamera) getGameCamera().getInternalCamera()
       );
@@ -123,7 +123,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    }
 
    @Override
-   public LightingManager getLightingManager() {
+   public LightingManagerImpl getLightingManager() {
       return lightingManager;
    }
 
@@ -142,9 +142,10 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    }
 
    public void updateAndRender(float delta) {
-      super.updateAndRender(delta);
+      lightingManager.update();
       physicsManager.update(delta);
       worldStage.act(delta);
+      super.updateAndRender(delta);
    }
 
    @Override
@@ -158,6 +159,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    public void resize(int width, int height) {
       super.resize(width, height);
       worldStage.getViewport().update(width, height, true);
+      lightingManager.resize(width, height);
    }
 
    @Override

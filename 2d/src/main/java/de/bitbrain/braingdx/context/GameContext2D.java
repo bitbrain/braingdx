@@ -17,7 +17,7 @@ package de.bitbrain.braingdx.context;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import de.bitbrain.braingdx.graphics.lighting.LightingManager;
+import de.bitbrain.braingdx.graphics.lighting.LightingManagerImpl;
 import de.bitbrain.braingdx.graphics.particles.ParticleManager;
 import de.bitbrain.braingdx.physics.PhysicsManager;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
@@ -37,7 +37,7 @@ public interface GameContext2D extends GameContext {
 
    ParticleManager getParticleManager();
 
-   LightingManager getLightingManager();
+   LightingManagerImpl getLightingManager();
 
    TiledMapManager getTiledMapManager();
 

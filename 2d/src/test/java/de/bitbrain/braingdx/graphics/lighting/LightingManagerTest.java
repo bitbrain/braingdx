@@ -5,9 +5,8 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import de.bitbrain.braingdx.graphics.lighting.LightingManager.LightFactory;
+import de.bitbrain.braingdx.graphics.lighting.LightingManagerImpl.LightFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +34,7 @@ public class LightingManagerTest {
    PointLight pointLightMock;
 
    @InjectMocks
-   private LightingManager lightingManager;
+   private LightingManagerImpl lightingManager;
 
    @Before
    public void beforeTest() {

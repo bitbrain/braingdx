@@ -6,16 +6,15 @@ import de.bitbrain.braingdx.util.Resizeable;
 
 public class LightingManagerRenderLayer extends RenderLayer2D implements Resizeable {
 
-   private final LightingManager manager;
+   private final LightingManagerImpl manager;
 
-   public LightingManagerRenderLayer(LightingManager manager) {
+   public LightingManagerRenderLayer(LightingManagerImpl manager) {
       this.manager = manager;
    }
 
    @Override
    public void render(Batch batch, float delta) {
       batch.end();
-      manager.beforeRender();
       manager.render();
       batch.begin();
    }
