@@ -16,6 +16,8 @@
 package de.bitbrain.braingdx.screens;
 
 import de.bitbrain.braingdx.BrainGdxGame;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
+import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 
 /**
  * Screen transition utilities.
@@ -32,7 +34,10 @@ public class ScreenTransitions {
 
    private final ColorTransition defaultTransition = new ColorTransition();
 
-   public ScreenTransitions(BrainGdxGame game, AbstractScreen<?, ?> from) {
+   private final RenderPipeline renderPipeline;
+
+   public ScreenTransitions(RenderPipeline renderPipeline, BrainGdxGame game, AbstractScreen<?, ?> from) {
+      this.renderPipeline = renderPipeline;
       this.game = game;
       this.from = from;
    }
@@ -50,7 +55,7 @@ public class ScreenTransitions {
    }
 
    public void in(Transitionable transition, float duration) {
-      in(transition, null, Transitionable.DEFAULT_DURATION);
+      in(transition, null, duration);
    }
 
    public void in(TransitionCallback callback, float duration) {
@@ -58,6 +63,9 @@ public class ScreenTransitions {
    }
 
    public void in(Transitionable transition, TransitionCallback callback, float duration) {
+      if (transition instanceof RenderLayer2D) {
+         renderPipeline.put(ScreenTransitions.class.getSimpleName(), (RenderLayer2D)transition);
+      }
       transition.in(callback, duration);
    }
 
@@ -82,6 +90,9 @@ public class ScreenTransitions {
    }
 
    public void outIn(Transitionable transition, TransitionCallback callback, float duration) {
+      if (transition instanceof RenderLayer2D) {
+         renderPipeline.put(ScreenTransitions.class.getSimpleName(), (RenderLayer2D)transition);
+      }
       defaultTransition.outIn(callback, duration);
    }
 
@@ -107,6 +118,9 @@ public class ScreenTransitions {
 
    public void out(Transitionable transition, final TransitionCallback callback, final AbstractScreen<?, ?> to,
                    float duration) {
+      if (transition instanceof RenderLayer2D) {
+         renderPipeline.put(ScreenTransitions.class.getSimpleName(), (RenderLayer2D)transition);
+      }
       transition.out(new TransitionCallback() {
          @Override
          public void beforeTransition() {

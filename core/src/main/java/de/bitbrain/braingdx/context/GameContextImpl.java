@@ -57,6 +57,7 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
          BrainGdxGame game,
          AbstractScreen<?, ?> screen,
          ArgumentFactory<GameContext, BatchResolver<?>[]> batchResolverFactory) {
+      BatchResolver<?>[] batchResolvers = batchResolverFactory.create(this);
       this.game = game;
       this.screen = screen;
       this.eventManager = new GameEventManagerImpl();
@@ -67,7 +68,7 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       this.inputManager = new InputManagerImpl();
       this.stage = new Stage(viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera()));
       this.gameCamera = gameCameraFactory.create(this);
-      this.renderPipeline = new CombinedRenderPipeline(shaderConfig);
+      this.renderPipeline = new CombinedRenderPipeline(shaderConfig, batchResolvers);
       this.audioManager = new AudioManagerImpl(//
             gameCamera,//
             tweenManager,//
@@ -75,8 +76,8 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
             world,//
             behaviorManager//
       );
-      this.transitions = new ScreenTransitions(game, screen);
-      this.renderManager = new GameObjectRenderManager(batchResolverFactory.create(this));
+      this.transitions = new ScreenTransitions(renderPipeline, game, screen);
+      this.renderManager = new GameObjectRenderManager(batchResolvers);
       wire();
    }
 

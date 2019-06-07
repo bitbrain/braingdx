@@ -2,6 +2,7 @@ package de.bitbrain.braingdx.graphics.particles;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
 
 /**
  * Renders particles on a render layer.
@@ -9,18 +10,16 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
  * @author Miguel Gonzalez Sanchez
  * @since 0.2.6
  */
-public class ParticleManagerRenderLayer implements RenderLayer {
+public class ParticleManagerRenderLayer extends RenderLayer2D {
 
    private final ParticleManager manager;
-   private final Batch batch;
 
-   public ParticleManagerRenderLayer(ParticleManager manager, Batch batch) {
+   public ParticleManagerRenderLayer(ParticleManager manager) {
       this.manager = manager;
-      this.batch = batch;
    }
 
    @Override
-   public void render(float delta) {
+   public void render(Batch batch, float delta) {
       batch.begin();
       manager.draw(batch, delta);
       batch.end();

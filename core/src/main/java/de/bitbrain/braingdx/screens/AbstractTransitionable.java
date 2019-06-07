@@ -19,6 +19,7 @@ import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 
 /**
@@ -28,7 +29,7 @@ import de.bitbrain.braingdx.tweens.SharedTweenManager;
  * @version 1.0
  * @since 1.0
  */
-abstract class AbstractTransitionable implements Transitionable {
+abstract class AbstractTransitionable extends RenderLayer2D implements Transitionable {
 
    @Override
    public void in() {

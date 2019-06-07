@@ -1,21 +1,19 @@
 package de.bitbrain.braingdx.graphics.pipeline.layers;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
 import de.bitbrain.braingdx.world.GameWorld;
 
-public class WorldRenderLayer implements RenderLayer {
+public class WorldRenderLayer extends RenderLayer2D {
 
    private final GameWorld world;
-   private final Batch batch;
 
-   public WorldRenderLayer(GameWorld world, Batch batch) {
+   public WorldRenderLayer(GameWorld world) {
       this.world = world;
-      this.batch = batch;
    }
 
    @Override
-   public void render(float delta) {
+   public void render(Batch batch, float delta) {
       batch.begin();
       world.update(delta);
       batch.end();

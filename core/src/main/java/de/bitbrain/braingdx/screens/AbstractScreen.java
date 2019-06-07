@@ -24,7 +24,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.context.GameContext;
-import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.util.ArgumentFactory;
 import de.bitbrain.braingdx.util.ViewportFactory;
 
@@ -102,10 +101,6 @@ public abstract class AbstractScreen<T extends BrainGdxGame, C extends GameConte
 
    public ViewportFactory getViewportFactory() {
       return viewportFactory;
-   }
-
-   public ShaderConfig getShaderConfig() {
-      return new ShaderConfig();
    }
 
    public Viewport getViewport(int width, int height, Camera camera) {

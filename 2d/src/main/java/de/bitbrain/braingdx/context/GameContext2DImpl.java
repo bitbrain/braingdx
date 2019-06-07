@@ -20,7 +20,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -35,8 +34,7 @@ import de.bitbrain.braingdx.graphics.lighting.LightingManager;
 import de.bitbrain.braingdx.graphics.lighting.LightingManagerRenderLayer;
 import de.bitbrain.braingdx.graphics.particles.ParticleManager;
 import de.bitbrain.braingdx.graphics.particles.ParticleManagerRenderLayer;
-import de.bitbrain.braingdx.graphics.pipeline.CombinedRenderPipeline2DFactory;
-import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.pipeline.layers.ColoredRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
@@ -60,7 +58,6 @@ import de.bitbrain.braingdx.util.ViewportFactory;
  */
 public class GameContext2DImpl extends GameContextImpl implements GameContext2D, Disposable, Resizeable {
 
-   private final Batch batch;
    private final Stage worldStage;
    private final LightingManager lightingManager;
    private final ParticleManager particleManager;
@@ -68,7 +65,6 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    private final TiledMapManager tiledMapManager;
    private final PhysicsManagerImpl physicsManager;
    private final ColoredRenderLayer coloredRenderLayer;
-   private final RenderPipeline renderPipeline;
 
    private static final ArgumentFactory<GameContext, GameCamera> GAME_CAMERA_FACTORY = new ArgumentFactory<GameContext, GameCamera>() {
       @Override
@@ -89,7 +85,6 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    public GameContext2DImpl(ViewportFactory viewportFactory, ShaderConfig shaderConfig, BrainGdxGame game, AbstractScreen<?, ?> screen) {
       super(shaderConfig, viewportFactory, GAME_CAMERA_FACTORY, game, screen, BATCH_RESOLVER_FACTORY);
       coloredRenderLayer = new ColoredRenderLayer();
-      batch = new SpriteBatch();
       particleManager = new ParticleManager(getBehaviorManager(), getSettings().getGraphics());
       worldStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera()));
       boxWorld = new World(Vector2.Zero, true);
@@ -102,8 +97,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
             new RayHandler(boxWorld),
             (OrthographicCamera) getGameCamera().getInternalCamera()
       );
-      renderPipeline = new CombinedRenderPipeline2DFactory().create(this);
-      configurePipeline(renderPipeline, this);
+      configurePipeline(getRenderPipeline(), this);
       tiledMapManager = new TiledMapManagerImpl(
             getBehaviorManager(),
             getGameWorld(),
@@ -129,11 +123,6 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    }
 
    @Override
-   public RenderPipeline getRenderPipeline() {
-      return renderPipeline;
-   }
-
-   @Override
    public LightingManager getLightingManager() {
       return lightingManager;
    }
@@ -150,14 +139,12 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
       particleManager.dispose();
       physicsManager.dispose();
       lightingManager.dispose();
-      renderPipeline.dispose();
    }
 
    public void updateAndRender(float delta) {
       super.updateAndRender(delta);
       physicsManager.update(delta);
       worldStage.act(delta);
-      renderPipeline.render(delta);
    }
 
    @Override
@@ -170,7 +157,6 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    @Override
    public void resize(int width, int height) {
       super.resize(width, height);
-      renderPipeline.resize(width, height);
       worldStage.getViewport().update(width, height, true);
    }
 
@@ -180,20 +166,20 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    }
 
    private void configurePipeline(RenderPipeline pipeline, GameContext2D context) {
-      pipeline.put(RenderPipeIds.BACKGROUND, new RenderLayer() {
+      pipeline.put(RenderPipeIds.BACKGROUND, new RenderLayer2D() {
          @Override
-         public void render(float delta) {
+         public void render(Batch batch, float delta) {
          }
       });
-      pipeline.put(RenderPipeIds.FOREGROUND, new RenderLayer() {
+      pipeline.put(RenderPipeIds.FOREGROUND, new RenderLayer2D() {
          @Override
-         public void render(float delta) {
+         public void render(Batch batch, float delta) {
             // noOp
          }
       });
-      pipeline.put(RenderPipeIds.WORLD, new WorldRenderLayer(context.getGameWorld(), batch));
+      pipeline.put(RenderPipeIds.WORLD, new WorldRenderLayer(context.getGameWorld()));
       pipeline.put(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(context.getLightingManager()));
-      pipeline.put(RenderPipeIds.PARTICLES, new ParticleManagerRenderLayer(context.getParticleManager(), batch));
+      pipeline.put(RenderPipeIds.PARTICLES, new ParticleManagerRenderLayer(context.getParticleManager()));
       pipeline.put(RenderPipeIds.WORLD_UI, new StageRenderLayer(context.getWorldStage()));
       pipeline.put(RenderPipeIds.UI, new StageRenderLayer(context.getStage()));
    }

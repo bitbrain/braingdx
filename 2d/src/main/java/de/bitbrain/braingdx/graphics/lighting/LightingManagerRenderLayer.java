@@ -1,9 +1,10 @@
 package de.bitbrain.braingdx.graphics.lighting;
 
-import de.bitbrain.braingdx.graphics.pipeline.RenderLayer;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
 import de.bitbrain.braingdx.util.Resizeable;
 
-public class LightingManagerRenderLayer implements RenderLayer, Resizeable {
+public class LightingManagerRenderLayer extends RenderLayer2D implements Resizeable {
 
    private final LightingManager manager;
 
@@ -12,7 +13,7 @@ public class LightingManagerRenderLayer implements RenderLayer, Resizeable {
    }
 
    @Override
-   public void render(float delta) {
+   public void render(Batch batch, float delta) {
       manager.render();
    }
 

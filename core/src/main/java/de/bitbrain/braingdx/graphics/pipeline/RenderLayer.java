@@ -20,12 +20,14 @@ package de.bitbrain.braingdx.graphics.pipeline;
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-public interface RenderLayer {
+public interface RenderLayer<BatchType> {
+
+   Class<BatchType> getBatchCass();
 
    /**
     * Renders the layer with the given batch and delta.
     *
     * @param delta frame delta
     */
-   void render(float delta);
+   void render(BatchType batch, float delta);
 }

@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Rectangle;
+import de.bitbrain.braingdx.graphics.BatchResolver;
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
@@ -32,9 +33,7 @@ import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.util.ShaderLoader;
 import org.apache.commons.collections.map.ListOrderedMap;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Combined implementation of {@link RenderPipeline}. This pipeline will bake together all layers
@@ -65,8 +64,9 @@ public class CombinedRenderPipeline implements RenderPipeline {
    private boolean hasEffects;
    private int bufferWidth;
    private int bufferHeight;
+   private final Map<Class<?>, BatchResolver<?>> batchResolverMap = new HashMap<Class<?>, BatchResolver<?>>();
 
-   public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera) {
+   public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera, BatchResolver[] batchResolvers) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
          @Override
@@ -77,10 +77,10 @@ public class CombinedRenderPipeline implements RenderPipeline {
             return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
          }
 
-      }, internalBatch, camera);
+      }, internalBatch, camera, batchResolvers);
    }
 
-   public CombinedRenderPipeline(ShaderConfig config) {
+   public CombinedRenderPipeline(ShaderConfig config, BatchResolver[] batchResolvers) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
          @Override
@@ -91,11 +91,11 @@ public class CombinedRenderPipeline implements RenderPipeline {
             return new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
          }
 
-      }, new SpriteBatch(), new OrthographicCamera());
+      }, new SpriteBatch(), new OrthographicCamera(), batchResolvers);
    }
 
    CombinedRenderPipeline(ShaderConfig config, PostProcessor processor, FrameBufferFactory factory,
-                          SpriteBatch internalBatch, OrthographicCamera camera) {
+                          SpriteBatch internalBatch, OrthographicCamera camera, BatchResolver[] batchResolvers) {
       this.config = config;
       ShaderLoader.BasePath = this.config.basePath;
       ShaderLoader.PathResolver = this.config.pathResolver;
@@ -103,6 +103,9 @@ public class CombinedRenderPipeline implements RenderPipeline {
       this.bufferFactory = factory;
       this.internalBatch = internalBatch;
       this.camera = camera;
+      for (BatchResolver resolver : batchResolvers) {
+         batchResolverMap.put(resolver.getBatchClass(), resolver);
+      }
    }
 
    @Override
@@ -127,7 +130,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
 
    @Override
    public void put(String id, RenderLayer layer, PostProcessorEffect... effects) {
-      CombinedRenderPipe pipe = new CombinedRenderPipe(layer, processor, internalBatch, effects);
+      CombinedRenderPipe pipe = new CombinedRenderPipe(layer, processor, internalBatch, batchResolverMap, effects);
       orderedPipes.put(id, pipe);
       this.hasEffects = hasEffects || effects.length > 0;
       pipes.clear();
@@ -141,7 +144,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
          Gdx.app.error("FATAL", "Unable add layer '" + id + "'!");
          return;
       }
-      orderedPipes.put(index + 1, id, new CombinedRenderPipe(layer, processor, internalBatch, effects));
+      orderedPipes.put(index + 1, id, new CombinedRenderPipe(layer, processor, internalBatch, batchResolverMap, effects));
       this.hasEffects = hasEffects || effects.length > 0;
       pipes.clear();
       pipes.addAll(orderedPipes.valueList());
@@ -154,7 +157,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
          Gdx.app.error("FATAL", "Unable add layer '" + id + "'!");
          return;
       }
-      orderedPipes.put(index > 0 ? index - 1 : index, id, new CombinedRenderPipe(layer, processor, internalBatch, effects));
+      orderedPipes.put(index > 0 ? index - 1 : index, id, new CombinedRenderPipe(layer, processor, internalBatch, batchResolverMap, effects));
       this.hasEffects = hasEffects || effects.length > 0;
       pipes.clear();
       pipes.addAll(orderedPipes.valueList());

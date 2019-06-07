@@ -17,10 +17,13 @@ package de.bitbrain.braingdx.graphics.pipeline;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import de.bitbrain.braingdx.graphics.BatchResolver;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.graphics.shader.BatchPostProcessor;
 import de.bitbrain.braingdx.util.Resizeable;
+
+import java.util.Map;
 
 class CombinedRenderPipe implements RenderPipe, Resizeable {
 
@@ -30,11 +33,14 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
    private final SpriteBatch batch;
    private boolean enabled = true;
 
-   public CombinedRenderPipe(RenderLayer layer, PostProcessor processor, SpriteBatch batch,
+   private final Map<Class<?>, BatchResolver<?>> batchResolverMap;
+
+   public CombinedRenderPipe(RenderLayer layer, PostProcessor processor, SpriteBatch batch, Map<Class<?>, BatchResolver<?>> batchResolverMap,
                              PostProcessorEffect... effects) {
       this.layer = layer;
       this.batchPostProcessor = new BatchPostProcessor(processor, effects);
       this.batch = batch;
+      this.batchResolverMap = batchResolverMap;
    }
 
    @Override
@@ -66,18 +72,19 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
    @Override
    public void render(float delta, FrameBuffer buffer) {
       if (isEnabled()) {
+         Object batch = batchResolverMap.get(layer.getBatchCass());
          if (buffer == null) {
-            layer.render(delta);
+            layer.render(batch, delta);
          } else if (batchPostProcessor.hasEffects()) {
             batchPostProcessor.begin();
             this.batch.begin();
             this.batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
             this.batch.end();
-            layer.render(delta);
+            layer.render(batch, delta);
             batchPostProcessor.end(buffer);
          } else {
             buffer.begin();
-            layer.render(delta);
+            layer.render(batch, delta);
             buffer.end();
          }
       }

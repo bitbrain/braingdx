@@ -34,7 +34,6 @@ import de.bitbrain.braingdx.tweens.ColorTween;
  */
 public class ColorTransition extends AbstractTransitionable implements Disposable {
 
-   private SpriteBatch batch = new SpriteBatch();
    private Texture texture;
    private Color color = Color.WHITE.cpy();
    private Color fadeToColor;
@@ -46,16 +45,6 @@ public class ColorTransition extends AbstractTransitionable implements Disposabl
 
    public ColorTransition() {
       this(Color.BLACK);
-   }
-
-   public void render(Batch batch, float delta) {
-      if (texture == null) {
-         initTexture();
-      }
-      this.batch.setColor(color);
-      this.batch.begin();
-      this.batch.draw(texture, 0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-      this.batch.end();
    }
 
    @Override
@@ -94,8 +83,15 @@ public class ColorTransition extends AbstractTransitionable implements Disposabl
       return ColorTween.A;
    }
 
-   public static interface ScreenFadeCallback {
-      void afterFade();
+   @Override
+   public void render(Batch batch, float delta) {
+      if (texture == null) {
+         initTexture();
+      }
+      batch.setColor(color);
+      batch.begin();
+      batch.draw(texture, 0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      batch.end();
    }
 
 }

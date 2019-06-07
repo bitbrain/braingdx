@@ -19,6 +19,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -79,9 +81,9 @@ public class RenderPipelineTest {
       pipeline.resize(0, 0);
       pipeline.render(0f);
       InOrder order = Mockito.inOrder(layerA, layerB, layerC);
-      order.verify(layerA, Mockito.calls(1)).render(0f);
-      order.verify(layerB, Mockito.calls(1)).render(0f);
-      order.verify(layerC, Mockito.calls(1)).render(0f);
+      order.verify(layerA, Mockito.calls(1)).render(any(Object.class), eq(0f));
+      order.verify(layerB, Mockito.calls(1)).render(any(Object.class), eq(0f));
+      order.verify(layerC, Mockito.calls(1)).render(any(Object.class), eq(0f));
    }
 
    @Test

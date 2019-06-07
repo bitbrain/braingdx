@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import de.bitbrain.braingdx.graphics.BatchResolver;
 import de.bitbrain.braingdx.graphics.FrameBufferFactory;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
@@ -24,8 +25,17 @@ public class MockedCombinedRenderPipelineFactory implements RenderPipelineFactor
       Texture mockTexture = mock(Texture.class);
       when(factory.create(Mockito.anyInt(), Mockito.anyInt())).thenReturn(buffer);
       when(buffer.getColorBufferTexture()).thenReturn(mockTexture);
-      return new CombinedRenderPipeline(config, processorMock, factory, mock(SpriteBatch.class),
-            mock(OrthographicCamera.class));
+      BatchResolver[] batchResolvers = new BatchResolver[]{
+        mock(BatchResolver.class)
+      };
+      return new CombinedRenderPipeline(
+            config,
+            processorMock,
+            factory,
+            mock(SpriteBatch.class),
+            mock(OrthographicCamera.class),
+            batchResolvers
+      );
    }
 
 }
