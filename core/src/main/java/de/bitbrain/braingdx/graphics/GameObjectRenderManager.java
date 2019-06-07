@@ -16,11 +16,16 @@
 package de.bitbrain.braingdx.graphics;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import de.bitbrain.braingdx.util.ZIndexComparator;
 import de.bitbrain.braingdx.world.GameObject;
+import de.bitbrain.braingdx.world.GameWorld;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,11 +37,14 @@ import java.util.Map;
  */
 public class GameObjectRenderManager implements Disposable {
 
+   private final GameWorld gameWorld;
+   private final Comparator<GameObject> comparator = new ZIndexComparator();
    private final Map<Object, GameObjectRenderer<?>> rendererMap = new HashMap<Object, GameObjectRenderer<?>>();
    private final Map<Class<?>, BatchResolver<?>> batchResolverMap = new HashMap<Class<?>, BatchResolver<?>>();
    private final BatchResolver<?>[] allbatchResolvers;
 
-   public GameObjectRenderManager(BatchResolver<?> ... resolvers) {
+   public GameObjectRenderManager(GameWorld gameWorld, BatchResolver<?> ... resolvers) {
+      this.gameWorld = gameWorld;
       this.allbatchResolvers = resolvers;
       if (resolvers.length < 1) {
          throw new GdxRuntimeException("Unable to create " + GameObjectRenderManager.class.getName() + " no batch resolvers provided.");
@@ -62,18 +70,19 @@ public class GameObjectRenderManager implements Disposable {
       }
    }
 
-   public void render(GameObject object, float delta) {
-      final GameObjectRenderer renderer = rendererMap.get(object.getType());
-      if (renderer != null) {
-         BatchResolver<?> batchResolver = batchResolverMap.get(renderer.getBatchClass());
-         if (batchResolver == null) {
-            throw new GdxRuntimeException("Unable to render type=" + object.getType()
-                  + "! Renderer=" + renderer + " provided but no batch resolver registered.");
+   public void render(float delta) {
+      List<GameObject> objects = gameWorld.getObjects(comparator);
+      for (int i = 0; i < objects.size(); ++i) {
+         GameObject object = objects.get(i);
+         final GameObjectRenderer renderer = rendererMap.get(object.getType());
+         if (renderer != null) {
+            BatchResolver<?> batchResolver = batchResolverMap.get(renderer.getBatchClass());
+            if (batchResolver == null) {
+               throw new GdxRuntimeException("Unable to render type=" + object.getType()
+                     + "! Renderer=" + renderer + " provided but no batch resolver registered.");
+            }
+            renderer.render(object, batchResolver.getBatch(), delta);
          }
-         batchResolver.begin();
-         Object batch = batchResolver.getBatch();
-         renderer.render(object, batch, delta);
-         batchResolver.end();
       }
    }
 

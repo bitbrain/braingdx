@@ -42,7 +42,6 @@ public class GameWorld {
    private final Group<Object, GameObject> objects = new Group<Object, GameObject>();
    private final Map<String, GameObject> identityMap = new HashMap<String, GameObject>();
    private final Pool<GameObject> pool;
-   private final Comparator<GameObject> comparator = new ZIndexComparator();
    private final List<GameWorldListener> listeners = new ArrayList<GameWorldListener>();
    private WorldBounds bounds = new WorldBounds() {
 
@@ -232,7 +231,6 @@ public class GameWorld {
     */
    public void update(float delta) {
       List<GameObject> allObjects = objects.getAll();
-      Collections.sort(allObjects, comparator);
       for (int i = 0; i < allObjects.size(); ++i) {
          GameObject object = allObjects.get(i);
          if (!bounds.isInBounds(object) && !object.isPersistent()) {

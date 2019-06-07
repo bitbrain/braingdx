@@ -66,7 +66,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
    private int bufferHeight;
    private final Map<Class<?>, BatchResolver<?>> batchResolverMap = new HashMap<Class<?>, BatchResolver<?>>();
 
-   public CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera, BatchResolver[] batchResolvers) {
+   CombinedRenderPipeline(ShaderConfig config, SpriteBatch internalBatch, OrthographicCamera camera, BatchResolver[] batchResolvers) {
       this(config, new PostProcessor(true, true, isDesktop), new FrameBufferFactory() {
 
          @Override

@@ -45,7 +45,6 @@ public class OrthogonalMapLayerRendererFactory implements MapLayerRendererFactor
                for (int y = 0; y < state.getMapIndexHeight(); y++) {
                   for (int layer = 0; layer < state.getNumberOfLayers(); ++layer) {
                      if (state.getState(x, y, layer).isCollision()) {
-                        batch.setProjectionMatrix(camera.combined);
                         batch.draw(texture, x * state.getCellWidth(), y * state.getCellHeight(), state.getCellWidth(), state.getCellHeight());
                      }
                   }

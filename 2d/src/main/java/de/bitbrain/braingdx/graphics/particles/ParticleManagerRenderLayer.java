@@ -20,9 +20,7 @@ public class ParticleManagerRenderLayer extends RenderLayer2D {
 
    @Override
    public void render(Batch batch, float delta) {
-      batch.begin();
       manager.draw(batch, delta);
-      batch.end();
    }
 
 }

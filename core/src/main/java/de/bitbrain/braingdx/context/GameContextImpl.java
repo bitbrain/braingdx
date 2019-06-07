@@ -57,7 +57,6 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
          BrainGdxGame game,
          AbstractScreen<?, ?> screen,
          ArgumentFactory<GameContext, BatchResolver<?>[]> batchResolverFactory) {
-      BatchResolver<?>[] batchResolvers = batchResolverFactory.create(this);
       this.game = game;
       this.screen = screen;
       this.eventManager = new GameEventManagerImpl();
@@ -68,6 +67,7 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       this.inputManager = new InputManagerImpl();
       this.stage = new Stage(viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera()));
       this.gameCamera = gameCameraFactory.create(this);
+      BatchResolver<?>[] batchResolvers = batchResolverFactory.create(this);
       this.renderPipeline = new CombinedRenderPipeline(shaderConfig, batchResolvers);
       this.audioManager = new AudioManagerImpl(//
             gameCamera,//
@@ -77,7 +77,7 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
             behaviorManager//
       );
       this.transitions = new ScreenTransitions(renderPipeline, game, screen);
-      this.renderManager = new GameObjectRenderManager(batchResolvers);
+      this.renderManager = new GameObjectRenderManager(getGameWorld(), batchResolvers);
       wire();
    }
 
@@ -162,7 +162,6 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       behaviorManager.update(delta);
       tweenManager.update(delta);
       gameCamera.update(delta);
-      renderManager.beforeRender();
       world.update(delta);
       stage.act(delta);
       renderPipeline.render(delta);
@@ -182,6 +181,7 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
    public void resize(int width, int height) {
       gameCamera.resize(width, height);
       stage.getViewport().update(width, height, true);
+      renderPipeline.resize(width, height);
       eventManager.publish(new GraphicsSettingsChangeEvent());
    }
 
@@ -197,7 +197,6 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
 
    private void wire() {
       world.addListener(new BehaviorManagerAdapter(behaviorManager));
-      getGameWorld().addListener(new GameObjectRenderManagerAdapter(renderManager));
       inputManager.register(stage);
       Gdx.input.setInputProcessor(inputManager.getMultiplexer());
    }

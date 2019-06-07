@@ -17,6 +17,7 @@ package de.bitbrain.braingdx.graphics.pipeline;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.graphics.BatchResolver;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
@@ -72,19 +73,29 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
    @Override
    public void render(float delta, FrameBuffer buffer) {
       if (isEnabled()) {
-         Object batch = batchResolverMap.get(layer.getBatchCass());
+         BatchResolver<?> batchResolver = batchResolverMap.get(layer.getBatchCass());
+         if (batchResolver == null) {
+            throw new GdxRuntimeException("No batch resolver defined for type=" + layer.getBatchCass());
+         }
+         Object batch = batchResolver.getBatch();
          if (buffer == null) {
+            batchResolver.begin();
             layer.render(batch, delta);
+            batchResolver.end();
          } else if (batchPostProcessor.hasEffects()) {
             batchPostProcessor.begin();
             this.batch.begin();
             this.batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
             this.batch.end();
+            batchResolver.begin();
             layer.render(batch, delta);
+            batchResolver.end();
             batchPostProcessor.end(buffer);
          } else {
             buffer.begin();
+            batchResolver.begin();
             layer.render(batch, delta);
+            batchResolver.end();
             buffer.end();
          }
       }

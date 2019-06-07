@@ -39,7 +39,7 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.pipeline.layers.ColoredRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.layers.RenderPipeIds;
 import de.bitbrain.braingdx.graphics.pipeline.layers.StageRenderLayer;
-import de.bitbrain.braingdx.graphics.pipeline.layers.WorldRenderLayer;
+import de.bitbrain.braingdx.graphics.pipeline.layers.GameObjectRenderLayer;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.physics.PhysicsManager;
 import de.bitbrain.braingdx.physics.PhysicsManagerImpl;
@@ -177,7 +177,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
             // noOp
          }
       });
-      pipeline.put(RenderPipeIds.WORLD, new WorldRenderLayer(context.getGameWorld()));
+      pipeline.put(RenderPipeIds.WORLD, new GameObjectRenderLayer(context.getRenderManager()));
       pipeline.put(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(context.getLightingManager()));
       pipeline.put(RenderPipeIds.PARTICLES, new ParticleManagerRenderLayer(context.getParticleManager()));
       pipeline.put(RenderPipeIds.WORLD_UI, new StageRenderLayer(context.getWorldStage()));

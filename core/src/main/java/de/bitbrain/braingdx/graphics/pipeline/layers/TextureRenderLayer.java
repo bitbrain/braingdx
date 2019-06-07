@@ -19,9 +19,11 @@ public class TextureRenderLayer extends RenderLayer2D {
 
    @Override
    public void render(Batch batch, float delta) {
-      batch.begin();
-      batch.draw(texture, 0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       batch.end();
+      this.batch.begin();
+      this.batch.draw(texture, 0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      this.batch.end();
+      batch.begin();
    }
 
 }
