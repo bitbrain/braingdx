@@ -30,4 +30,6 @@ public interface RenderLayer<BatchType> {
     * @param delta frame delta
     */
    void render(BatchType batch, float delta);
+
+   void beforeRender();
 }

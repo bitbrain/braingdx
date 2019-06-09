@@ -71,6 +71,11 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
    }
 
    @Override
+   public void beforeRender() {
+      layer.beforeRender();
+   }
+
+   @Override
    public void render(float delta, FrameBuffer buffer) {
       if (isEnabled()) {
          BatchResolver<?> batchResolver = batchResolverMap.get(layer.getBatchCass());
@@ -79,23 +84,17 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
          }
          Object batch = batchResolver.getBatch();
          if (buffer == null) {
-            batchResolver.begin();
             layer.render(batch, delta);
-            batchResolver.end();
          } else if (batchPostProcessor.hasEffects()) {
             batchPostProcessor.begin();
             this.batch.begin();
             this.batch.draw(buffer.getColorBufferTexture(), 0f, 0f);
             this.batch.end();
-            batchResolver.begin();
             layer.render(batch, delta);
-            batchResolver.end();
             batchPostProcessor.end(buffer);
          } else {
             buffer.begin();
-            batchResolver.begin();
             layer.render(batch, delta);
-            batchResolver.end();
             buffer.end();
          }
       }

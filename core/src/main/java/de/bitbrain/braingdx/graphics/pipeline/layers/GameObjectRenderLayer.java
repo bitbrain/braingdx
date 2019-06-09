@@ -13,9 +13,15 @@ public class GameObjectRenderLayer extends RenderLayer2D {
    }
 
    @Override
-   public void render(Batch batch, float delta) {
+   public void beforeRender() {
       renderManager.beforeRender();
+   }
+
+   @Override
+   public void render(Batch batch, float delta) {
+      batch.begin();
       renderManager.render(delta);
+      batch.end();
    }
 
 }

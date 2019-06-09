@@ -5,6 +5,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 public abstract class RenderLayer2D implements RenderLayer<Batch> {
 
    @Override
+   public void beforeRender() {
+      // noOp
+   }
+
+   @Override
    public Class<Batch> getBatchCass() {
       return Batch.class;
    }

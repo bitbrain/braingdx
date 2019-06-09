@@ -46,7 +46,6 @@ public abstract class AbstractScreen<T extends BrainGdxGame, C extends GameConte
    };
 
    private T game;
-   private Color backgroundColor = Color.BLACK.cpy();
    private C gameContext;
    private ArgumentFactory<AbstractScreen, C> contextFactory;
 
@@ -67,6 +66,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame, C extends GameConte
 
    @Override
    public final void render(float delta) {
+      Color backgroundColor = gameContext.getBackgroundColor();
       Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       onUpdate(delta);

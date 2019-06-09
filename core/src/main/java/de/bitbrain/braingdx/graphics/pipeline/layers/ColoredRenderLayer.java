@@ -41,13 +41,11 @@ public class ColoredRenderLayer extends RenderLayer2D implements Disposable, Res
 
    @Override
    public void render(Batch batch, float delta) {
-      batch.end();
       this.batch.setColor(color);
       this.batch.setProjectionMatrix(camera.combined);
       this.batch.begin();
       this.batch.draw(texture, 0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       this.batch.end();
-      batch.begin();
    }
 
    @Override

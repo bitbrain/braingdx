@@ -25,6 +25,8 @@ import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
  */
 public interface RenderPipe {
 
+   void beforeRender();
+
    void render(float delta, FrameBuffer buffer);
 
    boolean isEnabled();

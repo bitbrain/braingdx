@@ -217,18 +217,11 @@ public class LightingManagerImpl implements LightingManager, Disposable {
       handler.removeAll();
    }
 
-   public void update() {
-
-   }
-
-   void render() {
+   public void render() {
       if (disposed) {
          return;
       }
-      handler.setAmbientLight(ambientLightColor);
-      handler.setCombinedMatrix(camera);
-      handler.prepareRender();
-      handler.updateAndRender();
+      handler.renderOnly();
    }
 
    public void resize(int width, int height) {
@@ -241,6 +234,13 @@ public class LightingManagerImpl implements LightingManager, Disposable {
          handler.dispose();
          disposed = true;
       }
+   }
+
+   public void beforeRender() {
+      handler.setAmbientLight(ambientLightColor);
+      handler.setCombinedMatrix(camera);
+      handler.update();
+      handler.prepareRender();
    }
 
    public interface LightFactory {

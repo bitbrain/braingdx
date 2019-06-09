@@ -143,7 +143,6 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    }
 
    public void updateAndRender(float delta) {
-      lightingManager.update();
       physicsManager.update(delta);
       worldStage.act(delta);
       super.updateAndRender(delta);
