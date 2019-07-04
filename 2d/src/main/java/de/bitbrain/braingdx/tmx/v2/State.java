@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tmx;
+package de.bitbrain.braingdx.tmx.v2;
 
 import com.badlogic.gdx.maps.MapProperties;
 

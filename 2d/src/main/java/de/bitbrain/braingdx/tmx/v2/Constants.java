@@ -13,8 +13,28 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tmx;
+package de.bitbrain.braingdx.tmx.v2;
 
-public enum TiledMapType {
-   ORTHOGONAL;
+/**
+ * Contains constants for TMX.
+ *
+ * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+interface Constants {
+
+   String X = "x";
+   String Y = "y";
+   String WIDTH = "width";
+   String HEIGHT = "height";
+   String TYPE = "type";
+   String COLLISION = "collision";
+   String LAYER_INDEX = "tmx_layer_index";
+   String LAST_LAYER_INDEX = "tmx_last_layer_index";
+   String COLOR = "color";
+   String STICKY = "sticky";
+   String PRODUCER = "producer";
+   Object LAST_TILE_X = "lastTileX";
+   Object LAST_TILE_Y = "lastTileY";
 }

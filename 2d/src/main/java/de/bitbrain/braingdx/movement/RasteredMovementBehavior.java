@@ -19,7 +19,7 @@ import aurelienribon.tweenengine.*;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.behavior.movement.Movement;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
-import de.bitbrain.braingdx.tmx.TiledMapAPI;
+import de.bitbrain.braingdx.tmx.v2.TiledMapContext;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.util.DeltaTimer;
@@ -35,7 +35,7 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
    public static final Orientation DEFAULT_DIRECTION = Orientation.DOWN;
    private final TweenManager tweenManager = SharedTweenManager.getInstance();
    private final DeltaTimer timer = new DeltaTimer(DEFAULT_INTERVAL);
-   private final TiledMapAPI api;
+   private final TiledMapContext context;
    private final List<RasteredMovementListener> listeners = new ArrayList<RasteredMovementListener>();
    private float rasterWidth = DEFAULT_RASTER_SIZE;
    private float rasterHeight = DEFAULT_RASTER_SIZE;
@@ -44,8 +44,8 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
    private boolean wasMoving = false;
    private GameObject source;
    private TweenEquation ease = TweenEquations.easeNone;
-   public RasteredMovementBehavior(TiledMapAPI api) {
-      this.api = api;
+   public RasteredMovementBehavior(TiledMapContext context) {
+      this.context = context;
    }
 
    public RasteredMovementBehavior rasterSize(float width, float height) {
@@ -142,8 +142,8 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
       // 1. Get the raw target to check
       int targetX = orientation.getXFactor();
       int targetY = orientation.getYFactor();
-      int widthIndex = (int) Math.floor(source.getWidth() / api.getCellWidth());
-      int heightIndex = (int) Math.floor(source.getHeight() / api.getCellHeight());
+      int widthIndex = (int) Math.floor(source.getWidth() / context.getCellWidth());
+      int heightIndex = (int) Math.floor(source.getHeight() / context.getCellHeight());
 
       // Offset target by width
       if (targetX > 0) {
@@ -155,13 +155,13 @@ public class RasteredMovementBehavior extends BehaviorAdapter implements Movemen
 
       for (int i = 0; i < widthIndex; ++i) {
          int checkIndex = orientation.getYFactor() != 0 ? targetX + i : targetX;
-         if (api.isCollision(source, checkIndex, targetY)) {
+         if (context.isCollision(source, checkIndex, targetY)) {
             return false;
          }
       }
       for (int i = 0; i < heightIndex; ++i) {
          int checkIndex = orientation.getXFactor() != 0 ? targetY + i : targetY;
-         if (api.isCollision(source, targetX, checkIndex)) {
+         if (context.isCollision(source, targetX, checkIndex)) {
             return false;
          }
       }

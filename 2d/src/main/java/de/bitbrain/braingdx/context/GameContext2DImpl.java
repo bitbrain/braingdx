@@ -20,12 +20,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.bitbrain.braingdx.BrainGdxGame;
+import de.bitbrain.braingdx.event.GameEventRouter;
 import de.bitbrain.braingdx.graphics.BatchResolver;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.SpriteBatchResolver;
@@ -45,11 +47,11 @@ import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.physics.PhysicsManager;
 import de.bitbrain.braingdx.physics.PhysicsManagerImpl;
 import de.bitbrain.braingdx.screens.AbstractScreen;
-import de.bitbrain.braingdx.tmx.TiledMapManager;
-import de.bitbrain.braingdx.tmx.TiledMapManagerImpl;
+import de.bitbrain.braingdx.tmx.v2.*;
 import de.bitbrain.braingdx.util.ArgumentFactory;
 import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.util.ViewportFactory;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * 2D Implementation of {@link GameContext}.
@@ -66,6 +68,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    private final TiledMapManager tiledMapManager;
    private final PhysicsManagerImpl physicsManager;
    private final ColoredRenderLayer coloredRenderLayer;
+   private final GameEventRouter tiledMapEventRouter;
 
    private static final ArgumentFactory<GameContext, GameCamera> GAME_CAMERA_FACTORY = new ArgumentFactory<GameContext, GameCamera>() {
       @Override
@@ -98,13 +101,23 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
             new RayHandler(boxWorld),
             (OrthographicCamera) getGameCamera().getInternalCamera()
       );
-      configurePipeline(getRenderPipeline(), this);
-      tiledMapManager = new TiledMapManagerImpl(
-            getBehaviorManager(),
+      tiledMapEventRouter = new GameEventRouter(
+            getEventManager(),
             getGameWorld(),
-            getRenderManager(),
-            getEventManager()
+            new TiledMapInfoExtractor()
       );
+      tiledMapManager = new TiledMapManagerImpl(
+            getGameWorld(),
+            getEventManager(),
+            new TiledMapContextFactory(
+                  getRenderManager(),
+                  getGameWorld(),
+                  getEventManager(),
+                  tiledMapEventRouter,
+                  getBehaviorManager()
+            )
+      );
+      configurePipeline(getRenderPipeline(), this);
       wire();
    }
 
@@ -188,5 +201,6 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
 
    private void wire() {
       getInputManager().register(worldStage);
+      getBehaviorManager().apply(tiledMapEventRouter);
    }
 }

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tmx;
+package de.bitbrain.braingdx.tmx.v2;
 
 import de.bitbrain.braingdx.world.GameObject;
 
@@ -35,14 +35,14 @@ public class IndexCalculator {
    }
 
    public static int calculateIndex(float value, float cellSize) {
-      return (int) Math.round(Math.floor(value / (float) cellSize));
+      return (int) Math.round(Math.floor(value / cellSize));
    }
 
    public static float calculateIndexedDimension(float size, float cellSize) {
       return (float) (Math.ceil(size / cellSize) * cellSize);
    }
 
-   public static int calculateZIndex(GameObject object, TiledMapAPI api, int currentLayerIndex) {
+   public static int calculateZIndex(GameObject object, TiledMapContext api, int currentLayerIndex) {
       int rows = api.getNumberOfRows();
       int yIndex = calculateIndex(object.getTop(), api.getCellHeight());
       return calculateZIndex(rows, yIndex, currentLayerIndex);

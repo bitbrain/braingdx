@@ -1,4 +1,4 @@
-package de.bitbrain.braingdx.tmx;
+package de.bitbrain.braingdx.tmx.v2;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.event.GameEvent;
@@ -10,13 +10,13 @@ public final class TiledMapEvents {
       private final int lastLayerIndex;
       private final int currentLayerIndex;
       private final GameObject object;
-      private final TiledMapAPI api;
+      private final TiledMapContext context;
 
-      public OnLayerChangeEvent(int lastLayerIndex, int currentLayerIndex, GameObject object, TiledMapAPI api) {
+      public OnLayerChangeEvent(int lastLayerIndex, int currentLayerIndex, GameObject object, TiledMapContext context) {
          this.lastLayerIndex = lastLayerIndex;
          this.currentLayerIndex = currentLayerIndex;
          this.object = object;
-         this.api = api;
+         this.context = context;
       }
 
       public int getLastLayerIndex() {
@@ -31,8 +31,8 @@ public final class TiledMapEvents {
          return object;
       }
 
-      public TiledMapAPI getApi() {
-         return api;
+      public TiledMapContext getContext() {
+         return context;
       }
    }
 
@@ -40,13 +40,13 @@ public final class TiledMapEvents {
       private final int xIndex;
       private final int yIndex;
       private final GameObject object;
-      private final TiledMapAPI api;
+      private final TiledMapContext context;
 
-      public OnEnterCellEvent(int xIndex, int yIndex, GameObject object, TiledMapAPI api) {
+      public OnEnterCellEvent(int xIndex, int yIndex, GameObject object, TiledMapContext context) {
          this.xIndex = xIndex;
          this.yIndex = yIndex;
          this.object = object;
-         this.api = api;
+         this.context = context;
       }
 
       public int getxIndex() {
@@ -61,26 +61,26 @@ public final class TiledMapEvents {
          return object;
       }
 
-      public TiledMapAPI getApi() {
-         return api;
+      public TiledMapContext getContext() {
+         return context;
       }
    }
 
    public static class OnLoadGameObjectEvent implements GameEvent {
       private final GameObject object;
-      private final TiledMapAPI api;
+      private final TiledMapContext context;
 
-      public OnLoadGameObjectEvent(GameObject object, TiledMapAPI api) {
+      public OnLoadGameObjectEvent(GameObject object, TiledMapContext context) {
          this.object = object;
-         this.api = api;
+         this.context = context;
       }
 
       public GameObject getObject() {
          return object;
       }
 
-      public TiledMapAPI getTiledMapAPI() {
-         return api;
+      public TiledMapContext getTiledMapContext() {
+         return context;
       }
    }
 
@@ -98,15 +98,15 @@ public final class TiledMapEvents {
 
    public static class AfterLoadEvent implements GameEvent {
       private final TiledMap map;
-      private final TiledMapAPI api;
+      private final TiledMapContext context;
 
-      public AfterLoadEvent(TiledMap map, TiledMapAPI api) {
+      public AfterLoadEvent(TiledMap map, TiledMapContext context) {
          this.map = map;
-         this.api = api;
+         this.context = context;
       }
 
-      public TiledMapAPI getTiledMapAPI() {
-         return api;
+      public TiledMapContext getTiledMapContext() {
+         return context;
       }
 
       public TiledMap getTiledMap() {
@@ -115,14 +115,14 @@ public final class TiledMapEvents {
    }
 
    public static class BeforeUnloadEvent implements GameEvent {
-      private final TiledMapAPI api;
+      private final TiledMapContext context;
 
-      public BeforeUnloadEvent(TiledMapAPI api) {
-         this.api = api;
+      public BeforeUnloadEvent(TiledMapContext context) {
+         this.context = context;
       }
 
-      public TiledMapAPI getTiledMapAPI() {
-         return api;
+      public TiledMapContext getTiledMapContext() {
+         return context;
       }
    }
 

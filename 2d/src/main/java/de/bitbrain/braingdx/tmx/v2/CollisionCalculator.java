@@ -1,4 +1,4 @@
-package de.bitbrain.braingdx.tmx;
+package de.bitbrain.braingdx.tmx.v2;
 
 import de.bitbrain.braingdx.world.GameObject;
 

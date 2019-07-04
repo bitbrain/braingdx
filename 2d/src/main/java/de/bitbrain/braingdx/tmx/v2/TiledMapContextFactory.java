@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tmx;
+package de.bitbrain.braingdx.tmx.v2;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -25,9 +25,9 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.event.GameEventManager;
+import de.bitbrain.braingdx.event.GameEventRouter;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
-import de.bitbrain.braingdx.tmx.State.CellState;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
@@ -42,25 +42,34 @@ import java.util.UUID;
  * @version 1.0.0
  * @since 1.0.0
  */
-class StatePopulator {
+public class TiledMapContextFactory {
 
    private final GameObjectRenderManager renderManager;
    private final GameWorld gameWorld;
-   private final TiledMapAPI api;
-   private final BehaviorManager behaviorManager;
    private final GameEventManager gameEventManager;
+   private final GameEventRouter gameEventRouter;
+   private final BehaviorManager behaviorManager;
 
-   public StatePopulator(GameObjectRenderManager renderManager, GameWorld gameWorld, TiledMapAPI api,
-                         BehaviorManager behaviorManager, GameEventManager gameEventManager) {
+   public TiledMapContextFactory(
+         GameObjectRenderManager renderManager,
+         GameWorld gameWorld,
+         GameEventManager gameEventManager,
+         GameEventRouter gameEventRouter,
+         BehaviorManager behaviorManager) {
       this.renderManager = renderManager;
       this.gameWorld = gameWorld;
-      this.api = api;
-      this.behaviorManager = behaviorManager;
       this.gameEventManager = gameEventManager;
+      this.gameEventRouter = gameEventRouter;
+      this.behaviorManager = behaviorManager;
    }
 
-   public void populate(TiledMap tiledMap, State state, Camera camera, MapLayerRendererFactory rendererFactory,
-                        TiledMapConfig config) {
+   public TiledMapContextImpl createContext(
+         TiledMap tiledMap,
+         Camera camera,
+         MapLayerRendererFactory rendererFactory,
+         TiledMapConfig config) {
+      State state = new State();
+      TiledMapContextImpl context = new TiledMapContextImpl(tiledMap, state, gameWorld, gameEventRouter, renderManager);
       MapLayers mapLayers = tiledMap.getLayers();
       state.setNumberOfLayers(mapLayers.getCount());
       handleMapProperties(tiledMap.getProperties(), state, config);
@@ -77,13 +86,19 @@ class StatePopulator {
             populateStaticMapData(lastTileLayerIndex, (TiledMapTileLayer) mapLayer, state, config);
          } else {
             // Not a tiledlayer so consider it as an object layer
-            handleObjectLayer(lastLayerId, lastTileLayerIndex, mapLayer, state, config);
+            handleObjectLayer(context, lastLayerId, lastTileLayerIndex, mapLayer, state, config);
          }
       }
 
       // Add debug layer
-      layerIds.add(handleDebugTileLayer(state, camera, rendererFactory));
+      layerIds.add(handleDebugTileLayer(context, state, camera, rendererFactory));
       state.setLayerIds(layerIds);
+
+      // TODO Move stuff to context since this needs to be disposed
+      // Apply behaviours
+      behaviorManager.apply(new GameObjectUpdater(context, state, gameEventManager));
+
+      return context;
    }
 
    private void handleMapProperties(MapProperties properties, State state, TiledMapConfig config) {
@@ -91,7 +106,7 @@ class StatePopulator {
             properties.get(config.get(Constants.HEIGHT), Integer.class));
    }
 
-   private void handleObjectLayer(String lastLayerId, int layerIndex, MapLayer layer, State state, TiledMapConfig config) {
+   private void handleObjectLayer(TiledMapContext context, String lastLayerId, int layerIndex, MapLayer layer, State state, TiledMapConfig config) {
       if (layerIndex < 0) {
          throw new GdxRuntimeException("Unable to load tiled map! At least a single tiled layer is required!");
       }
@@ -133,17 +148,16 @@ class StatePopulator {
          gameObject.setType(objectType);
          gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
          gameObject.setAttribute(MapProperties.class, objectProperties);
-         if (!api.isInclusiveCollision(x, y, layerIndex, gameObject)) {
+         if (!context.isInclusiveCollision(x, y, layerIndex, gameObject)) {
             CollisionCalculator.updateCollision(gameObject, collision, x, y, layerIndex, state);
          }
-         IndexCalculator.calculateZIndex(gameObject, state, layerIndex);
-         gameEventManager.publish(new TiledMapEvents.OnLoadGameObjectEvent(gameObject, api));
+         gameEventManager.publish(new TiledMapEvents.OnLoadGameObjectEvent(gameObject, context));
       }
    }
 
-   private String handleDebugTileLayer(State state, Camera camera,
+   private String handleDebugTileLayer(TiledMapContext context, State state, Camera camera,
                                        MapLayerRendererFactory rendererFactory) {
-      GameObjectRenderer renderer = rendererFactory.createDebug(api, state, camera);
+      GameObjectRenderer renderer = rendererFactory.createDebug(context, state, camera);
       String id = UUID.randomUUID().toString();
       renderManager.register(id, renderer);
       GameObject layerObject = gameWorld.addObject(id);
@@ -211,7 +225,7 @@ class StatePopulator {
       // the current layer is non-collision by default
       boolean isCollision = layerIndex > 0 && !collisionLayer && state.getState(x, y, layerIndex - 1).isCollision();
       if (isCollision) {
-         CellState cellState = state.getState(x, y, layerIndex);
+         State.CellState cellState = state.getState(x, y, layerIndex);
          cellState.setCollision(true);
       } else if (cell != null) {
          TiledMapTile tile = cell.getTile();
@@ -220,7 +234,7 @@ class StatePopulator {
             if (!properties.getKeys().hasNext()) {
                return;
             }
-            CellState cellState = state.getState(x, y, layerIndex);
+            State.CellState cellState = state.getState(x, y, layerIndex);
             cellState.setProperties(properties);
             if (properties.containsKey(Constants.COLLISION)) {
                Object collisionProperty = properties.get(Constants.COLLISION);

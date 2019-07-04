@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tmx;
+package de.bitbrain.braingdx.tmx.v2;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -23,6 +23,8 @@ import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.util.Factory;
 import de.bitbrain.braingdx.world.GameObject;
+
+import static de.bitbrain.braingdx.tmx.v2.IndexCalculator.calculateIndex;
 
 /**
  * This component updates game objects which are part of the tiledmap lifecycle.
@@ -46,7 +48,7 @@ class GameObjectUpdater extends BehaviorAdapter {
 
       @Override
       public Integer create() {
-         return IndexCalculator.calculateIndex(value, cellSize);
+         return calculateIndex(value, cellSize);
       }
    }
 
@@ -56,7 +58,7 @@ class GameObjectUpdater extends BehaviorAdapter {
 
       @Override
       public Integer create() {
-         return api.lastLayerIndexOf(object);
+         return context.lastLayerIndexOf(object);
       }
    }
 
@@ -64,7 +66,7 @@ class GameObjectUpdater extends BehaviorAdapter {
 
    private final LayerIndexFactory layerIndexFactory = new LayerIndexFactory();
 
-   private final TiledMapAPI api;
+   private final TiledMapContext context;
 
    private final State state;
 
@@ -72,8 +74,8 @@ class GameObjectUpdater extends BehaviorAdapter {
 
    private final GameEventManager gameEventManager;
 
-   public GameObjectUpdater(TiledMapAPI api, State state, GameEventManager gameEventManager) {
-      this.api = api;
+   public GameObjectUpdater(TiledMapContext context, State state, GameEventManager gameEventManager) {
+      this.context = context;
       this.state = state;
       this.gameEventManager = gameEventManager;
    }
@@ -86,13 +88,13 @@ class GameObjectUpdater extends BehaviorAdapter {
          updateLayerIndex(object);
          // Update object state
          object.setPosition(object.getLeft(), object.getTop());
-         object.setAttribute(Constants.LAST_LAYER_INDEX, api.lastLayerIndexOf(object));
+         object.setAttribute(Constants.LAST_LAYER_INDEX, context.lastLayerIndexOf(object));
       }
    }
 
    private void updateZIndex(GameObject object) {
-      int currentLayerIndex = api.layerIndexOf(object);
-      object.setZIndex(IndexCalculator.calculateZIndex(object, api, currentLayerIndex));
+      int currentLayerIndex = context.layerIndexOf(object);
+      object.setZIndex(IndexCalculator.calculateZIndex(object, context, currentLayerIndex));
    }
 
    private void updateCollision(GameObject object) {
@@ -116,24 +118,24 @@ class GameObjectUpdater extends BehaviorAdapter {
       currentPosition.set(object.getLeft(), object.getTop());
       layerIndexFactory.object = object;
       int lastLayerIndex = object.getOrSetAttribute(Constants.LAST_LAYER_INDEX, layerIndexFactory);
-      int currentLayerIndex = api.layerIndexOf(object);
+      int currentLayerIndex = context.layerIndexOf(object);
       if (lastLayerIndex != currentLayerIndex || !currentPosition.equals(lastPosition)) {
          if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
             Gdx.app.debug("TiledMapAPI", "Updating collision of " + object);
          }
          // Object has moved, now check if last position is already occupied
          indexFactory.value = lastPosition.x;
-         indexFactory.cellSize = api.getCellWidth();
+         indexFactory.cellSize = context.getCellWidth();
          int lastTileX = object.getOrSetAttribute(Constants.LAST_TILE_X, indexFactory);
          indexFactory.value = lastPosition.y;
-         indexFactory.cellSize = api.getCellHeight();
+         indexFactory.cellSize = context.getCellHeight();
          int lastTileY = object.getOrSetAttribute(Constants.LAST_TILE_Y, indexFactory);
-         GameObject occupant = api.getGameObjectAt(lastTileX, lastTileY, lastLayerIndex);
+         GameObject occupant = context.getGameObjectAt(lastTileX, lastTileY, lastLayerIndex);
 
          // clear last collision
          for (int xIndex = lastTileX; xIndex < lastTileX + getObjectIndexWidth(object); ++xIndex) {
             for (int yIndex = lastTileY; yIndex < lastTileY + getObjectIndexHeight(object); ++yIndex) {
-               if (api.isInclusiveCollision(xIndex, yIndex, lastLayerIndex, object)) {
+               if (context.isInclusiveCollision(xIndex, yIndex, lastLayerIndex, object)) {
                   CollisionCalculator.updateCollision(object, false, xIndex, yIndex, lastLayerIndex, state);
                }
             }
@@ -144,14 +146,14 @@ class GameObjectUpdater extends BehaviorAdapter {
          }
          // Update current collision
          if (!object.equals(occupant) && object.isActive()) {
-            if (!api.isExclusiveCollision(object.getLeft(), object.getTop(), currentLayerIndex, object)) {
+            if (!context.isExclusiveCollision(object.getLeft(), object.getTop(), currentLayerIndex, object)) {
                CollisionCalculator.updateCollision(object, true, object.getLeft(), object.getTop(), currentLayerIndex, state);
             }
-            int tileX = IndexCalculator.calculateIndex(object.getLeft(), state.getCellWidth());
-            int tileY = IndexCalculator.calculateIndex(object.getTop(), state.getCellWidth());
+            int tileX = calculateIndex(object.getLeft(), state.getCellWidth());
+            int tileY = calculateIndex(object.getTop(), state.getCellWidth());
             for (int xIndex = tileX; xIndex < tileX + getObjectIndexWidth(object); ++xIndex) {
                for (int yIndex = tileY; yIndex < tileY + getObjectIndexHeight(object); ++yIndex) {
-                  if (!api.isExclusiveCollision(xIndex, yIndex, currentLayerIndex, object)) {
+                  if (!context.isExclusiveCollision(xIndex, yIndex, currentLayerIndex, object)) {
                      CollisionCalculator.updateCollision(object, true, xIndex, yIndex, currentLayerIndex, state);
                   }
                   if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
@@ -165,17 +167,17 @@ class GameObjectUpdater extends BehaviorAdapter {
          if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
             Gdx.app.debug("TiledMapAPI", "Tiled map layer change of " + object + " from " + lastLayerIndex + " -> " + currentLayerIndex);
          }
-         gameEventManager.publish(new TiledMapEvents.OnLayerChangeEvent(lastLayerIndex, currentLayerIndex, object, api));
+         gameEventManager.publish(new TiledMapEvents.OnLayerChangeEvent(lastLayerIndex, currentLayerIndex, object, context));
 
       }
       if (!currentPosition.equals(lastPosition)) {
-         int xIndex = IndexCalculator.calculateIndex(currentPosition.x, api.getCellWidth());
-         int yIndex = IndexCalculator.calculateIndex(currentPosition.y, api.getCellHeight());
-         gameEventManager.publish(new TiledMapEvents.OnEnterCellEvent(xIndex, yIndex, object, api));
+         int xIndex = calculateIndex(currentPosition.x, context.getCellWidth());
+         int yIndex = calculateIndex(currentPosition.y, context.getCellHeight());
+         gameEventManager.publish(new TiledMapEvents.OnEnterCellEvent(xIndex, yIndex, object, context));
       }
-      object.setAttribute(Constants.LAST_TILE_X, IndexCalculator.calculateIndex(object.getLeft(), api.getCellWidth()));
-      object.setAttribute(Constants.LAST_TILE_Y, IndexCalculator.calculateIndex(object.getTop(), api.getCellHeight()));
-      object.setAttribute(Constants.LAST_LAYER_INDEX, api.layerIndexOf(object));
+      object.setAttribute(Constants.LAST_TILE_X, calculateIndex(object.getLeft(), context.getCellWidth()));
+      object.setAttribute(Constants.LAST_TILE_Y, calculateIndex(object.getTop(), context.getCellHeight()));
+      object.setAttribute(Constants.LAST_LAYER_INDEX, context.layerIndexOf(object));
    }
 
    private void updateLayerIndex(GameObject object) {
@@ -186,10 +188,10 @@ class GameObjectUpdater extends BehaviorAdapter {
    }
 
    private int getObjectIndexWidth(GameObject object) {
-      return (int) Math.floor(object.getWidth() / api.getCellWidth());
+      return (int) Math.floor(object.getWidth() / context.getCellWidth());
    }
 
    private int getObjectIndexHeight(GameObject object) {
-      return (int) Math.floor(object.getHeight() / api.getCellHeight());
+      return (int) Math.floor(object.getHeight() / context.getCellHeight());
    }
 }

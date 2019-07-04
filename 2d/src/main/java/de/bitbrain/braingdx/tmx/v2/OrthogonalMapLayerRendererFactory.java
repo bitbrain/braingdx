@@ -1,4 +1,4 @@
-package de.bitbrain.braingdx.tmx;
+package de.bitbrain.braingdx.tmx.v2;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -22,7 +22,7 @@ public class OrthogonalMapLayerRendererFactory implements MapLayerRendererFactor
    }
 
    @Override
-   public GameObjectRenderer createDebug(final TiledMapAPI api, final State state, final Camera camera) {
+   public GameObjectRenderer createDebug(final TiledMapContext context, final State state, final Camera camera) {
       if (!(camera instanceof OrthographicCamera)) {
          throw new RuntimeException("OrthographicCamera must be provided for Orthographic TiledMaps!");
       }
@@ -38,7 +38,7 @@ public class OrthogonalMapLayerRendererFactory implements MapLayerRendererFactor
 
          @Override
          public void render(GameObject object, Batch batch, float delta) {
-            if (!api.isDebug()) {
+            if (!context.isDebug()) {
                return;
             }
             for (int x = 0; x < state.getMapIndexWidth(); ++x) {

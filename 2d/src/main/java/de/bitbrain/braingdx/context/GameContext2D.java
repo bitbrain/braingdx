@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import de.bitbrain.braingdx.graphics.lighting.LightingManager;
 import de.bitbrain.braingdx.graphics.particles.ParticleManager;
 import de.bitbrain.braingdx.physics.PhysicsManager;
-import de.bitbrain.braingdx.tmx.TiledMapManager;
+import de.bitbrain.braingdx.tmx.v2.TiledMapManager;
 
 /**
  * Provides access to the current game management.

@@ -12,25 +12,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package de.bitbrain.braingdx.tmx.v2;
 
-package de.bitbrain.braingdx.tmx;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
+/**
+ * Contains naming configuration for TMX maps.
+ *
+ * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+public class TiledMapConfig {
 
-import static org.mockito.Mockito.mock;
+   private final Map<String, String> translations = new HashMap<String, String>();
 
-public class MockMapLayerRendererFactory implements MapLayerRendererFactory {
-
-   @Override
-   public GameObjectRenderer create(int index, TiledMap tiledMap, Camera camera) {
-      return mock(GameObjectRenderer.class);
+   public TiledMapConfig translate(String key, String newKey) {
+      translations.put(key, newKey);
+      return this;
    }
 
-   @Override
-   public GameObjectRenderer createDebug(TiledMapAPI api, State state, Camera camera) {
-      return mock(GameObjectRenderer.class);
+   public String get(String key) {
+      String newKey = translations.get(key);
+      return newKey != null ? newKey : key;
    }
-
 }
