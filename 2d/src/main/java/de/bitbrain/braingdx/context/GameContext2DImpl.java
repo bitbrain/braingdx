@@ -35,6 +35,7 @@ import de.bitbrain.braingdx.graphics.lighting.LightingManager;
 import de.bitbrain.braingdx.graphics.lighting.LightingManagerImpl;
 import de.bitbrain.braingdx.graphics.lighting.LightingManagerRenderLayer;
 import de.bitbrain.braingdx.graphics.particles.ParticleManager;
+import de.bitbrain.braingdx.graphics.particles.ParticleManagerImpl;
 import de.bitbrain.braingdx.graphics.particles.ParticleManagerRenderLayer;
 import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
@@ -64,7 +65,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
 
    private final Stage worldStage;
    private final LightingManagerImpl lightingManager;
-   private final ParticleManager particleManager;
+   private final ParticleManagerImpl particleManager;
    private final World boxWorld;
    private final TiledMapManager tiledMapManager;
    private final PhysicsManagerImpl physicsManager;
@@ -90,7 +91,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    public GameContext2DImpl(ViewportFactory viewportFactory, ShaderConfig shaderConfig, BrainGdxGame game, AbstractScreen<?, ?> screen) {
       super(shaderConfig, viewportFactory, GAME_CAMERA_FACTORY, game, screen, BATCH_RESOLVER_FACTORY);
       coloredRenderLayer = new ColoredRenderLayer();
-      particleManager = new ParticleManager(getBehaviorManager(), getSettings().getGraphics());
+      particleManager = new ParticleManagerImpl(getBehaviorManager(), getSettings().getGraphics());
       worldStage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), getGameCamera().getInternalCamera()));
       boxWorld = new World(Vector2.Zero, true);
       physicsManager = new PhysicsManagerImpl(
@@ -195,7 +196,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
       });
       pipeline.put(RenderPipeIds.WORLD, new GameObjectRenderLayer(context.getRenderManager()));
       pipeline.put(RenderPipeIds.LIGHTING, new LightingManagerRenderLayer(lightingManager));
-      pipeline.put(RenderPipeIds.PARTICLES, new ParticleManagerRenderLayer(context.getParticleManager()));
+      pipeline.put(RenderPipeIds.PARTICLES, new ParticleManagerRenderLayer(particleManager));
       pipeline.put(RenderPipeIds.WORLD_UI, new StageRenderLayer(context.getWorldStage()));
       pipeline.put(RenderPipeIds.UI, new StageRenderLayer(context.getStage()));
    }
