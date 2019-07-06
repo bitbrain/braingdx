@@ -49,6 +49,10 @@ public class PointLightBehavior extends BehaviorAdapter {
       createLight();
    }
 
+   public PointLight getLight() {
+      return this.light;
+   }
+
    @Override
    public void update(GameObject source, float delta) {
       super.update(source, delta);

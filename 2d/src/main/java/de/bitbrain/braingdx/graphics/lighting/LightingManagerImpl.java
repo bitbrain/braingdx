@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import de.bitbrain.braingdx.tweens.ColorTween;
+import de.bitbrain.braingdx.tweens.PointLight2DTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 
 import java.util.HashMap;
@@ -41,6 +42,10 @@ public class LightingManagerImpl implements LightingManager, Disposable {
    private int rays;
 
    private boolean disposed = false;
+
+   static {
+      Tween.registerAccessor(PointLight.class, new PointLight2DTween());
+   }
 
    public LightingManagerImpl(RayHandler rayHandler, OrthographicCamera camera) {
       this(rayHandler, camera, new LightFactory() {
