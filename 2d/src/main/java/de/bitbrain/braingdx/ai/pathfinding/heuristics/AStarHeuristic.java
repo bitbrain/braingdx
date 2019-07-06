@@ -1,6 +1,6 @@
 package de.bitbrain.braingdx.ai.pathfinding.heuristics;
 
-import de.bitbrain.braingdx.tmx.TiledMapAPI;
+import de.bitbrain.braingdx.tmx.TiledMapContext;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -18,13 +18,13 @@ public interface AStarHeuristic {
     * target location. The lower the cost the more likely the tile will
     * be searched.
     *
-    * @param map   The map on which the path is being found
-    * @param mover The entity that is moving along the path
-    * @param x     The x coordinate of the tile being evaluated
-    * @param y     The y coordinate of the tile being evaluated
-    * @param tx    The x coordinate of the target location
-    * @param ty    Teh y coordinate of the target location
+    * @param context The map on which the path is being found
+    * @param target  The entity that is moving along the path
+    * @param x       The x coordinate of the tile being evaluated
+    * @param y       The y coordinate of the tile being evaluated
+    * @param tx      The x coordinate of the target location
+    * @param ty      Teh y coordinate of the target location
     * @return The cost associated with the given tile
     */
-   public float getCost(TiledMapAPI api, GameObject target, int x, int y, int tx, int ty);
+   float getCost(TiledMapContext context, GameObject target, int x, int y, int tx, int ty);
 }

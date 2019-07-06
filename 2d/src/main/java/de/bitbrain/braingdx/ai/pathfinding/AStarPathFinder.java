@@ -3,7 +3,7 @@ package de.bitbrain.braingdx.ai.pathfinding;
 import de.bitbrain.braingdx.ai.pathfinding.heuristics.AStarHeuristic;
 import de.bitbrain.braingdx.ai.pathfinding.heuristics.ClosestHeuristic;
 import de.bitbrain.braingdx.tmx.IndexCalculator;
-import de.bitbrain.braingdx.tmx.TiledMapAPI;
+import de.bitbrain.braingdx.tmx.TiledMapContext;
 import de.bitbrain.braingdx.world.GameObject;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class AStarPathFinder implements PathFinder {
    /**
     * The map being searched
     */
-   private TiledMapAPI map;
+   private TiledMapContext context;
    /**
     * The maximum depth of search we're willing to accept before giving up
     */
@@ -50,34 +50,34 @@ public class AStarPathFinder implements PathFinder {
    /**
     * Create a path finder with the default heuristic - closest to target.
     *
-    * @param map               The map to be searched
+    * @param context            The context to be used
     * @param maxSearchDistance The maximum depth we'll search before giving up
     * @param allowDiagMovement True if the search should try diaganol movement
     */
-   public AStarPathFinder(TiledMapAPI map, short maxSearchDistance, boolean allowDiagMovement) {
-      this(map, maxSearchDistance, allowDiagMovement, new ClosestHeuristic());
+   public AStarPathFinder(TiledMapContext context, short maxSearchDistance, boolean allowDiagMovement) {
+      this(context, maxSearchDistance, allowDiagMovement, new ClosestHeuristic());
    }
 
    /**
     * Create a path finder
     *
     * @param heuristic         The heuristic used to determine the search order of the map
-    * @param map               The map to be searched
+    * @param context           The context to be used
     * @param maxSearchDistance The maximum depth we'll search before giving up
     * @param allowDiagMovement True if the search should try diaganol movement
     */
-   public AStarPathFinder(TiledMapAPI map, short maxSearchDistance, boolean allowDiagMovement, AStarHeuristic heuristic) {
+   public AStarPathFinder(TiledMapContext context, short maxSearchDistance, boolean allowDiagMovement, AStarHeuristic heuristic) {
       this.heuristic = heuristic;
-      this.map = map;
+      this.context = context;
       this.maxSearchDistance = maxSearchDistance;
       this.allowDiagMovement = allowDiagMovement;
       refresh();
    }
 
    public void refresh() {
-      nodes = new Node[map.getNumberOfColumns()][map.getNumberOfRows()];
-      for (short x = 0; x < map.getNumberOfColumns(); x++) {
-         for (short y = 0; y < map.getNumberOfRows(); y++) {
+      nodes = new Node[context.getNumberOfColumns()][context.getNumberOfRows()];
+      for (short x = 0; x < context.getNumberOfColumns(); x++) {
+         for (short y = 0; y < context.getNumberOfRows(); y++) {
             nodes[x][y] = new Node(x, y);
          }
       }
@@ -87,11 +87,11 @@ public class AStarPathFinder implements PathFinder {
    public Path findPath(GameObject mover, int tx, int ty) {
 
 
-      int sx = IndexCalculator.calculateIndex(mover.getLeft(), map.getCellWidth());
-      int sy = IndexCalculator.calculateIndex(mover.getTop(), map.getCellHeight());
+      int sx = IndexCalculator.calculateIndex(mover.getLeft(), context.getCellWidth());
+      int sy = IndexCalculator.calculateIndex(mover.getTop(), context.getCellHeight());
 
       // easy first check, if the destination is blocked, we can't get there
-      if (map.isExclusiveCollision(tx, ty, map.layerIndexOf(mover), mover)) {
+      if (context.isExclusiveCollision(tx, ty, context.layerIndexOf(mover), mover)) {
          return null;
       }
 
@@ -145,7 +145,7 @@ public class AStarPathFinder implements PathFinder {
                   // in the sorted open list
                   float nextStepCost = current.cost + getMovementCost(mover, current.x, current.y, xp, yp);
                   Node neighbour = nodes[xp][yp];
-                  //map.pathFinderVisited(xp, yp);
+                  //context.pathFinderVisited(xp, yp);
 
                   // if the new cost we've determined for this node is lower than
                   // it has been previously makes sure the node hasn't been discarded. We've
@@ -272,14 +272,14 @@ public class AStarPathFinder implements PathFinder {
     * @return True if the location is valid for the given mover
     */
    protected boolean isValidLocation(GameObject mover, int sx, int sy, int x, int y) {
-      boolean invalid = (x < 0) || (y < 0) || (x >= map.getNumberOfColumns()) || (y >= map.getNumberOfRows());
+      boolean invalid = (x < 0) || (y < 0) || (x >= context.getNumberOfColumns()) || (y >= context.getNumberOfRows());
 
       if ((!invalid) && ((sx != x) || (sy != y))) {
-         int widthCells = (int) Math.floor(mover.getWidth() / map.getCellWidth());
-         int heightCells = (int) Math.floor(mover.getHeight() / map.getCellHeight());
+         int widthCells = (int) Math.floor(mover.getWidth() / context.getCellWidth());
+         int heightCells = (int) Math.floor(mover.getHeight() / context.getCellHeight());
          for (int xAddition = 0; xAddition < widthCells; ++xAddition) {
             for (int yAddition = 0; yAddition < heightCells; ++yAddition) {
-               if (map.isExclusiveCollision(x + xAddition, y + yAddition, map.layerIndexOf(mover), mover)) {
+               if (context.isExclusiveCollision(x + xAddition, y + yAddition, context.layerIndexOf(mover), mover)) {
                   return false;
                }
             }
@@ -316,7 +316,7 @@ public class AStarPathFinder implements PathFinder {
     * @return The heuristic cost assigned to the tile
     */
    public float getHeuristicCost(GameObject mover, int x, int y, int tx, int ty) {
-      return heuristic.getCost(map, mover, x, y, tx, ty);
+      return heuristic.getCost(context, mover, x, y, tx, ty);
    }
 
    /**

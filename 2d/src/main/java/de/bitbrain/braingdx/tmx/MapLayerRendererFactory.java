@@ -30,5 +30,5 @@ public interface MapLayerRendererFactory {
 
    GameObjectRenderer create(int index, TiledMap tiledMap, Camera camera);
 
-   GameObjectRenderer createDebug(TiledMapAPI api, State state, Camera camera);
+   GameObjectRenderer createDebug(TiledMapContext context, State state, Camera camera);
 }

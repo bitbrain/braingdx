@@ -17,24 +17,48 @@ package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.utils.Disposable;
-import de.bitbrain.braingdx.ai.pathfinding.PathFinder;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * This manager gives extended support for {@link TiledMap} objects. It features an API to query the
  * map for details and provides an own rendering integration for braingdx.
  *
  * @author Miguel Gonzalez Sanchez
- * @version 1.0.0
- * @since 1.0.0
  */
-public interface TiledMapManager extends Disposable {
+public interface TiledMapManager {
 
-   void load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config) throws TiledMapException;
+   /**
+    * Loads a tiledmap into the active {@link de.bitbrain.braingdx.world.GameWorld}
+    *
+    * @param tiledMap the tiledmap to load
+    * @param camera the camera to use
+    * @param config additional configuration
+    * @return a new instance of {@link TiledMapContext}
+    * @throws TiledMapException when there is an issue loading the tiledmap
+    */
+   TiledMapContext load(
+         TiledMap tiledMap,
+         Camera camera,
+         TiledMapConfig config) throws TiledMapException;
 
-   void load(TiledMap tiledMap, Camera camera, TiledMapType type) throws TiledMapException;
+   /**
+    * Loads a tiledmap into the active {@link de.bitbrain.braingdx.world.GameWorld}
+    *
+    * @param tiledMap the tiledmap to load
+    * @param camera the camera to use
+    * @param type the type of tiledmap
+    * @return a new instance of {@link TiledMapContext}
+    * @throws TiledMapException when there is an issue loading the tiledmap
+    */
+   TiledMapContext load(
+         TiledMap tiledMap,
+         Camera camera,
+         TiledMapType type) throws TiledMapException;
 
-   TiledMapAPI getAPI();
-
-   PathFinder getPathFinder();
+   /**
+    * Unloads an existing tiledmap
+    *
+    * @param context an existing tiledmap context
+    */
+   void unload(TiledMapContext context);
 }

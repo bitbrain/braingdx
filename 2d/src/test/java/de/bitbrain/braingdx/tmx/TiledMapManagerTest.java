@@ -32,6 +32,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -57,7 +58,7 @@ public class TiledMapManagerTest {
    private GameObjectRenderManager renderManager;
    @Mock
    private OrthographicCamera camera;
-   private TiledMapManager tiledMapManager;
+   private TiledMapManagerImpl tiledMapManager;
    private GameEventManager gameEventManager;
    private GameWorld world;
 
@@ -68,9 +69,22 @@ public class TiledMapManagerTest {
       GdxUtils.mockApplicationContext();
       BehaviorManager behaviorManager = new BehaviorManager(world);
       world.addListener(new BehaviorManagerAdapter(behaviorManager));
-      tiledMapManager = new TiledMapManagerImpl(behaviorManager, world, renderManager, gameEventManager) {
+      GameEventRouter tiledMapEventRouter = new GameEventRouter(
+            gameEventManager,
+            world,
+            new TiledMapInfoExtractor()
+      );
+      behaviorManager.apply(tiledMapEventRouter);
+      TiledMapContextFactory contextFactory = new TiledMapContextFactory(
+            renderManager,
+            world,
+            gameEventManager,
+            tiledMapEventRouter,
+            behaviorManager
+      );
+      tiledMapManager = new TiledMapManagerImpl(world, gameEventManager, contextFactory) {
          @Override
-         protected Map<TiledMapType, MapLayerRendererFactory> createFactories() {
+         protected Map<TiledMapType, MapLayerRendererFactory> createRendererFactories() {
             Map<TiledMapType, MapLayerRendererFactory> mockMap = new HashMap<TiledMapType, MapLayerRendererFactory>();
             for (TiledMapType type : TiledMapType.values()) {
                mockMap.put(type, new MockMapLayerRendererFactory());
@@ -82,7 +96,7 @@ public class TiledMapManagerTest {
 
    @Test(expected = NullPointerException.class)
    public void load_WithNullValues() throws TiledMapException {
-      tiledMapManager.load(null, null, null);
+      tiledMapManager.load(null, null, (TiledMapConfig)null);
    }
 
    @Test(expected = TiledMapException.class)
@@ -154,19 +168,19 @@ public class TiledMapManagerTest {
          @Override
          public void onEvent(TiledMapEvents.OnLoadGameObjectEvent event) {
             if (firstObject.get()) {
-               assertThat(event.getTiledMapAPI().getNumberOfColumns()).isEqualTo(2);
-               assertThat(event.getTiledMapAPI().getNumberOfRows()).isEqualTo(2);
-               assertThat(event.getTiledMapAPI().highestZIndexAt(0, 0)).isGreaterThan(2);
-               assertThat(event.getTiledMapAPI().isCollision(0, 0, 1)).isFalse();
-               assertThat(event.getTiledMapAPI().isCollision(1, 1, 1)).isFalse();
+               assertThat(event.getTiledMapContext().getNumberOfColumns()).isEqualTo(2);
+               assertThat(event.getTiledMapContext().getNumberOfRows()).isEqualTo(2);
+               assertThat(event.getTiledMapContext().highestZIndexAt(0, 0)).isGreaterThan(2);
+               assertThat(event.getTiledMapContext().isCollision(0, 0, 1)).isFalse();
+               assertThat(event.getTiledMapContext().isCollision(1, 1, 1)).isFalse();
                failed.set(false);
                firstObject.set(false);
             } else {
-               assertThat(event.getTiledMapAPI().getNumberOfColumns()).isEqualTo(2);
-               assertThat(event.getTiledMapAPI().getNumberOfRows()).isEqualTo(2);
-               assertThat(event.getTiledMapAPI().highestZIndexAt(0, 0)).isGreaterThan(2);
-               assertThat(event.getTiledMapAPI().isCollision(0, 0, 1)).isFalse();
-               assertThat(event.getTiledMapAPI().isCollision(1, 1, 1)).isTrue();
+               assertThat(event.getTiledMapContext().getNumberOfColumns()).isEqualTo(2);
+               assertThat(event.getTiledMapContext().getNumberOfRows()).isEqualTo(2);
+               assertThat(event.getTiledMapContext().highestZIndexAt(0, 0)).isGreaterThan(2);
+               assertThat(event.getTiledMapContext().isCollision(0, 0, 1)).isFalse();
+               assertThat(event.getTiledMapContext().isCollision(1, 1, 1)).isTrue();
             }
          }
       }, TiledMapEvents.OnLoadGameObjectEvent.class);
@@ -179,12 +193,10 @@ public class TiledMapManagerTest {
 
    @Test
    public void load_withSimple3x3Map_validCollisions() throws TiledMapException {
-      final TiledMapAPI api = tiledMapManager.getAPI();
-      // Load game world
-      tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
-      final GameObject objectA = api.getGameObjectAt(0, 1, 0);
-      final GameObject objectB = api.getGameObjectAt(1, 1, 0);
-      final GameObject objectC = api.getGameObjectAt(0, 0, 1);
+      TiledMapContext context = tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
+      final GameObject objectA = context.getGameObjectAt(0, 1, 0);
+      final GameObject objectB = context.getGameObjectAt(1, 1, 0);
+      final GameObject objectC = context.getGameObjectAt(0, 0, 1);
 
       // Update the world
       world.update(0f);
@@ -195,24 +207,22 @@ public class TiledMapManagerTest {
       assertThat(objectC).isNotNull();
 
       // Validate collisions
-      assertThat(api.isCollision(0, 0, 0)).isFalse();
-      assertThat(api.isCollision(1, 0, 0)).isFalse();
-      assertThat(api.isCollision(0, 1, 0)).isTrue();
-      assertThat(api.isCollision(1, 1, 0)).isTrue();
-      assertThat(api.isCollision(0, 0, 1)).isTrue();
-      assertThat(api.isCollision(1, 0, 1)).isFalse();
-      assertThat(api.isCollision(0, 1, 1)).isTrue();
-      assertThat(api.isCollision(1, 1, 1)).isTrue();
+      assertThat(context.isCollision(0, 0, 0)).isFalse();
+      assertThat(context.isCollision(1, 0, 0)).isFalse();
+      assertThat(context.isCollision(0, 1, 0)).isTrue();
+      assertThat(context.isCollision(1, 1, 0)).isTrue();
+      assertThat(context.isCollision(0, 0, 1)).isTrue();
+      assertThat(context.isCollision(1, 0, 1)).isFalse();
+      assertThat(context.isCollision(0, 1, 1)).isTrue();
+      assertThat(context.isCollision(1, 1, 1)).isTrue();
    }
 
    @Test
    public void load_withSimple3x3Map_validCollisionsWithCollisionLayer() throws TiledMapException {
-      final TiledMapAPI api = tiledMapManager.getAPI();
-      // Load game world
-      tiledMapManager.load(createSimple3x3Map(true), camera, TiledMapType.ORTHOGONAL);
-      final GameObject objectA = api.getGameObjectAt(0, 1, 0);
-      final GameObject objectB = api.getGameObjectAt(1, 1, 0);
-      final GameObject objectC = api.getGameObjectAt(0, 0, 1);
+      TiledMapContext context = tiledMapManager.load(createSimple3x3Map(true), camera, TiledMapType.ORTHOGONAL);
+      final GameObject objectA = context.getGameObjectAt(0, 1, 0);
+      final GameObject objectB = context.getGameObjectAt(1, 1, 0);
+      final GameObject objectC = context.getGameObjectAt(0, 0, 1);
 
       // Update the world
       world.update(0f);
@@ -223,58 +233,58 @@ public class TiledMapManagerTest {
       assertThat(objectC).isNotNull();
 
       // Validate collisions
-      assertThat(api.isCollision(0, 0, 0)).isFalse();
-      assertThat(api.isCollision(1, 0, 0)).isFalse();
-      assertThat(api.isCollision(0, 1, 0)).isTrue();
-      assertThat(api.isCollision(1, 1, 0)).isTrue();
-      assertThat(api.isCollision(0, 0, 1)).isTrue();
-      assertThat(api.isCollision(1, 0, 1)).isFalse();
-      assertThat(api.isCollision(0, 1, 1)).isFalse();
-      assertThat(api.isCollision(1, 1, 1)).isFalse();
+      assertThat(context.isCollision(0, 0, 0)).isFalse();
+      assertThat(context.isCollision(1, 0, 0)).isFalse();
+      assertThat(context.isCollision(0, 1, 0)).isTrue();
+      assertThat(context.isCollision(1, 1, 0)).isTrue();
+      assertThat(context.isCollision(0, 0, 1)).isTrue();
+      assertThat(context.isCollision(1, 0, 1)).isFalse();
+      assertThat(context.isCollision(0, 1, 1)).isFalse();
+      assertThat(context.isCollision(1, 1, 1)).isFalse();
    }
 
    @Test
    public void load_withSimple3x3Map_validUpdatingAfterMovement() throws TiledMapException {
-      final TiledMapAPI api = tiledMapManager.getAPI();
-      tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
-      final GameObject objectA = api.getGameObjectAt(0, 1, 0);
+      TiledMapContext context = tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
+      final GameObject objectA = context.getGameObjectAt(0, 1, 0);
       objectA.setPosition(1, 0);
       world.update(0f);
-      assertThat(api.isCollision(1, 0, 0)).isTrue();
-      assertThat(api.isCollision(0, 1, 0)).isFalse();
+      assertThat(context.isCollision(1, 0, 0)).isTrue();
+      assertThat(context.isCollision(0, 1, 0)).isFalse();
    }
 
    @Test
    public void load_withSimple3x3Map_validUpdatingAfterChangingLayers() throws TiledMapException {
-      final TiledMapAPI api = tiledMapManager.getAPI();
-      tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
-      final GameObject objectA = api.getGameObjectAt(0, 1, 0);
+      TiledMapContext context = tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
+      final GameObject objectA = context.getGameObjectAt(0, 1, 0);
       objectA.setPosition(1, 0);
       world.update(0f);
-      api.setLayerIndex(objectA, 1);
+      context.setLayerIndex(objectA, 1);
       world.update(0f);
-      assertThat(api.isCollision(1, 0, 1)).isTrue();
-      assertThat(api.isCollision(1, 0, 0)).isFalse();
-      assertThat(api.isCollision(0, 1, 0)).isFalse();
+      assertThat(context.isCollision(1, 0, 1)).isTrue();
+      assertThat(context.isCollision(1, 0, 0)).isFalse();
+      assertThat(context.isCollision(0, 1, 0)).isFalse();
    }
 
    @Test(expected = TiledMapException.class)
    public void load_withSimple3x3Map_invalidUpdatingAfterChangingLayers() throws TiledMapException {
-      final TiledMapAPI api = tiledMapManager.getAPI();
-      tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
-      final GameObject objectA = api.getGameObjectAt(0, 1, 0);
-      api.setLayerIndex(objectA, 6);
+      TiledMapContext context = tiledMapManager.load(createSimple3x3Map(), camera, TiledMapType.ORTHOGONAL);
+      final GameObject objectA = context.getGameObjectAt(0, 1, 0);
+      context.setLayerIndex(objectA, 6);
    }
 
    @Test
    public void load_withSimple3x3Map_publishCustomEventOnCollision() throws TiledMapException {
       TiledMap map = new MockTiledMapBuilder(2, 2, 1)
-            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1)
+                  .addCell(1, 0)
+                  .addCell(1, 1).build())
             .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "event").addObject(1, 1, "player").build())
             .build();
 
-      final TiledMapAPI api = tiledMapManager.getAPI();
-      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      TiledMapContext context = tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
       final AtomicBoolean called = new AtomicBoolean();
       final GameEventListener<TestEvent> gameEventEventListener = new GameEventListener<TestEvent>() {
          @Override
@@ -283,7 +293,7 @@ public class TiledMapManagerTest {
          }
       };
       gameEventManager.register(gameEventEventListener, TestEvent.class);
-      api.setEventFactory(new GameEventFactory() {
+      context.setEventFactory(new GameEventFactory() {
          @Override
          public GameEvent create(GameObject eventObject, GameObject producerObject) {
             return new TestEvent();
@@ -314,8 +324,7 @@ public class TiledMapManagerTest {
                   .addObject(1, 1, "another_player").build())
             .build();
 
-      final TiledMapAPI api = tiledMapManager.getAPI();
-      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      TiledMapContext context = tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
       final AtomicInteger calls = new AtomicInteger();
       final GameEventListener<TestEvent> gameEventEventListener = new GameEventListener<TestEvent>() {
          @Override
@@ -324,7 +333,7 @@ public class TiledMapManagerTest {
          }
       };
       gameEventManager.register(gameEventEventListener, TestEvent.class);
-      api.setEventFactory(new GameEventFactory() {
+      context.setEventFactory(new GameEventFactory() {
          @Override
          public GameEvent create(GameObject eventObject, GameObject producerObject) {
             return new TestEvent();
@@ -348,15 +357,19 @@ public class TiledMapManagerTest {
    @Test
    public void load_withSimple3x3Map_republishOnSticky() throws TiledMapException {
       TiledMap map = new MockTiledMapBuilder(2, 2, 1)
-            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1)
+                  .addCell(1, 0)
+                  .addCell(1, 1)
+                  .build())
             .addLayer(new MockObjectLayerBuilder()
                   .addObject(0, 0, "event", null, true)
                   .addObject(1, 1, "player")
                   .addObject(1, 1, "another_player").build())
             .build();
 
-      final TiledMapAPI api = tiledMapManager.getAPI();
-      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      TiledMapContext context = tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
       final AtomicInteger calls = new AtomicInteger();
       final GameEventListener<TestEvent> gameEventEventListener = new GameEventListener<TestEvent>() {
          @Override
@@ -365,7 +378,7 @@ public class TiledMapManagerTest {
          }
       };
       gameEventManager.register(gameEventEventListener, TestEvent.class);
-      api.setEventFactory(new GameEventFactory() {
+      context.setEventFactory(new GameEventFactory() {
          @Override
          public GameEvent create(GameObject eventObject, GameObject producerObject) {
             return new TestEvent();
@@ -389,30 +402,39 @@ public class TiledMapManagerTest {
    @Test
    public void load_withSimple3x3Map_removeLastCollisionOnSimpleMove() {
       TiledMap map = new MockTiledMapBuilder(2, 2, 1)
-            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0)
+                  .addCell(0, 1)
+                  .addCell(1, 0)
+                  .addCell(1, 1)
+                  .build())
             .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player").build())
             .build();
-      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      TiledMapContext context = tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
       world.update(0f);
-      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
+      assertThat(context.isCollision(0, 0, 0)).isTrue();
       for (GameObject o : world.getObjects()) {
          if (o.getType().equals("player")) {
             o.setPosition(1, 0);
          }
       }
       world.update(0f);
-      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isFalse();
+      assertThat(context.isCollision(0, 0, 0)).isFalse();
    }
 
    @Test
    public void load_withSimple3x3Map_removeLastCollisionOnMultipleMoves() {
       TiledMap map = new MockTiledMapBuilder(2, 2, 1)
-            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1)
+                  .addCell(1, 0)
+                  .addCell(1, 1)
+                  .build())
             .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player").build())
             .build();
-      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      TiledMapContext context = tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
       world.update(0f);
-      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
+      assertThat(context.isCollision(0, 0, 0)).isTrue();
       for (GameObject o : world.getObjects()) {
          if (o.getType().equals("player")) {
             o.setPosition(1, 0);
@@ -420,8 +442,8 @@ public class TiledMapManagerTest {
          }
       }
       world.update(0f);
-      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isFalse();
-      assertThat(tiledMapManager.getAPI().isCollision(0, 1, 0)).isTrue();
+      assertThat(context.isCollision(0, 0, 0)).isFalse();
+      assertThat(context.isCollision(0, 1, 0)).isTrue();
    }
 
    @Test
@@ -434,11 +456,11 @@ public class TiledMapManagerTest {
                   .addCell(1, 1).build())
             .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player").build())
             .build();
-      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      TiledMapContext context = tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
       world.update(0f);
       // Check for normal collision setup
-      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
-      assertThat(tiledMapManager.getAPI().isCollision(0, 1, 0)).isTrue();
+      assertThat(context.isCollision(0, 0, 0)).isTrue();
+      assertThat(context.isCollision(0, 1, 0)).isTrue();
       for (GameObject o : world.getObjects()) {
          if (o.getType().equals("player")) {
             o.setPosition(0, 1);
@@ -446,8 +468,8 @@ public class TiledMapManagerTest {
       }
       world.update(0f);
       // Verify collision has moved
-      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isFalse();
-      assertThat(tiledMapManager.getAPI().isCollision(0, 1, 0)).isTrue();
+      assertThat(context.isCollision(0, 0, 0)).isFalse();
+      assertThat(context.isCollision(0, 1, 0)).isTrue();
       for (GameObject o : world.getObjects()) {
          if (o.getType().equals("player")) {
             o.setPosition(0, 0);
@@ -455,8 +477,8 @@ public class TiledMapManagerTest {
       }
       world.update(0f);
       // Verify that everything is back to normal
-      assertThat(tiledMapManager.getAPI().isCollision(0, 0, 0)).isTrue();
-      assertThat(tiledMapManager.getAPI().isCollision(0, 1, 0)).isTrue();
+      assertThat(context.isCollision(0, 0, 0)).isTrue();
+      assertThat(context.isCollision(0, 1, 0)).isTrue();
    }
 
    @Test
@@ -469,12 +491,53 @@ public class TiledMapManagerTest {
                   .addCell(1, 1).build())
             .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player").build())
             .build();
-      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      TiledMapContext context = tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
       world.update(0f);
-      GameObject remainer = world.addObject();
+      GameObject remainder = world.addObject();
       assertThat(world.size()).isEqualTo(4);
-      tiledMapManager.dispose();
-      assertThat(world.getObjects()).containsExactly(remainer);
+      context.dispose();
+      assertThat(world.getObjects()).containsExactly(remainder);
+   }
+
+   @Test
+   public void should_load_multiple_maps() {
+      TiledMap map1 = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1, true)
+                  .addCell(1, 0)
+                  .addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player1").build())
+            .build();
+      TiledMap map2 = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1, true)
+                  .addCell(1, 0)
+                  .addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player2").build())
+            .build();
+      TiledMapContext context1 = tiledMapManager.load(map1, camera, TiledMapType.ORTHOGONAL);
+      TiledMapContext context2 = tiledMapManager.load(map2, camera, TiledMapType.ORTHOGONAL);
+      assertThat(world.getObjects()).hasSize(6);
+      tiledMapManager.unload(context2);
+      assertThat(world.getObjects()).hasSize(3);
+      tiledMapManager.unload(context1);
+      assertThat(world.getObjects()).isEmpty();
+   }
+
+   @Test(expected = TiledMapException.class)
+   public void should_not_allow_duplicate_loading() {
+      TiledMap map = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1, true)
+                  .addCell(1, 0)
+                  .addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player1").build())
+            .build();
+      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
    }
 
    /**

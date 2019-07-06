@@ -29,7 +29,7 @@ public class MockMapLayerRendererFactory implements MapLayerRendererFactory {
    }
 
    @Override
-   public GameObjectRenderer createDebug(TiledMapAPI api, State state, Camera camera) {
+   public GameObjectRenderer createDebug(TiledMapContext context, State state, Camera camera) {
       return mock(GameObjectRenderer.class);
    }
 

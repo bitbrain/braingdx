@@ -1,6 +1,6 @@
 package de.bitbrain.braingdx.ai.pathfinding.heuristics;
 
-import de.bitbrain.braingdx.tmx.TiledMapAPI;
+import de.bitbrain.braingdx.tmx.TiledMapContext;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -12,7 +12,7 @@ import de.bitbrain.braingdx.world.GameObject;
 public class ClosestHeuristic implements AStarHeuristic {
 
    @Override
-   public float getCost(TiledMapAPI api, GameObject target, int x, int y, int tx, int ty) {
+   public float getCost(TiledMapContext context, GameObject target, int x, int y, int tx, int ty) {
       float dx = tx - x;
       float dy = ty - y;
 

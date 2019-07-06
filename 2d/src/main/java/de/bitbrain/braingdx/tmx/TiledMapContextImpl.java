@@ -1,49 +1,52 @@
-/* Copyright 2017 Miguel Gonzalez Sanchez
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import de.bitbrain.braingdx.ai.pathfinding.AStarPathFinder;
+import de.bitbrain.braingdx.ai.pathfinding.PathFinder;
 import de.bitbrain.braingdx.event.GameEventFactory;
-import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.event.GameEventRouter;
+import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
 import java.util.List;
 
-/**
- * Implementation of {@link TiledMapAPI}.
- *
- * @author Miguel Gonzalez Sanchez
- * @version 1.0.0
- * @since 1.0.0
- */
-class TiledMapAPIImpl implements TiledMapAPI {
+public class TiledMapContextImpl implements TiledMapContext {
 
+   private final TiledMap tiledMap;
    private final State state;
-   private final GameEventManager gameEventManager;
    private final GameWorld gameWorld;
    private final GameEventRouter eventRouter;
+   private final GameObjectRenderManager renderManager;
    private boolean debug;
 
-   public TiledMapAPIImpl(State state, GameWorld gameWorld, GameEventRouter router, GameEventManager gameEventManager) {
+   private PathFinder pathFinder;
+
+   public TiledMapContextImpl(
+         TiledMap tiledMap,
+         State state,
+         GameWorld gameWorld,
+         GameEventRouter eventRouter,
+         GameObjectRenderManager renderManager) {
+      this.tiledMap = tiledMap;
       this.state = state;
-      this.gameEventManager = gameEventManager;
       this.gameWorld = gameWorld;
-      this.eventRouter = router;
+      this.eventRouter = eventRouter;
+      this.renderManager = renderManager;
+   }
+
+   @Override
+   public TiledMap getTiledMap() {
+      return tiledMap;
+   }
+
+   @Override
+   public PathFinder getPathFinder() {
+      if (pathFinder == null) {
+         this.pathFinder = new AStarPathFinder(this, (short)100, false);
+      }
+      return this.pathFinder;
    }
 
    @Override
@@ -63,8 +66,8 @@ class TiledMapAPIImpl implements TiledMapAPI {
 
    @Override
    public int highestZIndexAt(float x, float y) {
-      int tileX = (int) Math.floor(x / (float) state.getCellWidth());
-      int tileY = (int) Math.floor(y / (float) state.getCellWidth());
+      int tileX = (int) Math.floor(x / state.getCellWidth());
+      int tileY = (int) Math.floor(y / state.getCellWidth());
       return highestZIndexAt(tileX, tileY);
    }
 
@@ -87,14 +90,6 @@ class TiledMapAPIImpl implements TiledMapAPI {
    }
 
    @Override
-   public void setLayerIndex(GameObject object, int layerIndex) {
-      if (layerIndex > state.getNumberOfLayers() - 1) {
-         throw new TiledMapException("Layer index is too high: " + layerIndex);
-      }
-      object.setAttribute(Constants.LAYER_INDEX, layerIndex);
-   }
-
-   @Override
    public int getNumberOfRows() {
       return state.getMapIndexHeight();
    }
@@ -102,6 +97,14 @@ class TiledMapAPIImpl implements TiledMapAPI {
    @Override
    public int getNumberOfColumns() {
       return state.getMapIndexWidth();
+   }
+
+   @Override
+   public void setLayerIndex(GameObject object, int layerIndex) {
+      if (layerIndex > state.getNumberOfLayers() - 1) {
+         throw new TiledMapException("Layer index is too high: " + layerIndex);
+      }
+      object.setAttribute(Constants.LAYER_INDEX, layerIndex);
    }
 
    @Override
@@ -120,6 +123,11 @@ class TiledMapAPIImpl implements TiledMapAPI {
    }
 
    @Override
+   public MapProperties getPropertiesAt(int tileX, int tileY, int layer) {
+      return state.getState(tileX, tileY, layer).getProperties();
+   }
+
+   @Override
    public float getCellWidth() {
       return state.getCellWidth();
    }
@@ -127,6 +135,26 @@ class TiledMapAPIImpl implements TiledMapAPI {
    @Override
    public float getCellHeight() {
       return state.getCellHeight();
+   }
+
+   @Override
+   public float getWorldWidth() {
+      return getCellWidth() * getNumberOfColumns();
+   }
+
+   @Override
+   public float getWorldHeight() {
+      return getCellHeight() * getNumberOfRows();
+   }
+
+   @Override
+   public boolean isDebug() {
+      return debug;
+   }
+
+   @Override
+   public void setDebug(boolean enabled) {
+      this.debug = enabled;
    }
 
    @Override
@@ -203,32 +231,15 @@ class TiledMapAPIImpl implements TiledMapAPI {
    }
 
    @Override
-   public MapProperties getPropertiesAt(int tileX, int tileY, int layer) {
-      return state.getState(tileX, tileY, layer).getProperties();
-   }
-
-   @Override
-   public float getWorldWidth() {
-      return getCellWidth() * getNumberOfColumns();
-   }
-
-   @Override
-   public float getWorldHeight() {
-      return getCellHeight() * getNumberOfRows();
+   public void dispose() {
+      for (String id : state.getLayerIds()) {
+         gameWorld.clearGroup(id);
+         renderManager.unregister(id);
+      }
+      state.clear();
    }
 
    private boolean verifyIndex(int indexX, int indexY) {
       return indexX >= 0 && indexY >= 0 && indexX < state.getMapIndexWidth() && indexY < state.getMapIndexHeight();
    }
-
-   @Override
-   public boolean isDebug() {
-      return debug;
-   }
-
-   @Override
-   public void setDebug(boolean enabled) {
-      this.debug = enabled;
-   }
-
 }
