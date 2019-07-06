@@ -56,4 +56,8 @@ public interface GameContext extends Disposable, Resizeable {
    GameObjectRenderManager getRenderManager();
 
    RenderPipeline getRenderPipeline();
+
+   boolean isPaused();
+
+   void setPaused(boolean paused);
 }

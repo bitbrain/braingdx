@@ -49,10 +49,63 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
    private final BrainGdxGame game;
    private final AbstractScreen<?, ?> screen;
    private final RenderPipeline renderPipeline;
+   private boolean paused;
 
    public GameContextImpl(
          ShaderConfig shaderConfig,
          ViewportFactory viewportFactory,
+         ArgumentFactory<GameContext, GameCamera> gameCameraFactory,
+         BrainGdxGame game,
+         AbstractScreen<?, ?> screen,
+         ArgumentFactory<GameContext, BatchResolver<?>[]> batchResolverFactory) {
+      this(
+            shaderConfig,
+            new Stage(viewportFactory.create(
+                  Gdx.graphics.getWidth(),
+                  Gdx.graphics.getHeight(),
+                  new OrthographicCamera())
+            ),
+            gameCameraFactory,
+            game,
+            screen,
+            batchResolverFactory
+      );
+   }
+
+   public GameContextImpl(
+         ShaderConfig shaderConfig,
+         Stage stage,
+         RenderPipeline renderPipeline,
+         ArgumentFactory<GameContext, GameCamera> gameCameraFactory,
+         BrainGdxGame game,
+         AbstractScreen<?, ?> screen,
+         GameObjectRenderManager renderManager) {
+      this.game = game;
+      this.screen = screen;
+      this.eventManager = new GameEventManagerImpl();
+      this.settings = new GameSettings(eventManager);
+      this.shaderManager = new ShaderManager(shaderConfig, eventManager, settings.getGraphics());
+      this.world = new GameWorld();
+      this.behaviorManager = new BehaviorManager(world);
+      this.inputManager = new InputManagerImpl();
+      this.stage = stage;
+      this.gameCamera = gameCameraFactory.create(this);
+      this.renderPipeline = renderPipeline;
+      this.audioManager = new AudioManagerImpl(//
+            gameCamera,//
+            tweenManager,//
+            SharedAssetManager.getInstance(),//
+            world,//
+            behaviorManager//
+      );
+      this.transitions = new ScreenTransitions(renderPipeline, game, screen);
+      this.renderManager = renderManager;
+      wire();
+   }
+
+   public GameContextImpl(
+         ShaderConfig shaderConfig,
+         Stage stage,
          ArgumentFactory<GameContext, GameCamera> gameCameraFactory,
          BrainGdxGame game,
          AbstractScreen<?, ?> screen,
@@ -65,7 +118,7 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       this.world = new GameWorld();
       this.behaviorManager = new BehaviorManager(world);
       this.inputManager = new InputManagerImpl();
-      this.stage = new Stage(viewportFactory.create(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera()));
+      this.stage = stage;
       this.gameCamera = gameCameraFactory.create(this);
       BatchResolver<?>[] batchResolvers = batchResolverFactory.create(this);
       this.renderPipeline = new CombinedRenderPipeline(shaderConfig, batchResolvers);
@@ -159,10 +212,10 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
 
    public void updateAndRender(float delta) {
       inputManager.update(delta);
-      behaviorManager.update(delta);
+      behaviorManager.update(paused ? 0f : delta);
       tweenManager.update(delta);
       gameCamera.update(delta);
-      world.update(delta);
+      world.update(paused ? 0f : delta);
       stage.act(delta);
       renderPipeline.render(delta);
    }
@@ -175,6 +228,16 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
    @Override
    public RenderPipeline getRenderPipeline() {
       return renderPipeline;
+   }
+
+   @Override
+   public boolean isPaused() {
+      return this.paused;
+   }
+
+   @Override
+   public void setPaused(boolean paused) {
+      this.paused = paused;
    }
 
    @Override
