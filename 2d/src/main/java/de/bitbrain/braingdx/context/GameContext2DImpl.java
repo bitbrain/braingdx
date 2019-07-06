@@ -50,7 +50,6 @@ import de.bitbrain.braingdx.tmx.TiledMapContextFactory;
 import de.bitbrain.braingdx.tmx.TiledMapInfoExtractor;
 import de.bitbrain.braingdx.tmx.TiledMapManager;
 import de.bitbrain.braingdx.tmx.TiledMapManagerImpl;
-import de.bitbrain.braingdx.tmx.v2.*;
 import de.bitbrain.braingdx.util.ArgumentFactory;
 import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.util.ViewportFactory;

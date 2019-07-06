@@ -61,12 +61,4 @@ public interface TiledMapManager {
     * @param context an existing tiledmap context
     */
    void unload(TiledMapContext context);
-
-   /**
-    * Transfers a {@link GameObject} from one context to another
-    *
-    * @param object the game object to move
-    * @param target the target context to move to
-    */
-   void transfer(GameObject object, TiledMapContext target);
 }

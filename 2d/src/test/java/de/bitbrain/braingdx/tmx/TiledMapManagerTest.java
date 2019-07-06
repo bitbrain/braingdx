@@ -32,6 +32,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -275,7 +276,11 @@ public class TiledMapManagerTest {
    @Test
    public void load_withSimple3x3Map_publishCustomEventOnCollision() throws TiledMapException {
       TiledMap map = new MockTiledMapBuilder(2, 2, 1)
-            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1)
+                  .addCell(1, 0)
+                  .addCell(1, 1).build())
             .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "event").addObject(1, 1, "player").build())
             .build();
 
@@ -352,7 +357,12 @@ public class TiledMapManagerTest {
    @Test
    public void load_withSimple3x3Map_republishOnSticky() throws TiledMapException {
       TiledMap map = new MockTiledMapBuilder(2, 2, 1)
-            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1)
+                  .addCell(1, 0)
+                  .addCell(1, 1)
+                  .build())
             .addLayer(new MockObjectLayerBuilder()
                   .addObject(0, 0, "event", null, true)
                   .addObject(1, 1, "player")
@@ -392,7 +402,11 @@ public class TiledMapManagerTest {
    @Test
    public void load_withSimple3x3Map_removeLastCollisionOnSimpleMove() {
       TiledMap map = new MockTiledMapBuilder(2, 2, 1)
-            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0)
+                  .addCell(0, 1)
+                  .addCell(1, 0)
+                  .addCell(1, 1)
+                  .build())
             .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player").build())
             .build();
       TiledMapContext context = tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
@@ -410,7 +424,12 @@ public class TiledMapManagerTest {
    @Test
    public void load_withSimple3x3Map_removeLastCollisionOnMultipleMoves() {
       TiledMap map = new MockTiledMapBuilder(2, 2, 1)
-            .addLayer(new MockTiledTileLayerBuilder().addCell(0, 0).addCell(0, 1).addCell(1, 0).addCell(1, 1).build())
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1)
+                  .addCell(1, 0)
+                  .addCell(1, 1)
+                  .build())
             .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player").build())
             .build();
       TiledMapContext context = tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
@@ -474,10 +493,51 @@ public class TiledMapManagerTest {
             .build();
       TiledMapContext context = tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
       world.update(0f);
-      GameObject remainer = world.addObject();
+      GameObject remainder = world.addObject();
       assertThat(world.size()).isEqualTo(4);
       context.dispose();
-      assertThat(world.getObjects()).containsExactly(remainer);
+      assertThat(world.getObjects()).containsExactly(remainder);
+   }
+
+   @Test
+   public void should_load_multiple_maps() {
+      TiledMap map1 = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1, true)
+                  .addCell(1, 0)
+                  .addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player1").build())
+            .build();
+      TiledMap map2 = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1, true)
+                  .addCell(1, 0)
+                  .addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player2").build())
+            .build();
+      TiledMapContext context1 = tiledMapManager.load(map1, camera, TiledMapType.ORTHOGONAL);
+      TiledMapContext context2 = tiledMapManager.load(map2, camera, TiledMapType.ORTHOGONAL);
+      assertThat(world.getObjects()).hasSize(6);
+      tiledMapManager.unload(context2);
+      assertThat(world.getObjects()).hasSize(3);
+      tiledMapManager.unload(context1);
+      assertThat(world.getObjects()).isEmpty();
+   }
+
+   @Test(expected = TiledMapException.class)
+   public void should_not_allow_duplicate_loading() {
+      TiledMap map = new MockTiledMapBuilder(2, 2, 1)
+            .addLayer(new MockTiledTileLayerBuilder()
+                  .addCell(0, 0)
+                  .addCell(0, 1, true)
+                  .addCell(1, 0)
+                  .addCell(1, 1).build())
+            .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player1").build())
+            .build();
+      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
+      tiledMapManager.load(map, camera, TiledMapType.ORTHOGONAL);
    }
 
    /**

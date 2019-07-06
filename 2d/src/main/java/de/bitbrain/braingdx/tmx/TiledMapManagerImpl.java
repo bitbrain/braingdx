@@ -5,7 +5,6 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Disposable;
 import de.bitbrain.braingdx.event.GameEventManager;
-import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.SimpleWorldBounds;
 
@@ -62,11 +61,6 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
       context.dispose();
       gameEventManager.publish(new TiledMapEvents.AfterUnloadEvent());
       contextMap.remove(context.getTiledMap());
-   }
-
-   @Override
-   public void transfer(GameObject object, TiledMapContext target) {
-      // TODO
    }
 
    @Override
