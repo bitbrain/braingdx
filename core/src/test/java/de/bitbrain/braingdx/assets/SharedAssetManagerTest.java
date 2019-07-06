@@ -10,6 +10,8 @@ public class SharedAssetManagerTest {
 
    @Test(expected = RuntimeException.class)
    public void testReload_GdxNotLoaded() {
+      Gdx.files = null;
+      SharedAssetManager.getInstance();
       SharedAssetManager.reload();
    }
 
@@ -18,6 +20,12 @@ public class SharedAssetManagerTest {
    public void testReload() {
       Gdx.files = mock(Files.class);
       SharedAssetManager.reload();
+   }
+
+   @Test
+   public void testGetInstance() {
+      Gdx.files = mock(Files.class);
+      SharedAssetManager.getInstance();
    }
 
 }
