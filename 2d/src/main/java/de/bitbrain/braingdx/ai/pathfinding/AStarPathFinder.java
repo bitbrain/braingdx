@@ -2,8 +2,8 @@ package de.bitbrain.braingdx.ai.pathfinding;
 
 import de.bitbrain.braingdx.ai.pathfinding.heuristics.AStarHeuristic;
 import de.bitbrain.braingdx.ai.pathfinding.heuristics.ClosestHeuristic;
-import de.bitbrain.braingdx.tmx.v2.IndexCalculator;
-import de.bitbrain.braingdx.tmx.v2.TiledMapContext;
+import de.bitbrain.braingdx.tmx.IndexCalculator;
+import de.bitbrain.braingdx.tmx.TiledMapContext;
 import de.bitbrain.braingdx.world.GameObject;
 
 import java.util.ArrayList;

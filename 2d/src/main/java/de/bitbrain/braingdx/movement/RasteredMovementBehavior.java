@@ -19,7 +19,7 @@ import aurelienribon.tweenengine.*;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.behavior.movement.Movement;
 import de.bitbrain.braingdx.behavior.movement.Orientation;
-import de.bitbrain.braingdx.tmx.v2.TiledMapContext;
+import de.bitbrain.braingdx.tmx.TiledMapContext;
 import de.bitbrain.braingdx.tweens.GameObjectTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.util.DeltaTimer;

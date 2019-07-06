@@ -1,4 +1,4 @@
-package de.bitbrain.braingdx.tmx.v2;
+package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapLayers;

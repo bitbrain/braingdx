@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tmx.v2;
+package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -24,7 +24,7 @@ import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.util.Factory;
 import de.bitbrain.braingdx.world.GameObject;
 
-import static de.bitbrain.braingdx.tmx.v2.IndexCalculator.calculateIndex;
+import static de.bitbrain.braingdx.tmx.IndexCalculator.calculateIndex;
 
 /**
  * This component updates game objects which are part of the tiledmap lifecycle.

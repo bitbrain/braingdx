@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tmx.v2;
+package de.bitbrain.braingdx.tmx;
 
 import de.bitbrain.braingdx.world.GameObject;
 

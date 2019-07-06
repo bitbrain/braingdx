@@ -1,6 +1,6 @@
 package de.bitbrain.braingdx.ai.pathfinding.heuristics;
 
-import de.bitbrain.braingdx.tmx.v2.TiledMapContext;
+import de.bitbrain.braingdx.tmx.TiledMapContext;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**

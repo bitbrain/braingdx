@@ -20,7 +20,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -47,11 +46,14 @@ import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.physics.PhysicsManager;
 import de.bitbrain.braingdx.physics.PhysicsManagerImpl;
 import de.bitbrain.braingdx.screens.AbstractScreen;
+import de.bitbrain.braingdx.tmx.TiledMapContextFactory;
+import de.bitbrain.braingdx.tmx.TiledMapInfoExtractor;
+import de.bitbrain.braingdx.tmx.TiledMapManager;
+import de.bitbrain.braingdx.tmx.TiledMapManagerImpl;
 import de.bitbrain.braingdx.tmx.v2.*;
 import de.bitbrain.braingdx.util.ArgumentFactory;
 import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.util.ViewportFactory;
-import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * 2D Implementation of {@link GameContext}.

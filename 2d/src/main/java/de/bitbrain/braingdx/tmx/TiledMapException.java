@@ -12,29 +12,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.bitbrain.braingdx.tmx.v2;
 
-import java.util.HashMap;
-import java.util.Map;
+package de.bitbrain.braingdx.tmx;
 
 /**
- * Contains naming configuration for TMX maps.
+ * Is thrown when there is a problem with a tiledmap in braingdx.
  *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  * @since 1.0.0
  */
-public class TiledMapConfig {
+public class TiledMapException extends RuntimeException {
 
-   private final Map<String, String> translations = new HashMap<String, String>();
+   private static final long serialVersionUID = 1L;
 
-   public TiledMapConfig translate(String key, String newKey) {
-      translations.put(key, newKey);
-      return this;
+   public TiledMapException(String message) {
+      super(message);
    }
 
-   public String get(String key) {
-      String newKey = translations.get(key);
-      return newKey != null ? newKey : key;
-   }
 }

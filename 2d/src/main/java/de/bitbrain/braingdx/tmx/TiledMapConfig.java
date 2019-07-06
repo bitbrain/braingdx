@@ -12,23 +12,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package de.bitbrain.braingdx.tmx;
 
-package de.bitbrain.braingdx.tmx.v2;
-
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Provides renderers for map layers.
+ * Contains naming configuration for TMX maps.
  *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface MapLayerRendererFactory {
+public class TiledMapConfig {
 
-   GameObjectRenderer create(int index, TiledMap tiledMap, Camera camera);
+   private final Map<String, String> translations = new HashMap<String, String>();
 
-   GameObjectRenderer createDebug(TiledMapContext context, State state, Camera camera);
+   public TiledMapConfig translate(String key, String newKey) {
+      translations.put(key, newKey);
+      return this;
+   }
+
+   public String get(String key) {
+      String newKey = translations.get(key);
+      return newKey != null ? newKey : key;
+   }
 }

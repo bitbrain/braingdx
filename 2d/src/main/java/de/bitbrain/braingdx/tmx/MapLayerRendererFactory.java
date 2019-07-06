@@ -13,8 +13,22 @@
  * limitations under the License.
  */
 
-package de.bitbrain.braingdx.tmx.v2;
+package de.bitbrain.braingdx.tmx;
 
-public enum TiledMapType {
-   ORTHOGONAL;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
+
+/**
+ * Provides renderers for map layers.
+ *
+ * @author Miguel Gonzalez Sanchez
+ * @version 1.0.0
+ * @since 1.0.0
+ */
+public interface MapLayerRendererFactory {
+
+   GameObjectRenderer create(int index, TiledMap tiledMap, Camera camera);
+
+   GameObjectRenderer createDebug(TiledMapContext context, State state, Camera camera);
 }
