@@ -85,7 +85,32 @@ public class BehaviorManagerTest {
       Behavior mockBehavior = Mockito.mock(Behavior.class);
       GameObject mockObject = world.addObject();
       manager.apply(mockBehavior, mockObject);
+      manager.remove(mockObject, mockBehavior);
+      manager.updateLocally(mockObject, 0f);
+      manager.updateGlobally(mockObject, 0f);
+      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onDetach(mockObject);
+      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(mockObject, 0f);
+   }
+
+   @Test
+   public void testRemoveBehavior_GameObjectOnly() {
+      Behavior mockBehavior = Mockito.mock(Behavior.class);
+      GameObject mockObject = world.addObject();
+      manager.apply(mockBehavior, mockObject);
       manager.remove(mockObject);
+      manager.updateLocally(mockObject, 0f);
+      manager.updateGlobally(mockObject, 0f);
+      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onAttach(mockObject);
+      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onDetach(mockObject);
+      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(mockObject, 0f);
+   }
+
+   @Test
+   public void testClear() {
+      Behavior mockBehavior = Mockito.mock(Behavior.class);
+      GameObject mockObject = world.addObject();
+      manager.apply(mockBehavior, mockObject);
+      manager.clear();
       manager.updateLocally(mockObject, 0f);
       manager.updateGlobally(mockObject, 0f);
       Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onDetach(mockObject);

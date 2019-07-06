@@ -52,8 +52,10 @@ public class SharedAssetManager extends AssetManager {
    }
 
    public static void reload() {
-      instance.dispose();
-      loadInternal();
+      if (instance != null) {
+         instance.dispose();
+         loadInternal();
+      }
    }
 
    private static void loadInternal() {

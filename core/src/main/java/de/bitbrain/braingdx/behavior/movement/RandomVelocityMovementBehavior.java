@@ -33,17 +33,23 @@ public class RandomVelocityMovementBehavior extends BehaviorAdapter {
 
    private float interval = 1f;
 
-   private DeltaTimer timer = new DeltaTimer();
+   private final DeltaTimer timer;
 
    private Vector2 direction = new Vector2(1f, 0f);
 
    private Vector2 velocity = new Vector2(100f, 100f);
 
-   private Random random = new Random();
+   private final Random random;
 
    public RandomVelocityMovementBehavior() {
+      this(new Random());
       changeInterval();
+   }
+
+   public RandomVelocityMovementBehavior(Random random) {
+      this.random = random;
       timer = new DeltaTimer(interval);
+      changeInterval();
    }
 
    @Override

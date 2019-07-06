@@ -35,22 +35,17 @@ public class SpriteRenderer extends GameObject2DRenderer {
    private final AssetManager assets = SharedAssetManager.getInstance();
    private final Vector2 offset = new Vector2();
    protected Sprite sprite;
-   private String textureId;
    private Texture texture;
-   private final Batch batch;
 
-   public SpriteRenderer(String textureId, Batch batch) {
-      this.textureId = textureId;
-      this.batch = batch;
+   public SpriteRenderer(String textureId) {
       if (textureId != null) {
          texture = assets.get(textureId, Texture.class);
+         sprite = new Sprite(texture);
       }
-      sprite = new Sprite(texture);
    }
 
-   public SpriteRenderer(Texture texture, Batch batch) {
+   public SpriteRenderer(Texture texture) {
       this.texture = texture;
-      this.batch = batch;
       sprite = new Sprite(texture);
    }
 

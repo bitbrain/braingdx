@@ -12,9 +12,9 @@ import de.bitbrain.braingdx.graphics.pipeline.RenderLayer2D;
  */
 public class ParticleManagerRenderLayer extends RenderLayer2D {
 
-   private final ParticleManager manager;
+   private final ParticleManagerImpl manager;
 
-   public ParticleManagerRenderLayer(ParticleManager manager) {
+   public ParticleManagerRenderLayer(ParticleManagerImpl manager) {
       this.manager = manager;
    }
 
