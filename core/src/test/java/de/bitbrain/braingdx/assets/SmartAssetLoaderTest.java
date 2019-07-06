@@ -54,4 +54,13 @@ public class SmartAssetLoaderTest {
       loader.put(assets);
       Assertions.assertThat(assets).hasSize(2);
    }
+
+   @Test
+   public void testDefaultTypes_MissingType() {
+      SmartAssetLoaderConfiguration config = SmartAssetLoader.defaultConfiguration();
+      config.getClassMapping().put("AsdfType2", Object.class);
+      SmartAssetLoader loader = new SmartAssetLoader(CustomSampleValidAssets.class, config);
+      loader.put(assets);
+      Assertions.assertThat(assets).hasSize(0);
+   }
 }
