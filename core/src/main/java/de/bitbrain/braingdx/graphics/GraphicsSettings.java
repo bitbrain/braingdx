@@ -27,7 +27,7 @@ public class GraphicsSettings {
       this.gameEventManager = gameEventManager;
       Preferences prefs = getPreferences();
       String radialBlurName = prefs.getString(RADIAL_BLUR_QUALITY, RadialBlur.Quality.Medium.name());
-      radialBlurQuality = RadialBlur.Quality.valueOf(radialBlurName);
+      radialBlurQuality = radialBlurName == null ? RadialBlur.Quality.Normal : RadialBlur.Quality.valueOf(radialBlurName);
       renderScale = prefs.getFloat(RENDER_SCALE, 1f);
       particleMultiplier = prefs.getFloat(PARTICLE_MULTIPLIER, 1f);
    }
