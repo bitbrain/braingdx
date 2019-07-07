@@ -45,6 +45,7 @@ public abstract class AbstractScreen<T extends BrainGdxGame, C extends GameConte
 
    };
 
+   private boolean created = false;
    private T game;
    private C gameContext;
    private ArgumentFactory<AbstractScreen, C> contextFactory;
@@ -61,11 +62,14 @@ public abstract class AbstractScreen<T extends BrainGdxGame, C extends GameConte
    @Override
    public final void show() {
       gameContext = contextFactory.create(this);
-      onCreate(gameContext);
    }
 
    @Override
    public final void render(float delta) {
+      if (!created) {
+         onCreate(gameContext);
+         created = true;
+      }
       Color backgroundColor = gameContext.getBackgroundColor();
       Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);

@@ -2,9 +2,9 @@ package de.bitbrain.braingdx.graphics.postprocessing.effects;
 
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.graphics.postprocessing.filters.Copy;
 import de.bitbrain.braingdx.graphics.postprocessing.filters.MotionFilter;
-import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 
 /**
  * A motion blur effect which draws the last frame with a lower opacity. The result is then stored

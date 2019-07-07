@@ -4,9 +4,9 @@ import de.bitbrain.braingdx.world.GameObject;
 
 class CollisionCalculator {
 
-   public static void updateCollision(GameObject gameObject, boolean collision, float x, float y, int currentLayerIndex, State state) {
-      int tileX = IndexCalculator.calculateIndex(x, state.getCellWidth());
-      int tileY = IndexCalculator.calculateIndex(y, state.getCellWidth());
+   public static void updateCollision(PositionTranslator positionTranslator, GameObject gameObject, boolean collision, float x, float y, int currentLayerIndex, State state) {
+      int tileX = positionTranslator.toIndexX(x);
+      int tileY = positionTranslator.toIndexY(y);
       updateCollision(gameObject, collision, tileX, tileY, currentLayerIndex, state);
    }
 

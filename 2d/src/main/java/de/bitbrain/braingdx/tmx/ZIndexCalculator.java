@@ -18,39 +18,23 @@ package de.bitbrain.braingdx.tmx;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
- * This component calculates the index for instances of type {@link GameObject}.
+ * This component calculates the Z index for instances of type {@link GameObject}.
  *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  * @since 1.0.0
  */
-public class IndexCalculator {
+public class ZIndexCalculator {
 
-   public static int calculateXIndex(GameObject object, State state) {
-      return calculateIndex(object.getLeft(), state.getCellWidth());
-   }
-
-   public static int calculateYIndex(GameObject object, State state) {
-      return calculateIndex(object.getTop(), state.getCellHeight());
-   }
-
-   public static int calculateIndex(float value, float cellSize) {
-      return (int) Math.round(Math.floor(value / cellSize));
-   }
-
-   public static float calculateIndexedDimension(float size, float cellSize) {
-      return (float) (Math.ceil(size / cellSize) * cellSize);
-   }
-
-   public static int calculateZIndex(GameObject object, TiledMapContext api, int currentLayerIndex) {
+   public static int calculateZIndex(GameObject object, TiledMapContext api, PositionTranslator positionTranslator, int currentLayerIndex) {
       int rows = api.getNumberOfRows();
-      int yIndex = calculateIndex(object.getTop(), api.getCellHeight());
+      int yIndex = positionTranslator.toIndexY(object.getTop());
       return calculateZIndex(rows, yIndex, currentLayerIndex);
    }
 
-   public static int calculateZIndex(GameObject object, State state, int currentLayerIndex) {
+   public static int calculateZIndex(GameObject object, State state, PositionTranslator positionTranslator, int currentLayerIndex) {
       int rows = state.getMapIndexHeight();
-      int yIndex = calculateYIndex(object, state);
+      int yIndex = positionTranslator.toIndexY(object.getTop());
       return calculateZIndex(rows, yIndex, currentLayerIndex);
    }
 

@@ -19,8 +19,8 @@ package de.bitbrain.braingdx.graphics.postprocessing.effects;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Matrix4;
-import de.bitbrain.braingdx.graphics.postprocessing.filters.CameraBlur;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
+import de.bitbrain.braingdx.graphics.postprocessing.filters.CameraBlur;
 
 /**
  * FIXME this effect is INCOMPLETE!

@@ -1,6 +1,5 @@
 package de.bitbrain.braingdx.behavior;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import de.bitbrain.braingdx.util.GdxUtils;
 import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
@@ -10,8 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BehaviorManagerTest {

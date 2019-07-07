@@ -17,8 +17,8 @@
 package de.bitbrain.braingdx.graphics.postprocessing.effects;
 
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import de.bitbrain.braingdx.graphics.postprocessing.filters.RadialDistortion;
 import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
+import de.bitbrain.braingdx.graphics.postprocessing.filters.RadialDistortion;
 
 public final class Curvature extends PostProcessorEffect {
    private RadialDistortion distort;

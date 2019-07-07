@@ -18,6 +18,7 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
    private final TiledMapContextFactory contextFactory;
    private final Map<TiledMap, TiledMapContext> contextMap = new HashMap<TiledMap, TiledMapContext>();
    private final Map<TiledMapType, MapLayerRendererFactory> rendererFactoryMap;
+   private final Map<TiledMapType, PositionTranslatorFactory> positionTranslatorFactoryMap;
 
    public TiledMapManagerImpl(
          GameWorld gameWorld,
@@ -27,26 +28,35 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
       this.gameEventManager = gameEventManager;
       this.contextFactory = tiledMapContextFactory;
       this.rendererFactoryMap = createRendererFactories();
-   }
-
-   @Override
-   public TiledMapContext load(TiledMap tiledMap, Camera camera, TiledMapConfig config) throws TiledMapException {
-      return load(tiledMap, camera, TiledMapType.ORTHOGONAL, new TiledMapConfig());
+      this.positionTranslatorFactoryMap = createPositionTranslators();
    }
 
    @Override
    public TiledMapContext load(
          TiledMap tiledMap,
-         Camera camera,
-         TiledMapType type) throws TiledMapException {
-      return load(tiledMap, camera, type, new TiledMapConfig());
+         Camera camera) throws TiledMapException {
+      return load(tiledMap, camera, new TiledMapConfig());
    }
 
-   public TiledMapContext load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config) {
+   @Override
+   public TiledMapContext load(TiledMap tiledMap, Camera camera, TiledMapConfig config) {
       validate(tiledMap);
       gameEventManager.publish(new TiledMapEvents.BeforeLoadEvent(tiledMap));
-      TiledMapContextImpl context = contextFactory.createContext(tiledMap, camera, rendererFactoryMap.get(type), config);
-      gameWorld.setBounds(new SimpleWorldBounds(context.getWorldWidth(), context.getWorldHeight()));
+      TiledMapType type = TiledMapType.fromOrientation(
+            tiledMap.getProperties().get(Constants.ORIENTATION, String.class)
+      );
+
+      TiledMapContextImpl context = contextFactory.createContext(
+            tiledMap,
+            camera,
+            rendererFactoryMap.get(type),
+            positionTranslatorFactoryMap.get(type),
+            config
+      );
+      gameWorld.setBounds(new SimpleWorldBounds(
+            context.getWorldWidth(),
+            context.getWorldHeight()
+      ));
       gameEventManager.publish(new TiledMapEvents.AfterLoadEvent(tiledMap, context));
       contextMap.put(tiledMap, context);
       return context;
@@ -77,6 +87,17 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
       return factories;
    }
 
+   protected Map<TiledMapType, PositionTranslatorFactory> createPositionTranslators() {
+      Map<TiledMapType, PositionTranslatorFactory> factories = new HashMap<TiledMapType, PositionTranslatorFactory>();
+      factories.put(TiledMapType.ORTHOGONAL, new PositionTranslatorFactory() {
+         @Override
+         public PositionTranslator create(State state) {
+            return new OrthogonalPositionTranslator(state);
+         }
+      });
+      return factories;
+   }
+
    private void validate(TiledMap map) throws TiledMapException {
       if (contextMap.containsKey(map)) {
          throw new TiledMapException("TiledMap already loaded. Unload first!");
@@ -93,6 +114,9 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
       }
       if (properties.get(Constants.HEIGHT, int.class) <= 0f) {
          throw new TiledMapException("Map height must be larger than 0");
+      }
+      if (properties.get(Constants.ORIENTATION) == null) {
+         throw new TiledMapException("Map has no orientation specified");
       }
    }
 }

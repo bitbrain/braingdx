@@ -20,7 +20,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Pool;
 import de.bitbrain.braingdx.util.Group;
 import de.bitbrain.braingdx.util.Mutator;
-import de.bitbrain.braingdx.util.ZIndexComparator;
 
 import java.util.*;
 

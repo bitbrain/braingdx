@@ -2,7 +2,6 @@ package de.bitbrain.braingdx.graphics.pipeline;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import de.bitbrain.braingdx.graphics.BatchResolver;

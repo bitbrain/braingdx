@@ -18,9 +18,9 @@ package de.bitbrain.braingdx.graphics.postprocessing.effects;
 
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector2;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.graphics.postprocessing.filters.RadialBlur;
 import de.bitbrain.braingdx.graphics.postprocessing.filters.Zoom;
-import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 
 /**
  * Implements a zooming effect: either a radial blur filter or a zoom filter is used.

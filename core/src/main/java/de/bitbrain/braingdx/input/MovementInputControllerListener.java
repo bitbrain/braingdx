@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static de.bitbrain.braingdx.behavior.movement.Orientation.*;
-import static de.bitbrain.braingdx.behavior.movement.Orientation.RIGHT;
 import static de.bitbrain.braingdx.input.MovementInputControllerListener.Mode.*;
 
 /**

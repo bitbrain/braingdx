@@ -24,8 +24,6 @@ import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.util.Factory;
 import de.bitbrain.braingdx.world.GameObject;
 
-import static de.bitbrain.braingdx.tmx.IndexCalculator.calculateIndex;
-
 /**
  * This component updates game objects which are part of the tiledmap lifecycle.
  *
@@ -37,18 +35,35 @@ class GameObjectUpdater extends BehaviorAdapter {
 
    private static final String FALSE = "false";
 
-   private class IndexFactory implements Factory<Integer> {
+   private class IndexXFactory implements Factory<Integer> {
 
       float value;
-      float cellSize;
 
-      public IndexFactory() {
+      private final PositionTranslator positionTranslator;
 
+      public IndexXFactory(PositionTranslator positionTranslator) {
+         this.positionTranslator = positionTranslator;
       }
 
       @Override
       public Integer create() {
-         return calculateIndex(value, cellSize);
+         return positionTranslator.toIndexX(value);
+      }
+   }
+
+   private class IndexYFactory implements Factory<Integer> {
+
+      float value;
+
+      private final PositionTranslator positionTranslator;
+
+      public IndexYFactory(PositionTranslator positionTranslator) {
+         this.positionTranslator = positionTranslator;
+      }
+
+      @Override
+      public Integer create() {
+         return positionTranslator.toIndexY(value);
       }
    }
 
@@ -62,7 +77,9 @@ class GameObjectUpdater extends BehaviorAdapter {
       }
    }
 
-   private final IndexFactory indexFactory = new IndexFactory();
+   private final IndexXFactory indexXFactory;
+
+   private final IndexYFactory indexYFactory;
 
    private final LayerIndexFactory layerIndexFactory = new LayerIndexFactory();
 
@@ -74,10 +91,19 @@ class GameObjectUpdater extends BehaviorAdapter {
 
    private final GameEventManager gameEventManager;
 
-   public GameObjectUpdater(TiledMapContext context, State state, GameEventManager gameEventManager) {
+   private final PositionTranslator positionTranslator;
+
+   public GameObjectUpdater(
+         TiledMapContext context,
+         State state,
+         GameEventManager gameEventManager,
+         PositionTranslator positionTranslator) {
       this.context = context;
       this.state = state;
       this.gameEventManager = gameEventManager;
+      this.positionTranslator = positionTranslator;
+      this.indexXFactory = new IndexXFactory(positionTranslator);
+      this.indexYFactory = new IndexYFactory(positionTranslator);
    }
 
    @Override
@@ -94,7 +120,7 @@ class GameObjectUpdater extends BehaviorAdapter {
 
    private void updateZIndex(GameObject object) {
       int currentLayerIndex = context.layerIndexOf(object);
-      object.setZIndex(IndexCalculator.calculateZIndex(object, context, currentLayerIndex));
+      object.setZIndex(ZIndexCalculator.calculateZIndex(object, context, positionTranslator, currentLayerIndex));
    }
 
    private void updateCollision(GameObject object) {
@@ -124,12 +150,10 @@ class GameObjectUpdater extends BehaviorAdapter {
             Gdx.app.debug("TiledMapAPI", "Updating collision of " + object);
          }
          // Object has moved, now check if last position is already occupied
-         indexFactory.value = lastPosition.x;
-         indexFactory.cellSize = context.getCellWidth();
-         int lastTileX = object.getOrSetAttribute(Constants.LAST_TILE_X, indexFactory);
-         indexFactory.value = lastPosition.y;
-         indexFactory.cellSize = context.getCellHeight();
-         int lastTileY = object.getOrSetAttribute(Constants.LAST_TILE_Y, indexFactory);
+         indexXFactory.value = lastPosition.x;
+         int lastTileX = object.getOrSetAttribute(Constants.LAST_TILE_X, indexXFactory);
+         indexYFactory.value = lastPosition.y;
+         int lastTileY = object.getOrSetAttribute(Constants.LAST_TILE_Y, indexYFactory);
          GameObject occupant = context.getGameObjectAt(lastTileX, lastTileY, lastLayerIndex);
 
          // clear last collision
@@ -147,10 +171,10 @@ class GameObjectUpdater extends BehaviorAdapter {
          // Update current collision
          if (!object.equals(occupant) && object.isActive()) {
             if (!context.isExclusiveCollision(object.getLeft(), object.getTop(), currentLayerIndex, object)) {
-               CollisionCalculator.updateCollision(object, true, object.getLeft(), object.getTop(), currentLayerIndex, state);
+               CollisionCalculator.updateCollision(positionTranslator, object, true, object.getLeft(), object.getTop(), currentLayerIndex, state);
             }
-            int tileX = calculateIndex(object.getLeft(), state.getCellWidth());
-            int tileY = calculateIndex(object.getTop(), state.getCellWidth());
+            int tileX = positionTranslator.toIndexX(object.getLeft());
+            int tileY = positionTranslator.toIndexY(object.getTop());
             for (int xIndex = tileX; xIndex < tileX + getObjectIndexWidth(object); ++xIndex) {
                for (int yIndex = tileY; yIndex < tileY + getObjectIndexHeight(object); ++yIndex) {
                   if (!context.isExclusiveCollision(xIndex, yIndex, currentLayerIndex, object)) {
@@ -171,12 +195,12 @@ class GameObjectUpdater extends BehaviorAdapter {
 
       }
       if (!currentPosition.equals(lastPosition)) {
-         int xIndex = calculateIndex(currentPosition.x, context.getCellWidth());
-         int yIndex = calculateIndex(currentPosition.y, context.getCellHeight());
+         int xIndex = positionTranslator.toIndexX(currentPosition.x);
+         int yIndex = positionTranslator.toIndexY(currentPosition.y);
          gameEventManager.publish(new TiledMapEvents.OnEnterCellEvent(xIndex, yIndex, object, context));
       }
-      object.setAttribute(Constants.LAST_TILE_X, calculateIndex(object.getLeft(), context.getCellWidth()));
-      object.setAttribute(Constants.LAST_TILE_Y, calculateIndex(object.getTop(), context.getCellHeight()));
+      object.setAttribute(Constants.LAST_TILE_X, positionTranslator.toIndexX(object.getLeft()));
+      object.setAttribute(Constants.LAST_TILE_Y, positionTranslator.toIndexY(object.getTop()));
       object.setAttribute(Constants.LAST_LAYER_INDEX, context.layerIndexOf(object));
    }
 

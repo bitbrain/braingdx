@@ -17,7 +17,6 @@ package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * This manager gives extended support for {@link TiledMap} objects. It features an API to query the
@@ -30,7 +29,7 @@ public interface TiledMapManager {
    /**
     * Loads a tiledmap into the active {@link de.bitbrain.braingdx.world.GameWorld}
     *
-    * @param tiledMap the tiledmap to load
+    * @param tiledMap the tiledmap to loadTiledMapManager
     * @param camera the camera to use
     * @param config additional configuration
     * @return a new instance of {@link TiledMapContext}
@@ -46,14 +45,12 @@ public interface TiledMapManager {
     *
     * @param tiledMap the tiledmap to load
     * @param camera the camera to use
-    * @param type the type of tiledmap
     * @return a new instance of {@link TiledMapContext}
     * @throws TiledMapException when there is an issue loading the tiledmap
     */
    TiledMapContext load(
          TiledMap tiledMap,
-         Camera camera,
-         TiledMapType type) throws TiledMapException;
+         Camera camera) throws TiledMapException;
 
    /**
     * Unloads an existing tiledmap

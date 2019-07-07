@@ -20,11 +20,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
+import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.graphics.postprocessing.filters.Blur;
 import de.bitbrain.braingdx.graphics.postprocessing.filters.Combine;
 import de.bitbrain.braingdx.graphics.postprocessing.filters.Threshold;
-import de.bitbrain.braingdx.graphics.postprocessing.PostProcessor;
-import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
 import de.bitbrain.braingdx.graphics.postprocessing.utils.PingPongBuffer;
 
 public final class Bloom extends PostProcessorEffect {

@@ -1,9 +1,7 @@
 package de.bitbrain.braingdx.graphics;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 

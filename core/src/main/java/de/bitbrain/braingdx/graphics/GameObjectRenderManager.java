@@ -15,8 +15,6 @@
 
 package de.bitbrain.braingdx.graphics;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.util.ZIndexComparator;

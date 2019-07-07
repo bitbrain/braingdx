@@ -1,7 +1,5 @@
 package de.bitbrain.braingdx.event;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 import de.bitbrain.braingdx.util.GdxUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +7,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.times;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameEventManagerTest {

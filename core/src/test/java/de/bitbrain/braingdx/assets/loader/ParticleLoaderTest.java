@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
