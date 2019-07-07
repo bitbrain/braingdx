@@ -16,5 +16,6 @@
 package de.bitbrain.braingdx.tmx;
 
 public enum TiledMapType {
-   ORTHOGONAL;
+   ORTHOGONAL,
+   ISOMETRIC;
 }

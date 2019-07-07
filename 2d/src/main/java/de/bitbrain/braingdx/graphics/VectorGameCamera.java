@@ -67,6 +67,8 @@ public class VectorGameCamera implements GameCamera {
    private int correctionX = 0;
    private int correctionY = 0;
 
+   private Vector2 position = new Vector2();
+
    private final Random random = new Random();
 
    static {
@@ -100,6 +102,8 @@ public class VectorGameCamera implements GameCamera {
 
    @Override
    public void update(float delta) {
+      camera.position.x = position.x;
+      camera.position.y = position.y;
       camera.position.x -= lastShake.x;
       camera.position.y -= lastShake.y;
       if (target != null) {
@@ -133,6 +137,8 @@ public class VectorGameCamera implements GameCamera {
       camera.position.y += shake.y;
       camera.update();
       lastShake.set(shake);
+      position.x = camera.position.x;
+      position.y = camera.position.y;
    }
 
    @Override
@@ -142,7 +148,9 @@ public class VectorGameCamera implements GameCamera {
 
    @Override
    public void resize(int width, int height) {
-      focusRequested = true;
+      if (target != null) {
+         focusRequested = true;
+      }
       camera.setToOrtho(false, width, height);
    }
 
@@ -187,6 +195,8 @@ public class VectorGameCamera implements GameCamera {
    public void focusCentered(GameObject object) {
       camera.position.x = object.getLeft() + object.getOffsetX() + object.getWidth() / 2f;
       camera.position.y = object.getTop() + object.getOffsetY() + object.getHeight() / 2f;
+      position.x = camera.position.x;
+      position.y = camera.position.y;
       if (worldBoundsStickiness) {
          correctionX = 0;
          correctionY = 0;
@@ -201,6 +211,8 @@ public class VectorGameCamera implements GameCamera {
          WorldBounds bounds = world.getBounds();
          camera.position.x = bounds.getWorldOffsetX() + bounds.getWorldWidth() / 2f;
          camera.position.y = bounds.getWorldOffsetY() + bounds.getWorldHeight() / 2f;
+         position.x = camera.position.x;
+         position.y = camera.position.y;
       }
       if (worldBoundsStickiness) {
          correctionX = 0;
@@ -218,6 +230,8 @@ public class VectorGameCamera implements GameCamera {
    public void setPosition(float x, float y) {
       this.camera.position.x = x;
       this.camera.position.y = y;
+      position.x = x;
+      position.y = y;
       if (worldBoundsStickiness) {
          applyWorldBounds();
       }

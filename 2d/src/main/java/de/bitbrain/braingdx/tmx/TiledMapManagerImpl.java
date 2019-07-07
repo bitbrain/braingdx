@@ -74,6 +74,7 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
    protected Map<TiledMapType, MapLayerRendererFactory> createRendererFactories() {
       Map<TiledMapType, MapLayerRendererFactory> factories = new HashMap<TiledMapType, MapLayerRendererFactory>();
       factories.put(TiledMapType.ORTHOGONAL, new OrthogonalMapLayerRendererFactory());
+      factories.put(TiledMapType.ISOMETRIC, new IsometricMapLayerRendererFactory());
       return factories;
    }
 
