@@ -8,8 +8,7 @@ import org.mockito.Captor;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertNotSame;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RandomVelocityMovementBehaviorTest {
@@ -26,6 +25,13 @@ public class RandomVelocityMovementBehaviorTest {
       RandomVelocityMovementBehavior behavior = new RandomVelocityMovementBehavior();
       behavior.update(obj, 1f);
       verify(obj).move(xCaptor.capture(), yCaptor.capture());
+      assertNotSame(xCaptor.getValue(), yCaptor.getValue());
+      float oldX = xCaptor.getValue();
+      float oldY = yCaptor.getValue();
+      behavior.update(obj, 1f);
+      verify(obj, times(2)).move(xCaptor.capture(), yCaptor.capture());
+      assertNotSame(oldX, xCaptor.getValue());
+      assertNotSame(oldY, yCaptor.getValue());
       assertNotSame(xCaptor.getValue(), yCaptor.getValue());
    }
 
