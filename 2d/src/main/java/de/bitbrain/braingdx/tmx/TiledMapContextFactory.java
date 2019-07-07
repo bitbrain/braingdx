@@ -69,7 +69,15 @@ public class TiledMapContextFactory {
          MapLayerRendererFactory rendererFactory,
          TiledMapConfig config) {
       State state = new State();
-      TiledMapContextImpl context = new TiledMapContextImpl(tiledMap, state, gameWorld, gameEventRouter, renderManager);
+      TiledMapContextImpl context = new TiledMapContextImpl(
+            tiledMap,
+            state,
+            gameWorld,
+            gameEventRouter,
+            renderManager,
+            behaviorManager,
+            gameEventManager
+      );
       MapLayers mapLayers = tiledMap.getLayers();
       state.setNumberOfLayers(mapLayers.getCount());
       handleMapProperties(tiledMap.getProperties(), state, config);
@@ -93,10 +101,6 @@ public class TiledMapContextFactory {
       // Add debug layer
       layerIds.add(handleDebugTileLayer(context, state, camera, rendererFactory));
       state.setLayerIds(layerIds);
-
-      // TODO Move stuff to context since this needs to be disposed
-      // Apply behaviours
-      behaviorManager.apply(new GameObjectUpdater(context, state, gameEventManager));
 
       return context;
    }

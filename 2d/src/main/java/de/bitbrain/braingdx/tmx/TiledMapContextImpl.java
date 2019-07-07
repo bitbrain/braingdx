@@ -4,7 +4,9 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.ai.pathfinding.AStarPathFinder;
 import de.bitbrain.braingdx.ai.pathfinding.PathFinder;
+import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.event.GameEventFactory;
+import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.event.GameEventRouter;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameObject;
@@ -19,6 +21,8 @@ public class TiledMapContextImpl implements TiledMapContext {
    private final GameWorld gameWorld;
    private final GameEventRouter eventRouter;
    private final GameObjectRenderManager renderManager;
+   private final GameObjectUpdater gameObjectUpdater;
+   private final BehaviorManager behaviorManager;
    private boolean debug;
 
    private PathFinder pathFinder;
@@ -28,12 +32,18 @@ public class TiledMapContextImpl implements TiledMapContext {
          State state,
          GameWorld gameWorld,
          GameEventRouter eventRouter,
-         GameObjectRenderManager renderManager) {
+         GameObjectRenderManager renderManager,
+         BehaviorManager behaviorManager,
+         GameEventManager gameEventManager) {
       this.tiledMap = tiledMap;
       this.state = state;
       this.gameWorld = gameWorld;
       this.eventRouter = eventRouter;
       this.renderManager = renderManager;
+      this.behaviorManager = behaviorManager;
+      // Apply behaviours
+      gameObjectUpdater = new GameObjectUpdater(this, state, gameEventManager);
+      this.behaviorManager.apply(gameObjectUpdater);
    }
 
    @Override
@@ -237,6 +247,7 @@ public class TiledMapContextImpl implements TiledMapContext {
          renderManager.unregister(id);
       }
       state.clear();
+      behaviorManager.remove(gameObjectUpdater);
    }
 
    private boolean verifyIndex(int indexX, int indexY) {
