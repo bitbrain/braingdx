@@ -28,6 +28,7 @@ interface Constants {
    String Y = "y";
    String WIDTH = "width";
    String HEIGHT = "height";
+   String ORIENTATION = "orientation";
    String TYPE = "type";
    String COLLISION = "collision";
    String LAYER_INDEX = "tmx_layer_index";

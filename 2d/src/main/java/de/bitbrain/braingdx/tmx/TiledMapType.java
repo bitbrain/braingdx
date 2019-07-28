@@ -15,7 +15,29 @@
 
 package de.bitbrain.braingdx.tmx;
 
+import com.badlogic.gdx.utils.GdxRuntimeException;
+
 public enum TiledMapType {
-   ORTHOGONAL,
-   ISOMETRIC;
+
+   ORTHOGONAL("orthogonal"),
+   ISOMETRIC("isometric");
+
+   private final String orientation;
+
+   TiledMapType(String orientation) {
+      this.orientation = orientation;
+   }
+
+   public String getOrientation() {
+      return orientation;
+   }
+
+   static TiledMapType fromOrientation(String orientation) {
+      for (TiledMapType type : values()) {
+         if (orientation.equals(type.getOrientation())) {
+            return type;
+         }
+      }
+      throw new GdxRuntimeException("TiledMap orientation '" + orientation + "' is currently unsupported.");
+   }
 }

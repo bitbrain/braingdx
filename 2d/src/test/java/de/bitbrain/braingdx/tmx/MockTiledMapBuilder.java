@@ -18,12 +18,13 @@ public class MockTiledMapBuilder {
    private MapLayers layers;
    private float size;
 
-   public MockTiledMapBuilder(int xTiles, int yTiles, int tileSize) {
+   public MockTiledMapBuilder(int xTiles, int yTiles, int tileSize, TiledMapType mapType) {
       map = mock(TiledMap.class);
       layers = new MapLayers();
       MapProperties properties = new MapProperties();
       properties.put(Constants.WIDTH, xTiles);
       properties.put(Constants.HEIGHT, yTiles);
+      properties.put(Constants.ORIENTATION, mapType.getOrientation());
       when(map.getProperties()).thenReturn(properties);
       this.size = tileSize;
    }

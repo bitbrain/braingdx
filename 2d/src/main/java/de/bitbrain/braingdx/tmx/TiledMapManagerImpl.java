@@ -30,23 +30,29 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
    }
 
    @Override
-   public TiledMapContext load(TiledMap tiledMap, Camera camera, TiledMapConfig config) throws TiledMapException {
-      return load(tiledMap, camera, TiledMapType.ORTHOGONAL, new TiledMapConfig());
+   public TiledMapContext load(
+         TiledMap tiledMap,
+         Camera camera) throws TiledMapException {
+      return load(tiledMap, camera, new TiledMapConfig());
    }
 
    @Override
-   public TiledMapContext load(
-         TiledMap tiledMap,
-         Camera camera,
-         TiledMapType type) throws TiledMapException {
-      return load(tiledMap, camera, type, new TiledMapConfig());
-   }
-
-   public TiledMapContext load(TiledMap tiledMap, Camera camera, TiledMapType type, TiledMapConfig config) {
+   public TiledMapContext load(TiledMap tiledMap, Camera camera, TiledMapConfig config) {
       validate(tiledMap);
       gameEventManager.publish(new TiledMapEvents.BeforeLoadEvent(tiledMap));
-      TiledMapContextImpl context = contextFactory.createContext(tiledMap, camera, rendererFactoryMap.get(type), config);
-      gameWorld.setBounds(new SimpleWorldBounds(context.getWorldWidth(), context.getWorldHeight()));
+      TiledMapType type = TiledMapType.fromOrientation(
+            tiledMap.getProperties().get(Constants.ORIENTATION, String.class)
+      );
+      TiledMapContextImpl context = contextFactory.createContext(
+            tiledMap,
+            camera,
+            rendererFactoryMap.get(type),
+            config
+      );
+      gameWorld.setBounds(new SimpleWorldBounds(
+            context.getWorldWidth(),
+            context.getWorldHeight()
+      ));
       gameEventManager.publish(new TiledMapEvents.AfterLoadEvent(tiledMap, context));
       contextMap.put(tiledMap, context);
       return context;
@@ -94,6 +100,9 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
       }
       if (properties.get(Constants.HEIGHT, int.class) <= 0f) {
          throw new TiledMapException("Map height must be larger than 0");
+      }
+      if (properties.get(Constants.ORIENTATION) == null) {
+         throw new TiledMapException("Map has no orientation specified");
       }
    }
 }
