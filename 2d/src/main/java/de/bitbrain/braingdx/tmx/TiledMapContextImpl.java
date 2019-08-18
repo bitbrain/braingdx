@@ -23,6 +23,7 @@ public class TiledMapContextImpl implements TiledMapContext {
    private final GameObjectRenderManager renderManager;
    private final GameObjectUpdater gameObjectUpdater;
    private final BehaviorManager behaviorManager;
+   private final PositionTranslator positionTranslator;
    private boolean debug;
 
    private PathFinder pathFinder;
@@ -34,15 +35,17 @@ public class TiledMapContextImpl implements TiledMapContext {
          GameEventRouter eventRouter,
          GameObjectRenderManager renderManager,
          BehaviorManager behaviorManager,
-         GameEventManager gameEventManager) {
+         GameEventManager gameEventManager,
+         PositionTranslator positionTranslator) {
       this.tiledMap = tiledMap;
       this.state = state;
       this.gameWorld = gameWorld;
       this.eventRouter = eventRouter;
       this.renderManager = renderManager;
       this.behaviorManager = behaviorManager;
+      this.positionTranslator = positionTranslator;
       // Apply behaviours
-      gameObjectUpdater = new GameObjectUpdater(this, state, gameEventManager);
+      gameObjectUpdater = new GameObjectUpdater(this, state, gameEventManager, positionTranslator);
       this.behaviorManager.apply(gameObjectUpdater);
    }
 
@@ -54,7 +57,7 @@ public class TiledMapContextImpl implements TiledMapContext {
    @Override
    public PathFinder getPathFinder() {
       if (pathFinder == null) {
-         this.pathFinder = new AStarPathFinder(this, (short)100, false);
+         this.pathFinder = new AStarPathFinder(this, (short) 100, false);
       }
       return this.pathFinder;
    }
@@ -122,8 +125,8 @@ public class TiledMapContextImpl implements TiledMapContext {
       List<GameObject> objects = gameWorld.getObjects();
       for (int i = 0; i < objects.size(); ++i) {
          GameObject worldObject = objects.get(i);
-         int objectTileX = IndexCalculator.calculateXIndex(worldObject, state);
-         int objectTileY = IndexCalculator.calculateYIndex(worldObject, state);
+         int objectTileX = positionTranslator.toIndexX(worldObject.getLeft());
+         int objectTileY = positionTranslator.toIndexY(worldObject.getTop());
          int layerIndex = layerIndexOf(worldObject);
          if (objectTileX == tileX && objectTileY == tileY && layer == layerIndex) {
             return worldObject;
@@ -135,6 +138,11 @@ public class TiledMapContextImpl implements TiledMapContext {
    @Override
    public MapProperties getPropertiesAt(int tileX, int tileY, int layer) {
       return state.getState(tileX, tileY, layer).getProperties();
+   }
+
+   @Override
+   public PositionTranslator getPositionTranslator() {
+      return null;
    }
 
    @Override
@@ -195,8 +203,8 @@ public class TiledMapContextImpl implements TiledMapContext {
 
    @Override
    public boolean isCollision(float x, float y, int layer) {
-      int tileX = IndexCalculator.calculateIndex(x, state.getCellWidth());
-      int tileY = IndexCalculator.calculateIndex(y, state.getCellHeight());
+      int tileX = positionTranslator.toIndexX(x);
+      int tileY = positionTranslator.toIndexY(y);
       return isCollision(tileX, tileY, layer);
    }
 
@@ -212,8 +220,8 @@ public class TiledMapContextImpl implements TiledMapContext {
 
    @Override
    public boolean isExclusiveCollision(float x, float y, int layer, GameObject object) {
-      int tileX = IndexCalculator.calculateIndex(x, state.getCellWidth());
-      int tileY = IndexCalculator.calculateIndex(y, state.getCellHeight());
+      int tileX = positionTranslator.toIndexX(x);
+      int tileY = positionTranslator.toIndexY(y);
       if (!verifyIndex(tileX, tileY)) {
          return true;
       }
@@ -223,8 +231,8 @@ public class TiledMapContextImpl implements TiledMapContext {
 
    @Override
    public boolean isInclusiveCollision(float x, float y, int layer, GameObject object) {
-      int tileX = IndexCalculator.calculateIndex(x, state.getCellWidth());
-      int tileY = IndexCalculator.calculateIndex(y, state.getCellHeight());
+      int tileX = positionTranslator.toIndexX(x);
+      int tileY = positionTranslator.toIndexY(y);
       if (!verifyIndex(tileX, tileY)) {
          return true;
       }
@@ -235,8 +243,8 @@ public class TiledMapContextImpl implements TiledMapContext {
    @Override
    public boolean isCollision(GameObject object, int tileOffsetX, int tileOffsetY) {
       int layer = layerIndexOf(object);
-      int tileX = IndexCalculator.calculateXIndex(object, state) + tileOffsetX;
-      int tileY = IndexCalculator.calculateYIndex(object, state) + tileOffsetY;
+      int tileX = positionTranslator.toIndexX(object.getLeft()) + tileOffsetX;
+      int tileY = positionTranslator.toIndexY(object.getTop()) + tileOffsetY;
       return isCollision(tileX, tileY, layer);
    }
 

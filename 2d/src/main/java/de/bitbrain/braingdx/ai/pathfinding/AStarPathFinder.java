@@ -2,7 +2,7 @@ package de.bitbrain.braingdx.ai.pathfinding;
 
 import de.bitbrain.braingdx.ai.pathfinding.heuristics.AStarHeuristic;
 import de.bitbrain.braingdx.ai.pathfinding.heuristics.ClosestHeuristic;
-import de.bitbrain.braingdx.tmx.IndexCalculator;
+import de.bitbrain.braingdx.tmx.ZIndexCalculator;
 import de.bitbrain.braingdx.tmx.TiledMapContext;
 import de.bitbrain.braingdx.world.GameObject;
 
@@ -87,8 +87,8 @@ public class AStarPathFinder implements PathFinder {
    public Path findPath(GameObject mover, int tx, int ty) {
 
 
-      int sx = IndexCalculator.calculateIndex(mover.getLeft(), context.getCellWidth());
-      int sy = IndexCalculator.calculateIndex(mover.getTop(), context.getCellHeight());
+      int sx = context.getPositionTranslator().toIndexX(mover.getLeft());
+      int sy = context.getPositionTranslator().toIndexY(mover.getTop());
 
       // easy first check, if the destination is blocked, we can't get there
       if (context.isExclusiveCollision(tx, ty, context.layerIndexOf(mover), mover)) {

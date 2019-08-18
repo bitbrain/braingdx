@@ -22,6 +22,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.event.GameEventManager;
@@ -31,6 +32,7 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
+import javax.swing.text.Position;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -67,8 +69,10 @@ public class TiledMapContextFactory {
          TiledMap tiledMap,
          Camera camera,
          MapLayerRendererFactory rendererFactory,
+         PositionTranslatorFactory positionTranslatorFactory,
          TiledMapConfig config) {
       State state = new State();
+      PositionTranslator positionTranslator = positionTranslatorFactory.create(state);
       TiledMapContextImpl context = new TiledMapContextImpl(
             tiledMap,
             state,
@@ -76,7 +80,8 @@ public class TiledMapContextFactory {
             gameEventRouter,
             renderManager,
             behaviorManager,
-            gameEventManager
+            gameEventManager,
+            positionTranslator
       );
       MapLayers mapLayers = tiledMap.getLayers();
       state.setNumberOfLayers(mapLayers.getCount());
@@ -94,7 +99,7 @@ public class TiledMapContextFactory {
             populateStaticMapData(lastTileLayerIndex, (TiledMapTileLayer) mapLayer, state, config);
          } else {
             // Not a tiledlayer so consider it as an object layer
-            handleObjectLayer(context, lastLayerId, lastTileLayerIndex, mapLayer, state, config);
+            handleObjectLayer(context, lastLayerId, lastTileLayerIndex, mapLayer, state, config, positionTranslator);
          }
       }
 
@@ -110,7 +115,7 @@ public class TiledMapContextFactory {
             properties.get(config.get(Constants.HEIGHT), Integer.class));
    }
 
-   private void handleObjectLayer(TiledMapContext context, String lastLayerId, int layerIndex, MapLayer layer, State state, TiledMapConfig config) {
+   private void handleObjectLayer(TiledMapContext context, String lastLayerId, int layerIndex, MapLayer layer, State state, TiledMapConfig config, PositionTranslator positionTranslator) {
       if (layerIndex < 0) {
          throw new GdxRuntimeException("Unable to load tiled map! At least a single tiled layer is required!");
       }
@@ -119,8 +124,11 @@ public class TiledMapContextFactory {
          MapObject mapObject = mapObjects.get(objectIndex);
          MapProperties objectProperties = mapObject.getProperties();
          GameObject gameObject = gameWorld.addObject(lastLayerId);
-         final float x = objectProperties.get(config.get(Constants.X), Float.class);
-         final float y = objectProperties.get(config.get(Constants.Y), Float.class);
+         final float mapX = objectProperties.get(config.get(Constants.X), Float.class);
+         final float mapY = objectProperties.get(config.get(Constants.Y), Float.class);
+         final Vector2 worldPos = positionTranslator.toWorld(mapX, mapY);
+         final float worldX = worldPos.x;
+         final float worldY = worldPos.y;
          final float w = objectProperties.get(config.get(Constants.WIDTH), Float.class);
          final float h = objectProperties.get(config.get(Constants.HEIGHT), Float.class);
          final float cellWidth = state.getCellWidth();
@@ -137,23 +145,35 @@ public class TiledMapContextFactory {
 
          // issue #135 - correct positions of game objects with a collision
          if (collision) {
-            gameObject.setPosition(
-                  IndexCalculator.calculateIndex(x, state.getCellWidth()) * state.getCellWidth(),
-                  IndexCalculator.calculateIndex(y, state.getCellHeight()) * state.getCellHeight()
-            );
+            final int xIndex = positionTranslator.toIndexX(worldX);
+            final int yIndex = positionTranslator.toIndexY(worldY);
+            final float newMapX = xIndex * state.getCellWidth();
+            final float newMapY = yIndex * state.getCellHeight();
+            final Vector2 newWorldPos = positionTranslator.toWorld(newMapX, newMapY);
+            gameObject.setPosition(newWorldPos.x, newWorldPos.y);
          } else {
-            gameObject.setPosition(x, y);
+            gameObject.setPosition(worldX, worldY);
          }
-         gameObject.setDimensions(IndexCalculator.calculateIndexedDimension(w, cellWidth),
-               IndexCalculator.calculateIndexedDimension(h, cellHeight));
+         gameObject.setDimensions(
+               calculateIndexedDimension(w, cellWidth),
+               calculateIndexedDimension(h, cellHeight)
+         );
          Color color = objectProperties.get(config.get(Constants.COLOR), mapObject.getColor(), Color.class);
-         gameObject.setLastPosition(x, y);
+         gameObject.setLastPosition(gameObject.getLeft(), gameObject.getTop());
          gameObject.setColor(color);
          gameObject.setType(objectType);
          gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
          gameObject.setAttribute(MapProperties.class, objectProperties);
-         if (!context.isInclusiveCollision(x, y, layerIndex, gameObject)) {
-            CollisionCalculator.updateCollision(gameObject, collision, x, y, layerIndex, state);
+         if (!context.isInclusiveCollision(gameObject.getLeft(), gameObject.getTop(), layerIndex, gameObject)) {
+            CollisionCalculator.updateCollision(
+                  positionTranslator,
+                  gameObject,
+                  collision,
+                  gameObject.getLeft(),
+                  gameObject.getTop(),
+                  layerIndex,
+                  state
+            );
          }
          gameEventManager.publish(new TiledMapEvents.OnLoadGameObjectEvent(gameObject, context));
       }
@@ -183,7 +203,7 @@ public class TiledMapContextFactory {
       layerObject.setActive(false);
       layerObject.setPersistent(true);
       layerObject.setType(id);
-      layerObject.setZIndex(IndexCalculator.calculateZIndex(numberOfRows, numberOfRows, index));
+      layerObject.setZIndex(ZIndexCalculator.calculateZIndex(numberOfRows, numberOfRows, index));
       if (!layer.isVisible()) {
          layerObject.getColor().a = 0f;
       }
@@ -210,7 +230,7 @@ public class TiledMapContextFactory {
       Cell cell = layer.getCell(x, y);
       if (cell != null) {
          Integer[][] heightMap = state.getHeightMap();
-         heightMap[x][y] = IndexCalculator.calculateZIndex(state.getMapIndexHeight(), y, layerIndex);
+         heightMap[x][y] = ZIndexCalculator.calculateZIndex(state.getMapIndexHeight(), y, layerIndex);
       }
    }
 
@@ -252,5 +272,9 @@ public class TiledMapContextFactory {
             }
          }
       }
+   }
+
+   public static float calculateIndexedDimension(float size, float cellSize) {
+      return (float) (Math.ceil(size / cellSize) * cellSize);
    }
 }

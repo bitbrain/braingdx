@@ -17,7 +17,7 @@ package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-public enum TiledMapType {
+enum TiledMapType {
 
    ORTHOGONAL("orthogonal"),
    ISOMETRIC("isometric");

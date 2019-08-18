@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Disposable;
 import de.bitbrain.braingdx.event.GameEventManager;
+import de.bitbrain.braingdx.util.Factory;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.SimpleWorldBounds;
 
@@ -18,6 +19,7 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
    private final TiledMapContextFactory contextFactory;
    private final Map<TiledMap, TiledMapContext> contextMap = new HashMap<TiledMap, TiledMapContext>();
    private final Map<TiledMapType, MapLayerRendererFactory> rendererFactoryMap;
+   private final Map<TiledMapType, PositionTranslatorFactory> positionTranslatorFactoryMap;
 
    public TiledMapManagerImpl(
          GameWorld gameWorld,
@@ -27,6 +29,7 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
       this.gameEventManager = gameEventManager;
       this.contextFactory = tiledMapContextFactory;
       this.rendererFactoryMap = createRendererFactories();
+      this.positionTranslatorFactoryMap = createPositionTranslators();
    }
 
    @Override
@@ -43,10 +46,12 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
       TiledMapType type = TiledMapType.fromOrientation(
             tiledMap.getProperties().get(Constants.ORIENTATION, String.class)
       );
+
       TiledMapContextImpl context = contextFactory.createContext(
             tiledMap,
             camera,
             rendererFactoryMap.get(type),
+            positionTranslatorFactoryMap.get(type),
             config
       );
       gameWorld.setBounds(new SimpleWorldBounds(
@@ -81,6 +86,23 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
       Map<TiledMapType, MapLayerRendererFactory> factories = new HashMap<TiledMapType, MapLayerRendererFactory>();
       factories.put(TiledMapType.ORTHOGONAL, new OrthogonalMapLayerRendererFactory());
       factories.put(TiledMapType.ISOMETRIC, new IsometricMapLayerRendererFactory());
+      return factories;
+   }
+
+   protected Map<TiledMapType, PositionTranslatorFactory> createPositionTranslators() {
+      Map<TiledMapType, PositionTranslatorFactory> factories = new HashMap<TiledMapType, PositionTranslatorFactory>();
+      factories.put(TiledMapType.ORTHOGONAL, new PositionTranslatorFactory() {
+         @Override
+         public PositionTranslator create(State state) {
+            return new OrthogonalPositionTranslator(state);
+         }
+      });
+      factories.put(TiledMapType.ISOMETRIC, new PositionTranslatorFactory() {
+         @Override
+         public PositionTranslator create(State state) {
+            return new IsometricPositionTranslator(state);
+         }
+      });
       return factories;
    }
 

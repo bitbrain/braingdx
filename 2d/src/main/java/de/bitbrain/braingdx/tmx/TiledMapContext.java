@@ -34,6 +34,8 @@ public interface TiledMapContext extends TiledCollisionResolver, Disposable {
 
    MapProperties getPropertiesAt(int tileX, int tileY, int layer);
 
+   PositionTranslator getPositionTranslator();
+
    float getCellWidth();
 
    float getCellHeight();
