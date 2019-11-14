@@ -14,54 +14,55 @@ public class IsometricPositionTranslator implements PositionTranslator {
    }
 
    @Override
-   public float toWorldX(int indexX) {
-      return toWorldX(indexX * state.getCellWidth());
+   public Vector2 toWorld(float mapX, float mapY) {
+      int originX = (int) (state.getMapIndexHeight() * state.getCellWidth() / 2f);
+      float tileY = mapX / state.getCellHeight();
+      float tileX = mapY / state.getCellWidth();
+      return new Vector2(
+            (tileX - tileY) * state.getCellWidth() / 2f + originX,
+            (tileX + tileY) * state.getCellHeight() / 2f
+      );
    }
 
    @Override
-   public float toWorldY(int indexY) {
-      return toWorldY(indexY * state.getCellHeight());
-   }
-
-   @Override
-   public float toWorldX(float mapX) {
-      return toWorld(mapX, 0f).x;
-   }
-
-   @Override
-   public float toWorldY(float mapY) {
-      return toWorld(0f, mapY).y;
-   }
-
-   @Override
-   public Vector2 toWorld(float x, float y) {
+   public Vector2 toWorld(int indexX, int indexY) {
       xAxis.set(state.getCellWidth() / 2f, -state.getCellHeight() / 2f);
       yAxis.set(state.getCellWidth() / 2f, state.getCellHeight() / 2f);
-      float scalar  = yAxis.len() / state.getCellHeight();
-      return xAxis.nor().scl(x).scl(scalar)
-            .add(yAxis.nor().scl(y).scl(scalar))
-            .add(0f, state.getCellHeight() / 2f);
+      return toWorld(indexX * xAxis.len(), indexY * yAxis.len());
    }
 
    @Override
-   public float toMapX(float worldX) {
-      return worldX;
+   public Vector2 toMap(float worldX, float worldY) {
+      worldX -= state.getMapIndexHeight() * state.getCellWidth() / 2f;
+      float tileY = worldY / state.getCellHeight();
+      float tileX = worldX / state.getCellWidth();
+      return new Vector2(
+            (tileY + tileX) * state.getCellHeight(),
+            (tileY - tileX) * state.getCellHeight()
+      );
    }
 
    @Override
-   public float toMapY(float worldY) {
-     return worldY;
+   public Vector2 toMap(int indexX, int indexY) {
+      xAxis.set(state.getCellWidth() / 2f, -state.getCellHeight() / 2f);
+      yAxis.set(state.getCellWidth() / 2f, state.getCellHeight() / 2f);
+      return new Vector2(
+            indexX * xAxis.len(),
+            indexY * yAxis.len()
+      );
    }
 
    @Override
    public int toIndexX(float worldX) {
-      float mapX = toMapX(worldX);
-      return (int) Math.floor(mapX / state.getCellWidth());
+      xAxis.set(state.getCellWidth() / 2f, -state.getCellHeight() / 2f);
+      Vector2 mapPos = toMap(worldX, 0f);
+      return (int)Math.floor(mapPos.x / xAxis.len());
    }
 
    @Override
    public int toIndexY(float worldY) {
-      float mapY = toMapY(worldY);
-      return (int) Math.floor(mapY / state.getCellHeight());
+      yAxis.set(state.getCellWidth() / 2f, state.getCellHeight() / 2f);
+      Vector2 mapPos = toMap(0f, worldY);
+      return (int)Math.floor(mapPos.y / yAxis.len());
    }
 }

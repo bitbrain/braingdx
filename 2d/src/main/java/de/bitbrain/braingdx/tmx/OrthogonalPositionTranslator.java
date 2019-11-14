@@ -5,29 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 public class OrthogonalPositionTranslator implements PositionTranslator {
 
    private final State state;
+   private final Vector2 tmp = new Vector2();
 
    public OrthogonalPositionTranslator(State state) {
       this.state = state;
-   }
-
-   @Override
-   public float toWorldX(int indexX) {
-      return (float) Math.floor(indexX * state.getCellWidth());
-   }
-
-   @Override
-   public float toWorldY(int indexY) {
-      return (float) Math.floor(indexY * state.getCellHeight());
-   }
-
-   @Override
-   public float toWorldX(float mapX) {
-      return mapX;
-   }
-
-   @Override
-   public float toWorldY(float mapY) {
-      return mapY;
    }
 
    @Override
@@ -36,13 +17,18 @@ public class OrthogonalPositionTranslator implements PositionTranslator {
    }
 
    @Override
-   public float toMapX(float worldX) {
-      return worldX;
+   public Vector2 toWorld(int indexX, int indexY) {
+      return tmp.set(indexX * state.getCellWidth(), indexY * state.getCellHeight());
    }
 
    @Override
-   public float toMapY(float worldY) {
-      return worldY;
+   public Vector2 toMap(float worldX, float worldY) {
+      return tmp.set(worldX, worldY);
+   }
+
+   @Override
+   public Vector2 toMap(int indexX, int indexY) {
+      return tmp.set(indexX * state.getCellWidth(), indexY * state.getCellHeight());
    }
 
    @Override
