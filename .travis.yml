@@ -1,11 +1,16 @@
 language: java
 
+dist: trusty
+
 sudo: required
 
 script: "mvn cobertura:cobertura"
 
 services:
   - docker
+
+jdk:
+  - openjdk7
 
 cache:
     directories:
