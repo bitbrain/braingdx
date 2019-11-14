@@ -1,3 +1,29 @@
+# Version 0.6.0
+
+> **Disclaimer!** this version introduces major API refactoring and will produce compilation errors before migration!
+
+This update changes the entire architecture of this framework by separating reponsibilities into submodules:
+
+- **braingdx-core** the core dependency now contains only generic core logic and boilerplate
+- **braingdx-2d** the 2D dependency provides features such as 2D lighting and 2D physics support as well as tiledmap support
+
+Later on, a new **braingdx-3d** module will be added which provides a different kind of feature set such as Blender support.
+
+## Features
+
+* [[#95](https://github.com/bitbrain/braingdx/issues/95)] added pause game functionality
+* [[#144](https://github.com/bitbrain/braingdx/issues/144)] replace `TiledMapAPI` with `TiledMapContext`
+* [[#186](https://github.com/bitbrain/braingdx/issues/186)] drastically improved performance on mobile devices
+* [[#193](https://github.com/bitbrain/braingdx/issues/193)] added color manipulation utility
+* [[#194](https://github.com/bitbrain/braingdx/issues/194)] added point light tween
+* [[#202](https://github.com/bitbrain/braingdx/issues/202)] infer MapType from TiledMap orientation property
+ 
+## Bugfixes
+ 
+* [[#103](https://github.com/bitbrain/braingdx/issues/103)] resolved an issue where global behaviours could not be loaded globally within a loop
+* [[#197](https://github.com/bitbrain/braingdx/issues/197)] drastically reduce memory footprint
+* [[#199](https://github.com/bitbrain/braingdx/issues/199)] fixing camera position setting
+
 # Version 0.5.17
 
 * [[#98](https://github.com/bitbrain/braingdx/issues/98)] only remove relevant objects from the world when disposing the tiled manager
