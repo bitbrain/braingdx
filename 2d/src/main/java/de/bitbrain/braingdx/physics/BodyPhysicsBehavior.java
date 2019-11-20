@@ -1,5 +1,6 @@
 package de.bitbrain.braingdx.physics;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -30,7 +31,7 @@ public class BodyPhysicsBehavior extends BehaviorAdapter {
    public void update(GameObject source, float delta) {
       super.update(source, delta);
       source.setPosition(body.getPosition().x, body.getPosition().y);
-      source.setRotation(body.getAngle());
+      source.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
       if (!body.getFixtureList().isEmpty()) {
          Fixture fixture = body.getFixtureList().get(0);
          Shape shape = fixture.getShape();

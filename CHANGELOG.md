@@ -1,3 +1,7 @@
+# Version 0.6.2
+
+Fix rotations for physics bodies.
+
 # Version 0.6.1
 
 Fixed a small issue which caused physics to get positioned wrongly.
