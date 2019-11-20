@@ -1,3 +1,7 @@
+# Version 0.6.1
+
+Fixed a small issue which caused physics to get positioned wrongly.
+
 # Version 0.6.0
 
 > **Disclaimer!** this version introduces major API refactoring and will produce compilation errors before migration!

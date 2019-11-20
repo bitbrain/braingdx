@@ -38,6 +38,7 @@ public class BodyPhysicsBehavior extends BehaviorAdapter {
             source.setDimensions(shape.getRadius() * 2f, shape.getRadius() * 2f);
             source.setPosition(body.getPosition().x - shape.getRadius(), body.getPosition().y - shape.getRadius());
          }
+         source.setPosition(body.getPosition().x - source.getWidth() / 2f, body.getPosition().y - source.getHeight() / 2f);
       }
    }
 }
