@@ -1,9 +1,11 @@
 package de.bitbrain.braingdx.tmx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Disposable;
+import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.SimpleWorldBounds;
@@ -39,7 +41,21 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
    }
 
    @Override
+   public TiledMapContext load(String path, Camera camera, TiledMapConfig config) throws TiledMapException {
+      return load(SharedAssetManager.getInstance().get(path, TiledMap.class), camera, config);
+   }
+
+   @Override
+   public TiledMapContext load(String path, Camera camera) throws TiledMapException {
+      return load(SharedAssetManager.getInstance().get(path, TiledMap.class), camera);
+   }
+
+   @Override
    public TiledMapContext load(TiledMap tiledMap, Camera camera, TiledMapConfig config) {
+      if (contextMap.containsKey(tiledMap)) {
+         Gdx.app.log("TiledMap", "TiledMap already loaded. Returning loaded context...");
+         return contextMap.get(tiledMap);
+      }
       validate(tiledMap);
       gameEventManager.publish(new TiledMapEvents.BeforeLoadEvent(tiledMap));
       TiledMapType type = TiledMapType.fromOrientation(
@@ -71,6 +87,11 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
       context.dispose();
       gameEventManager.publish(new TiledMapEvents.AfterUnloadEvent());
       contextMap.remove(context.getTiledMap());
+   }
+
+   @Override
+   public void unload(String path) {
+      unload(contextMap.get(SharedAssetManager.getInstance().get(path, TiledMap.class)));
    }
 
    @Override

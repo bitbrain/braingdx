@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
+import de.bitbrain.braingdx.context.GameContext;
 import de.bitbrain.braingdx.event.*;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
@@ -95,7 +96,7 @@ public class TiledMapManagerTest {
 
    @Test(expected = NullPointerException.class)
    public void load_WithNullValues() throws TiledMapException {
-      tiledMapManager.load(null, null, null);
+      tiledMapManager.load((TiledMap)null, null, null);
    }
 
    @Test(expected = TiledMapException.class)
@@ -525,8 +526,8 @@ public class TiledMapManagerTest {
       assertThat(world.getObjects()).isEmpty();
    }
 
-   @Test(expected = TiledMapException.class)
-   public void should_not_allow_duplicate_loading() {
+   @Test
+   public void should_allow_duplicate_loading() {
       TiledMap map = new MockTiledMapBuilder(2, 2, 1, TiledMapType.ORTHOGONAL)
             .addLayer(new MockTiledTileLayerBuilder()
                   .addCell(0, 0)
@@ -535,8 +536,8 @@ public class TiledMapManagerTest {
                   .addCell(1, 1).build())
             .addLayer(new MockObjectLayerBuilder().addObject(0, 0, "player1").build())
             .build();
-      tiledMapManager.load(map, camera);
-      tiledMapManager.load(map, camera);
+      TiledMapContext context = tiledMapManager.load(map, camera);
+      assertThat(tiledMapManager.load(map, camera)).isEqualTo(context);
    }
 
    /**

@@ -30,8 +30,8 @@ public interface TiledMapManager {
     * Loads a tiledmap into the active {@link de.bitbrain.braingdx.world.GameWorld}
     *
     * @param tiledMap the tiledmap to loadTiledMapManager
-    * @param camera the camera to use
-    * @param config additional configuration
+    * @param camera   the camera to use
+    * @param config   additional configuration
     * @return a new instance of {@link TiledMapContext}
     * @throws TiledMapException when there is an issue loading the tiledmap
     */
@@ -44,7 +44,7 @@ public interface TiledMapManager {
     * Loads a tiledmap into the active {@link de.bitbrain.braingdx.world.GameWorld}
     *
     * @param tiledMap the tiledmap to load
-    * @param camera the camera to use
+    * @param camera   the camera to use
     * @return a new instance of {@link TiledMapContext}
     * @throws TiledMapException when there is an issue loading the tiledmap
     */
@@ -53,9 +53,42 @@ public interface TiledMapManager {
          Camera camera) throws TiledMapException;
 
    /**
+    * Loads a tiledmap into the active {@link de.bitbrain.braingdx.world.GameWorld}
+    *
+    * @param path   the tiledmap path to load
+    * @param camera the camera to use
+    * @param config additional configuration
+    * @return a new instance of {@link TiledMapContext}
+    * @throws TiledMapException when there is an issue loading the tiledmap
+    */
+   TiledMapContext load(
+         String path,
+         Camera camera,
+         TiledMapConfig config) throws TiledMapException;
+
+   /**
+    * Loads a tiledmap into the active {@link de.bitbrain.braingdx.world.GameWorld}
+    *
+    * @param path   the tiledmap path to load
+    * @param camera the camera to use
+    * @return a new instance of {@link TiledMapContext}
+    * @throws TiledMapException when there is an issue loading the tiledmap
+    */
+   TiledMapContext load(
+         String path,
+         Camera camera) throws TiledMapException;
+
+   /**
     * Unloads an existing tiledmap
     *
     * @param context an existing tiledmap context
     */
    void unload(TiledMapContext context);
+
+   /**
+    * Unloads an existing tiled map
+    *
+    * @param path unloads the tiled map at a given path
+    */
+   void unload(String path);
 }
