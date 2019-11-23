@@ -35,7 +35,7 @@ import java.util.UUID;
  */
 public class GameObject implements Pool.Poolable {
 
-   private final Vector2 position, dimensions, lastPosition, offset, origin;
+   private final Vector2 position, dimensions, lastPosition, offset, origin, tmp;
    private final Vector2 scale;
    private String id;
    private Object type;
@@ -82,6 +82,7 @@ public class GameObject implements Pool.Poolable {
       offset = new Vector2();
       scale = new Vector2(1f, 1f);
       origin = new Vector2();
+      tmp = new Vector2();
       id = UUID.randomUUID().toString();
       active = true;
    }
@@ -186,6 +187,11 @@ public class GameObject implements Pool.Poolable {
 
    public Vector2 getLastPosition() {
       return lastPosition;
+   }
+
+   public Vector2 getPosition() {
+      tmp.set(position.x, position.y);
+      return tmp;
    }
 
    public String getId() {

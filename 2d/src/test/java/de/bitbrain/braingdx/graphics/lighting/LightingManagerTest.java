@@ -50,17 +50,15 @@ public class LightingManagerTest {
 
    @Test
    public void testRemoveLight_Point() {
-      lightingManager.addPointLight("pointlight", new Vector2(), 0f, Color.WHITE);
-      lightingManager.removePointLight("pointlight");
+      lightingManager.destroyLight(lightingManager.createPointLight(new Vector2(), 0f, Color.WHITE));
       verify(pointLightMock, times(1)).remove();
    }
 
    @Test
    public void testClear() {
-      lightingManager.addPointLight("", new Vector2(), 0f, Color.WHITE);
       lightingManager.clear();
-      lightingManager.removePointLight("pointlight");
-      verify(pointLightMock, never()).remove();
+      lightingManager.destroyLight(lightingManager.createPointLight(new Vector2(), 0f, Color.WHITE));
+      verify(pointLightMock, times(1)).remove();
    }
 
 }

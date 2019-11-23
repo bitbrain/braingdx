@@ -22,22 +22,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import de.bitbrain.braingdx.behavior.BehaviorAdapter;
+import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.tweens.ColorTween;
 import de.bitbrain.braingdx.tweens.PointLight2DTween;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
-
-import java.util.HashMap;
-import java.util.Map;
+import de.bitbrain.braingdx.world.GameObject;
 
 public class LightingManagerImpl implements LightingManager, Disposable {
 
    private final RayHandler handler;
-   private final Map<String, PointLight> pointLights = new HashMap<String, PointLight>();
-   private final Map<String, DirectionalLight> dirLights = new HashMap<String, DirectionalLight>();
-   private final Map<String, ChainLight> chainLights = new HashMap<String, ChainLight>();
-   private final Map<String, ConeLight> coneLights = new HashMap<String, ConeLight>();
    private final OrthographicCamera camera;
    private final LightFactory lightFactory;
+   private final BehaviorManager behaviorManager;
    private Color ambientLightColor = Color.WHITE.cpy();
    private int rays;
 
@@ -47,8 +44,8 @@ public class LightingManagerImpl implements LightingManager, Disposable {
       Tween.registerAccessor(PointLight.class, new PointLight2DTween());
    }
 
-   public LightingManagerImpl(RayHandler rayHandler, OrthographicCamera camera) {
-      this(rayHandler, camera, new LightFactory() {
+   public LightingManagerImpl(RayHandler rayHandler, BehaviorManager behaviorManager, OrthographicCamera camera) {
+      this(rayHandler, camera, behaviorManager, new LightFactory() {
 
          @Override
          public PointLight newPointLight(RayHandler handler, int rays, Color color, float distance, float x, float y) {
@@ -75,8 +72,9 @@ public class LightingManagerImpl implements LightingManager, Disposable {
       });
    }
 
-   public LightingManagerImpl(RayHandler rayHandler, OrthographicCamera camera, LightFactory lightFactory) {
+   public LightingManagerImpl(RayHandler rayHandler, OrthographicCamera camera, BehaviorManager behaviorManager, LightFactory lightFactory) {
       this.handler = rayHandler;
+      this.behaviorManager = behaviorManager;
       this.camera = camera;
       setConfig(new LightingConfig());
       setAmbientLight(Color.WHITE.cpy());
@@ -123,89 +121,46 @@ public class LightingManagerImpl implements LightingManager, Disposable {
    }
 
    @Override
-   public PointLight addPointLight(String id, Vector2 pos, float distance, Color color) {
-      return addPointLight(id, pos.x, pos.y, distance, color);
+   public PointLight createPointLight(Vector2 pos, float distance, Color color) {
+      return createPointLight(pos.x, pos.y, distance, color);
    }
 
    @Override
-   public PointLight addPointLight(String id, float x, float y, float distance, Color color) {
-      PointLight light = lightFactory.newPointLight(handler, rays, color, distance, x, y);
-      pointLights.put(id, light);
-      return light;
+   public PointLight createPointLight(float x, float y, float distance, Color color) {
+      return lightFactory.newPointLight(handler, rays, color, distance, x, y);
    }
 
    @Override
-   public DirectionalLight addDirectionalLight(String id, Color color, float degree) {
-      DirectionalLight light = lightFactory.newDirectionalLight(handler, rays, color, degree);
-      dirLights.put(id, light);
-      return light;
+   public DirectionalLight createDirectionalLight(Color color, float degree) {
+      return lightFactory.newDirectionalLight(handler, rays, color, degree);
    }
 
    @Override
-   public ChainLight addChainLight(String id, float distance, int direction, Color color) {
-      return addChainLight(id, distance, direction, color);
+   public ChainLight createChainLight(float distance, int direction, Color color) {
+      return createChainLight(distance, direction, color);
    }
 
    @Override
-   public ChainLight addChainLight(String id, float distance, int direction, Color color, float... chain) {
-      ChainLight light = lightFactory.newChainLight(handler, direction, color, distance, direction, chain);
-      chainLights.put(id, light);
-      return light;
+   public ChainLight createChainLight(float distance, int direction, Color color, float... chain) {
+      return lightFactory.newChainLight(handler, direction, color, distance, direction, chain);
    }
 
    @Override
-   public ConeLight addConeLight(String id, float x, float y, float distance, float directionDegree, float coneDegree,
+   public ConeLight createConeLight(float x, float y, float distance, float directionDegree, float coneDegree,
                                  Color color) {
-      ConeLight light = lightFactory.newConeLight(handler, rays, color, distance, x, y, directionDegree, coneDegree);
-      coneLights.put(id, light);
-      return light;
+      return lightFactory.newConeLight(handler, rays, color, distance, x, y, directionDegree, coneDegree);
    }
 
    @Override
-   public void removePointLight(final String id) {
-      Gdx.app.postRunnable(new Runnable() {
-         @Override
-         public void run() {
-            PointLight light = pointLights.remove(id);
-            if (light != null) {
-               light.remove();
-            }
-         }
-      });
+   public ConeLight createConeLight(Vector2 pos, float distance, float directionDegree, float coneDegree, Color color) {
+      return createConeLight(pos.x, pos.y, distance, directionDegree, coneDegree, color);
    }
 
    @Override
-   public void removeDirectionalLight(final String id) {
+   public void destroyLight(final Light light) {
       Gdx.app.postRunnable(new Runnable() {
          @Override
          public void run() {
-            DirectionalLight light = dirLights.remove(id);
-            if (light != null) {
-               light.remove();
-            }
-         }
-      });
-   }
-
-   @Override
-   public void removeChainLight(final String id) {
-      Gdx.app.postRunnable(new Runnable() {
-         @Override
-         public void run() {
-            ChainLight light = chainLights.remove(id);
-            if (light != null) {
-               light.remove();
-            }
-         }
-      });
-   }
-
-   @Override
-   public void removeConeLight(final String id) {
-      Gdx.app.postRunnable(new Runnable() {
-         @Override
-         public void run() {
-            ConeLight light = coneLights.remove(id);
             if (light != null) {
                light.remove();
             }
@@ -215,11 +170,22 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
    @Override
    public void clear() {
-      pointLights.clear();
-      dirLights.clear();
-      chainLights.clear();
-      coneLights.clear();
       handler.removeAll();
+   }
+
+   @Override
+   public void attach(Light light, GameObject object, boolean centered) {
+      attach(light, object, centered ? object.getWidth() / 2f : 0f, centered ? object.getHeight() / 2f : 0f);
+   }
+
+   @Override
+   public void attach(Light light, GameObject object) {
+      attach(light, object, 0f, 0f);
+   }
+
+   @Override
+   public void attach(Light light, GameObject object, float offsetX, float offsetY) {
+      behaviorManager.apply(new LightBehavior(light, offsetX, offsetY, this));
    }
 
    public void render() {
@@ -258,5 +224,33 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
       ConeLight newConeLight(RayHandler handler, int rays, Color color, float distance, float x, float y,
                              float directionDegree, float coneDegree);
+   }
+
+   private class LightBehavior extends BehaviorAdapter {
+
+      private final Light light;
+
+      private final LightingManager lightingManager;
+
+      private final float offsetX, offsetY;
+
+      LightBehavior(Light light, float offsetX, float offsetY, LightingManager lightingManager) {
+         this.light = light;
+         this.offsetX = offsetX;
+         this.offsetY = offsetY;
+         this.lightingManager = lightingManager;
+      }
+
+      @Override
+      public void update(GameObject source, float delta) {
+         super.update(source, delta);
+         light.setPosition(source.getLeft() + source.getOffsetX() + offsetX,
+               source.getTop() + source.getOffsetY() + offsetY);
+      }
+
+      @Override
+      public void onDetach(GameObject source) {
+         lightingManager.destroyLight(this.light);
+      }
    }
 }

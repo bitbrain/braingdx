@@ -101,6 +101,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
       );
       lightingManager = new LightingManagerImpl(
             new RayHandler(boxWorld),
+            getBehaviorManager(),
             (OrthographicCamera) getGameCamera().getInternalCamera()
       );
       tiledMapEventRouter = new GameEventRouter(

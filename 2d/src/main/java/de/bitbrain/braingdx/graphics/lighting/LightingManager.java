@@ -1,12 +1,10 @@
 package de.bitbrain.braingdx.graphics.lighting;
 
 import aurelienribon.tweenengine.TweenEquation;
-import box2dLight.ChainLight;
-import box2dLight.ConeLight;
-import box2dLight.DirectionalLight;
-import box2dLight.PointLight;
+import box2dLight.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+import de.bitbrain.braingdx.world.GameObject;
 
 /**
  * Manages box2d lights internally and stores them in memory.
@@ -22,31 +20,29 @@ public interface LightingManager {
 
    void setAmbientLight(Color color, float interval, TweenEquation equation);
 
-   PointLight addPointLight(String id, Vector2 pos, float distance, Color color);
+   PointLight createPointLight(Vector2 pos, float distance, Color color);
 
-   PointLight addPointLight(String id, float x, float y, float distance, Color color);
+   PointLight createPointLight(float x, float y, float distance, Color color);
 
-   DirectionalLight addDirectionalLight(String id, Color color, float degree);
+   DirectionalLight createDirectionalLight(Color color, float degree);
 
-   ChainLight addChainLight(String id, float distance, int direction, Color color);
+   ChainLight createChainLight(float distance, int direction, Color color);
 
-   ChainLight addChainLight(String id, float distance, int direction, Color color, float... chain);
+   ChainLight createChainLight(float distance, int direction, Color color, float... chain);
 
-   ConeLight addConeLight(String id, float x, float y, float distance, float directionDegree, float coneDegree,
+   ConeLight createConeLight(float x, float y, float distance, float directionDegree, float coneDegree,
                           Color color);
 
-   void removePointLight(final String id);
+   ConeLight createConeLight(Vector2 pos, float distance, float directionDegree, float coneDegree,
+                             Color color);
 
-   void removeDirectionalLight(final String id);
-
-   void removeChainLight(final String id);
-
-   void removeConeLight(final String id);
+   void destroyLight(Light light);
 
    void clear();
 
+   void attach(Light light, GameObject object);
 
+   void attach(Light light, GameObject object, boolean centered);
 
-
-
+   void attach(Light light, GameObject object, float offsetX, float offsetY);
 }
