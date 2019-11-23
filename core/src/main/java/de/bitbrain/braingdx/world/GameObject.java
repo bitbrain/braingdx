@@ -292,8 +292,8 @@ public class GameObject implements Pool.Poolable {
       if (value != null) {
          return value;
       }
-      setAttribute(key, value);
-      return value;
+      setAttribute(key, defaultValue);
+      return defaultValue;
    }
 
    public <T> T getOrSetAttribute(Object key, Factory<T> defaultValueFactory) {

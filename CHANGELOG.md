@@ -1,3 +1,7 @@
+# Version 0.6.5
+
+* fixed `NullPointerException` on `GameObject::getOrSetAttribute`
+
 # Version 0.6.4
 
 * [[#174](https://github.com/bitbrain/braingdx/issues/174)] allow 3D sound creation through Tiled
