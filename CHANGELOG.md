@@ -1,3 +1,9 @@
+# UNRELEASED 0.6.2
+
+* [[#203](https://github.com/bitbrain/braingdx/issues/203)] make loading of tiled map more consistent
+* [[#204](https://github.com/bitbrain/braingdx/issues/204)] return already loaded context when trying to load again
+* [[#205](https://github.com/bitbrain/braingdx/issues/205)] add support for registering updateables to the game context
+* [[#206](https://github.com/bitbrain/braingdx/issues/206)] inject map properties directly as attributes
 # Version 0.6.2
 
 Fix rotations for physics bodies.

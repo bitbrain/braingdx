@@ -33,6 +33,7 @@ import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -162,7 +163,14 @@ public class TiledMapContextFactory {
          gameObject.setColor(color);
          gameObject.setType(objectType);
          gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
-         gameObject.setAttribute(MapProperties.class, objectProperties);
+
+         // [#205] Load attributes directly into game object
+         Iterator<String> objectKeyIterator = objectProperties.getKeys();
+         while (objectKeyIterator.hasNext()) {
+            String key = objectKeyIterator.next();
+            gameObject.setAttribute(key, objectProperties.get(key));
+         }
+
          if (!context.isInclusiveCollision(gameObject.getLeft(), gameObject.getTop(), layerIndex, gameObject)) {
             CollisionCalculator.updateCollision(
                   positionTranslator,

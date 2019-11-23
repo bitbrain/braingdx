@@ -270,6 +270,15 @@ public class GameObject implements Pool.Poolable {
       return attributes.get(key);
    }
 
+   public <T> T getOrSetAttribute(Object key, T defaultValue) {
+      T value = (T) attributes.get(key);
+      if (value != null) {
+         return value;
+      }
+      setAttribute(key, value);
+      return value;
+   }
+
    public <T> T getOrSetAttribute(Object key, Factory<T> defaultValueFactory) {
       T value = (T) attributes.get(key);
       if (value != null) {

@@ -1,6 +1,5 @@
 package de.bitbrain.braingdx.tmx;
 
-import com.badlogic.gdx.maps.MapProperties;
 import de.bitbrain.braingdx.event.GameEventRouter;
 import de.bitbrain.braingdx.world.GameObject;
 
@@ -8,19 +7,14 @@ public class TiledMapInfoExtractor implements GameEventRouter.GameEventInfoExtra
 
    @Override
    public boolean isSticky(GameObject object) {
-      if (!object.hasAttribute(MapProperties.class)) {
-         return false;
-      }
-      MapProperties properties = (MapProperties)object.getAttribute(MapProperties.class);
-      return properties.get(Constants.STICKY, false, Boolean.class);
+      return object.getOrSetAttribute(Constants.STICKY, false);
    }
 
    @Override
    public String getProducer(GameObject object) {
-      if (!object.hasAttribute(MapProperties.class)) {
+      if (!object.hasAttribute(Constants.PRODUCER)) {
          return null;
       }
-      MapProperties properties = (MapProperties)object.getAttribute(MapProperties.class);
-      return properties.get(Constants.PRODUCER, null, String.class);
+      return object.getOrSetAttribute(Constants.PRODUCER, null);
    }
 }

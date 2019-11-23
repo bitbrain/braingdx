@@ -17,7 +17,6 @@ package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.event.GameEventManager;
@@ -125,17 +124,13 @@ class GameObjectUpdater extends BehaviorAdapter {
 
    private void updateCollision(GameObject object) {
       // Verify that object is valid for collisions
-      if (object.hasAttribute(MapProperties.class)) {
-         MapProperties mapProperties = (MapProperties) object.getAttribute(MapProperties.class);
+      if (object.hasAttribute(Constants.COLLISION)) {
          // Do not update objects which have a false collision
-         if (mapProperties.containsKey(Constants.COLLISION)) {
-            Object collision = mapProperties.get(Constants.COLLISION);
-            if (collision.equals(Boolean.FALSE)) {
-               return;
-            }
-            if (collision.equals(FALSE)) {
-               return;
-            }
+         if (object.getAttribute(Constants.COLLISION).equals(Boolean.FALSE)) {
+            return;
+         }
+         if (object.getAttribute(Constants.COLLISION).equals(FALSE)) {
+            return;
          }
       }
       // Remove last collision if object has moved
