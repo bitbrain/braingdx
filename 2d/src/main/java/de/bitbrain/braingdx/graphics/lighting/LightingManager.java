@@ -24,11 +24,16 @@ public interface LightingManager {
 
    PointLight createPointLight(float x, float y, float distance, Color color);
 
+   PointLight createPointLight(float distance, Color color);
+
    DirectionalLight createDirectionalLight(Color color, float degree);
 
    ChainLight createChainLight(float distance, int direction, Color color);
 
    ChainLight createChainLight(float distance, int direction, Color color, float... chain);
+
+   ConeLight createConeLight(float distance, float directionDegree, float coneDegree,
+                             Color color);
 
    ConeLight createConeLight(float x, float y, float distance, float directionDegree, float coneDegree,
                           Color color);

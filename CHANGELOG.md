@@ -1,4 +1,4 @@
-# UNRELEASED 0.6.2
+# Version 0.6.3
 
 * [[#183](https://github.com/bitbrain/braingdx/issues/183)] improve lighting manager API
 * [[#203](https://github.com/bitbrain/braingdx/issues/203)] make loading of tiled map more consistent

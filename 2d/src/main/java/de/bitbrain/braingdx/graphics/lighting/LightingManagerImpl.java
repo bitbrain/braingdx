@@ -131,6 +131,11 @@ public class LightingManagerImpl implements LightingManager, Disposable {
    }
 
    @Override
+   public PointLight createPointLight(float distance, Color color) {
+      return createPointLight(0f, 0f, distance, color);
+   }
+
+   @Override
    public DirectionalLight createDirectionalLight(Color color, float degree) {
       return lightFactory.newDirectionalLight(handler, rays, color, degree);
    }
@@ -143,6 +148,11 @@ public class LightingManagerImpl implements LightingManager, Disposable {
    @Override
    public ChainLight createChainLight(float distance, int direction, Color color, float... chain) {
       return lightFactory.newChainLight(handler, direction, color, distance, direction, chain);
+   }
+
+   @Override
+   public ConeLight createConeLight(float distance, float directionDegree, float coneDegree, Color color) {
+      return createConeLight(0f, 0f, distance, directionDegree, coneDegree, color);
    }
 
    @Override
@@ -185,7 +195,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
    @Override
    public void attach(Light light, GameObject object, float offsetX, float offsetY) {
-      behaviorManager.apply(new LightBehavior(light, offsetX, offsetY, this));
+      behaviorManager.apply(new LightBehavior(light, offsetX, offsetY, this), object);
    }
 
    public void render() {
