@@ -47,10 +47,10 @@ import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.physics.PhysicsManager;
 import de.bitbrain.braingdx.physics.PhysicsManagerImpl;
 import de.bitbrain.braingdx.screens.AbstractScreen;
-import de.bitbrain.braingdx.tmx.TiledMapContextFactory;
-import de.bitbrain.braingdx.tmx.TiledMapInfoExtractor;
-import de.bitbrain.braingdx.tmx.TiledMapManager;
-import de.bitbrain.braingdx.tmx.TiledMapManagerImpl;
+import de.bitbrain.braingdx.tmx.*;
+import de.bitbrain.braingdx.tmx.TiledMapEvents.OnLoadGameObjectEvent;
+import de.bitbrain.braingdx.tmx.events.TmxAudioConfigurer;
+import de.bitbrain.braingdx.tmx.events.TmxLightingConfigurer;
 import de.bitbrain.braingdx.util.ArgumentFactory;
 import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.util.ViewportFactory;
@@ -205,5 +205,9 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
    private void wire() {
       getInputManager().register(worldStage);
       getBehaviorManager().apply(tiledMapEventRouter);
+
+      // TiledMap features
+      getEventManager().register(new TmxAudioConfigurer(getAudioManager()), OnLoadGameObjectEvent.class);
+      getEventManager().register(new TmxLightingConfigurer(getLightingManager()), OnLoadGameObjectEvent.class);
    }
 }

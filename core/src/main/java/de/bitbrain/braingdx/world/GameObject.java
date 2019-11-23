@@ -273,7 +273,18 @@ public class GameObject implements Pool.Poolable {
    }
 
    public Object getAttribute(Object key) {
-      return attributes.get(key);
+      return getAttribute(key, Object.class);
+   }
+
+   public <T> T getAttribute(Object key, Class<T> clazz) {
+      return (T) attributes.get(key);
+   }
+
+   public <T> T getAttribute(Object key, T defaultValue) {
+      if (!attributes.containsKey(key)) {
+         return defaultValue;
+      }
+      return (T) attributes.get(key);
    }
 
    public <T> T getOrSetAttribute(Object key, T defaultValue) {

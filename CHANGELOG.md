@@ -1,3 +1,8 @@
+# Version 0.6.4
+
+* [[#174](https://github.com/bitbrain/braingdx/issues/174)] allow 3D sound creation through Tiled
+* lighting and sounds are now automatically created through tiled via properties
+
 # Version 0.6.3
 
 * [[#183](https://github.com/bitbrain/braingdx/issues/183)] improve lighting manager API

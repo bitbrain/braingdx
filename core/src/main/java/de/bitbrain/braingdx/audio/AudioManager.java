@@ -56,7 +56,6 @@ public interface AudioManager {
     * @param path         the path of the audio file
     * @param x            the horizontal position in the world
     * @param y            the vertical position in the world
-    * @param pitch        the audio pitch
     * @param volume       the audio volume. <code>FinalVolume=MasterVolume*volume*directionalVolume</code>
     * @param hearingRange the hearing range where the audio is hearable from
     */

@@ -185,7 +185,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
    @Override
    public void attach(Light light, GameObject object, boolean centered) {
-      attach(light, object, centered ? object.getWidth() / 2f : 0f, centered ? object.getHeight() / 2f : 0f);
+      behaviorManager.apply(new LightBehavior(light, centered, this), object);
    }
 
    @Override
@@ -244,6 +244,8 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
       private final float offsetX, offsetY;
 
+      private boolean centered = false;
+
       LightBehavior(Light light, float offsetX, float offsetY, LightingManager lightingManager) {
          this.light = light;
          this.offsetX = offsetX;
@@ -251,11 +253,24 @@ public class LightingManagerImpl implements LightingManager, Disposable {
          this.lightingManager = lightingManager;
       }
 
+      LightBehavior(Light light, boolean centered, LightingManager lightingManager) {
+         this.light = light;
+         this.offsetX = 0f;
+         this.offsetY = 0f;
+         this.centered = centered;
+         this.lightingManager = lightingManager;
+      }
+
       @Override
       public void update(GameObject source, float delta) {
          super.update(source, delta);
-         light.setPosition(source.getLeft() + source.getOffsetX() + offsetX,
-               source.getTop() + source.getOffsetY() + offsetY);
+         if (centered) {
+            light.setPosition(source.getLeft() + source.getOffsetX() + source.getWidth() / 2f,
+                  source.getTop() + source.getOffsetY() + source.getHeight() / 2f);
+         } else {
+            light.setPosition(source.getLeft() + source.getOffsetX() + offsetX,
+                  source.getTop() + source.getOffsetY() + offsetY);
+         }
       }
 
       @Override
