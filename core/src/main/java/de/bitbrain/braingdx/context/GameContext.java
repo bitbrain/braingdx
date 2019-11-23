@@ -17,6 +17,7 @@ import de.bitbrain.braingdx.input.InputManager;
 import de.bitbrain.braingdx.screens.AbstractScreen;
 import de.bitbrain.braingdx.screens.ScreenTransitions;
 import de.bitbrain.braingdx.util.Resizeable;
+import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameWorld;
 
 public interface GameContext extends Disposable, Resizeable {
@@ -60,4 +61,6 @@ public interface GameContext extends Disposable, Resizeable {
    boolean isPaused();
 
    void setPaused(boolean paused);
+
+   void addUpdateable(Updateable updateable);
 }

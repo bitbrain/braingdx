@@ -30,8 +30,12 @@ import de.bitbrain.braingdx.screens.ScreenTransitions;
 import de.bitbrain.braingdx.tweens.SharedTweenManager;
 import de.bitbrain.braingdx.util.ArgumentFactory;
 import de.bitbrain.braingdx.util.Resizeable;
+import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.util.ViewportFactory;
 import de.bitbrain.braingdx.world.GameWorld;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameContextImpl implements GameContext, Disposable, Resizeable {
 
@@ -50,6 +54,7 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
    private Color backgroundColor = Color.BLACK.cpy();
    private final BrainGdxGame game;
    private final AbstractScreen<?, ?> screen;
+   private final List<Updateable> updateableList = new ArrayList<Updateable>();
    private final RenderPipeline renderPipeline;
    private boolean paused;
 
@@ -210,9 +215,13 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       eventManager.clear();
       renderPipeline.dispose();
       renderManager.dispose();
+      updateableList.clear();
    }
 
    public void updateAndRender(float delta) {
+      for (Updateable updateable : updateableList) {
+         updateable.update(delta);
+      }
       inputManager.update(delta);
       behaviorManager.update(paused ? 0f : delta);
       tweenManager.update(delta);
@@ -240,6 +249,11 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
    @Override
    public void setPaused(boolean paused) {
       this.paused = paused;
+   }
+
+   @Override
+   public void addUpdateable(Updateable updateable) {
+      updateableList.add(updateable);
    }
 
    @Override
