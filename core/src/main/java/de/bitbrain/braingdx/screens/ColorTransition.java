@@ -91,6 +91,7 @@ public class ColorTransition extends AbstractTransitionable implements Disposabl
       batch.begin();
       batch.draw(texture, 0f, 0f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
       batch.end();
+      batch.setColor(Color.WHITE);
    }
 
 }

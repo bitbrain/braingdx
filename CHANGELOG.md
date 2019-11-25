@@ -1,3 +1,7 @@
+# Version 0.6.7
+
+* fix `ScreenTransitions` color issue
+
 # Version 0.6.6
 
 * [[#207](https://github.com/bitbrain/braingdx/issues/207)] introduce enteronly property for event router

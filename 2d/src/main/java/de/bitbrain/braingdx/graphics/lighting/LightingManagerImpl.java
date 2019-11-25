@@ -185,7 +185,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
    @Override
    public void attach(Light light, GameObject object, boolean centered) {
-      behaviorManager.apply(new LightBehavior(light, centered, this), object);
+      behaviorManager.apply(new LightBehavior(light, centered), object);
    }
 
    @Override
@@ -195,7 +195,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
    @Override
    public void attach(Light light, GameObject object, float offsetX, float offsetY) {
-      behaviorManager.apply(new LightBehavior(light, offsetX, offsetY, this), object);
+      behaviorManager.apply(new LightBehavior(light, offsetX, offsetY), object);
    }
 
    public void render() {
@@ -240,25 +240,21 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
       private final Light light;
 
-      private final LightingManager lightingManager;
-
       private final float offsetX, offsetY;
 
       private boolean centered = false;
 
-      LightBehavior(Light light, float offsetX, float offsetY, LightingManager lightingManager) {
+      LightBehavior(Light light, float offsetX, float offsetY) {
          this.light = light;
          this.offsetX = offsetX;
          this.offsetY = offsetY;
-         this.lightingManager = lightingManager;
       }
 
-      LightBehavior(Light light, boolean centered, LightingManager lightingManager) {
+      LightBehavior(Light light, boolean centered) {
          this.light = light;
          this.offsetX = 0f;
          this.offsetY = 0f;
          this.centered = centered;
-         this.lightingManager = lightingManager;
       }
 
       @Override
@@ -275,7 +271,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
       @Override
       public void onDetach(GameObject source) {
-         lightingManager.destroyLight(this.light);
+         this.light.remove(true);
       }
    }
 }
