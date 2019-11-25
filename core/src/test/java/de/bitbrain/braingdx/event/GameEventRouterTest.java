@@ -104,17 +104,75 @@ public class GameEventRouterTest {
       assertThat(eventListener.getEvents().get(0).getProducerObject()).isEqualTo(producer);
    }
 
+   @Test
+   public void testFireEventOnce_OnSticky_EnterOnly() {
+      mockInfoExtractor.setSticky(true);
+      mockInfoExtractor.setEnterOnly(true);
+      GameObject producer = gameWorld.addObject();
+      producer.setType("producer");
+      GameObject event = gameWorld.addObject();
+      event.setType("mockevent");
+      producer.setDimensions(16, 16);
+      event.setDimensions(16, 16);
+      gameEventRouter.update(event, producer, 0f);
+      assertThat(eventListener.getEvents()).isEmpty();
+
+      producer.setPosition(16, 16);
+      producer.setPosition(17, 17);
+      gameEventRouter.update(event, producer, 0f);
+      producer.setPosition(15, 15);
+      gameEventRouter.update(event, producer, 0f);
+      gameEventRouter.update(event, producer, 0f);
+      assertThat(eventListener.getEvents()).hasSize(1);
+      assertThat(eventListener.getEvents().get(0).getEventObject()).isEqualTo(event);
+      assertThat(eventListener.getEvents().get(0).getProducerObject()).isEqualTo(producer);
+   }
+
+   @Test
+   public void testFireEventOnce_EnterOnly() {
+      mockInfoExtractor.setSticky(false);
+      mockInfoExtractor.setEnterOnly(true);
+      GameObject producer = gameWorld.addObject();
+      producer.setType("producer");
+      GameObject event = gameWorld.addObject();
+      event.setType("mockevent");
+      producer.setDimensions(16, 16);
+      event.setDimensions(16, 16);
+      gameEventRouter.update(event, producer, 0f);
+      assertThat(eventListener.getEvents()).isEmpty();
+
+      producer.setPosition(16, 16);
+      producer.setPosition(17, 17);
+      gameEventRouter.update(event, producer, 0f);
+      producer.setPosition(15, 15);
+      gameEventRouter.update(event, producer, 0f);
+      gameEventRouter.update(event, producer, 0f);
+      assertThat(eventListener.getEvents()).hasSize(1);
+      assertThat(eventListener.getEvents().get(0).getEventObject()).isEqualTo(event);
+      assertThat(eventListener.getEvents().get(0).getProducerObject()).isEqualTo(producer);
+   }
+
    private class MockInfoExtractor implements GameEventRouter.GameEventInfoExtractor {
 
       private boolean sticky;
+      private boolean enterOnly;
 
       public void setSticky(boolean sticky) {
          this.sticky = sticky;
       }
 
+      public void setEnterOnly(boolean enterOnly) {
+         this.enterOnly = enterOnly;
+      }
+
       @Override
       public boolean isSticky(GameObject object) {
          return sticky;
+      }
+
+      @Override
+      public boolean isTriggerOnEnter(GameObject object) {
+         return enterOnly;
       }
 
       @Override

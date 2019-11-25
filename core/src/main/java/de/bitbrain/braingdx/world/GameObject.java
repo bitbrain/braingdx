@@ -301,7 +301,7 @@ public class GameObject implements Pool.Poolable {
       if (value != null) {
          return value;
       }
-      value = defaultValueFactory.create();
+      value = defaultValueFactory != null ? defaultValueFactory.create() : null;
       setAttribute(key, value);
       return value;
    }
@@ -340,6 +340,10 @@ public class GameObject implements Pool.Poolable {
 
    public void rotate(float delta) {
       this.rotation += delta;
+   }
+
+   public boolean hasMoved() {
+      return position.x != lastPosition.x || position.y != lastPosition.y;
    }
 
    @Override

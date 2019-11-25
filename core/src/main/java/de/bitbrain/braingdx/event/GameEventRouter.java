@@ -6,8 +6,7 @@ import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * An event router which manages object collisions and detects events happening in the
@@ -23,6 +22,7 @@ public class GameEventRouter extends BehaviorAdapter {
 
    public interface GameEventInfoExtractor {
       boolean isSticky(GameObject object);
+      boolean isTriggerOnEnter(GameObject object);
       String getProducer(GameObject object);
    }
 
@@ -31,6 +31,7 @@ public class GameEventRouter extends BehaviorAdapter {
    private Rectangle sourceRect, targetRect;
    private GameEventFactory eventFactory;
    private Set<String> eventIds = new HashSet<String>();
+   private Map<String, List<String>> enterMap = new HashMap<String, List<String>>();
    private Object[] identifiers;
    private final GameEventInfoExtractor extractor;
 
@@ -72,9 +73,18 @@ public class GameEventRouter extends BehaviorAdapter {
       targetRect.set(target.getLeft(), target.getTop(), target.getWidth(), target.getHeight());
 
       if (sourceRect.contains(targetRect) || sourceRect.overlaps(targetRect)) {
+         if (extractor.isTriggerOnEnter(source)) {
+            if (!enterMap.containsKey(source.getId()) || !enterMap.get(source.getId()).contains(target.getId())) {
+               return;
+            } else {
+               enterMap.get(source.getId()).remove(target.getId());
+            }
+         }
+
          if (eventIds.contains(source.getId())) {
             // Event already consumed!
             gameWorld.remove(source);
+            enterMap.remove(source.getId());
             return;
          }
          eventIds.add(source.getId());
@@ -84,6 +94,14 @@ public class GameEventRouter extends BehaviorAdapter {
             eventManager.publish(event);
          } else {
             Gdx.app.log("WARN", "Unable to publish event for " + source + "! Not supported by EventFactory!");
+         }
+      } else if (extractor.isTriggerOnEnter(source) && target.hasMoved()) {
+         if (!enterMap.containsKey(source.getId())) {
+            enterMap.put(source.getId(), new ArrayList<String>());
+         }
+         List<String> objects = enterMap.get(source.getId());
+         if (!objects.contains(target.getId())) {
+            objects.add(target.getId());
          }
       }
       if (extractor.isSticky(source)) {

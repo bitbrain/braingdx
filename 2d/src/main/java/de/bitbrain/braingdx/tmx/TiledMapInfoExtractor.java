@@ -11,10 +11,12 @@ public class TiledMapInfoExtractor implements GameEventRouter.GameEventInfoExtra
    }
 
    @Override
+   public boolean isTriggerOnEnter(GameObject object) {
+      return object.getOrSetAttribute(Constants.TRIGGER_ENTERONLY, false);
+   }
+
+   @Override
    public String getProducer(GameObject object) {
-      if (!object.hasAttribute(Constants.PRODUCER)) {
-         return null;
-      }
       return object.getOrSetAttribute(Constants.PRODUCER, null);
    }
 }
