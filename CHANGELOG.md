@@ -1,3 +1,7 @@
+# Version 0.6.8
+
+* [[#130](https://github.com/bitbrain/braingdx/issues/130)] introduce box2d support for tiled
+
 # Version 0.6.7
 
 * fix `ScreenTransitions` color issue
