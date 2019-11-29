@@ -117,7 +117,8 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
                   getGameWorld(),
                   getEventManager(),
                   tiledMapEventRouter,
-                  getBehaviorManager()
+                  getBehaviorManager(),
+                  physicsManager
             )
       );
       configurePipeline(getRenderPipeline(), this);
