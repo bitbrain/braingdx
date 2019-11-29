@@ -159,6 +159,7 @@ public class TiledMapContextFactory {
       }
       BodyDef bd = new BodyDef();
       bd.position.set(objectProperties.get(Constants.X, 0f, Float.class), objectProperties.get(Constants.Y, 0f, Float.class));
+
       bd.type = BodyDef.BodyType.StaticBody;
       Body body = physicsManager.getPhysicsWorld().createBody(bd);
       for (Shape shape : shapes) {

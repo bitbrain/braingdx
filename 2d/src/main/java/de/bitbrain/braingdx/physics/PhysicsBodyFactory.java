@@ -12,11 +12,9 @@ public class PhysicsBodyFactory {
 
    public static PolygonShape getRectangle(Rectangle rectangle) {
       PolygonShape polygon = new PolygonShape();
-      Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f),
-            (rectangle.y + rectangle.height * 0.5f));
       polygon.setAsBox(rectangle.width * 0.5f,
             rectangle.height * 0.5f,
-            size,
+            new Vector2(rectangle.width * 0.5f, rectangle.height * 0.5f),
             0.0f);
       return polygon;
    }

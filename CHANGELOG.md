@@ -1,3 +1,7 @@
+# Version 0.6.9
+
+* fixed a positioning issue when centering rectangular box2d objects
+
 # Version 0.6.8
 
 * [[#130](https://github.com/bitbrain/braingdx/issues/130)] introduce box2d support for tiled
