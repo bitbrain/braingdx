@@ -28,5 +28,12 @@
          <artifactId>box2dlights</artifactId>
          <version>${box2dlights.version}</version>
       </dependency>
+      <dependency>
+         <groupId>com.badlogicgames.gdx</groupId>
+         <artifactId>gdx-box2d-platform</artifactId>
+         <version>${libgdx.version}</version>
+         <classifier>natives-desktop</classifier>
+         <scope>test</scope>
+      </dependency>
    </dependencies>
 </project>

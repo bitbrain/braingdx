@@ -3,6 +3,7 @@ package de.bitbrain.braingdx.physics;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -18,4 +19,5 @@ public interface PhysicsManager {
    void setGravity(float x, float y);
    void setPositionIterations(int positionIterations);
    void setVelocityIterations(int velocityIterations);
+   World getPhysicsWorld();
 }

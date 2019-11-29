@@ -18,17 +18,25 @@ package de.bitbrain.braingdx.tmx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.*;
+import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.objects.PolylineMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.event.GameEventRouter;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
+import de.bitbrain.braingdx.physics.PhysicsManager;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
@@ -36,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
+
+import static de.bitbrain.braingdx.physics.PhysicsBodyFactory.*;
 
 /**
  * Extracts {@link GameObject} instances from a {@link TiledMap} provided.
@@ -51,18 +61,21 @@ public class TiledMapContextFactory {
    private final GameEventManager gameEventManager;
    private final GameEventRouter gameEventRouter;
    private final BehaviorManager behaviorManager;
+   private final PhysicsManager physicsManager;
 
    public TiledMapContextFactory(
          GameObjectRenderManager renderManager,
          GameWorld gameWorld,
          GameEventManager gameEventManager,
          GameEventRouter gameEventRouter,
-         BehaviorManager behaviorManager) {
+         BehaviorManager behaviorManager,
+         PhysicsManager physicsManager) {
       this.renderManager = renderManager;
       this.gameWorld = gameWorld;
       this.gameEventManager = gameEventManager;
       this.gameEventRouter = gameEventRouter;
       this.behaviorManager = behaviorManager;
+      this.physicsManager = physicsManager;
    }
 
    public TiledMapContextImpl createContext(
@@ -123,67 +136,98 @@ public class TiledMapContextFactory {
       for (int objectIndex = 0; objectIndex < mapObjects.getCount(); ++objectIndex) {
          MapObject mapObject = mapObjects.get(objectIndex);
          MapProperties objectProperties = mapObject.getProperties();
-         GameObject gameObject = gameWorld.addObject(lastLayerId);
-         final float mapX = objectProperties.get(config.get(Constants.X), Float.class);
-         final float mapY = objectProperties.get(config.get(Constants.Y), Float.class);
-         final Vector2 worldPos = positionTranslator.toWorld(mapX, mapY);
-         final float worldX = worldPos.x;
-         final float worldY = worldPos.y;
-         final float w = objectProperties.get(config.get(Constants.WIDTH), Float.class);
-         final float h = objectProperties.get(config.get(Constants.HEIGHT), Float.class);
-         final float cellWidth = state.getCellWidth();
-         final float cellHeight = state.getCellHeight();
-         Object objectType = objectProperties.get(config.get(Constants.TYPE));
-
-         Object collisionObject = objectProperties.get(config.get(Constants.COLLISION), "false", Object.class);
-         boolean collision = false;
-         if (collisionObject instanceof Boolean) {
-            collision = (Boolean) collisionObject;
-         } else if (collisionObject instanceof String) {
-            collision = Boolean.valueOf((String) collisionObject);
-         }
-
-         // issue #135 - correct positions of game objects with a collision
-         if (collision) {
-            final int xIndex = positionTranslator.toIndexX(worldX);
-            final int yIndex = positionTranslator.toIndexY(worldY);
-            final float newMapX = xIndex * state.getCellWidth();
-            final float newMapY = yIndex * state.getCellHeight();
-            final Vector2 newWorldPos = positionTranslator.toWorld(newMapX, newMapY);
-            gameObject.setPosition(newWorldPos.x, newWorldPos.y);
+         if (objectProperties.get("physics.enabled", false, Boolean.class)) {
+            handlePhysicsObject(mapObject, objectProperties);
          } else {
-            gameObject.setPosition(worldX, worldY);
+            handleGameObject(context, lastLayerId, layerIndex, state, config, positionTranslator, mapObject, objectProperties);
          }
-         gameObject.setDimensions(
-               calculateIndexedDimension(w, cellWidth),
-               calculateIndexedDimension(h, cellHeight)
-         );
-         Color color = objectProperties.get(config.get(Constants.COLOR), mapObject.getColor(), Color.class);
-         gameObject.setLastPosition(gameObject.getLeft(), gameObject.getTop());
-         gameObject.setColor(color);
-         gameObject.setType(objectType);
-         gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
-
-         // [#205] Load attributes directly into game object
-         Iterator<String> objectKeyIterator = objectProperties.getKeys();
-         while (objectKeyIterator.hasNext()) {
-            String key = objectKeyIterator.next();
-            gameObject.setAttribute(key, objectProperties.get(key));
-         }
-
-         if (!context.isInclusiveCollision(gameObject.getLeft(), gameObject.getTop(), layerIndex, gameObject)) {
-            CollisionCalculator.updateCollision(
-                  positionTranslator,
-                  gameObject,
-                  collision,
-                  gameObject.getLeft(),
-                  gameObject.getTop(),
-                  layerIndex,
-                  state
-            );
-         }
-         gameEventManager.publish(new TiledMapEvents.OnLoadGameObjectEvent(gameObject, context));
       }
+   }
+
+   private void handlePhysicsObject(MapObject mapObject, MapProperties objectProperties) {
+      List<Shape> shapes = new ArrayList<Shape>();
+      if (mapObject instanceof RectangleMapObject) {
+         shapes.add(getRectangle(((RectangleMapObject) mapObject).getRectangle()));
+      } else if (mapObject instanceof PolygonMapObject) {
+         shapes.addAll(getPolygons(((PolygonMapObject) mapObject).getPolygon()));
+      } else if (mapObject instanceof PolylineMapObject) {
+         shapes.add(getPolyline(((PolylineMapObject) mapObject).getPolyline()));
+      } else if (mapObject instanceof CircleMapObject) {
+         shapes.add(getCircle(((CircleMapObject) mapObject).getCircle()));
+      } else {
+         throw new GdxRuntimeException("Shape of " + mapObject + " not supported by braingdx");
+      }
+      BodyDef bd = new BodyDef();
+      bd.position.set(objectProperties.get(Constants.X, 0f, Float.class), objectProperties.get(Constants.Y, 0f, Float.class));
+      bd.type = BodyDef.BodyType.StaticBody;
+      Body body = physicsManager.getPhysicsWorld().createBody(bd);
+      for (Shape shape : shapes) {
+         body.createFixture(shape, 1);
+         shape.dispose();
+      }
+   }
+
+   private void handleGameObject(TiledMapContext context, String lastLayerId, int layerIndex, State state, TiledMapConfig config, PositionTranslator positionTranslator, MapObject mapObject, MapProperties objectProperties) {
+      GameObject gameObject = gameWorld.addObject(lastLayerId);
+      final float mapX = objectProperties.get(config.get(Constants.X), Float.class);
+      final float mapY = objectProperties.get(config.get(Constants.Y), Float.class);
+      final Vector2 worldPos = positionTranslator.toWorld(mapX, mapY);
+      final float worldX = worldPos.x;
+      final float worldY = worldPos.y;
+      final float w = objectProperties.get(config.get(Constants.WIDTH), Float.class);
+      final float h = objectProperties.get(config.get(Constants.HEIGHT), Float.class);
+      final float cellWidth = state.getCellWidth();
+      final float cellHeight = state.getCellHeight();
+      Object objectType = objectProperties.get(config.get(Constants.TYPE));
+
+      Object collisionObject = objectProperties.get(config.get(Constants.COLLISION), "false", Object.class);
+      boolean collision = false;
+      if (collisionObject instanceof Boolean) {
+         collision = (Boolean) collisionObject;
+      } else if (collisionObject instanceof String) {
+         collision = Boolean.valueOf((String) collisionObject);
+      }
+
+      // issue #135 - correct positions of game objects with a collision
+      if (collision) {
+         final int xIndex = positionTranslator.toIndexX(worldX);
+         final int yIndex = positionTranslator.toIndexY(worldY);
+         final float newMapX = xIndex * state.getCellWidth();
+         final float newMapY = yIndex * state.getCellHeight();
+         final Vector2 newWorldPos = positionTranslator.toWorld(newMapX, newMapY);
+         gameObject.setPosition(newWorldPos.x, newWorldPos.y);
+      } else {
+         gameObject.setPosition(worldX, worldY);
+      }
+      gameObject.setDimensions(
+            calculateIndexedDimension(w, cellWidth),
+            calculateIndexedDimension(h, cellHeight)
+      );
+      Color color = objectProperties.get(config.get(Constants.COLOR), mapObject.getColor(), Color.class);
+      gameObject.setLastPosition(gameObject.getLeft(), gameObject.getTop());
+      gameObject.setColor(color);
+      gameObject.setType(objectType);
+      gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
+
+      // [#205] Load attributes directly into game object
+      Iterator<String> objectKeyIterator = objectProperties.getKeys();
+      while (objectKeyIterator.hasNext()) {
+         String key = objectKeyIterator.next();
+         gameObject.setAttribute(key, objectProperties.get(key));
+      }
+
+      if (!context.isInclusiveCollision(gameObject.getLeft(), gameObject.getTop(), layerIndex, gameObject)) {
+         CollisionCalculator.updateCollision(
+               positionTranslator,
+               gameObject,
+               collision,
+               gameObject.getLeft(),
+               gameObject.getTop(),
+               layerIndex,
+               state
+         );
+      }
+      gameEventManager.publish(new TiledMapEvents.OnLoadGameObjectEvent(gameObject, context));
    }
 
    private String handleDebugTileLayer(TiledMapContext context, State state, Camera camera,

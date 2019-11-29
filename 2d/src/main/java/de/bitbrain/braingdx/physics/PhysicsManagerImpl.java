@@ -91,4 +91,9 @@ public class PhysicsManagerImpl implements PhysicsManager, Updateable, Disposabl
    public void setVelocityIterations(int velocityIterations) {
       this.velocityIterations = velocityIterations;
    }
+
+   @Override
+   public World getPhysicsWorld() {
+      return physicsWorld;
+   }
 }

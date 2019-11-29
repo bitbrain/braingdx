@@ -17,12 +17,14 @@ package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
-import de.bitbrain.braingdx.context.GameContext;
 import de.bitbrain.braingdx.event.*;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
+import de.bitbrain.braingdx.physics.PhysicsManagerImpl;
 import de.bitbrain.braingdx.utils.GdxUtils;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
@@ -40,8 +42,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.calls;
-import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.*;
 
 /**
  * Tests and verifies the integrity of the {@link TiledMapManager} implementation used within
@@ -80,7 +81,8 @@ public class TiledMapManagerTest {
             world,
             gameEventManager,
             tiledMapEventRouter,
-            behaviorManager
+            behaviorManager,
+            new PhysicsManagerImpl(new World(new Vector2(), true), world, behaviorManager)
       );
       tiledMapManager = new TiledMapManagerImpl(world, gameEventManager, contextFactory) {
          @Override
@@ -96,7 +98,7 @@ public class TiledMapManagerTest {
 
    @Test(expected = NullPointerException.class)
    public void load_WithNullValues() throws TiledMapException {
-      tiledMapManager.load((TiledMap)null, null, null);
+      tiledMapManager.load((TiledMap) null, null, null);
    }
 
    @Test(expected = TiledMapException.class)
