@@ -142,7 +142,7 @@ public class TiledMapContextImpl implements TiledMapContext {
 
    @Override
    public PositionTranslator getPositionTranslator() {
-      return null;
+      return positionTranslator;
    }
 
    @Override

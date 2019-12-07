@@ -1,3 +1,8 @@
+# Version 0.6.11
+
+* fix `NullPointerException` in tiledmap context
+* fix screen transition overlay positioning
+
 # Version 0.6.10
 
 * minor API improvements around font baking
