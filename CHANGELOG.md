@@ -1,3 +1,7 @@
+# Version 0.6.10
+
+* minor API improvements around font baking
+
 # Version 0.6.9
 
 * fixed a positioning issue when centering rectangular box2d objects

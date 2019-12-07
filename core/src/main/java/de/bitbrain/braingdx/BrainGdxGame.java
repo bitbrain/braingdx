@@ -24,6 +24,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
 import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.graphics.BitmapFontBaker;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.postprocessing.effects.*;
 import de.bitbrain.braingdx.screens.AbstractScreen;
@@ -49,6 +50,12 @@ public abstract class BrainGdxGame extends Game {
       loadAssets();
       initTweens();
       setScreen(getInitialScreen());
+   }
+
+   @Override
+   public void dispose() {
+      super.dispose();
+      BitmapFontBaker.dispose();
    }
 
    protected abstract GameAssetLoader getAssetLoader();
