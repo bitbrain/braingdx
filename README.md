@@ -59,7 +59,7 @@ This framework is currently developed by a single person. Pull requests are very
 ```xml
 <dependency>
     <groupId>io.github.bitbrain</groupId>
-    <artifactId>braingdx-core</artifactId>
+    <artifactId>braingdx-2d</artifactId>
     <version>$braingdxVersion</version>
 </dependency>
 ```
@@ -67,9 +67,9 @@ This framework is currently developed by a single person. Pull requests are very
 
 Add the following to your `build.gradle` file to your `core` module:
 ```gradle
-compile "io.github.bitbrain:braingdx-core:$braingdxVersion"
-compile "io.github.bitbrain:braingdx-core:$braingdxVersion:sources"
-compile "io.github.bitbrain:braingdx-core:$braingdxVersion:javadoc"
+compile "io.github.bitbrain:braingdx-2d:$braingdxVersion"
+compile "io.github.bitbrain:braingdx-2d:$braingdxVersion:sources"
+compile "io.github.bitbrain:braingdx-2d:$braingdxVersion:javadoc"
 ```
 Replace `$brainGdxVersion` with the version on Maven Central.
 
