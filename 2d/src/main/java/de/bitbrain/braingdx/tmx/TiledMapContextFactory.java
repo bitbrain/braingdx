@@ -181,16 +181,15 @@ public class TiledMapContextFactory {
       final float cellHeight = state.getCellHeight();
       Object objectType = objectProperties.get(config.get(Constants.TYPE));
 
-      Object collisionObject = objectProperties.get(config.get(Constants.COLLISION), "false", Object.class);
-      boolean collision = false;
-      if (collisionObject instanceof Boolean) {
-         collision = (Boolean) collisionObject;
-      } else if (collisionObject instanceof String) {
-         collision = Boolean.valueOf((String) collisionObject);
+      // [#205] Load attributes directly into game object
+      Iterator<String> objectKeyIterator = objectProperties.getKeys();
+      while (objectKeyIterator.hasNext()) {
+         String key = objectKeyIterator.next();
+         gameObject.setAttribute(key, objectProperties.get(key));
       }
 
       // issue #135 - correct positions of game objects with a collision
-      if (collision) {
+      if (gameObject.getOrSetAttribute(Constants.COLLISION, false)) {
          final int xIndex = positionTranslator.toIndexX(worldX);
          final int yIndex = positionTranslator.toIndexY(worldY);
          final float newMapX = xIndex * state.getCellWidth();
@@ -210,18 +209,14 @@ public class TiledMapContextFactory {
       gameObject.setType(objectType);
       gameObject.setAttribute(Constants.LAYER_INDEX, layerIndex);
 
-      // [#205] Load attributes directly into game object
-      Iterator<String> objectKeyIterator = objectProperties.getKeys();
-      while (objectKeyIterator.hasNext()) {
-         String key = objectKeyIterator.next();
-         gameObject.setAttribute(key, objectProperties.get(key));
-      }
+      // Always set collision even if not provided
+      gameObject.getOrSetAttribute("collision", false);
 
       if (!context.isInclusiveCollision(gameObject.getLeft(), gameObject.getTop(), layerIndex, gameObject)) {
          CollisionCalculator.updateCollision(
                positionTranslator,
                gameObject,
-               collision,
+               gameObject.getOrSetAttribute(Constants.COLLISION, false),
                gameObject.getLeft(),
                gameObject.getTop(),
                layerIndex,

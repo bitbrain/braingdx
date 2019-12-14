@@ -1,3 +1,7 @@
+# UNRELEASED Version 0.6.12
+
+* always set collisions to `false` when not defined within Tiled
+
 # Version 0.6.11
 
 * fix `NullPointerException` in tiledmap context
