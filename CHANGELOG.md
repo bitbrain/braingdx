@@ -1,6 +1,7 @@
 # UNRELEASED Version 0.6.12
 
 * always set collisions to `false` when not defined within Tiled
+* [[#210](https://github.com/bitbrain/braingdx/issues/210)] do not expose internal vector on `getPosition()`
 
 # Version 0.6.11
 

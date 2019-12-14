@@ -194,7 +194,7 @@ public class GameObject implements Pool.Poolable {
 
     public Vector2 getPosition() {
         tmp.set(position.x, position.y);
-        return tmp;
+        return tmp.cpy();
     }
 
     public String getId() {
