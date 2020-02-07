@@ -82,6 +82,13 @@ Learn [here](https://github.com/bitbrain/braingdx/wiki) how to integrate **brain
 
 Feel free to create [a new pull request](https://github.com/bitbrain/braingdx/pull/new/master). When you detect an issue [please report it here](https://github.com/bitbrain/braingdx/issues).
 
+# Games created with braingdx
+
+### 🎣 [fishmonger](https://bitbrain.itch.io/fishmonger)
+### 🤖 [mindmazer](https://bitbrain.itch.io/mindmazer)
+### 💀 [pragma](https://bitbrain.itch.io/pragma)
+### 🚀 [v0id](https://bitbrain.itch.io/v0id)
+
 # License
 
 This software is licensed under the [Apache 2 License](LICENSE).
