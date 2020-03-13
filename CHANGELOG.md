@@ -1,3 +1,8 @@
+# Version 0.6.13
+
+* [[#212](https://github.com/bitbrain/braingdx/issues/212)] introduce new `setZoom` method to calculate camera zoom automatically
+* fixed an issue regarding screen transitions
+
 # Version 0.6.12
 
 * always set collisions to `false` when not defined within Tiled

@@ -67,6 +67,53 @@ public class VectorGameCameraTest {
    }
 
    @Test
+   public void testSetZoom_ToValue() {
+      final float WORLD_WIDTH = 500;
+      final float WORLD_HEIGHT = 800;
+      final float FACTOR = 2;
+      setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH / FACTOR, WORLD_HEIGHT / FACTOR);
+      camera.setZoom(0.5f);
+      camera.update(0f);
+
+      assertThat(orthographicCamera.position.len()).isZero();
+      assertThat(orthographicCamera.viewportWidth).isEqualTo(WORLD_WIDTH / FACTOR);
+      assertThat(orthographicCamera.viewportHeight).isEqualTo(WORLD_HEIGHT/ FACTOR);
+   }
+
+   @Test
+   public void testSetZoom_ToWidth() {
+      final float WORLD_WIDTH = 500;
+      final float WORLD_HEIGHT = 800;
+      final float FACTOR = 2;
+      setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH / FACTOR, WORLD_HEIGHT / FACTOR);
+      camera.setZoom(WORLD_WIDTH / 10f, GameCamera.ZoomMode.TO_WIDTH);
+      camera.update(0f);
+
+      assertThat(orthographicCamera.position.len()).isZero();
+      assertThat(orthographicCamera.viewportWidth).isEqualTo(WORLD_WIDTH / FACTOR);
+      assertThat(orthographicCamera.viewportHeight).isEqualTo(WORLD_HEIGHT/ FACTOR);
+      assertThat(camera.getDefaultZoomFactor()).isEqualTo(0.2f);
+   }
+
+   @Test
+   public void testSetZoom_ToHeight() {
+      final float WORLD_WIDTH = 500;
+      final float WORLD_HEIGHT = 800;
+      final float FACTOR = 2;
+      setWorldBounds(0f, 0f, WORLD_WIDTH , WORLD_HEIGHT);
+      setCameraBounds(0f, 0f, WORLD_WIDTH / FACTOR, WORLD_HEIGHT / FACTOR);
+      camera.setZoom(WORLD_HEIGHT / 10f, GameCamera.ZoomMode.TO_HEIGHT);
+      camera.update(0f);
+
+      assertThat(orthographicCamera.position.len()).isZero();
+      assertThat(orthographicCamera.viewportWidth).isEqualTo(WORLD_WIDTH / FACTOR);
+      assertThat(orthographicCamera.viewportHeight).isEqualTo(WORLD_HEIGHT/ FACTOR);
+      assertThat(camera.getDefaultZoomFactor()).isEqualTo(0.2f);
+   }
+
+   @Test
    public void testSetDefaultZoom_FocusCentered_NoTrackingTarget() {
       final float WORLD_WIDTH = 500;
       final float WORLD_HEIGHT = 800;

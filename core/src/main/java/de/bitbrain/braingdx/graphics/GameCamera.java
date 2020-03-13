@@ -2,6 +2,8 @@ package de.bitbrain.braingdx.graphics;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
+import de.bitbrain.braingdx.util.Resizeable;
+import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
@@ -12,7 +14,27 @@ import de.bitbrain.braingdx.world.GameWorld;
  * @version 1.0.0
  * @since 1.0.0
  */
-public interface GameCamera {
+public interface GameCamera extends Updateable, Resizeable {
+
+   /**
+    * The zoom mode of the camera.
+    */
+   enum ZoomMode {
+      /**
+       * Uses the literal value provided as a zoom factor.
+       */
+      TO_VALUE,
+
+      /**
+       * Calculates the required zoom based on the virtual width provided.
+       */
+      TO_WIDTH,
+
+      /**
+       * Calculates the required zoom based on the virtual height provided.
+       */
+      TO_HEIGHT;
+   }
 
    /**
     * Sets a new threshold to where the camera should stop tracking.
@@ -68,6 +90,20 @@ public interface GameCamera {
     * @param amount the base zoom amount
     */
    void zoom(float amount);
+
+   /**
+    * Sets a new zoom value, based on the mode.
+    *
+    * @param value
+    * @param zoomMode
+    */
+   void setZoom(float value, ZoomMode zoomMode);
+
+   /**
+    * Sets a new zoom value. Defaults to <code>TO_VALUE</code>.
+    * @param value
+    */
+   void setZoom(float value);
 
    /**
     * Focuses directly on the target
@@ -158,8 +194,4 @@ public interface GameCamera {
     * @param duration the length of the effect in seconds
     */
    void shake(float strength, float duration);
-
-   void update(float delta);
-
-   void resize(int width, int height);
 }

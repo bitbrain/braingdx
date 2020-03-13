@@ -19,6 +19,7 @@ import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
@@ -76,6 +77,9 @@ public class VectorGameCamera implements GameCamera {
    }
 
    private float distanceThreshold = 0;
+
+   private float zoomModeValue = 1f;
+   private ZoomMode zoomMode = ZoomMode.TO_VALUE;
 
    public VectorGameCamera(OrthographicCamera camera, GameWorld world) {
       this.camera = camera;
@@ -167,6 +171,18 @@ public class VectorGameCamera implements GameCamera {
       if (target == null) {
          camera.zoom = (float) defaultZoom;
       }
+   }
+
+   @Override
+   public void setZoom(float value, ZoomMode zoomMode) {
+      this.zoomModeValue = value;
+      this.zoomMode = zoomMode;
+      setDefaultZoomFactor(calculateZoom(value, zoomMode));
+   }
+
+   @Override
+   public void setZoom(float value) {
+      setZoom(value, ZoomMode.TO_VALUE);
    }
 
    @Override
@@ -413,6 +429,17 @@ public class VectorGameCamera implements GameCamera {
       } else if (cameraBottom > worldTop + worldHeight) {
          camera.position.y = (float) (worldTop + worldHeight - cameraHeightScaled / 2.0);
          correctionY = 1;
+      }
+   }
+
+   private float calculateZoom(float value, ZoomMode zoomMode) {
+      if (zoomMode == ZoomMode.TO_VALUE) {
+         return value;
+      }
+      if (zoomMode == ZoomMode.TO_WIDTH) {
+         return value / camera.viewportWidth;
+      } else {
+         return value / camera.viewportHeight;
       }
    }
 }
