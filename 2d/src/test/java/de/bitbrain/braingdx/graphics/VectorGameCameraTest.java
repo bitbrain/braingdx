@@ -13,6 +13,7 @@ import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -35,6 +36,7 @@ public class VectorGameCameraTest {
       camera = new VectorGameCamera(orthographicCamera, gameWorld);
       camera.setStickToWorldBounds(false);
       doNothing().when(orthographicCamera).update();
+      doNothing().when(orthographicCamera).update(anyBoolean());
    }
 
    @Test

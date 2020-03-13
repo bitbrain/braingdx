@@ -16,7 +16,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import static org.mockito.Matchers.*;
+import static de.bitbrain.braingdx.utils.GdxUtils.mockApplicationContext;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,15 +37,7 @@ public class LightingManagerTest {
    @Before
    public void beforeTest() {
       when(lightFactory.newPointLight(any(RayHandler.class), anyInt(), any(Color.class), anyFloat(), anyFloat(), anyFloat())).thenReturn(pointLightMock);
-      Application mockApp = mock(Application.class);
-      Gdx.app = mockApp;
-      doAnswer(new Answer<Void>() {
-         @Override
-         public Void answer(InvocationOnMock invocation) {
-            ((Runnable)invocation.getArguments()[0]).run();
-            return null;
-         }
-      }).when(mockApp).postRunnable(any(Runnable.class));
+      mockApplicationContext();
    }
 
    @Test

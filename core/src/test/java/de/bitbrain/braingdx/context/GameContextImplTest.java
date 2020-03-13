@@ -1,6 +1,8 @@
 package de.bitbrain.braingdx.context;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.graphics.GameCamera;
@@ -8,21 +10,32 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.pipeline.RenderPipeline;
 import de.bitbrain.braingdx.graphics.shader.ShaderConfig;
 import de.bitbrain.braingdx.screens.AbstractScreen;
+import de.bitbrain.braingdx.screens.ColorTransition;
 import de.bitbrain.braingdx.util.ArgumentFactory;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
+import static org.powermock.api.mockito.PowerMockito.whenNew;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ColorTransition.class)
 public class GameContextImplTest {
 
    private GameContextImpl impl;
 
    @Before
-   public void setup() {
+   public void setup() throws Exception {
+      final SpriteBatch mockBatch = mock(SpriteBatch.class);
+      whenNew(SpriteBatch.class).withNoArguments().thenReturn(mockBatch);
+      final OrthographicCamera mockCamera = mock(OrthographicCamera.class);
+      whenNew(OrthographicCamera.class).withNoArguments().thenReturn(mockCamera);
       Gdx.app = mock(Application.class);
       Gdx.graphics = mock(Graphics.class);
       Gdx.files = mock(Files.class);

@@ -17,12 +17,16 @@ package de.bitbrain.braingdx.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import de.bitbrain.braingdx.tweens.ColorTween;
+import de.bitbrain.braingdx.util.Resizeable;
+import de.bitbrain.braingdx.util.Updateable;
 
 /**
  * Implementation which fades a texture.
@@ -31,15 +35,20 @@ import de.bitbrain.braingdx.tweens.ColorTween;
  * @version 1.0
  * @since 1.0
  */
-public class ColorTransition extends AbstractTransitionable implements Disposable {
+public class ColorTransition extends AbstractTransitionable implements Disposable, Resizeable {
 
    private Texture texture;
    private Color color = Color.WHITE.cpy();
    private Color fadeToColor;
+   private SpriteBatch batch;
+   private OrthographicCamera camera;
 
    public ColorTransition(Color fadeToColor) {
       this.color.a = 0f;
       this.fadeToColor = fadeToColor;
+      batch = new SpriteBatch();
+      camera = new OrthographicCamera();
+      camera.setToOrtho(true, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
    }
 
    public ColorTransition() {
@@ -87,11 +96,15 @@ public class ColorTransition extends AbstractTransitionable implements Disposabl
       if (texture == null) {
          initTexture();
       }
-      batch.setColor(color);
-      batch.begin();
-      batch.draw(texture, -Gdx.graphics.getWidth() / 2f, -Gdx.graphics.getHeight() / 2f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-      batch.end();
-      batch.setColor(Color.WHITE);
+      this.batch.setProjectionMatrix(camera.combined);
+      this.batch.setColor(color);
+      this.batch.begin();
+      this.batch.draw(texture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+      this.batch.end();
    }
 
+   @Override
+   public void resize(int width, int height) {
+      camera.setToOrtho(true, width,  height);
+   }
 }
