@@ -1,3 +1,7 @@
+# Version 0.6.14
+
+* vastly improve `NavigationMenu` implementation to support colour fading and animations
+
 # Version 0.6.13
 
 * [[#212](https://github.com/bitbrain/braingdx/issues/212)] introduce new `setZoom` method to calculate camera zoom automatically
