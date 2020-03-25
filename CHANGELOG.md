@@ -1,3 +1,7 @@
+# Version 0.6.15
+
+* more improvements to `NavigationMenu` implementation
+
 # Version 0.6.14
 
 * vastly improve `NavigationMenu` implementation to support colour fading and animations

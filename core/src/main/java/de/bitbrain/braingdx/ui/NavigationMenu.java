@@ -85,7 +85,7 @@ public class NavigationMenu<T extends Button> extends Table implements Navigatea
       setTouchable(Touchable.childrenOnly);
    }
 
-   public Cell<T> add(final T button, final ClickListener listener) {
+   public Cell<T> add(final T button, final ClickListener listener, Boolean newRow) {
       button.getColor().set(getFadeToColor(false));
       if (button instanceof TextButton) {
          ((TextButton) button).getLabel().setColor(getFadeToColor(false));
@@ -114,11 +114,11 @@ public class NavigationMenu<T extends Button> extends Table implements Navigatea
       });
 
       Cell<T> cell = center().add(button);
-      if (calculateAlignment() == NavigationMenuStyle.Alignment.VERTICAL) {
+      if ((newRow == null && calculateAlignment() == NavigationMenuStyle.Alignment.VERTICAL) || (newRow != null && newRow)) {
          row();
       }
       if (!buttons.isEmpty()) {
-         if (calculateAlignment() == NavigationMenuStyle.Alignment.VERTICAL) {
+         if ((newRow == null && calculateAlignment() == NavigationMenuStyle.Alignment.VERTICAL) || (newRow != null && newRow)) {
             cell.padTop(style.padding);
          } else {
             cell.padLeft(style.padding);
@@ -136,6 +136,10 @@ public class NavigationMenu<T extends Button> extends Table implements Navigatea
       buttons.add(button);
       validateCheckState();
       return cell;
+   }
+
+   public Cell<T> add(final T button, final ClickListener listener) {
+      return add(button, listener, calculateAlignment() == NavigationMenuStyle.Alignment.VERTICAL);
    }
 
    @Override
