@@ -17,8 +17,9 @@ public class PhysicsManagerImpl implements PhysicsManager, Updateable, Disposabl
    private final BehaviorManager behaviorManager;
    private final World physicsWorld;
    private final Vector2 gravity = new Vector2();
-   private int positionIterations = 10;
-   private int velocityIterations = 10;
+   private int positionIterations = 5;
+   private int velocityIterations = 5;
+   private int iterationCount = 1;
 
    public PhysicsManagerImpl(World physicsWorld, GameWorld gameWorld, BehaviorManager behaviorManager) {
       this.gameWorld = gameWorld;
@@ -33,7 +34,9 @@ public class PhysicsManagerImpl implements PhysicsManager, Updateable, Disposabl
 
    @Override
    public void update(float delta) {
-      physicsWorld.step(TIME_STEP, velocityIterations, positionIterations);
+      for (int i = 0; i < iterationCount; ++i) {
+         physicsWorld.step(TIME_STEP, velocityIterations / iterationCount, positionIterations / iterationCount);
+      }
    }
 
    @Override
@@ -96,5 +99,10 @@ public class PhysicsManagerImpl implements PhysicsManager, Updateable, Disposabl
    @Override
    public World getPhysicsWorld() {
       return physicsWorld;
+   }
+
+   @Override
+   public void setIterationCount(int count) {
+      this.iterationCount = count;
    }
 }

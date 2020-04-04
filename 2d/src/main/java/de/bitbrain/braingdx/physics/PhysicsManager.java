@@ -20,4 +20,5 @@ public interface PhysicsManager {
    void setPositionIterations(int positionIterations);
    void setVelocityIterations(int velocityIterations);
    World getPhysicsWorld();
+   void setIterationCount(int count);
 }

@@ -1,3 +1,7 @@
+# Version 0.6.18
+
+* make physics faster by adding a scale
+
 # Version 0.6.17
 
 * add `lighting.offset.x` and `lighting.offset.y` option for Tiled
