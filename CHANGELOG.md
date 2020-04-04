@@ -1,3 +1,7 @@
+# Version 0.6.19
+
+* override physics body in case it is inactive to keep syncing with the game object
+
 # Version 0.6.18
 
 * make physics faster by adding a scale

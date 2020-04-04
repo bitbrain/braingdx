@@ -30,16 +30,20 @@ public class BodyPhysicsBehavior extends BehaviorAdapter {
    @Override
    public void update(GameObject source, float delta) {
       super.update(source, delta);
-      source.setPosition(body.getPosition().x, body.getPosition().y);
-      source.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
-      if (!body.getFixtureList().isEmpty()) {
-         Fixture fixture = body.getFixtureList().get(0);
-         Shape shape = fixture.getShape();
-         if (!(shape instanceof PolygonShape)) {
-            source.setDimensions(shape.getRadius() * 2f, shape.getRadius() * 2f);
-            source.setPosition(body.getPosition().x - shape.getRadius(), body.getPosition().y - shape.getRadius());
+      if (body.isActive()) {
+         source.setPosition(body.getPosition().x, body.getPosition().y);
+         source.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
+         if (!body.getFixtureList().isEmpty()) {
+            Fixture fixture = body.getFixtureList().get(0);
+            Shape shape = fixture.getShape();
+            if (!(shape instanceof PolygonShape)) {
+               source.setDimensions(shape.getRadius() * 2f, shape.getRadius() * 2f);
+               source.setPosition(body.getPosition().x - shape.getRadius(), body.getPosition().y - shape.getRadius());
+            }
+            source.setPosition(body.getPosition().x - source.getWidth() / 2f, body.getPosition().y - source.getHeight() / 2f);
          }
-         source.setPosition(body.getPosition().x - source.getWidth() / 2f, body.getPosition().y - source.getHeight() / 2f);
+      } else {
+         body.setTransform(source.getLeft(), source.getTop(), source.getRotation() * MathUtils.degreesToRadians);
       }
    }
 }
