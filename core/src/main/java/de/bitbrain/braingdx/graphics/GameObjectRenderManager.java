@@ -36,7 +36,7 @@ import java.util.Map;
 public class GameObjectRenderManager implements Disposable {
 
    private final GameWorld gameWorld;
-   private final Comparator<GameObject> comparator = new ZIndexComparator();
+   private Comparator<GameObject> comparator = new ZIndexComparator();
    private final Map<Object, GameObjectRenderer<?>> rendererMap = new HashMap<Object, GameObjectRenderer<?>>();
    private final Map<Class<?>, BatchResolver<?>> batchResolverMap = new HashMap<Class<?>, BatchResolver<?>>();
    private final BatchResolver<?>[] allbatchResolvers;
@@ -60,6 +60,10 @@ public class GameObjectRenderManager implements Disposable {
     */
    public static <T> GameObjectRenderer combine(GameObjectRenderer<T>... gameObjectRenderers) {
       return new CombinedGameObjectRenderer<T>(gameObjectRenderers);
+   }
+
+   public void setRenderOrderComparator(Comparator<GameObject> comparator) {
+      this.comparator = comparator;
    }
 
    public void beforeRender() {

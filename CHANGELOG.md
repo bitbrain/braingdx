@@ -1,3 +1,7 @@
+# Version 0.6.16
+
+* add option to set a custom render order comparator through `setRenderOrderComparator()`
+
 # Version 0.6.15
 
 * more improvements to `NavigationMenu` implementation
