@@ -275,6 +275,10 @@ public class GameObject implements Pool.Poolable {
         return attributes.containsKey(key);
     }
 
+    public<T> T getAttribute(Class<T> key) {
+        return getAttribute(key, key);
+    }
+
     public Object getAttribute(Object key) {
         return getAttribute(key, Object.class);
     }

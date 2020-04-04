@@ -1,3 +1,9 @@
+# Version 0.6.17
+
+* add `lighting.offset.x` and `lighting.offset.y` option for Tiled
+* add `Body` to game object attributes when physics are attached
+* add `T getAttribute(Class<T> key)` to `GameObject`
+
 # Version 0.6.16
 
 * add option to set a custom render order comparator through `setRenderOrderComparator()`

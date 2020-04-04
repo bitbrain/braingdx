@@ -72,6 +72,7 @@ public class PhysicsManagerImpl implements PhysicsManager, Updateable, Disposabl
       body.createFixture(fixtureDef);
       behaviorManager.apply(new BodyPhysicsBehavior(body), gameObject);
       body.setUserData(gameObject);
+      gameObject.setAttribute(Body.class, body);
       fixtureDef.shape.dispose();
       return body;
    }
