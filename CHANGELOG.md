@@ -1,3 +1,7 @@
+# Version 0.6.20
+
+* fix `PointLight2DTween`
+
 # Version 0.6.19
 
 * override physics body in case it is inactive to keep syncing with the game object

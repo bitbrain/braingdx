@@ -40,16 +40,16 @@ public class PointLight2DTween implements TweenAccessor<PointLight> {
             target.setDistance(newValues[0]);
             break;
          case COLOR_R:
-            target.getColor().r = newValues[0];
+            target.setColor(newValues[0], target.getColor().g, target.getColor().b, target.getColor().a);
             break;
          case COLOR_G:
-            target.getColor().g = newValues[0];
+            target.setColor(target.getColor().a, newValues[0], target.getColor().b, target.getColor().a);
             break;
          case COLOR_B:
-            target.getColor().b = newValues[0];
+            target.setColor(target.getColor().a, target.getColor().g, newValues[0], target.getColor().a);
             break;
          case COLOR_A:
-            target.getColor().a = newValues[0];
+            target.setColor(target.getColor().a, target.getColor().g, target.getColor().b, newValues[0]);
             break;
       }
    }
