@@ -30,6 +30,12 @@ public class InputManagerImpl implements InputManager, Updateable, Disposable {
    }
 
    @Override
+   public void clear() {
+      inputMultiplexer.clear();
+      Controllers.clearListeners();
+   }
+
+   @Override
    public void dispose() {
       Controllers.clearListeners();
    }

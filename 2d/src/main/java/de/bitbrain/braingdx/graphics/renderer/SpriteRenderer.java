@@ -34,6 +34,7 @@ public class SpriteRenderer extends GameObject2DRenderer {
 
    private final AssetManager assets = SharedAssetManager.getInstance();
    private final Vector2 offset = new Vector2();
+   private final Vector2 size = new Vector2();
    protected Sprite sprite;
    private Texture texture;
 
@@ -57,11 +58,16 @@ public class SpriteRenderer extends GameObject2DRenderer {
       return offset;
    }
 
+   public SpriteRenderer size(float width, float height) {
+      this.size.set(width, height);
+      return this;
+   }
+
    @Override
    public void render(GameObject object, Batch batch, float delta) {
       sprite.setPosition(object.getLeft() + object.getOffsetX() + offset.x,
             object.getTop() + object.getOffsetY() + offset.y);
-      sprite.setSize(object.getWidth(), object.getHeight());
+      sprite.setSize(size.x > 0 ? size.x : object.getWidth(), size.y > 0 ? size.y : object.getHeight());
       sprite.setColor(object.getColor());
       sprite.setRotation(object.getRotation());
       sprite.setOrigin(object.getWidth() / 2f, object.getHeight() / 2f);

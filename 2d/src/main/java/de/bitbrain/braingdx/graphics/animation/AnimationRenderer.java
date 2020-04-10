@@ -57,6 +57,8 @@ public class AnimationRenderer extends GameObject2DRenderer {
    private final AnimationTypeResolver<GameObject> animationTypeResolver;
    private final Enabler<GameObject> animationEnabler;
    private final Vector2 offset = new Vector2();
+   private final Vector2 customSize = new Vector2();
+   private boolean enabled = true;
 
    public AnimationRenderer(AnimationSpriteSheet spriteSheet, AnimationConfig config, Enabler<GameObject> animationEnabler) {
       this(spriteSheet, config, DEFAULT_ANIMATION_TYPE_RESOLVER, animationEnabler);
@@ -80,17 +82,30 @@ public class AnimationRenderer extends GameObject2DRenderer {
 
    @Override
    public void render(GameObject object, Batch batch, float delta) {
-      batch.setColor(object.getColor());
-      drawRegion(
-            batch,
-            retrieveRegionFor(object, delta),
-            object
-      );
-      batch.setColor(Color.WHITE);
+      TextureRegion region = retrieveRegionFor(object, delta);
+      if (enabled) {
+         batch.setColor(object.getColor());
+         drawRegion(
+               batch,
+               region,
+               object
+         );
+         batch.setColor(Color.WHITE);
+      }
    }
 
    public AnimationRenderer offset(float x, float y) {
       this.offset.set(x, y);
+      return this;
+   }
+
+   public AnimationRenderer size(float width, float height) {
+      this.customSize.set(width, height);
+      return this;
+   }
+
+   public AnimationRenderer enabled(boolean enabled) {
+      this.enabled = enabled;
       return this;
    }
 
@@ -111,8 +126,8 @@ public class AnimationRenderer extends GameObject2DRenderer {
       sprite.setBounds(
             object.getLeft() + object.getOffsetX() + offset.x,
             object.getTop() + object.getOffsetY() + offset.y,
-            object.getWidth(),
-            object.getHeight()
+            customSize.x != 0 ? customSize.x : object.getWidth(),
+            customSize.y != 0 ? customSize.y : object.getHeight()
       );
       sprite.setScale(object.getScaleX(), object.getScaleY());
       sprite.draw(batch);

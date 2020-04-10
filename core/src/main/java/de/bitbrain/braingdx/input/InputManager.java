@@ -9,4 +9,5 @@ import com.badlogic.gdx.controllers.ControllerListener;
 public interface InputManager {
    void register(ControllerListener controllerListener);
    void register(InputProcessor inputAdapter);
+   void clear();
 }

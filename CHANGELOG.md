@@ -1,3 +1,9 @@
+# Version 0.6.21
+
+* make animations more flexible by allowing to set a default animation
+* add size option to various animation and sprite renderers
+* add option to clear inputs
+
 # Version 0.6.20
 
 * fix `PointLight2DTween`
