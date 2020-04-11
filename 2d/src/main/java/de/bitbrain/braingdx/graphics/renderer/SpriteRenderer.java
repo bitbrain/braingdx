@@ -34,7 +34,9 @@ public class SpriteRenderer extends GameObject2DRenderer {
 
    private final AssetManager assets = SharedAssetManager.getInstance();
    private final Vector2 offset = new Vector2();
+   private final Vector2 rotationalOffset = new Vector2();
    private final Vector2 size = new Vector2();
+   private final Vector2 origin = new Vector2();
    protected Sprite sprite;
    private Texture texture;
 
@@ -50,12 +52,14 @@ public class SpriteRenderer extends GameObject2DRenderer {
       sprite = new Sprite(texture);
    }
 
-   public void setOffset(float x, float y) {
+   public SpriteRenderer offset(float x, float y) {
       offset.set(x, y);
+      return this;
    }
 
-   public Vector2 getOffset() {
-      return offset;
+   public SpriteRenderer rotationalOffset(float x, float y) {
+      rotationalOffset.set(x, y);
+      return this;
    }
 
    public SpriteRenderer size(float width, float height) {
@@ -63,14 +67,28 @@ public class SpriteRenderer extends GameObject2DRenderer {
       return this;
    }
 
+   public SpriteRenderer origin(float x, float y) {
+      this.origin.set(x, y);
+      return this;
+   }
+
    @Override
    public void render(GameObject object, Batch batch, float delta) {
-      sprite.setPosition(object.getLeft() + object.getOffsetX() + offset.x,
-            object.getTop() + object.getOffsetY() + offset.y);
-      sprite.setSize(size.x > 0 ? size.x : object.getWidth(), size.y > 0 ? size.y : object.getHeight());
+      rotationalOffset.setAngle(object.getRotation() - 90f);
+      sprite.setPosition(object.getLeft() + object.getOffsetX() + offset.x + rotationalOffset.x,
+            object.getTop() + object.getOffsetY() + offset.y + rotationalOffset.y);
+      if (size.len() != 0) {
+         sprite.setSize(size.x, size.y);
+      } else {
+         sprite.setSize(object.getWidth(),object.getHeight());
+      }
       sprite.setColor(object.getColor());
       sprite.setRotation(object.getRotation());
-      sprite.setOrigin(object.getWidth() / 2f, object.getHeight() / 2f);
+      if (origin.len() != 0) {
+         sprite.setOrigin(origin.x, origin.y);
+      } else {
+         sprite.setOrigin(object.getWidth() / 2f, object.getHeight() / 2f);
+      }
       sprite.setScale(object.getScaleX(), object.getScaleY());
       sprite.draw(batch, 1f);
    }

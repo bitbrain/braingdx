@@ -1,3 +1,7 @@
+# Version 0.6.22
+
+* add rotational offset to `SpriteRenderer`
+
 # Version 0.6.21
 
 * make animations more flexible by allowing to set a default animation
