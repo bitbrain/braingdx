@@ -84,6 +84,7 @@ Feel free to create [a new pull request](https://github.com/bitbrain/braingdx/pu
 
 # Games created with braingdx
 
+###   [shelter](https://bitbrain.itch.io/shelter)
 ### 🎣 [fishmonger](https://bitbrain.itch.io/fishmonger)
 ### 🤖 [mindmazer](https://bitbrain.itch.io/mindmazer)
 ### 💀 [pragma](https://bitbrain.itch.io/pragma)
