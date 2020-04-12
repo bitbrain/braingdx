@@ -1,3 +1,7 @@
+# Version 0.6.23
+
+* add the option to delete game objects by id to prevent race conditions
+
 # Version 0.6.22
 
 * add rotational offset to `SpriteRenderer`

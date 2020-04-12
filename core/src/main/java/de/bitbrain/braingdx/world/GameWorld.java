@@ -307,7 +307,7 @@ public class GameWorld {
       if (group != null) {
          group = new ArrayList<GameObject>(group);
          for (int i = 0; i < group.size(); i++) {
-            removeInternally(group.get(i));
+            removeInternally(group.get(i).getId());
          }
          objects.clearGroup(groupKey);
       }
@@ -330,19 +330,34 @@ public class GameWorld {
                if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
                   Gdx.app.debug("DEBUG", String.format("GameWorld - requested removal of game object %s", object));
                }
-               removeInternally(object);
+               removeInternally(object.getId());
             }
          }
       });
-
    }
 
-   private void removeInternally(GameObject object) {
+   public void remove(final String... ids) {
+      Gdx.app.postRunnable(new Runnable() {
+         @Override
+         public void run() {
+            for (final String id : ids) {
+               if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
+                  Gdx.app.debug("DEBUG", String.format("GameWorld - requested removal of game object with id %s", id));
+               }
+               removeInternally(id);
+            }
+         }
+      });
+   }
+
+   private void removeInternally(String id) {
       if (Gdx.app.getLogLevel() == Application.LOG_DEBUG) {
-         Gdx.app.debug("DEBUG", String.format("%s - GameWorld - removing game object %s", System.nanoTime(), object));
+         Gdx.app.debug("DEBUG", String.format("%s - GameWorld - removing game object with id %s", System.nanoTime(), id));
       }
-      if (identityMap.remove(object.getId()) == null) {
-         Gdx.app.error("FATAL", String.format("%s - GameWorld - game object %s does not exist.", System.nanoTime(), object));
+      GameObject object = identityMap.remove(id);
+      if (object == null) {
+         Gdx.app.debug("DEBUG", String.format("%s - GameWorld - game object with id %s does not exist any longer.", System.nanoTime(), id));
+         return;
       }
       for (int i = 0; i < listeners.size(); ++i) {
          listeners.get(i).onRemove(object);
