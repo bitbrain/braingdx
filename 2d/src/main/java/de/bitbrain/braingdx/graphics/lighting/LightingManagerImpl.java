@@ -270,6 +270,11 @@ public class LightingManagerImpl implements LightingManager, Disposable {
       }
 
       @Override
+      public void onStatusChange(GameObject source, boolean updateable) {
+         light.setActive(updateable);
+      }
+
+      @Override
       public void update(GameObject source, float delta) {
          super.update(source, delta);
          if (centered) {

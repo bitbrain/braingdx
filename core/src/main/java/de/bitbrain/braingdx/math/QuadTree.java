@@ -30,6 +30,7 @@ public class QuadTree {
       tmp.setType("ROOT");
    }
 
+
    public void getZones(Array<Rectangle> allZones) {
       allZones.add(bounds);
       if (nodes[0] != null) {
@@ -85,15 +86,11 @@ public class QuadTree {
       int index = getIndex(tmp);
 
       if (index != -1 & nodes[0] != null) {
-         System.out.println("Retrieving from node: " + index);
          nodes[index].retrieve(list, area);
       } else {
          for (QuadTree node : nodes) {
             if (node != null && fitsInside(area, node)) {
-               System.out.println("fits inside! level=" + level + " bounds" + node.bounds);
                node.retrieve(list, area);
-            } else if (node != null) {
-               System.out.println(node.bounds + " does not fit inside " + area);
             }
          }
       }
@@ -158,9 +155,6 @@ public class QuadTree {
          } else if (bottomQuadrant) {
             index = SOUTH_EAST;
          }
-      }
-      if ("ROOT".equals(pRect.getType())) {
-         System.out.println("Found index: " + index + " with objects " + objects.size + " and area " + bounds);
       }
       return index;
    }

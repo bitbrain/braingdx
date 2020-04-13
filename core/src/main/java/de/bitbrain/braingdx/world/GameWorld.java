@@ -44,6 +44,7 @@ public class GameWorld {
     * the default cache size this world uses
     */
    public static final int DEFAULT_CACHE_SIZE = 512;
+   private static final int QUADTREE_ENABLED_THRESHOLD = 50;
    private final Group<Object, GameObject> objects = new Group<Object, GameObject>();
    private final Map<String, GameObject> identityMap = new HashMap<String, GameObject>();
    private final Pool<GameObject> pool;
@@ -92,7 +93,7 @@ public class GameWorld {
          }
       };
       this.boundsRectangle = new Rectangle();
-      this.quadTree = new QuadTree(50, 12, 0, boundsRectangle);
+      this.quadTree = new QuadTree(50, 5, 0, boundsRectangle);
       this.tmp = new Rectangle();
    }
 
@@ -406,12 +407,35 @@ public class GameWorld {
    private void updateUpdatableObjects() {
       boundsRectangle.set(bounds.getWorldOffsetX(), bounds.getWorldOffsetY(), bounds.getWorldWidth(), bounds.getWorldHeight());
       Array<GameObject> allObjects = objects.getAll();
+
+      if (allObjects.size < QUADTREE_ENABLED_THRESHOLD) {
+         updateableObjects.clear();
+         updateableObjects.addAll(allObjects);
+         return;
+      }
       quadTree.clear();
       for (GameObject o : allObjects) {
+         final boolean wasUpdateable = updateableObjects.contains(o, false);
+         if (!wasUpdateable && o.getAttribute("updateable", true)) {
+            for (GameWorldListener listener : listeners) {
+               listener.onStatusChange(o, false);
+            }
+         } else if (wasUpdateable && !o.getAttribute("updateable", true)) {
+            for (GameWorldListener listener : listeners) {
+               listener.onStatusChange(o, true);
+            }
+         }
+         o.setAttribute("updateable", wasUpdateable);
          quadTree.insert(o);
       }
       updateableObjects.clear();
-      tmp.set(gameCamera.getLeft(), gameCamera.getTop(), gameCamera.getScaledCameraWidth(), gameCamera.getScaledCameraHeight());
+      float paddingPercentage = 0.1f;
+      tmp.set(
+            gameCamera.getLeft() - gameCamera.getScaledCameraWidth() * paddingPercentage,
+            gameCamera.getTop() - gameCamera.getScaledCameraHeight() * paddingPercentage,
+            gameCamera.getScaledCameraWidth() + gameCamera.getScaledCameraWidth() * (paddingPercentage * 2f),
+            gameCamera.getScaledCameraHeight() + gameCamera.getScaledCameraHeight() * (paddingPercentage * 2f)
+      );
       if (tmp.x < 0) {
          tmp.width =  tmp.width + tmp.x;
          tmp.x = 0;
@@ -428,7 +452,6 @@ public class GameWorld {
          tmp.height = tmp.height - (tmp.y + tmp.height - bounds.getWorldHeight());
          tmp.y = bounds.getWorldHeight() - tmp.height;
       }
-      System.out.println("===== retrieval has started for area " + tmp);
       quadTree.retrieve(updateableObjects, tmp);
    }
 
@@ -452,6 +475,11 @@ public class GameWorld {
     */
    public static class GameWorldListener {
       public void onAdd(GameObject object) {
+
+      }
+
+      public void onStatusChange(GameObject object, boolean updateable) {
+
       }
 
       public void onRemove(GameObject object) {

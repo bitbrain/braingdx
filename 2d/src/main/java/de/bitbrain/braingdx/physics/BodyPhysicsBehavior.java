@@ -28,6 +28,12 @@ public class BodyPhysicsBehavior extends BehaviorAdapter {
    }
 
    @Override
+   public void onStatusChange(GameObject source, boolean updateable) {
+      super.onStatusChange(source, updateable);
+      this.body.setActive(updateable);
+   }
+
+   @Override
    public void update(GameObject source, float delta) {
       super.update(source, delta);
       if (body.isActive()) {

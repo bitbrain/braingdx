@@ -25,6 +25,11 @@ public class BehaviorManagerAdapter extends GameWorldListener implements Updatea
    }
 
    @Override
+   public void onStatusChange(GameObject object, boolean updateable) {
+      behaviorManager.onStatusChange(object, updateable);
+   }
+
+   @Override
    public void onRemove(GameObject object) {
       behaviorManager.remove(object);
    }
