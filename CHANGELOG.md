@@ -1,3 +1,7 @@
+# Version 0.6.25
+
+* [[#189](https://github.com/bitbrain/braingdx/issues/189)] remove attached particle effects while their owner is not updateable
+
 # Version 0.6.24
 
 This version removes `ArrayList` from the `GameWorld` contract to boost performance and replaced it with the libgdx version of `Array`.
