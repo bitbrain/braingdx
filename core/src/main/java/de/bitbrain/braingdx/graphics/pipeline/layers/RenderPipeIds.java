@@ -9,4 +9,5 @@ public interface RenderPipeIds {
    String PARTICLES = "particles";
    String WORLD_UI = "world-ui";
    String UI = "ui";
+   String DEBUG = "debug";
 }

@@ -46,4 +46,8 @@ public abstract class BehaviorAdapter implements Behavior {
       // noOp
    }
 
+   @Override
+   public void onStatusChange(GameObject source, boolean updateable) {
+      // noOp
+   }
 }

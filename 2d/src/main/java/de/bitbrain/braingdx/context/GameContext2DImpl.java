@@ -26,6 +26,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import de.bitbrain.braingdx.BrainGdxGame;
+import de.bitbrain.braingdx.debug.DebugMetric;
+import de.bitbrain.braingdx.debug.DebugStageRenderLayer;
 import de.bitbrain.braingdx.event.GameEventRouter;
 import de.bitbrain.braingdx.graphics.BatchResolver;
 import de.bitbrain.braingdx.graphics.GameCamera;
@@ -201,6 +203,7 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
       pipeline.put(RenderPipeIds.PARTICLES, new ParticleManagerRenderLayer(particleManager));
       pipeline.put(RenderPipeIds.WORLD_UI, new StageRenderLayer(context.getWorldStage()));
       pipeline.put(RenderPipeIds.UI, new StageRenderLayer(context.getStage()));
+      pipeline.put(RenderPipeIds.DEBUG, new DebugStageRenderLayer(context));
    }
 
    private void wire() {
@@ -210,5 +213,18 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
       // TiledMap features
       getEventManager().register(new TmxAudioConfigurer(getAudioManager()), OnLoadGameObjectEvent.class);
       getEventManager().register(new TmxLightingConfigurer(getLightingManager()), OnLoadGameObjectEvent.class);
+
+      getDebugPanel().addMetric("light count", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(lightingManager.size());
+         }
+      });
+      getDebugPanel().addMetric("box2d body count", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(physicsManager.getPhysicsWorld().getBodyCount());
+         }
+      });
    }
 }

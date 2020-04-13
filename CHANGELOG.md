@@ -1,3 +1,11 @@
+# Version 0.6.24
+
+This version removes `ArrayList` from the `GameWorld` contract to boost performance and replaced it with the libgdx version of `Array`.
+
+* introduce `Array` as return type to retrieve game objects
+* [[#17](https://github.com/bitbrain/braingdx/issues/17)] when reaching over 50 game objects, a new `QuadTree` algorithm is used to temporarily disable not visible game objects. This should boost performance significantly.
+* [[#80](https://github.com/bitbrain/braingdx/issues/80)] introduce debug UI. Enable it by setting a `LabelStyle` on `BrainGdxDebug` as well as using `setDebug` on `GameContext`
+
 # Version 0.6.23
 
 * add the option to delete game objects by id to prevent race conditions

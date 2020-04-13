@@ -162,8 +162,8 @@ public class BehaviorManager {
    }
 
    public void updateGloballyCompared(GameObject source, GameObject target, float delta) {
-      for (int i = 0; i < globalBehaviors.size(); ++i) {
-         globalBehaviors.get(i).update(source, target, delta);
+      for (Behavior globalBehavior : globalBehaviors) {
+         globalBehavior.update(source, target, delta);
       }
    }
 
@@ -175,5 +175,22 @@ public class BehaviorManager {
       }
       localBehaviors.clear();
       globalBehaviors.clear();
+   }
+
+   public int getGlobalCount() {
+      return globalBehaviors.size();
+   }
+
+   public int getLocalCount() {
+      return localBehaviors.size();
+   }
+
+   public void onStatusChange(GameObject source, boolean updateable) {
+      List<Behavior> behaviors = localBehaviors.get(source.getId());
+      if (behaviors != null) {
+         for (Behavior behavior : behaviors) {
+            behavior.onStatusChange(source, updateable);
+         }
+      }
    }
 }

@@ -15,6 +15,7 @@
 
 package de.bitbrain.braingdx.graphics;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import de.bitbrain.braingdx.util.ZIndexComparator;
@@ -73,8 +74,8 @@ public class GameObjectRenderManager implements Disposable {
    }
 
    public void render(float delta) {
-      List<GameObject> objects = gameWorld.getObjects(comparator);
-      for (int i = 0; i < objects.size(); ++i) {
+      Array<GameObject> objects = gameWorld.getObjects(comparator, true);
+      for (int i = 0; i < objects.size; ++i) {
          GameObject object = objects.get(i);
          final GameObjectRenderer renderer = rendererMap.get(object.getType());
          if (renderer != null) {

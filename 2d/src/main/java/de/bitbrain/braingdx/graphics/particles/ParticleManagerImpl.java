@@ -45,9 +45,12 @@ public class ParticleManagerImpl implements ParticleManager, Disposable {
       }
    }
 
-   public ParticleEffect attachEffect(String assetEffectId, GameObject object, final float offsetX, final float offsetY) {
-      final InternalPooledEffect effect = ensureEffect(assetEffectId);
+   public ParticleEffect attachEffect(final String assetEffectId, GameObject object, final float offsetX, final float offsetY) {
+      final InternalPooledEffect resultEffect = ensureEffect(assetEffectId);
       behaviorManager.apply(new BehaviorAdapter() {
+
+         private InternalPooledEffect effect = resultEffect;
+
          @Override
          public void onDetach(GameObject source) {
             freeEffect(effect);
@@ -61,8 +64,17 @@ public class ParticleManagerImpl implements ParticleManager, Disposable {
                effect.effect.setPosition(source.getLeft() + offsetX, source.getTop() + offsetY);
             }
          }
+
+         @Override
+         public void onStatusChange(GameObject source, boolean updateable) {
+            if (updateable) {
+               effect = ensureEffect(assetEffectId);
+            } else {
+               freeEffect(effect);
+            }
+         }
       }, object);
-      return effect.effect;
+      return resultEffect.effect;
    }
 
    public ParticleEffect spawnEffect(String assetEffectId, float worldX, float worldY) {

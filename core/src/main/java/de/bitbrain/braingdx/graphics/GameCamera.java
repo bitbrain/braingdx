@@ -178,6 +178,14 @@ public interface GameCamera extends Updateable, Resizeable {
     */
    float getScaledCameraHeight();
 
+   float getUnscaledCameraWidth();
+
+   float getUnscaledCameraHeight();
+
+   float getLeft();
+
+   float getTop();
+
    /**
     * Returns the currently configured tracking speed
     */

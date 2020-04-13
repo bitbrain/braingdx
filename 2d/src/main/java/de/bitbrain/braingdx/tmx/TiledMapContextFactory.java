@@ -37,6 +37,7 @@ import de.bitbrain.braingdx.event.GameEventRouter;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.physics.PhysicsManager;
+import de.bitbrain.braingdx.util.Mutator;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
@@ -46,6 +47,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static de.bitbrain.braingdx.physics.PhysicsBodyFactory.*;
+import static de.bitbrain.braingdx.tmx.ZIndexCalculator.calculateZIndex;
 
 /**
  * Extracts {@link GameObject} instances from a {@link TiledMap} provided.
@@ -106,10 +108,10 @@ public class TiledMapContextFactory {
          MapLayer mapLayer = mapLayers.get(i);
          if (mapLayer instanceof TiledMapTileLayer) {
             lastTileLayerIndex++;
-            lastLayerId = handleTiledMapTileLayer((TiledMapTileLayer) mapLayer, i, tiledMap, camera, rendererFactory,
+            populateStaticMapData(lastTileLayerIndex, (TiledMapTileLayer) mapLayer, state, config);
+            lastLayerId = handleTiledMapTileLayer(context, (TiledMapTileLayer) mapLayer, i, tiledMap, camera, rendererFactory,
                   config);
             layerIds.add(lastLayerId);
-            populateStaticMapData(lastTileLayerIndex, (TiledMapTileLayer) mapLayer, state, config);
          } else {
             // Not a tiledlayer so consider it as an object layer
             handleObjectLayer(context, lastLayerId, lastTileLayerIndex, mapLayer, state, config, positionTranslator);
@@ -240,17 +242,22 @@ public class TiledMapContextFactory {
       return id;
    }
 
-   private String handleTiledMapTileLayer(TiledMapTileLayer layer, int index, TiledMap tiledMap, Camera camera,
+   private String handleTiledMapTileLayer(final TiledMapContext context, TiledMapTileLayer layer, final int index, TiledMap tiledMap, Camera camera,
                                           MapLayerRendererFactory rendererFactory, TiledMapConfig config) {
       final int numberOfRows = tiledMap.getProperties().get(config.get(Constants.HEIGHT), Integer.class);
-      GameObjectRenderer renderer = rendererFactory.create(index, tiledMap, camera);
-      String id = UUID.randomUUID().toString();
+      GameObjectRenderer<?> renderer = rendererFactory.create(index, tiledMap, camera);
+      final String id = UUID.randomUUID().toString();
       renderManager.register(id, renderer);
-      GameObject layerObject = gameWorld.addObject(id);
-      layerObject.setActive(false);
-      layerObject.setPersistent(true);
-      layerObject.setType(id);
-      layerObject.setZIndex(ZIndexCalculator.calculateZIndex(numberOfRows, numberOfRows, index));
+      GameObject layerObject = gameWorld.addObject(id, new Mutator<GameObject>() {
+         @Override
+         public void mutate(GameObject target) {
+            target.setActive(false);
+            target.setPersistent(true);
+            target.setType(id);
+            target.setDimensions(context.getWorldWidth(), context.getWorldHeight());
+            target.setZIndex(calculateZIndex(numberOfRows, numberOfRows, index));
+         }
+      });
       if (!layer.isVisible()) {
          layerObject.getColor().a = 0f;
       }
@@ -277,7 +284,7 @@ public class TiledMapContextFactory {
       Cell cell = layer.getCell(x, y);
       if (cell != null) {
          Integer[][] heightMap = state.getHeightMap();
-         heightMap[x][y] = ZIndexCalculator.calculateZIndex(state.getMapIndexHeight(), y, layerIndex);
+         heightMap[x][y] = calculateZIndex(state.getMapIndexHeight(), y, layerIndex);
       }
    }
 

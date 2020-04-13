@@ -8,6 +8,7 @@ import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.GameSettings;
 import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
+import de.bitbrain.braingdx.debug.DebugPanel;
 import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
@@ -29,6 +30,10 @@ public interface GameContext extends Disposable, Resizeable {
    GameWorld getGameWorld();
 
    Stage getStage();
+
+   Stage getDebugStage();
+
+   DebugPanel getDebugPanel();
 
    TweenManager getTweenManager();
 
@@ -63,4 +68,8 @@ public interface GameContext extends Disposable, Resizeable {
    void setPaused(boolean paused);
 
    void addUpdateable(Updateable updateable);
+
+   void setDebug(boolean enabled);
+
+   boolean isDebugEnabled();
 }

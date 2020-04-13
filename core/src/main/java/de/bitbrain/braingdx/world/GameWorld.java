@@ -17,11 +17,17 @@ package de.bitbrain.braingdx.world;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
+import de.bitbrain.braingdx.graphics.GameCamera;
+import de.bitbrain.braingdx.math.QuadTree;
 import de.bitbrain.braingdx.util.Group;
 import de.bitbrain.braingdx.util.Mutator;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Game world which contains all game objects and managed them.
@@ -38,10 +44,15 @@ public class GameWorld {
     * the default cache size this world uses
     */
    public static final int DEFAULT_CACHE_SIZE = 512;
+   private static final int QUADTREE_ENABLED_THRESHOLD = 50;
    private final Group<Object, GameObject> objects = new Group<Object, GameObject>();
    private final Map<String, GameObject> identityMap = new HashMap<String, GameObject>();
    private final Pool<GameObject> pool;
-   private final List<GameWorldListener> listeners = new ArrayList<GameWorldListener>();
+   private final Array<GameWorldListener> listeners = new Array<GameWorldListener>();
+   final QuadTree quadTree;
+   private final Rectangle boundsRectangle, tmp;
+   private GameCamera gameCamera;
+   private final Array<GameObject> updateableObjects = new Array<GameObject>(200);
    private WorldBounds bounds = new WorldBounds() {
 
       @Override
@@ -81,6 +92,13 @@ public class GameWorld {
             return new GameObject();
          }
       };
+      this.boundsRectangle = new Rectangle();
+      this.quadTree = new QuadTree(50, 5, 0, boundsRectangle);
+      this.tmp = new Rectangle();
+   }
+
+   public void setCamera(GameCamera gameCamera) {
+      this.gameCamera = gameCamera;
    }
 
    public void addListener(GameWorldListener listener) {
@@ -88,7 +106,7 @@ public class GameWorld {
    }
 
    public void removeListener(GameWorldListener listener) {
-      listeners.remove(listener);
+      listeners.removeValue(listener, false);
    }
 
    /**
@@ -206,7 +224,7 @@ public class GameWorld {
             @Override
             public void run() {
                objects.addToGroup(group, object);
-               for (int i = 0; i < listeners.size(); ++i) {
+               for (int i = 0; i < listeners.size; ++i) {
                   listeners.get(i).onAdd(object);
                }
             }
@@ -216,7 +234,7 @@ public class GameWorld {
             Gdx.app.debug("DEBUG", String.format("GameWorld - added new game object %s", object));
          }
          objects.addToGroup(group, object);
-         for (int i = 0; i < listeners.size(); ++i) {
+         for (int i = 0; i < listeners.size; ++i) {
             listeners.get(i).onAdd(object);
          }
       }
@@ -229,22 +247,22 @@ public class GameWorld {
     * @param delta frame delta
     */
    public void update(float delta) {
-      List<GameObject> allObjects = objects.getAll();
-      for (int i = 0; i < allObjects.size(); ++i) {
-         GameObject object = allObjects.get(i);
+      updateUpdatableObjects();
+      for (int i = 0; i < updateableObjects.size; ++i) {
+         GameObject object = updateableObjects.get(i);
          if (!bounds.isInBounds(object) && !object.isPersistent()) {
             Gdx.app.debug("DEBUG", String.format("GameWorld - object %s is out of bounds! Remove...", object));
             remove(object);
             continue;
          }
-         for (int listenerIndex = 0; listenerIndex < listeners.size(); ++listenerIndex) {
+         for (int listenerIndex = 0; listenerIndex < listeners.size; ++listenerIndex) {
             listeners.get(listenerIndex).onUpdate(object, delta);
          }
          if (object.isActive()) {
-            for (int otherObjIndex = 0; otherObjIndex < allObjects.size(); ++otherObjIndex) {
-               GameObject other = allObjects.get(otherObjIndex);
+            for (int otherObjIndex = 0; otherObjIndex < updateableObjects.size; ++otherObjIndex) {
+               GameObject other = updateableObjects.get(otherObjIndex);
                if (other.isActive() && !object.getId().equals(other.getId())) {
-                  for (int listenerIndex = 0; listenerIndex < listeners.size(); ++listenerIndex) {
+                  for (int listenerIndex = 0; listenerIndex < listeners.size; ++listenerIndex) {
                      listeners.get(listenerIndex).onUpdate(object, other, delta);
                   }
                }
@@ -263,19 +281,27 @@ public class GameWorld {
    /**
     * Returns a list of all objects within this world.
     */
-   public List<GameObject> getObjects() {
-      return getObjects(null);
+   public Array<GameObject> getObjects() {
+      return getObjects(null, false);
    }
 
+   public Array<GameObject> getObjects(Comparator<GameObject> comparator) {
+      return getObjects(comparator, false);
+   }
 
    /**
     * Returns a list of all objects within this world, ordered by the comparator provided. The comparator
     * can be null.
     */
-   public List<GameObject> getObjects(Comparator<GameObject> comparator) {
-      List<GameObject> result = new ArrayList<GameObject>(objects.getAll());
+   public Array<GameObject> getObjects(Comparator<GameObject> comparator, boolean updatableOnly) {
+      Array<GameObject> result;
+      if (updatableOnly) {
+         result = updateableObjects;
+      } else {
+         result = objects.getAll();
+      }
       if (comparator != null) {
-         Collections.sort(result, comparator);
+         result.sort(comparator);
       }
       return result;
    }
@@ -286,7 +312,7 @@ public class GameWorld {
     * @return
     */
    public int size() {
-      return objects.getAll().size();
+      return identityMap.size();
    }
 
    /**
@@ -303,17 +329,17 @@ public class GameWorld {
    }
 
    public void clearGroup(Object groupKey) {
-      List<GameObject> group = objects.getGroup(groupKey);
+      Array<GameObject> group = objects.getGroup(groupKey);
       if (group != null) {
-         group = new ArrayList<GameObject>(group);
-         for (int i = 0; i < group.size(); i++) {
+         group = new Array<GameObject>(group);
+         for (int i = 0; i < group.size; i++) {
             removeInternally(group.get(i).getId());
          }
          objects.clearGroup(groupKey);
       }
    }
 
-   public List<GameObject> getGroup(Object groupKey) {
+   public Array<GameObject> getGroup(Object groupKey) {
       return objects.getGroup(groupKey);
    }
 
@@ -359,11 +385,66 @@ public class GameWorld {
          Gdx.app.debug("DEBUG", String.format("%s - GameWorld - game object with id %s does not exist any longer.", System.nanoTime(), id));
          return;
       }
-      for (int i = 0; i < listeners.size(); ++i) {
+      for (int i = 0; i < listeners.size; ++i) {
          listeners.get(i).onRemove(object);
       }
       objects.remove(object);
       pool.free(object);
+   }
+
+   private void updateUpdatableObjects() {
+      boundsRectangle.set(bounds.getWorldOffsetX(), bounds.getWorldOffsetY(), bounds.getWorldWidth(), bounds.getWorldHeight());
+      Array<GameObject> allObjects = objects.getAll();
+
+      if (allObjects.size < QUADTREE_ENABLED_THRESHOLD) {
+         updateableObjects.clear();
+         updateableObjects.addAll(allObjects);
+         return;
+      }
+      quadTree.clear();
+      for (GameObject o : allObjects) {
+         final boolean wasUpdateable = updateableObjects.contains(o, false);
+         if (!wasUpdateable && o.getAttribute("updateable", false)) {
+            for (GameWorldListener listener : listeners) {
+               listener.onStatusChange(o, false);
+            }
+         } else if (wasUpdateable && !o.getAttribute("updateable", false)) {
+            for (GameWorldListener listener : listeners) {
+               listener.onStatusChange(o, true);
+            }
+         }
+         if (!o.hasAttribute("updateable")) {
+            o.setAttribute("updateable", true);
+         } else {
+            o.setAttribute("updateable", wasUpdateable);
+         }
+         quadTree.insert(o);
+      }
+      updateableObjects.clear();
+      float paddingPercentage = 0.1f;
+      tmp.set(
+            gameCamera.getLeft() - gameCamera.getScaledCameraWidth() * paddingPercentage,
+            gameCamera.getTop() - gameCamera.getScaledCameraHeight() * paddingPercentage,
+            gameCamera.getScaledCameraWidth() + gameCamera.getScaledCameraWidth() * (paddingPercentage * 2f),
+            gameCamera.getScaledCameraHeight() + gameCamera.getScaledCameraHeight() * (paddingPercentage * 2f)
+      );
+      if (tmp.x < 0) {
+         tmp.width =  tmp.width + tmp.x;
+         tmp.x = 0;
+      }
+      if (tmp.y < 0) {
+         tmp.height = tmp.height + tmp.y;
+         tmp.y = 0;
+      }
+      if (tmp.x + tmp.width > bounds.getWorldWidth()) {
+         tmp.width = tmp.width - (tmp.x + tmp.width - bounds.getWorldWidth());
+         tmp.x = bounds.getWorldWidth() - tmp.width;
+      }
+      if (tmp.y + tmp.height > bounds.getWorldHeight()) {
+         tmp.height = tmp.height - (tmp.y + tmp.height - bounds.getWorldHeight());
+         tmp.y = bounds.getWorldHeight() - tmp.height;
+      }
+      quadTree.retrieve(updateableObjects, tmp);
    }
 
    /**
@@ -386,6 +467,11 @@ public class GameWorld {
     */
    public static class GameWorldListener {
       public void onAdd(GameObject object) {
+
+      }
+
+      public void onStatusChange(GameObject object, boolean updateable) {
+
       }
 
       public void onRemove(GameObject object) {

@@ -56,4 +56,12 @@ public interface Behavior {
     * @param delta  current frame delta
     */
    void update(GameObject source, GameObject target, float delta);
+
+   /**
+    * Is called when the status of the object has changed.
+    *
+    * @param source the object source
+    * @param updateable if the object is currently being updateable or not
+    */
+   void onStatusChange(GameObject source, boolean updateable);
 }
