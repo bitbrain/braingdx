@@ -5,13 +5,14 @@ import de.bitbrain.braingdx.util.GdxUtils;
 import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
+import de.bitbrain.braingdx.world.SimpleWorldBounds;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BehaviorManagerTest {
@@ -30,6 +31,7 @@ public class BehaviorManagerTest {
    @Before
    public void beforeTest() {
       world = new GameWorld();
+      world.setBounds(new SimpleWorldBounds(5000, 5000));
       manager = new BehaviorManager(world);
       world.addListener(new BehaviorManagerAdapter(manager));
       GdxUtils.mockApplicationContext();
@@ -41,10 +43,10 @@ public class BehaviorManagerTest {
       GameObject mockObject = world.addObject();
       manager.apply(mockBehavior, mockObject);
       manager.update(1f);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(1f);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(1f);
       world.remove(mockObject);
       manager.update(2f);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(2f);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(2f);
    }
 
    @Test
@@ -52,10 +54,10 @@ public class BehaviorManagerTest {
       UpdateableBehavior mockBehavior = mock(UpdateableBehavior.class);
       manager.apply(mockBehavior);
       manager.update(1f);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(1f);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(1f);
       manager.remove(mockBehavior);
       manager.update(2f);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(2f);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(2f);
    }
 
    @Test
@@ -64,8 +66,8 @@ public class BehaviorManagerTest {
       GameObject mockObject = world.addObject();
       manager.apply(mockBehavior, mockObject);
       manager.updateLocally(mockObject, 0f);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onAttach(mockObject);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(mockObject, 0f);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onAttach(mockObject);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(mockObject, 0f);
    }
 
    @Test
@@ -76,8 +78,8 @@ public class BehaviorManagerTest {
       manager.apply(mockBehavior);
       manager.updateGlobally(mockObjectA, 0f);
       manager.updateGlobally(mockObjectB, 0f);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(mockObjectA, 0f);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(mockObjectB, 0f);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(mockObjectA, 0f);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(mockObjectB, 0f);
    }
 
    @Test
@@ -88,8 +90,8 @@ public class BehaviorManagerTest {
       manager.remove(mockObject, mockBehavior);
       manager.updateLocally(mockObject, 0f);
       manager.updateGlobally(mockObject, 0f);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onDetach(mockObject);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(mockObject, 0f);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onDetach(mockObject);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(mockObject, 0f);
    }
 
    @Test
@@ -100,9 +102,9 @@ public class BehaviorManagerTest {
       manager.remove(mockObject);
       manager.updateLocally(mockObject, 0f);
       manager.updateGlobally(mockObject, 0f);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onAttach(mockObject);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onDetach(mockObject);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(mockObject, 0f);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onAttach(mockObject);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onDetach(mockObject);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(mockObject, 0f);
    }
 
    @Test
@@ -113,7 +115,36 @@ public class BehaviorManagerTest {
       manager.clear();
       manager.updateLocally(mockObject, 0f);
       manager.updateGlobally(mockObject, 0f);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onDetach(mockObject);
-      Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(mockObject, 0f);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onDetach(mockObject);
+      inOrder(mockBehavior).verify(mockBehavior, Mockito.never()).update(mockObject, 0f);
+   }
+
+   @Test
+   public void testStatusChange_Updateable_ToDisabled_AndEnabled() {
+      GameCamera camera = mock(GameCamera.class);
+      when(camera.getScaledCameraWidth()).thenReturn(200f);
+      when(camera.getScaledCameraHeight()).thenReturn(200f);
+      world.setCamera(camera);
+      Behavior mockBehavior = mock(Behavior.class);
+      for (int i = 0; i < 60; ++i) {
+         GameObject mockObject = world.addObject();
+         mockObject.setPosition(i * 10, i * 10);
+         mockObject.setDimensions(5, 5);
+         manager.apply(mockBehavior, mockObject);
+      }
+      world.update(1f);
+      when(camera.getLeft()).thenReturn(1000f);
+      when(camera.getTop()).thenReturn(1000f);
+      world.update(1f);
+      world.update(1f);
+      for (GameObject o : world.getObjects()) {
+         inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onStatusChange(o, false);
+         o.setPosition(1000f, 1000f);
+      }
+      world.update(1f);
+      world.update(1f);
+      for (GameObject o : world.getObjects()) {
+         inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).onStatusChange(o, true);
+      }
    }
 }

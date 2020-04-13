@@ -176,19 +176,19 @@ public class GameWorldTest {
 
    @Test
    public void shouldNotReturnUpdateable() {
-      QuadTree quadTree = new QuadTree(1, 1, 0, new Rectangle(0, 0, 1000, 1000));
-      world = new GameWorld(10, quadTree);
-      GameObject object = world.addObject();
-      object.setDimensions(2, 2);
-      GameObject farAway = world.addObject("asdf2");
-      farAway.setPosition(500, 500);
-      farAway.setDimensions(2, 2);
+      world = new GameWorld(10);
+      for (int i = 0; i < 60; ++i) {
+         GameObject farAway = world.addObject("asdf2");
+         farAway.setPosition(500 + i * 2f, 500 + i * 2f);
+         farAway.setDimensions(2, 2);
+      }
       GameCamera gameCamera = mock(GameCamera.class);
-      setViewport(gameCamera, 10, 10, 100, 100);
+      setViewport(gameCamera, 10, 10, 50, 50);
       world.setCamera(gameCamera);
       world.setBounds(new SimpleWorldBounds(1000, 1000));
       world.update(1f);
-      assertThat(world.getObjects(null, true)).isEmpty();
+      assertThat(world.getObjects(null, true).size).isEqualTo(1);
+      assertThat(world.getObjects(null, false).size).isEqualTo(60);
    }
 
    private void setViewport(GameCamera cameraMock, float x, float y, float width, float height) {

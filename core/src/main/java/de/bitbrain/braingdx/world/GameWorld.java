@@ -97,18 +97,6 @@ public class GameWorld {
       this.tmp = new Rectangle();
    }
 
-   public GameWorld(int cacheSize, QuadTree quadTree) {
-      this.pool = new Pool<GameObject>(cacheSize) {
-         @Override
-         protected GameObject newObject() {
-            return new GameObject();
-         }
-      };
-      this.boundsRectangle = new Rectangle();
-      this.quadTree = quadTree;
-      this.tmp = new Rectangle();
-   }
-
    public void setCamera(GameCamera gameCamera) {
       this.gameCamera = gameCamera;
    }
@@ -416,16 +404,20 @@ public class GameWorld {
       quadTree.clear();
       for (GameObject o : allObjects) {
          final boolean wasUpdateable = updateableObjects.contains(o, false);
-         if (!wasUpdateable && o.getAttribute("updateable", true)) {
+         if (!wasUpdateable && o.getAttribute("updateable", false)) {
             for (GameWorldListener listener : listeners) {
                listener.onStatusChange(o, false);
             }
-         } else if (wasUpdateable && !o.getAttribute("updateable", true)) {
+         } else if (wasUpdateable && !o.getAttribute("updateable", false)) {
             for (GameWorldListener listener : listeners) {
                listener.onStatusChange(o, true);
             }
          }
-         o.setAttribute("updateable", wasUpdateable);
+         if (!o.hasAttribute("updateable")) {
+            o.setAttribute("updateable", true);
+         } else {
+            o.setAttribute("updateable", wasUpdateable);
+         }
          quadTree.insert(o);
       }
       updateableObjects.clear();
