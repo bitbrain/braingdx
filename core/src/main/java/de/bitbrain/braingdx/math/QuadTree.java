@@ -1,166 +1,76 @@
 package de.bitbrain.braingdx.math;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import de.bitbrain.braingdx.world.GameObject;
 
 public class QuadTree {
 
-   private final int maxEntities;
+   private static final int SOUTH_EAST = 0;
+   private static final int SOUTH_WEST = 1;
+   private static final int NORTH_WEST = 2;
+   private static final int NORTH_EAST = 3;
 
-   private final int maxLevels;
-
-   // Spatial bounds of this node
-   private Rectangle boundary;
-
-   // All entities in this quad
-   private Array<GameObject> entities;
-
-   private GameObject tmp = new GameObject();
-
-   // The level of this node
    private int level;
+   private Array<GameObject> objects;
+   private Rectangle bounds;
+   private QuadTree[] nodes;
+   private final int maxObjects;
+   private final int maxLevel;
 
-   // Child QuadTrees
-   private Array<QuadTree> childNodes;
+   private final GameObject tmp = new GameObject();
 
-   // Scratch variables
-   private static Vector2 BOUNDS_CENTER = null;
-
-   public QuadTree(int maxEntities, int maxLevels, int level, Rectangle boundary) {
-      this.maxEntities = maxEntities;
-      this.maxLevels = maxLevels;
+   public QuadTree(int maxObjects, int maxLevel, int level, Rectangle bounds) {
+      this.maxObjects = maxObjects;
+      this.maxLevel = maxLevel;
       this.level = level;
-      this.boundary = boundary;
+      this.bounds = bounds;
+      objects = new Array<GameObject>();
+      nodes = new QuadTree[4];
+      tmp.setType("ROOT");
+   }
 
-      entities = new Array<GameObject>(true, maxEntities);
-
-      // NW, NE, SE, SW (Clockwise)
-      childNodes = new Array<QuadTree>(true, 4);
-
-      if (BOUNDS_CENTER == null) {
-         BOUNDS_CENTER = new Vector2();
+   public void getZones(Array<Rectangle> allZones) {
+      allZones.add(bounds);
+      if (nodes[0] != null) {
+         nodes[0].getZones(allZones);
+         nodes[1].getZones(allZones);
+         nodes[2].getZones(allZones);
+         nodes[3].getZones(allZones);
       }
    }
 
-   /**
-    * Clear out all entities and null out all child nodes
-    */
    public void clear() {
-      // Clear the entities
-      entities.clear();
-
-      // Clear out each child node
-      for (QuadTree currNode : childNodes) {
-         if (currNode != null) {
-            currNode.clear();
-            currNode = null;
+      objects.clear();
+      for (int i = 0; i < nodes.length; i++) {
+         if (nodes[i] != null) {
+            nodes[i].clear();
+            nodes[i] = null;
          }
       }
-
-      // Lastly, clear out the nodes list
-      childNodes.clear();
    }
 
-   /**
-    * Subdivide the node into 4 child nodes
-    */
-   private void subdivide() {
-      float width_div2 = boundary.width / 2;
-      float height_div2 = boundary.height / 2;
-      float x = boundary.x;
-      float y = boundary.y;
-
-      // Create four child node which fully divide the boundary of this node
-      Rectangle nwRect = new Rectangle(x, y + height_div2, width_div2, height_div2);
-      childNodes.add(new QuadTree(maxEntities, maxLevels, level + 1, nwRect));
-
-      Rectangle neRect = new Rectangle(x + width_div2, y + height_div2, width_div2, height_div2);
-      childNodes.add(new QuadTree(maxEntities, maxLevels, level + 1, neRect));
-
-      Rectangle seRect = new Rectangle(x + width_div2, y, width_div2, height_div2);
-      childNodes.add(new QuadTree(maxEntities, maxLevels, level + 1, seRect));
-
-      Rectangle swRect = new Rectangle(x, y, width_div2, height_div2);
-      childNodes.add(new QuadTree(maxEntities, maxLevels, level + 1, swRect));
-   }
-
-   /**
-    * Determine which node the entity belongs to. -1 means object cannot completely fit within a child node
-    * and is part of the parent node
-    */
-   private int getIndex(GameObject entity) {
-      int index = -1;
-      BOUNDS_CENTER = boundary.getCenter(BOUNDS_CENTER);
-
-      // Object can completely fit within the top quadrants
-      boolean topQuadrant = entity.getTop() > BOUNDS_CENTER.y;
-
-      // Object can completely fit within the bottom quadrants
-      boolean bottomQuadrant = entity.getTop() + entity.getHeight() < BOUNDS_CENTER.y;
-
-      // Object can completely fit within the left quadrants
-      if (entity.getLeft() < BOUNDS_CENTER.x && entity.getLeft() + entity.getWidth() < BOUNDS_CENTER.x) {
-         if (topQuadrant) {
-            index = 0;
-         } else if (bottomQuadrant) {
-            index = 3;
-         }
-      }
-      // Object can completely fit within the right quadrants
-      else if (entity.getLeft() > BOUNDS_CENTER.x) {
-         if (topQuadrant) {
-            index = 1;
-         } else if (bottomQuadrant) {
-            index = 2;
-         }
-      }
-
-      // If we get here, the object can not fit completely in a child node, and will be part of the parent node
-      return index;
-   }
-
-   /**
-    * Insert an entity into the appropriate node, subdividing if necessary.
-    *
-    * @param entity
-    */
-
-   public void insert(GameObject entity) {
-      // If we have any child nodes, see if the entity could be contained completely inside of one
-      // of them
-      if (childNodes.size > 0) {
-         int index = getIndex(entity);
-
-         // If full containment is possible, recursively insert in that node.
+   public void insert(GameObject rect) {
+      if (nodes[0] != null) {
+         int index = getIndex(rect);
          if (index != -1) {
-            childNodes.get(index).insert(entity);
-
+            nodes[index].insert(rect);
             return;
          }
       }
 
-      // Add the entity to the list of entities for the node we are in
-      entities.add(entity);
+      objects.add(rect);
 
-      // If we've exceeded the max number of entities for this node (And have more that we could subdivide),
-      // attempt to subdivide and insert further
-      if (entities.size > maxEntities && level < maxLevels) {
-         // Only subdivide if we haven't
-         if (childNodes.size == 0) {
-            subdivide();
+      if (objects.size > maxObjects && level < maxLevel) {
+         if (nodes[0] == null) {
+            split();
          }
 
          int i = 0;
-         while (i < entities.size) {
-            // Move and insert what we can into the child nodes. If it can't be fully contained in the
-            // child nodes, leave it at this level.
-            int index = getIndex(entities.get(i));
+         while (i < objects.size) {
+            int index = getIndex(objects.get(i));
             if (index != -1) {
-               GameObject poppedEntity = entities.removeIndex(i);
-               QuadTree nodeToAddTo = childNodes.get(index);
-               nodeToAddTo.insert(poppedEntity);
+               nodes[index].insert(objects.removeIndex(i));
             } else {
                i++;
             }
@@ -168,27 +78,90 @@ public class QuadTree {
       }
    }
 
-   /**
-    * Return all entities that could collide with the given object
-    */
-   public Array<GameObject> retrieve(Array<GameObject> entitiesToReturn, Rectangle area) {
-      // If we have any child nodes, see if the entity could be contained completely inside of one
-      // of them
-      tmp.setPosition(area.x, area.y);
-      tmp.setDimensions(area.width, area.height);
-      if (childNodes.size > 0) {
-         int index = getIndex(tmp);
+   public Array<GameObject> retrieve(Array<GameObject> list, Rectangle area) {
+      tmp.setPosition(area.getX(), area.getY());
+      tmp.setDimensions(area.getWidth(), area.getHeight());
 
-         // If full containment is possible, recurse retrieval in that node.
-         if (index != -1) {
-            QuadTree nodeToRetrieveFrom = childNodes.get(index);
-            nodeToRetrieveFrom.retrieve(entitiesToReturn, area);
+      int index = getIndex(tmp);
+
+      if (index != -1 & nodes[0] != null) {
+         System.out.println("Retrieving from node: " + index);
+         nodes[index].retrieve(list, area);
+      } else {
+         for (QuadTree node : nodes) {
+            if (node != null && fitsInside(area, node)) {
+               System.out.println("fits inside! level=" + level + " bounds" + node.bounds);
+               node.retrieve(list, area);
+            } else if (node != null) {
+               System.out.println(node.bounds + " does not fit inside " + area);
+            }
          }
       }
 
-      // Add all the entities of the node we are in.
-      entitiesToReturn.addAll(entities);
+      list.addAll(objects);
 
-      return entitiesToReturn;
+      return list;
+   }
+
+   public Array<GameObject> retrieveFast(Array<GameObject> list, Rectangle area) {
+      tmp.setPosition(area.getX(), area.getY());
+      tmp.setDimensions(area.getWidth(), area.getHeight());
+
+      int index = getIndex(tmp);
+
+      if (index != -1 & nodes[0] != null) {
+         nodes[index].retrieveFast(list, area);
+      }
+
+      //  This if(..) is configurable: only process elements in MAX_LEVEL and MAX_LEVEL-1
+      if (level == maxLevel || level == maxLevel - 1) {
+         list.addAll(objects);
+      }
+
+      return list;
+   }
+
+   private void split() {
+      float subWidth = (bounds.getWidth() * 0.5f);
+      float subHeight = (bounds.getHeight() * 0.5f);
+      float x = bounds.getX();
+      float y = bounds.getY();
+
+      nodes[SOUTH_EAST] = new QuadTree(maxObjects, maxLevel, level + 1, new Rectangle(x + subWidth, y, subWidth, subHeight));
+      nodes[SOUTH_WEST] = new QuadTree(maxObjects, maxLevel, level + 1, new Rectangle(x, y, subWidth, subHeight));
+      nodes[NORTH_WEST] = new QuadTree(maxObjects, maxLevel, level + 1, new Rectangle(x, y + subHeight, subWidth, subHeight));
+      nodes[NORTH_EAST] = new QuadTree(maxObjects, maxLevel, level + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
+
+   }
+
+   private boolean fitsInside(Rectangle area, QuadTree node) {
+      return area.contains(node.bounds) || area.overlaps(node.bounds);
+   }
+
+   private int getIndex(GameObject pRect) {
+      int index = -1;
+      float verticalMidpoint = bounds.getX() + (bounds.getWidth() * 0.5f);
+      float horizontalMidpoint = bounds.getY() + (bounds.getHeight() * 0.5f);
+
+      boolean topQuadrant = pRect.getTop() > horizontalMidpoint;
+      boolean bottomQuadrant = pRect.getTop() + pRect.getHeight() < horizontalMidpoint;
+
+      if (pRect.getLeft() < verticalMidpoint && pRect.getLeft() + pRect.getWidth() < verticalMidpoint) {
+         if (topQuadrant) {
+            index = NORTH_WEST;
+         } else if (bottomQuadrant) {
+            index = SOUTH_WEST;
+         }
+      } else if (pRect.getLeft() > verticalMidpoint) {
+         if (topQuadrant) {
+            index = NORTH_EAST;
+         } else if (bottomQuadrant) {
+            index = SOUTH_EAST;
+         }
+      }
+      if ("ROOT".equals(pRect.getType())) {
+         System.out.println("Found index: " + index + " with objects " + objects.size + " and area " + bounds);
+      }
+      return index;
    }
 }

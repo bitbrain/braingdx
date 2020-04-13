@@ -92,7 +92,7 @@ public class GameWorld {
          }
       };
       this.boundsRectangle = new Rectangle();
-      this.quadTree = new QuadTree(5, 6, 0, boundsRectangle);
+      this.quadTree = new QuadTree(50, 12, 0, boundsRectangle);
       this.tmp = new Rectangle();
    }
 
@@ -412,6 +412,23 @@ public class GameWorld {
       }
       updateableObjects.clear();
       tmp.set(gameCamera.getLeft(), gameCamera.getTop(), gameCamera.getScaledCameraWidth(), gameCamera.getScaledCameraHeight());
+      if (tmp.x < 0) {
+         tmp.width =  tmp.width + tmp.x;
+         tmp.x = 0;
+      }
+      if (tmp.y < 0) {
+         tmp.height = tmp.height + tmp.y;
+         tmp.y = 0;
+      }
+      if (tmp.x + tmp.width > bounds.getWorldWidth()) {
+         tmp.width = tmp.width - (tmp.x + tmp.width - bounds.getWorldWidth());
+         tmp.x = bounds.getWorldWidth() - tmp.width;
+      }
+      if (tmp.y + tmp.height > bounds.getWorldHeight()) {
+         tmp.height = tmp.height - (tmp.y + tmp.height - bounds.getWorldHeight());
+         tmp.y = bounds.getWorldHeight() - tmp.height;
+      }
+      System.out.println("===== retrieval has started for area " + tmp);
       quadTree.retrieve(updateableObjects, tmp);
    }
 
