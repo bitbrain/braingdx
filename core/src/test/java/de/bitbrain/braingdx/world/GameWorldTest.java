@@ -1,5 +1,9 @@
 package de.bitbrain.braingdx.world;
 
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
+import de.bitbrain.braingdx.graphics.GameCamera;
+import de.bitbrain.braingdx.math.QuadTree;
 import de.bitbrain.braingdx.util.GdxUtils;
 import de.bitbrain.braingdx.util.Mutator;
 import org.junit.Before;
@@ -8,9 +12,10 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Comparator;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameWorldTest {
@@ -21,6 +26,9 @@ public class GameWorldTest {
    public void beforeTest() {
       GdxUtils.mockApplicationContext();
       world = new GameWorld();
+      GameCamera camera = mock(GameCamera.class);
+      world.setCamera(camera);
+      setViewport(camera, 0, 0, 100, 100);
    }
 
    @Test
@@ -94,7 +102,7 @@ public class GameWorldTest {
             target.setLeft(20);
          }
       });
-      List<GameObject> sorted = world.getObjects();
+      Array<GameObject> sorted = world.getObjects();
       assertThat(sorted).containsExactly(object1, object2, object3);
    }
 
@@ -118,7 +126,7 @@ public class GameWorldTest {
             target.setLeft(20);
          }
       });
-      List<GameObject> sorted = world.getObjects(new Comparator<GameObject>() {
+      Array<GameObject> sorted = world.getObjects(new Comparator<GameObject>() {
 
          @Override
          public int compare(GameObject o1, GameObject o2) {
@@ -152,5 +160,41 @@ public class GameWorldTest {
       world.clearGroup("asdf");
       assertThat(world.getGroup("asdf")).isEmpty();
       assertThat(world.getObjects()).containsExactlyInAnyOrder(object3, object4);
+   }
+
+   @Test
+   public void shouldReturnUpdateable() {
+      GameObject object = world.addObject("asdf2");
+      object.setDimensions(2, 2);
+      GameCamera gameCamera = mock(GameCamera.class);
+      setViewport(gameCamera, 0, 0, 10, 10);
+      world.setCamera(gameCamera);
+      world.setBounds(new SimpleWorldBounds(100, 100));
+      world.update(1f);
+      assertThat(world.getObjects(null, true)).containsExactly(object);
+   }
+
+   @Test
+   public void shouldNotReturnUpdateable() {
+      QuadTree quadTree = new QuadTree(1, 1, 0, new Rectangle(0, 0, 1000, 1000));
+      world = new GameWorld(10, quadTree);
+      GameObject object = world.addObject();
+      object.setDimensions(2, 2);
+      GameObject farAway = world.addObject("asdf2");
+      farAway.setPosition(500, 500);
+      farAway.setDimensions(2, 2);
+      GameCamera gameCamera = mock(GameCamera.class);
+      setViewport(gameCamera, 10, 10, 100, 100);
+      world.setCamera(gameCamera);
+      world.setBounds(new SimpleWorldBounds(1000, 1000));
+      world.update(1f);
+      assertThat(world.getObjects(null, true)).isEmpty();
+   }
+
+   private void setViewport(GameCamera cameraMock, float x, float y, float width, float height) {
+      when(cameraMock.getLeft()).thenReturn(x);
+      when(cameraMock.getTop()).thenReturn(y);
+      when(cameraMock.getScaledCameraHeight()).thenReturn(x);
+      when(cameraMock.getScaledCameraHeight()).thenReturn(y);
    }
 }

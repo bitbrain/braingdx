@@ -13,6 +13,8 @@ import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.audio.AudioManagerImpl;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
+import de.bitbrain.braingdx.debug.DebugMetric;
+import de.bitbrain.braingdx.debug.DebugPanel;
 import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.event.GameEventManagerImpl;
 import de.bitbrain.braingdx.graphics.BatchResolver;
@@ -42,6 +44,7 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
    private final GameWorld world;
    private final BehaviorManager behaviorManager;
    private final Stage stage;
+   private final Stage debugStage;
    private final TweenManager tweenManager = SharedTweenManager.getInstance();
    private final InputManagerImpl inputManager;
    private final GameObjectRenderManager renderManager;
@@ -57,6 +60,8 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
    private final List<Updateable> updateableList = new ArrayList<Updateable>();
    private final RenderPipeline renderPipeline;
    private boolean paused;
+   private boolean debug;
+   private final DebugPanel debugPanel;
 
    public GameContextImpl(
          ShaderConfig shaderConfig,
@@ -93,10 +98,14 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       this.settings = new GameSettings(eventManager);
       this.shaderManager = new ShaderManager(shaderConfig, eventManager, settings.getGraphics());
       this.world = new GameWorld();
+      this.gameCamera = gameCameraFactory.create(this);
+      this.world.setCamera(gameCamera);
       this.behaviorManager = new BehaviorManager(world);
       this.inputManager = new InputManagerImpl();
       this.stage = stage;
-      this.gameCamera = gameCameraFactory.create(this);
+      this.debugStage = new Stage(stage.getViewport(), stage.getBatch());
+      this.debugPanel = new DebugPanel();
+      debugStage.addActor(debugPanel);
       this.renderPipeline = renderPipeline;
       this.audioManager = new AudioManagerImpl(//
             gameCamera,//
@@ -123,10 +132,14 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       this.settings = new GameSettings(eventManager);
       this.shaderManager = new ShaderManager(shaderConfig, eventManager, settings.getGraphics());
       this.world = new GameWorld();
+      this.gameCamera = gameCameraFactory.create(this);
+      this.world.setCamera(gameCamera);
       this.behaviorManager = new BehaviorManager(world);
       this.inputManager = new InputManagerImpl();
       this.stage = stage;
-      this.gameCamera = gameCameraFactory.create(this);
+      this.debugStage = new Stage(stage.getViewport(), stage.getBatch());
+      this.debugPanel = new DebugPanel();
+      debugStage.addActor(debugPanel);
       BatchResolver<?>[] batchResolvers = batchResolverFactory.create(this);
       this.renderPipeline = new CombinedRenderPipeline(shaderConfig, batchResolvers);
       this.audioManager = new AudioManagerImpl(//
@@ -159,6 +172,16 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
    @Override
    public Stage getStage() {
       return stage;
+   }
+
+   @Override
+   public Stage getDebugStage() {
+      return debugStage;
+   }
+
+   @Override
+   public DebugPanel getDebugPanel() {
+      return debugPanel;
    }
 
    @Override
@@ -210,6 +233,7 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
    public void dispose() {
       world.clear();
       stage.dispose();
+      debugStage.dispose();
       inputManager.dispose();
       tweenManager.killAll();
       eventManager.clear();
@@ -228,6 +252,7 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       gameCamera.update(delta);
       world.update(paused ? 0f : delta);
       stage.act(delta);
+      debugStage.act(delta);
       renderPipeline.render(delta);
    }
 
@@ -257,9 +282,20 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
    }
 
    @Override
+   public void setDebug(boolean enabled) {
+      this.debug = enabled;
+   }
+
+   @Override
+   public boolean isDebugEnabled() {
+      return debug;
+   }
+
+   @Override
    public void resize(int width, int height) {
       gameCamera.resize(width, height);
       stage.getViewport().update(width, height, true);
+      debugStage.getViewport().update(width, height, true);
       renderPipeline.resize(width, height);
       eventManager.publish(new GraphicsSettingsChangeEvent());
    }
@@ -278,5 +314,65 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       world.addListener(new BehaviorManagerAdapter(behaviorManager));
       inputManager.register(stage);
       Gdx.input.setInputProcessor(inputManager.getMultiplexer());
+
+      // Setup Debug UI
+      debugPanel.addMetric("total game objects", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(getGameWorld().size());
+         }
+      });
+      debugPanel.addMetric("updateable game objects", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(getGameWorld().getObjects(null, true).size);
+         }
+      });
+      debugPanel.addMetric("global behaviors", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(getBehaviorManager().getGlobalCount());
+         }
+      });
+      debugPanel.addMetric("local behaviors", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(getBehaviorManager().getLocalCount());
+         }
+      });
+      debugPanel.addMetric("active tweens", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(getTweenManager().size());
+         }
+      });
+      debugPanel.addMetric("camera position", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return "x=" + gameCamera.getLeft() + ", y=" + gameCamera.getTop();
+         }
+      });
+      debugPanel.addMetric("camera viewport (scaled)", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return "width=" + gameCamera.getScaledCameraWidth() + ", height=" + gameCamera.getScaledCameraHeight();
+         }
+      });
+      debugPanel.addMetric("camera viewport (unscaled)", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return "width=" + gameCamera.getUnscaledCameraWidth() + ", height=" + gameCamera.getUnscaledCameraHeight();
+         }
+      });
+      debugPanel.addMetric("camera zoom", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            if (gameCamera.getInternalCamera() instanceof OrthographicCamera) {
+               return String.valueOf(((OrthographicCamera)gameCamera.getInternalCamera()).zoom);
+            } else {
+               return "N/A";
+            }
+         }
+      });
    }
 }

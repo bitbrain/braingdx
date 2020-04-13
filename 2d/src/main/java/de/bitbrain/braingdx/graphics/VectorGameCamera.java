@@ -85,7 +85,6 @@ public class VectorGameCamera implements GameCamera {
       this.camera = camera;
       velocityX = 0;
       velocityY = 0;
-
       this.world = world;
    }
 
@@ -272,6 +271,26 @@ public class VectorGameCamera implements GameCamera {
    public float getScaledCameraHeight() {
       float cameraZoom = camera.zoom;
       return camera.viewportHeight * cameraZoom;
+   }
+
+   @Override
+   public float getUnscaledCameraWidth() {
+      return camera.viewportWidth;
+   }
+
+   @Override
+   public float getUnscaledCameraHeight() {
+      return camera.viewportHeight;
+   }
+
+   @Override
+   public float getLeft() {
+      return camera.position.x - getScaledCameraWidth() / 2f;
+   }
+
+   @Override
+   public float getTop() {
+      return camera.position.y - getScaledCameraHeight() / 2f;
    }
 
    @Override

@@ -1,5 +1,8 @@
 package de.bitbrain.braingdx.util;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Array;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,25 +13,27 @@ import java.util.Map;
  */
 public class Group<K, T> {
 
-   private Map<K, List<T>> map = new HashMap<K, List<T>>();
+   private Map<K, Array<T>> map = new HashMap<K, Array<T>>();
    private Map<T, K> sourceToKeyMap = new HashMap<T, K>();
-   private List<T> all = new ArrayList<T>();
-   private List<K> groupKeys = new ArrayList<K>();
+   private Array<T> all = new Array<T>();
+   private Array<K> groupKeys = new Array<K>();
 
    public void addToGroup(K groupKey, T object) {
-      List<T> list = getGroup(groupKey);
-      if (!list.contains(object)) {
+      Array<T> list = getGroup(groupKey);
+      if (!list.contains(object, false)) {
          list.add(object);
          all.add(object);
          sourceToKeyMap.put(object, groupKey);
+      } else {
+         Gdx.app.error("GROUP", "Unable to add " + object + " to group " + groupKey + ": already exists!");
       }
    }
 
-   public List<T> getAll() {
+   public Array<T> getAll() {
       return all;
    }
 
-   public List<K> getGroupKeys() {
+   public Array<K> getGroupKeys() {
       return groupKeys;
    }
 
@@ -40,16 +45,16 @@ public class Group<K, T> {
    }
 
    public void removeFromGroup(K groupKey, T object) {
-      List<T> list = getGroup(groupKey);
-      list.remove(object);
-      all.remove(object);
+      Array<T> list = getGroup(groupKey);
+      list.removeValue(object, false);
+      all.removeValue(object, false);
       sourceToKeyMap.remove(object);
    }
 
-   public List<T> getGroup(K groupKey) {
-      List<T> group = map.get(groupKey);
+   public Array<T> getGroup(K groupKey) {
+      Array<T> group = map.get(groupKey);
       if (group == null) {
-         group = new ArrayList<T>();
+         group = new Array<T>(200);
          map.put(groupKey, group);
          groupKeys.add(groupKey);
       }
@@ -57,7 +62,7 @@ public class Group<K, T> {
    }
 
    public void clearGroup(K groupKey) {
-      List<T> list = map.get(groupKey);
+      Array<T> list = map.get(groupKey);
       if (list != null) {
          list.clear();
       }

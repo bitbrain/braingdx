@@ -2,6 +2,7 @@ package de.bitbrain.braingdx.tmx;
 
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.utils.Array;
 import de.bitbrain.braingdx.ai.pathfinding.AStarPathFinder;
 import de.bitbrain.braingdx.ai.pathfinding.PathFinder;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
@@ -122,8 +123,8 @@ public class TiledMapContextImpl implements TiledMapContext {
 
    @Override
    public GameObject getGameObjectAt(int tileX, int tileY, int layer) {
-      List<GameObject> objects = gameWorld.getObjects();
-      for (int i = 0; i < objects.size(); ++i) {
+      Array<GameObject> objects = gameWorld.getObjects();
+      for (int i = 0; i < objects.size; ++i) {
          GameObject worldObject = objects.get(i);
          int objectTileX = positionTranslator.toIndexX(worldObject.getLeft());
          int objectTileY = positionTranslator.toIndexY(worldObject.getTop());

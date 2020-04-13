@@ -50,4 +50,6 @@ public interface LightingManager {
    void attach(Light light, GameObject object, boolean centered);
 
    void attach(Light light, GameObject object, float offsetX, float offsetY);
+
+   int size();
 }

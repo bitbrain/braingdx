@@ -22,6 +22,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.behavior.BehaviorManagerAdapter;
 import de.bitbrain.braingdx.event.*;
+import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager.GameObjectRenderer;
 import de.bitbrain.braingdx.physics.PhysicsManagerImpl;
@@ -65,7 +66,13 @@ public class TiledMapManagerTest {
 
    @Before
    public void beforeTest() {
+      GameCamera gameCamera = mock(GameCamera.class);
+      when(gameCamera.getLeft()).thenReturn(0f);
+      when(gameCamera.getTop()).thenReturn(0f);
+      when(gameCamera.getScaledCameraWidth()).thenReturn(10f);
+      when(gameCamera.getScaledCameraHeight()).thenReturn(10f);
       world = new GameWorld();
+      world.setCamera(gameCamera);
       gameEventManager = new GameEventManagerImpl();
       GdxUtils.mockApplicationContext();
       BehaviorManager behaviorManager = new BehaviorManager(world);
@@ -127,10 +134,16 @@ public class TiledMapManagerTest {
 
    @Test
    public void load_withNoMapObjects() throws TiledMapException {
-      TiledMap map = new MockTiledMapBuilder(1, 1, 1, TiledMapType.ORTHOGONAL).addLayer().build();
+      TiledMap map = new MockTiledMapBuilder(1, 1, 1, TiledMapType.ORTHOGONAL)
+            .addLayer()
+            .addLayer()
+            .addLayer()
+            .build();
       tiledMapManager.load(map, camera);
-      assertThat(world.size()).isEqualTo(2); // 1 + 1 debug layer
+      assertThat(world.size()).isEqualTo(4); // 1 + 1 debug layer
       inOrder(renderManager).verify(renderManager, calls(1)).register(any(), any(GameObjectRenderer.class));
+      world.update(1f);
+      assertThat(world.getObjects(null, true).size).isEqualTo(4);
    }
 
    @Test
@@ -481,6 +494,7 @@ public class TiledMapManagerTest {
       // Verify that everything is back to normal
       assertThat(context.isCollision(0, 0, 0)).isTrue();
       assertThat(context.isCollision(0, 1, 0)).isTrue();
+      assertThat(world.getObjects(null, true).size).isEqualTo(3);
    }
 
    @Test

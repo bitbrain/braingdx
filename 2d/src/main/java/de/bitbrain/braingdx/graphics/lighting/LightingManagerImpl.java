@@ -37,6 +37,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
    private final BehaviorManager behaviorManager;
    private Color ambientLightColor = Color.WHITE.cpy();
    private int rays;
+   private int size;
 
    private boolean disposed = false;
 
@@ -127,6 +128,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
    @Override
    public PointLight createPointLight(float x, float y, float distance, Color color) {
+      size++;
       return lightFactory.newPointLight(handler, rays, color, distance, x, y);
    }
 
@@ -137,6 +139,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
    @Override
    public DirectionalLight createDirectionalLight(Color color, float degree) {
+      size++;
       return lightFactory.newDirectionalLight(handler, rays, color, degree);
    }
 
@@ -147,6 +150,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
 
    @Override
    public ChainLight createChainLight(float distance, int direction, Color color, float... chain) {
+      size++;
       return lightFactory.newChainLight(handler, direction, color, distance, direction, chain);
    }
 
@@ -158,6 +162,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
    @Override
    public ConeLight createConeLight(float x, float y, float distance, float directionDegree, float coneDegree,
                                  Color color) {
+      size++;
       return lightFactory.newConeLight(handler, rays, color, distance, x, y, directionDegree, coneDegree);
    }
 
@@ -173,6 +178,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
          public void run() {
             if (light != null) {
                light.remove();
+               size--;
             }
          }
       });
@@ -181,6 +187,7 @@ public class LightingManagerImpl implements LightingManager, Disposable {
    @Override
    public void clear() {
       handler.removeAll();
+      size = 0;
    }
 
    @Override
@@ -196,6 +203,11 @@ public class LightingManagerImpl implements LightingManager, Disposable {
    @Override
    public void attach(Light light, GameObject object, float offsetX, float offsetY) {
       behaviorManager.apply(new LightBehavior(light, offsetX, offsetY), object);
+   }
+
+   @Override
+   public int size() {
+      return size;
    }
 
    public void render() {

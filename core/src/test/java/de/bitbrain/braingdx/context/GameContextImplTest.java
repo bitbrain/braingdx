@@ -2,8 +2,10 @@ package de.bitbrain.braingdx.context;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
@@ -51,9 +53,12 @@ public class GameContextImplTest {
       };
       BrainGdxGame game = mock(BrainGdxGame.class);
       AbstractScreen<?, ?> screen = mock(AbstractScreen.class);
+      Stage stage = mock(Stage.class);
+      when(stage.getViewport()).thenReturn(mock(Viewport.class));
+      when(stage.getBatch()).thenReturn(mock(Batch.class));
       impl = new GameContextImpl(
             shaderConfig,
-            mock(Stage.class),
+            stage,
             mock(RenderPipeline.class),
             gameCameraFactory,
             game,

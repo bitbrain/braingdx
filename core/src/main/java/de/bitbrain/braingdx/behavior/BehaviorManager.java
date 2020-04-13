@@ -176,4 +176,12 @@ public class BehaviorManager {
       localBehaviors.clear();
       globalBehaviors.clear();
    }
+
+   public int getGlobalCount() {
+      return globalBehaviors.size();
+   }
+
+   public int getLocalCount() {
+      return localBehaviors.size();
+   }
 }

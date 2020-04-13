@@ -1,5 +1,6 @@
 package de.bitbrain.braingdx.behavior;
 
+import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.util.GdxUtils;
 import de.bitbrain.braingdx.util.Updateable;
 import de.bitbrain.braingdx.world.GameObject;
@@ -9,6 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BehaviorManagerTest {
@@ -34,7 +37,7 @@ public class BehaviorManagerTest {
 
    @Test
    public void testUpdateWithLocalBehavior() {
-      UpdateableBehavior mockBehavior = Mockito.mock(UpdateableBehavior.class);
+      UpdateableBehavior mockBehavior = mock(UpdateableBehavior.class);
       GameObject mockObject = world.addObject();
       manager.apply(mockBehavior, mockObject);
       manager.update(1f);
@@ -46,7 +49,7 @@ public class BehaviorManagerTest {
 
    @Test
    public void testUpdateWithGlobalBehavior() {
-      UpdateableBehavior mockBehavior = Mockito.mock(UpdateableBehavior.class);
+      UpdateableBehavior mockBehavior = mock(UpdateableBehavior.class);
       manager.apply(mockBehavior);
       manager.update(1f);
       Mockito.inOrder(mockBehavior).verify(mockBehavior, Mockito.calls(1)).update(1f);
@@ -57,7 +60,7 @@ public class BehaviorManagerTest {
 
    @Test
    public void testApplyLocalBehavior() {
-      Behavior mockBehavior = Mockito.mock(Behavior.class);
+      Behavior mockBehavior = mock(Behavior.class);
       GameObject mockObject = world.addObject();
       manager.apply(mockBehavior, mockObject);
       manager.updateLocally(mockObject, 0f);
@@ -67,7 +70,7 @@ public class BehaviorManagerTest {
 
    @Test
    public void testApplyGlobalBehavior() {
-      Behavior mockBehavior = Mockito.mock(Behavior.class);
+      Behavior mockBehavior = mock(Behavior.class);
       GameObject mockObjectA = world.addObject();
       GameObject mockObjectB = world.addObject();
       manager.apply(mockBehavior);
@@ -79,7 +82,7 @@ public class BehaviorManagerTest {
 
    @Test
    public void testRemoveBehavior() {
-      Behavior mockBehavior = Mockito.mock(Behavior.class);
+      Behavior mockBehavior = mock(Behavior.class);
       GameObject mockObject = world.addObject();
       manager.apply(mockBehavior, mockObject);
       manager.remove(mockObject, mockBehavior);
@@ -91,7 +94,7 @@ public class BehaviorManagerTest {
 
    @Test
    public void testRemoveBehavior_GameObjectOnly() {
-      Behavior mockBehavior = Mockito.mock(Behavior.class);
+      Behavior mockBehavior = mock(Behavior.class);
       GameObject mockObject = world.addObject();
       manager.apply(mockBehavior, mockObject);
       manager.remove(mockObject);
@@ -104,7 +107,7 @@ public class BehaviorManagerTest {
 
    @Test
    public void testClear() {
-      Behavior mockBehavior = Mockito.mock(Behavior.class);
+      Behavior mockBehavior = mock(Behavior.class);
       GameObject mockObject = world.addObject();
       manager.apply(mockBehavior, mockObject);
       manager.clear();
