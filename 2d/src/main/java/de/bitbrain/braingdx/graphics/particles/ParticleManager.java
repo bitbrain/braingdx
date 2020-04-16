@@ -29,4 +29,8 @@ public interface ParticleManager {
    ParticleEffect attachEffect(String assetEffectId, GameObject object, final float offsetX, final float offsetY);
 
    ParticleEffect spawnEffect(String assetEffectId, float worldX, float worldY);
+
+   int getTotalEffectCount();
+
+
 }

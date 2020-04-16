@@ -226,5 +226,11 @@ public class GameContext2DImpl extends GameContextImpl implements GameContext2D,
             return String.valueOf(physicsManager.getPhysicsWorld().getBodyCount());
          }
       });
+      getDebugPanel().addMetric("particle effect count", new DebugMetric() {
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(particleManager.getTotalEffectCount());
+         }
+      });
    }
 }

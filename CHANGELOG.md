@@ -1,3 +1,7 @@
+# Version 0.6.26
+
+* add fps and particle count metrics
+
 # Version 0.6.25
 
 * [[#189](https://github.com/bitbrain/braingdx/issues/189)] remove attached particle effects while their owner is not updateable

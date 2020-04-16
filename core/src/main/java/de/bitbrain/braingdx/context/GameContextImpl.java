@@ -316,6 +316,13 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       Gdx.input.setInputProcessor(inputManager.getMultiplexer());
 
       // Setup Debug UI
+      debugPanel.addMetric("fps", new DebugMetric() {
+
+         @Override
+         public String getCurrentValue() {
+            return String.valueOf(Gdx.graphics.getFramesPerSecond());
+         }
+      });
       debugPanel.addMetric("total game objects", new DebugMetric() {
          @Override
          public String getCurrentValue() {

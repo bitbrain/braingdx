@@ -67,9 +67,9 @@ public class ParticleManagerImpl implements ParticleManager, Disposable {
 
          @Override
          public void onStatusChange(GameObject source, boolean updateable) {
-            if (updateable) {
+            if (updateable && !effects.contains(effect)) {
                effect = ensureEffect(assetEffectId);
-            } else {
+            } else if (effects.contains(effect)) {
                freeEffect(effect);
             }
          }
@@ -81,6 +81,11 @@ public class ParticleManagerImpl implements ParticleManager, Disposable {
       InternalPooledEffect internal = ensureEffect(assetEffectId);
       internal.effect.setPosition(worldX, worldY);
       return internal.effect;
+   }
+
+   @Override
+   public int getTotalEffectCount() {
+      return effects.size();
    }
 
    @Override
