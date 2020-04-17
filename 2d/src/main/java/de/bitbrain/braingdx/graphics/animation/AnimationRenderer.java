@@ -115,12 +115,20 @@ public class AnimationRenderer extends GameObject2DRenderer {
       Animation<TextureRegion> animation = animationCache.getAnimation(currentAnimationType);
       AnimationFrames frames = config.getFrames(currentAnimationType);
       if (state.stateTime == 0f) {
-         state.stateTime = frames.getOffset();
+         if (frames.isRandomOffset()) {
+            state.stateTime = (float) (Math.random() * (frames.getDuration() * frames.getFrames()));
+         } else {
+            state.stateTime = frames.getOffset();
+         }
       }
       state.stateTime += delta;
       boolean animationEnabled = animationEnabler.isEnabledFor(object);
       if (!animationEnabled) {
-         state.stateTime = frames.getOffset();
+         if (frames.isRandomOffset()) {
+            state.stateTime = (float) (Math.random() * (frames.getDuration() * frames.getFrames()));
+         } else {
+            state.stateTime = frames.getOffset();
+         }
       }
       return animation.getKeyFrame(animationEnabled ? state.stateTime : frames.getDuration() * frames.getResetIndex());
    }

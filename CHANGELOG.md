@@ -1,3 +1,7 @@
+# Version 0.6.28
+
+* fix random animation offset
+
 # Version 0.6.27
 
 * improve animation rendering and add offset option
