@@ -15,8 +15,9 @@ public class AnimationFrames {
    private int frames;
    private float duration;
    private int resetIndex;
+   private float offset;
 
-   private AnimationFrames(int originX, int originY, Direction direction, Animation.PlayMode playMode, int frames, float duration, int resetIndex) {
+   private AnimationFrames(int originX, int originY, Direction direction, Animation.PlayMode playMode, int frames, float duration, int resetIndex, float offset) {
       this.originX = originX;
       this.originY = originY;
       this.direction = direction;
@@ -24,6 +25,11 @@ public class AnimationFrames {
       this.frames = frames;
       this.duration = duration;
       this.resetIndex = resetIndex;
+      this.offset = offset;
+   }
+
+   public float getOffset() {
+      return offset;
    }
 
    public void setOriginX(int originX) {
@@ -94,6 +100,7 @@ public class AnimationFrames {
       private int frames = 1;
       private float duration = 1f;
       private int resetIndex = 0;
+      private float offset = 0;
 
       private AnimationFramesBuilder() {
 
@@ -130,6 +137,19 @@ public class AnimationFrames {
          return this;
       }
 
+      public AnimationFramesBuilder offset(float offsetInMilliseconds) {
+         this.offset = offsetInMilliseconds;
+         return this;
+      }
+
+      public AnimationFramesBuilder randomOffset() {
+         if (frames > 0) {
+            return this.offset((float) (Math.random() * (this.duration * this.frames)));
+         } else {
+            return this.offset((float) (Math.random() * (this.duration * 8f)));
+         }
+      }
+
       public AnimationFrames build() {
          return new AnimationFrames(
                originX,
@@ -138,7 +158,8 @@ public class AnimationFrames {
                playMode,
                frames,
                duration,
-               resetIndex
+               resetIndex,
+               offset
          );
       }
 

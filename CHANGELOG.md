@@ -1,3 +1,7 @@
+# Version 0.6.27
+
+* improve animation rendering and add offset option
+
 # Version 0.6.26
 
 * add fps and particle count metrics
