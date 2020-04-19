@@ -1,3 +1,7 @@
+# Version 0.6.29
+
+* add additional constructors to `AnimationSpritesheet`
+
 # Version 0.6.28
 
 * fix random animation offset
