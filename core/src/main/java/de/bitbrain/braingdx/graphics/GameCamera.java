@@ -36,6 +36,8 @@ public interface GameCamera extends Updateable, Resizeable {
       TO_HEIGHT;
    }
 
+   float getZoomModeValue();
+
    /**
     * Sets a new threshold to where the camera should stop tracking.
     * The distance also takes camera zoom into account.

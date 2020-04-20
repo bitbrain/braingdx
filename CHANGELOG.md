@@ -1,3 +1,7 @@
+# Version 0.6.30
+
+* add camera zoom tweening
+
 # Version 0.6.29
 
 * add additional constructors to `AnimationSpritesheet`

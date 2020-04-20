@@ -139,6 +139,11 @@ public class VectorGameCamera implements GameCamera {
    }
 
    @Override
+   public float getZoomModeValue() {
+      return zoomModeValue;
+   }
+
+   @Override
    public void setDistanceStoppingThreshold(float distanceThreshold) {
       this.distanceThreshold = distanceThreshold;
    }
