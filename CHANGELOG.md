@@ -1,3 +1,8 @@
+# Version 0.6.31
+
+* expose screen shake value
+* add option to define custom game context
+
 # Version 0.6.30
 
 * add camera zoom tweening

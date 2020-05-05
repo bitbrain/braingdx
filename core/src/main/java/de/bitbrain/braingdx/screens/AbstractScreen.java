@@ -48,9 +48,9 @@ public abstract class AbstractScreen<T extends BrainGdxGame, C extends GameConte
    private boolean created = false;
    private T game;
    private C gameContext;
-   private ArgumentFactory<AbstractScreen, C> contextFactory;
+   private ArgumentFactory<AbstractScreen<T, C>, C> contextFactory;
 
-   public AbstractScreen(T game, ArgumentFactory<AbstractScreen, C> contextFactory) {
+   public AbstractScreen(T game, ArgumentFactory<AbstractScreen<T, C>, C> contextFactory) {
       this.game = game;
       this.contextFactory = contextFactory;
    }

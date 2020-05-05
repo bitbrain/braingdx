@@ -351,6 +351,11 @@ public class VectorGameCamera implements GameCamera {
    }
 
    @Override
+   public Vector2 getShake() {
+      return shake;
+   }
+
+   @Override
    public void setStickToWorldBounds(boolean enabled) {
       this.worldBoundsStickiness = enabled;
    }

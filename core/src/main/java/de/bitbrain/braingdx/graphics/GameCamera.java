@@ -1,6 +1,7 @@
 package de.bitbrain.braingdx.graphics;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import de.bitbrain.braingdx.util.Resizeable;
 import de.bitbrain.braingdx.util.Updateable;
@@ -204,4 +205,6 @@ public interface GameCamera extends Updateable, Resizeable {
     * @param duration the length of the effect in seconds
     */
    void shake(float strength, float duration);
+
+   Vector2 getShake();
 }

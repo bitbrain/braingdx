@@ -22,9 +22,9 @@ public class AbstractScreenTest {
       final GameContext context = mock(GameContext.class);
       when(context.getBackgroundColor()).thenReturn(Color.BLACK);
       final AtomicBoolean onUpdateCalled = new AtomicBoolean();
-      ArgumentFactory<AbstractScreen, GameContext> contextArgumentFactory = new ArgumentFactory<AbstractScreen, GameContext>() {
+      ArgumentFactory<AbstractScreen<BrainGdxGame, GameContext>, GameContext> contextArgumentFactory = new ArgumentFactory<AbstractScreen<BrainGdxGame, GameContext>, GameContext>() {
          @Override
-         public GameContext create(AbstractScreen supplier) {
+         public GameContext create(AbstractScreen<BrainGdxGame, GameContext> supplier) {
             return context;
          }
       };
