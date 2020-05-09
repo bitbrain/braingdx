@@ -2,7 +2,7 @@
 -
 :video_game: Game jam Java framework based on [libgdx](https://libgdx.badlogicgames.com/).
 
-[![Build Status](https://img.shields.io/travis/bitbrain/braingdx/master.svg?logo=travis&style=flat-square)](https://travis-ci.org/bitbrain/braingdx)
+[![Build Status](https://travis-ci.com/bitbrain/braingdx.svg?branch=master)](https://travis-ci.com/github/bitbrain/braingdx)
 [![mavencentral](https://img.shields.io/maven-central/v/io.github.bitbrain/braingdx-core.svg?colorB=blue&style=flat-square)](https://search.maven.org/search?q=g:io.github.bitbrain%20AND%20a:braingdx-core&core=gav) [![javadoc](https://img.shields.io/badge/javadoc-latest-pink.svg?style=flat-square)](http://bitbrain.github.io/braingdx/docs/latest/) [![codecov](https://img.shields.io/codecov/c/github/bitbrain/braingdx/master.svg?logo=codecov&style=flat-square)](https://codecov.io/gh/bitbrain/braingdx)
 [![license](https://img.shields.io/github/license/bitbrain/braingdx.svg?style=flat-square)](LICENSE.MD)
 
