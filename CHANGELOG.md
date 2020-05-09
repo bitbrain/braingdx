@@ -1,3 +1,7 @@
+# Version 0.6.32
+
+* simplify screens by making generic arguments optional
+
 # Version 0.6.31
 
 * expose screen shake value
