@@ -15,7 +15,6 @@
 
 package de.bitbrain.braingdx.assets;
 
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,10 +22,10 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import de.bitbrain.braingdx.assets.annotations.AssetSource;
 
-public interface SampleValidAssets {
+public interface SampleInvalidAssets {
 
-   @AssetSource(directory = "textures", assetClass = Texture.class)
    String field1 = "texture-field1";
+   @AssetSource(directory = "textures", assetClass = Texture.class) String field2 = "texture-field2";
 
    @AssetSource(directory = "textures", assetClass = Texture.class)
    interface Textures {
@@ -34,7 +33,6 @@ public interface SampleValidAssets {
       String field2 = "texture-field2";
    }
 
-   @AssetSource(directory = "music", assetClass = Music.class)
    interface Musics {
       String field1 = "musics-field1";
       String field2 = "musics-field2";

@@ -17,14 +17,17 @@ package de.bitbrain.braingdx.assets;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import de.bitbrain.braingdx.assets.SmartAssetLoader.SmartAssetLoaderConfiguration;
-import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 /**
  * Test for {@link SmartAssetLoader}.
@@ -36,31 +39,34 @@ public class SmartAssetLoaderTest {
    @Before
    public void beforeTest() {
       assets = new HashMap<String, Class<?>>();
-      Gdx.app = Mockito.mock(Application.class);
+      Application application = mock(Application.class);
+      doAnswer(new Answer<Void>() {
+         @Override
+         public Void answer(InvocationOnMock invocationOnMock) throws Throwable {
+            String tag = (String) invocationOnMock.getArguments()[0];
+            String message = (String) invocationOnMock.getArguments()[1];
+            throw new RuntimeException("Unexpected error log found: tag=" + tag + ", message=" + message);
+         }
+      }).when(application).error(anyString(), anyString());
+      Gdx.app = application;
+
    }
 
    @Test
    public void testDefaultTypes() {
       SmartAssetLoader loader = new SmartAssetLoader(SampleValidAssets.class);
       loader.put(assets);
-      Assertions.assertThat(assets).hasSize(12);
+      assertThat(assets).hasSize(12);
    }
 
    @Test
-   public void testDefaultTypesWithAsdfTypes() {
-      SmartAssetLoaderConfiguration config = SmartAssetLoader.defaultConfiguration();
-      config.getClassMapping().put("AsdfType", Object.class);
-      SmartAssetLoader loader = new SmartAssetLoader(CustomSampleValidAssets.class, config);
+   public void testProducesErrors_WithInvalidAssets() {
+      Application application = mock(Application.class);
+      doNothing().when(application).error(anyString(), anyString());
+      Gdx.app = application;
+      SmartAssetLoader loader = new SmartAssetLoader(SampleInvalidAssets.class);
       loader.put(assets);
-      Assertions.assertThat(assets).hasSize(2);
-   }
-
-   @Test
-   public void testDefaultTypes_MissingType() {
-      SmartAssetLoaderConfiguration config = SmartAssetLoader.defaultConfiguration();
-      config.getClassMapping().put("AsdfType2", Object.class);
-      SmartAssetLoader loader = new SmartAssetLoader(CustomSampleValidAssets.class, config);
-      loader.put(assets);
-      Assertions.assertThat(assets).hasSize(0);
+      assertThat(assets).hasSize(10);
+      verify(application, times(3)).error(anyString(), anyString());
    }
 }

@@ -16,16 +16,9 @@
 package de.bitbrain.braingdx.assets;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.maps.tiled.TiledMap;
+import de.bitbrain.braingdx.assets.annotations.AssetSource;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -39,61 +32,40 @@ import java.util.Map;
  * <li>Particles</li>
  * <li>TiledMaps</li>
  * </ul>
- * In order to extend or change the list make use of the {@link SmartAssetLoaderConfiguration}.
  *
  * @author Miguel Gonzalez Sanchez
  */
 public class SmartAssetLoader implements GameAssetLoader {
 
-   private final SmartAssetLoaderConfiguration configuration;
    private final Class<?> target;
+
    public SmartAssetLoader(Class<?> target) {
-      this(target, defaultConfiguration());
-   }
-
-   public SmartAssetLoader(Class<?> target, SmartAssetLoaderConfiguration configuration) {
       this.target = target;
-      this.configuration = configuration;
-   }
-
-   public static SmartAssetLoaderConfiguration defaultConfiguration() {
-      final Map<String, Class<?>> mapping = new HashMap<String, Class<?>>();
-      mapping.put("Textures", Texture.class);
-      mapping.put("Sounds", Sound.class);
-      mapping.put("Musics", Music.class);
-      mapping.put("BitmapFonts", BitmapFont.class);
-      mapping.put("Fonts", FreeTypeFontGenerator.class);
-      mapping.put("Particles", ParticleEffect.class);
-      mapping.put("TiledMaps", TiledMap.class);
-      return new SmartAssetLoaderConfiguration() {
-         @Override
-         public Map<String, Class<?>> getClassMapping() {
-            return mapping;
-         }
-      };
    }
 
    @Override
    public void put(Map<String, Class<?>> assets) {
       // for every sub-class, check for the given type
       for (Class<?> subclass : target.getDeclaredClasses()) {
-         String categoryName = subclass.getSimpleName();
-         Class<?> assetClassType = configuration.getClassMapping().get(categoryName);
-         if (assetClassType != null) {
-            putMembers(subclass, assets, assetClassType);
-         } else {
-            Gdx.app.log("WARN", "Asset category " + categoryName + " not defined in SmartAssetLoaderConfiguration!");
-         }
+         putMembers(subclass, assets, subclass.getAnnotation(AssetSource.class));
       }
+      putMembers(target, assets, target.getAnnotation(AssetSource.class));
    }
 
-   private void putMembers(Class<?> subclass, Map<String, Class<?>> assets, Class<?> assetClassType) {
+   private void putMembers(Class<?> subclass, Map<String, Class<?>> assets, AssetSource source) {
       for (Field field : subclass.getFields()) {
+         if (field.getAnnotation(AssetSource.class) != null) {
+            source = field.getAnnotation(AssetSource.class);
+         }
+         if (source == null) {
+            Gdx.app.error("ERROR", "Field " + field.getName() + " does has a missing asset source. Ignoring!");
+            continue;
+         }
          try {
             Object path = field.get(null);
             if (path instanceof String) {
-               assets.put((String) path, assetClassType);
-               Gdx.app.log("INFO", "Registering asset: path=" + path + ", class=" + assetClassType.getName());
+               assets.put(source.directory() + "/" + path, source.assetClass());
+               Gdx.app.log("INFO", "Registering asset: path=" + path + ", class=" + source.assetClass().getName());
             } else {
                Gdx.app.log("WARN", "Invalid property type in '" + subclass.getName() + "::" + field.getName() + "! Only java.lang.String is allowed.");
             }

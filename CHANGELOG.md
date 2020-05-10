@@ -1,3 +1,8 @@
+# Version 0.6.33
+
+* [[#224](https://github.com/bitbrain/braingdx/issues/224)] introduce `@AssetSource` annotation
+
+
 # Version 0.6.32
 
 * simplify screens by making generic arguments optional
