@@ -46,7 +46,9 @@ public class Asset {
 
    public static <T> T get(String relativePath, Class<T> assetClass) {
       AssetManager assetManager = getAssetManager();
-      String path = assetFolders.containsKey(assetClass)
+      String path = assetFolders.containsKey(assetClass) && !assetFolders.get(assetClass).trim().isEmpty()
+                  && !assetFolders.get(assetClass).equals(".")
+                  && !assetFolders.get(assetClass).equals("/")
             ? assetFolders.get(assetClass) + "/" + relativePath
             : relativePath;
       return assetManager.get(path, assetClass);

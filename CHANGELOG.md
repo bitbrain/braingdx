@@ -1,3 +1,7 @@
+# Version 0.6.35
+
+* fix various bugs
+
 # Version 0.6.34
 
 * rename `SharedAssetManager` into `Asset`
