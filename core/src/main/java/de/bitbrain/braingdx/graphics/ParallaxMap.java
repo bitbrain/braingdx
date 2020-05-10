@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.assets.Asset;
 
 public class ParallaxMap {
 
@@ -18,7 +18,7 @@ public class ParallaxMap {
    private float width, height;
 
    public ParallaxMap(String textureId, Camera camera, float paralaxity) {
-      this(SharedAssetManager.getInstance().get(textureId, Texture.class), camera, paralaxity);
+      this(Asset.get(textureId, Texture.class), camera, paralaxity);
    }
 
    public ParallaxMap(Texture texture, Camera camera, float paralaxity) {

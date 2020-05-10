@@ -24,6 +24,9 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Singleton implementation of an asset manager
  *
@@ -31,29 +34,57 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
  * @version 1.0.0
  * @since 1.0.0
  */
-public class SharedAssetManager extends AssetManager {
+public class Asset {
 
    public static FileHandleResolver fileHandleResolver = new InternalFileHandleResolver();
    private static AssetManager instance = null;
+   private static Map<Class<?>, String> assetFolders = new HashMap<Class<?>, String>();
+   private static Map<String, Class<?>> assets = new HashMap<String, Class<?>>();
 
-   private SharedAssetManager() {
+   private Asset() {
+   }
+
+   public static <T> T get(String relativePath, Class<T> assetClass) {
+      AssetManager assetManager = getAssetManager();
+      String path = assetFolders.containsKey(assetClass)
+            ? assetFolders.get(assetClass) + "/" + relativePath
+            : relativePath;
+      return assetManager.get(path, assetClass);
    }
 
    /**
     * Provides the internal asset manager instance
     */
-   public static AssetManager getInstance() {
-
+   private static AssetManager getAssetManager() {
       if (instance == null)
          loadInternal();
 
       return instance;
    }
 
+   public static void load(String key, Class<?> value) {
+      if (!assetFolders.containsKey(value)) {
+         int lastIndex = key.lastIndexOf("/");
+         if (lastIndex == -1) {
+            lastIndex = key.lastIndexOf("\\");
+         }
+         if (lastIndex != -1) {
+            String folder = key.substring(0, lastIndex);
+            assetFolders.put(value, folder);
+         }
+      }
+      AssetManager assetManager = getAssetManager();
+      assetManager.load(key, value);
+      assets.put(key, value);
+   }
+
    public static void reload() {
       if (instance != null) {
          instance.dispose();
          loadInternal();
+         for (Map.Entry<String, Class<?>> entry : assets.entrySet()) {
+            load(entry.getKey(), entry.getValue());
+         }
       }
    }
 
@@ -65,5 +96,11 @@ public class SharedAssetManager extends AssetManager {
       instance.setLoader(TiledMap.class, new TmxMapLoader(fileHandleResolver));
       instance.setLoader(FreeTypeFontGenerator.class,
             new FreeTypeFontGeneratorLoader(fileHandleResolver));
+   }
+
+   public static void finishLoading() {
+      if (instance != null) {
+         instance.finishLoading();
+      }
    }
 }

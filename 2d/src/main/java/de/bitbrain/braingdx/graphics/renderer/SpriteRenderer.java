@@ -15,12 +15,11 @@
 
 package de.bitbrain.braingdx.graphics.renderer;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.assets.Asset;
 import de.bitbrain.braingdx.world.GameObject;
 
 /**
@@ -32,7 +31,6 @@ import de.bitbrain.braingdx.world.GameObject;
  */
 public class SpriteRenderer extends GameObject2DRenderer {
 
-   private final AssetManager assets = SharedAssetManager.getInstance();
    private final Vector2 offset = new Vector2();
    private final Vector2 rotationalOffset = new Vector2();
    private final Vector2 size = new Vector2();
@@ -42,7 +40,7 @@ public class SpriteRenderer extends GameObject2DRenderer {
 
    public SpriteRenderer(String textureId) {
       if (textureId != null) {
-         texture = assets.get(textureId, Texture.class);
+         texture = Asset.get(textureId, Texture.class);
          sprite = new Sprite(texture);
       }
    }

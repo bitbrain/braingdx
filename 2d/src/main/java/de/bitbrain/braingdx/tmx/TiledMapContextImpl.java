@@ -13,8 +13,6 @@ import de.bitbrain.braingdx.graphics.GameObjectRenderManager;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 
-import java.util.List;
-
 public class TiledMapContextImpl implements TiledMapContext {
 
    private final TiledMap tiledMap;

@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import de.bitbrain.braingdx.BrainGdxGame;
 import de.bitbrain.braingdx.GameSettings;
-import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.audio.AudioManager;
 import de.bitbrain.braingdx.audio.AudioManagerImpl;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
@@ -110,7 +109,6 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       this.audioManager = new AudioManagerImpl(//
             gameCamera,//
             tweenManager,//
-            SharedAssetManager.getInstance(),//
             world,//
             behaviorManager//
       );
@@ -145,7 +143,6 @@ public class GameContextImpl implements GameContext, Disposable, Resizeable {
       this.audioManager = new AudioManagerImpl(//
             gameCamera,//
             tweenManager,//
-            SharedAssetManager.getInstance(),//
             world,//
             behaviorManager//
       );

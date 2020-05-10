@@ -2,7 +2,7 @@ package de.bitbrain.braingdx.graphics.animation;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.assets.Asset;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,11 +25,11 @@ public class AnimationSpriteSheet {
    private final TextureRegion[][] textureRegions;
 
    public AnimationSpriteSheet(String assetId, int tileSize) {
-      this(SharedAssetManager.getInstance().get(assetId, Texture.class), tileSize);
+      this(Asset.get(assetId, Texture.class), tileSize);
    }
 
    public AnimationSpriteSheet(String assetId, int tileWidth, int tileHeight) {
-      this(SharedAssetManager.getInstance().get(assetId, Texture.class), tileWidth, tileHeight);
+      this(Asset.get(assetId, Texture.class), tileWidth, tileHeight);
    }
 
    public AnimationSpriteSheet(Texture texture, int tileSize) {

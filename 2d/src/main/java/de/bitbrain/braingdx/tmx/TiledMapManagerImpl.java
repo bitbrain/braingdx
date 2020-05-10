@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Disposable;
-import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.assets.Asset;
 import de.bitbrain.braingdx.event.GameEventManager;
 import de.bitbrain.braingdx.world.GameWorld;
 import de.bitbrain.braingdx.world.SimpleWorldBounds;
@@ -42,12 +42,12 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
 
    @Override
    public TiledMapContext load(String path, Camera camera, TiledMapConfig config) throws TiledMapException {
-      return load(SharedAssetManager.getInstance().get(path, TiledMap.class), camera, config);
+      return load(Asset.get(path, TiledMap.class), camera, config);
    }
 
    @Override
    public TiledMapContext load(String path, Camera camera) throws TiledMapException {
-      return load(SharedAssetManager.getInstance().get(path, TiledMap.class), camera);
+      return load(Asset.get(path, TiledMap.class), camera);
    }
 
    @Override
@@ -91,7 +91,7 @@ public class TiledMapManagerImpl implements TiledMapManager, Disposable {
 
    @Override
    public void unload(String path) {
-      unload(contextMap.get(SharedAssetManager.getInstance().get(path, TiledMap.class)));
+      unload(contextMap.get(Asset.get(path, TiledMap.class)));
    }
 
    @Override

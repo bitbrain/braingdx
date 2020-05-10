@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.utils.Disposable;
-import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.assets.Asset;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.graphics.GraphicsSettings;
@@ -102,7 +102,7 @@ public class ParticleManagerImpl implements ParticleManager, Disposable {
    private InternalPooledEffect ensureEffect(String particleId) {
       ParticleEffectPool pool = pools.get(particleId);
       if (pool == null) {
-         ParticleEffect effect = SharedAssetManager.getInstance().get(particleId, ParticleEffect.class);
+         ParticleEffect effect = Asset.get(particleId, ParticleEffect.class);
          pool = new ParticleEffectPool(effect, 100, 500);
          pools.put(particleId, pool);
       }

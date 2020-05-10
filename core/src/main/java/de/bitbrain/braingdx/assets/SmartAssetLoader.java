@@ -65,7 +65,7 @@ public class SmartAssetLoader implements GameAssetLoader {
             Object path = field.get(null);
             if (path instanceof String) {
                assets.put(source.directory() + "/" + path, source.assetClass());
-               Gdx.app.log("INFO", "Registering asset: path=" + path + ", class=" + source.assetClass().getName());
+               Gdx.app.log("INFO", "Registering asset: path=" + source.directory() + "/" + path + ", class=" + source.assetClass().getName());
             } else {
                Gdx.app.log("WARN", "Invalid property type in '" + subclass.getName() + "::" + field.getName() + "! Only java.lang.String is allowed.");
             }

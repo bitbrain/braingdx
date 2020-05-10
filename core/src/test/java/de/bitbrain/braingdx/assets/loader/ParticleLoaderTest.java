@@ -2,10 +2,10 @@ package de.bitbrain.braingdx.assets.loader;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import de.bitbrain.braingdx.assets.SharedAssetManager;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -30,7 +30,7 @@ public class ParticleLoaderTest {
       InputStream stream = mock(InputStream.class);
       when(handle.read()).thenReturn(stream);
       assertThat(
-            loader.load(SharedAssetManager.getInstance(),
+            loader.load(new AssetManager(),
                   "asdf",
                   handle,
                   mock(ParticleLoader.ParticleParameter.class))

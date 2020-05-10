@@ -17,13 +17,12 @@ package de.bitbrain.braingdx;
 
 import aurelienribon.tweenengine.Tween;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import de.bitbrain.braingdx.assets.Asset;
 import de.bitbrain.braingdx.assets.GameAssetLoader;
-import de.bitbrain.braingdx.assets.SharedAssetManager;
 import de.bitbrain.braingdx.graphics.BitmapFontBaker;
 import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.graphics.postprocessing.effects.*;
@@ -63,16 +62,15 @@ public abstract class BrainGdxGame extends Game {
    protected abstract AbstractScreen<?, ?> getInitialScreen();
 
    private void loadAssets() {
-      final AssetManager assetManager = SharedAssetManager.getInstance();
       final GameAssetLoader loader = getAssetLoader();
       if (loader == null)
          throw new RuntimeException("No asset loader has been specified.");
       final HashMap<String, Class<?>> mapping = new HashMap<String, Class<?>>();
       loader.put(mapping);
       for (final Map.Entry<String, Class<?>> entry : mapping.entrySet()) {
-         assetManager.load(entry.getKey(), entry.getValue());
+         Asset.load(entry.getKey(), entry.getValue());
       }
-      assetManager.finishLoading();
+      Asset.finishLoading();
    }
 
    private void initTweens() {

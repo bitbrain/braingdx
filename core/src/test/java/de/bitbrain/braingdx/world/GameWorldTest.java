@@ -1,9 +1,7 @@
 package de.bitbrain.braingdx.world;
 
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import de.bitbrain.braingdx.graphics.GameCamera;
-import de.bitbrain.braingdx.math.QuadTree;
 import de.bitbrain.braingdx.util.GdxUtils;
 import de.bitbrain.braingdx.util.Mutator;
 import org.junit.Before;

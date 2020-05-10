@@ -2,8 +2,6 @@ package de.bitbrain.braingdx.graphics.lighting;
 
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import de.bitbrain.braingdx.graphics.lighting.LightingManagerImpl.LightFactory;
@@ -12,9 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
 import static de.bitbrain.braingdx.utils.GdxUtils.mockApplicationContext;
 import static org.mockito.Mockito.*;

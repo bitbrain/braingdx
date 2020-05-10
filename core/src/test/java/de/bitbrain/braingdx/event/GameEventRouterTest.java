@@ -2,7 +2,6 @@ package de.bitbrain.braingdx.event;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import de.bitbrain.braingdx.graphics.GameCamera;
 import de.bitbrain.braingdx.world.GameObject;
 import de.bitbrain.braingdx.world.GameWorld;
 import org.junit.Before;

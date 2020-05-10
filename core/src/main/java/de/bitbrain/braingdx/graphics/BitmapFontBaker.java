@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import de.bitbrain.braingdx.assets.SharedAssetManager;
+import de.bitbrain.braingdx.assets.Asset;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class BitmapFontBaker {
    private static List<BitmapFont> bakedFonts = new ArrayList<BitmapFont>();
 
    public static BitmapFont bake(String fontPath, FreeTypeFontGenerator.FreeTypeFontParameter params) {
-      FreeTypeFontGenerator generator = SharedAssetManager.getInstance().get(fontPath, FreeTypeFontGenerator.class);
+      FreeTypeFontGenerator generator = Asset.get(fontPath, FreeTypeFontGenerator.class);
       BitmapFont font = generator.generateFont(params);
       bakedFonts.add(font);
       return font;

@@ -1,3 +1,7 @@
+# Version 0.6.34
+
+* rename `SharedAssetManager` into `Asset`
+
 # Version 0.6.33
 
 * [[#224](https://github.com/bitbrain/braingdx/issues/224)] introduce `@AssetSource` annotation

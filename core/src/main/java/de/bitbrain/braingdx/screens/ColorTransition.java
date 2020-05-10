@@ -26,7 +26,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 import de.bitbrain.braingdx.tweens.ColorTween;
 import de.bitbrain.braingdx.util.Resizeable;
-import de.bitbrain.braingdx.util.Updateable;
 
 /**
  * Implementation which fades a texture.

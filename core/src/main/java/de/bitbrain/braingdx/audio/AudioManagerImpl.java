@@ -18,12 +18,12 @@ package de.bitbrain.braingdx.audio;
 import aurelienribon.tweenengine.*;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
+import de.bitbrain.braingdx.assets.Asset;
 import de.bitbrain.braingdx.behavior.BehaviorAdapter;
 import de.bitbrain.braingdx.behavior.BehaviorManager;
 import de.bitbrain.braingdx.graphics.GameCamera;
@@ -51,7 +51,6 @@ public class AudioManagerImpl implements AudioManager {
    private final Vector3 tmp = new Vector3();
 
    private final TweenManager tweenManager;
-   private final AssetManager assetManager;
    private final GameWorld gameWorld;
    private final BehaviorManager behaviorManager;
    private final GameCamera camera;
@@ -60,9 +59,8 @@ public class AudioManagerImpl implements AudioManager {
    private final Map<String, Long> soundHandles = new HashMap<String, Long>();
    private float volume;
 
-   public AudioManagerImpl(GameCamera gameCamera, TweenManager tweenManager, AssetManager assetManager, GameWorld gameWorld, BehaviorManager behaviorManager) {
+   public AudioManagerImpl(GameCamera gameCamera, TweenManager tweenManager,  GameWorld gameWorld, BehaviorManager behaviorManager) {
       this.tweenManager = tweenManager;
-      this.assetManager = assetManager;
       this.gameWorld = gameWorld;
       this.behaviorManager = behaviorManager;
       this.volume = DEFAULT_VOLUME;
@@ -72,7 +70,7 @@ public class AudioManagerImpl implements AudioManager {
 
    @Override
    public void spawnSound(String path, float x, float y, float pitch, final float volume, float hearingRange) {
-      final Sound sound = assetManager.get(path, Sound.class);
+      final Sound sound = Asset.get(path, Sound.class);
       final long handle = sound.play(volume, pitch, 0f);
       float computedPan = computePan(x, y, hearingRange);
       float computedVolume = computeVolume(x, y, hearingRange) * volume * this.volume;
@@ -90,7 +88,7 @@ public class AudioManagerImpl implements AudioManager {
 
    @Override
    public void spawnSoundLooped(String path, GameObject target, float pitch, final float volume, final float hearingRange) {
-      final Sound sound = assetManager.get(path, Sound.class);
+      final Sound sound = Asset.get(path, Sound.class);
       final long handle = sound.play(0f, pitch, 0f);
       sound.setLooping(handle, true);
       behaviorManager.apply(new BehaviorAdapter() {
@@ -110,7 +108,7 @@ public class AudioManagerImpl implements AudioManager {
       soundObject.setActive(false);
       soundObject.setPosition(x, y);
       soundObject.setDimensions(1, 1);
-      final Music music = assetManager.get(path, Music.class);
+      final Music music = Asset.get(path, Music.class);
       music.play();
       music.setLooping(true);
       behaviorManager.apply(new BehaviorAdapter() {
@@ -178,7 +176,7 @@ public class AudioManagerImpl implements AudioManager {
 
    @Override
    public void crossFadeMusic(String fromPath, String toPath, float duration) {
-      crossFadeMusic(assetManager.get(fromPath, Music.class), assetManager.get(toPath, Music.class), duration);
+      crossFadeMusic(Asset.get(fromPath, Music.class), Asset.get(toPath, Music.class), duration);
    }
 
    @Override
@@ -194,7 +192,7 @@ public class AudioManagerImpl implements AudioManager {
 
    @Override
    public void fadeOutMusic(final String path, float duration) {
-      fadeOutMusic(assetManager.get(path, Music.class), duration);
+      fadeOutMusic(Asset.get(path, Music.class), duration);
    }
 
    @Override
@@ -220,7 +218,7 @@ public class AudioManagerImpl implements AudioManager {
 
    @Override
    public void fadeInMusic(String path, float duration) {
-      fadeInMusic(assetManager.get(path, Music.class), duration);
+      fadeInMusic(Asset.get(path, Music.class), duration);
    }
 
    @Override
@@ -237,7 +235,7 @@ public class AudioManagerImpl implements AudioManager {
 
    @Override
    public void playMusic(String path) {
-      Music lastMusic = assetManager.get(path, Music.class);
+      Music lastMusic = Asset.get(path, Music.class);
       lastMusic.setVolume(volume);
       lastMusic.setPosition(0f);
       lastMusic.play();
@@ -245,12 +243,12 @@ public class AudioManagerImpl implements AudioManager {
 
    @Override
    public void stopMusic(String path) {
-      assetManager.get(path, Music.class).stop();
+      Asset.get(path, Music.class).stop();
    }
 
    @Override
    public void pauseMusic(String path) {
-      assetManager.get(path, Music.class).pause();
+      Asset.get(path, Music.class).pause();
    }
 
    private float computeVolume(float sourceX, float sourceY, float maxDistance) {

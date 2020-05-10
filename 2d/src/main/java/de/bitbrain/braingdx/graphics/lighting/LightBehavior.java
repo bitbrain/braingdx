@@ -15,10 +15,6 @@
 
 package de.bitbrain.braingdx.graphics.lighting;
 
-import box2dLight.Light;
-import de.bitbrain.braingdx.behavior.BehaviorAdapter;
-import de.bitbrain.braingdx.world.GameObject;
-
 /**
  * Lighting behavior to attach lights to game objects
  *
