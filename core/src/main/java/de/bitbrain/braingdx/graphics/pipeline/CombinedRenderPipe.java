@@ -71,6 +71,11 @@ class CombinedRenderPipe implements RenderPipe, Resizeable {
    }
 
    @Override
+   public RenderLayer<?> getLayer() {
+      return layer;
+   }
+
+   @Override
    public void beforeRender() {
       layer.beforeRender();
    }

@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 public class MockedCombinedRenderPipelineFactory implements RenderPipelineFactory {
 
    @Override
-   public RenderPipeline create() {
+   public InternalRenderPipeline create() {
       ShaderConfig config = mock(ShaderConfig.class);
       PostProcessor processorMock = mock(PostProcessor.class);
       FrameBufferFactory factory = mock(FrameBufferFactory.class);

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import de.bitbrain.braingdx.util.GdxUtils;
+import org.assertj.core.api.iterable.Extractor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,17 +29,17 @@ import static org.mockito.Mockito.when;
 public class RenderPipelineTest {
 
    @Parameter
-   public RenderPipelineFactory pipelineFactory;
+   public MockedCombinedRenderPipelineFactory pipelineFactory;
 
-   private RenderPipeline pipeline;
+   private InternalRenderPipeline pipeline;
 
    @Parameters
-   public static Collection<RenderPipelineFactory[]> getParams() {
-      List<RenderPipelineFactory[]> params = new ArrayList<RenderPipelineFactory[]>();
+   public static Collection<MockedCombinedRenderPipelineFactory[]> getParams() {
+      List<MockedCombinedRenderPipelineFactory[]> params = new ArrayList<MockedCombinedRenderPipelineFactory[]>();
       GdxUtils.mockApplicationContext();
       Gdx.gl = mock(GL20.class);
       when(Gdx.app.getType()).thenReturn(ApplicationType.Desktop);
-      params.add(new RenderPipelineFactory[]{new MockedCombinedRenderPipelineFactory()});
+      params.add(new MockedCombinedRenderPipelineFactory[]{new MockedCombinedRenderPipelineFactory()});
       return params;
    }
 
@@ -153,6 +154,27 @@ public class RenderPipelineTest {
       assertThat(pipeline.getPipeIds()).containsExactly("a", "c");
       pipeline.remove("a");
       assertThat(pipeline.getPipeIds()).containsExactly("c");
+   }
+
+   @Test
+   public void testReplace_Existing() {
+      RenderLayer<?> expectedLayerA = mock(RenderLayer.class);
+      RenderLayer<?> expectedLayerB = mock(RenderLayer.class);
+      RenderLayer<?> expectedLayerC = mock(RenderLayer.class);
+      RenderLayer<?> expectedLayerD = mock(RenderLayer.class);
+      RenderLayer<?> expectedLayerANew = mock(RenderLayer.class);
+      pipeline.put("a", expectedLayerA);
+      pipeline.put("b", expectedLayerB);
+      pipeline.putAfter("a", "c", expectedLayerC);
+      pipeline.put("a", expectedLayerANew);
+      pipeline.putBefore("c", "d", expectedLayerD);
+      assertThat(pipeline.getPipeIds()).containsExactly("a", "d", "c", "b");
+      assertThat(pipeline.getPipes()).extracting(new Extractor<RenderPipe, RenderLayer<?>>() {
+         @Override
+         public RenderLayer<?> extract(RenderPipe input) {
+            return input.getLayer();
+         }
+      }).containsExactly(expectedLayerANew, expectedLayerD, expectedLayerC, expectedLayerB);
    }
 
 }

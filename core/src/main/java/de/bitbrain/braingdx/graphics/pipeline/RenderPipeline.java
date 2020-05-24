@@ -96,12 +96,5 @@ public interface RenderPipeline extends Disposable, Resizeable {
     */
    void addEffects(String existingSourceId, PostProcessorEffect... effects);
 
-   /**
-    * Returns an ordered collection of all registered layers
-    *
-    * @return an ordered collection of Strings
-    */
-   Collection<String> getPipeIds();
-
    void render(float delta);
 }

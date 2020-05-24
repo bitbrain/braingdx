@@ -45,7 +45,7 @@ import java.util.*;
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-public class CombinedRenderPipeline implements RenderPipeline {
+public class CombinedRenderPipeline implements InternalRenderPipeline {
 
    private static final boolean isDesktop = (Gdx.app.getType() == Application.ApplicationType.Desktop);
 
@@ -156,7 +156,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
          Gdx.app.error("FATAL", "Unable add layer '" + id + "'!");
          return;
       }
-      orderedPipes.put(index > 0 ? index - 1 : index, id, new CombinedRenderPipe(layer, processor, internalBatch, batchResolverMap, effects));
+      orderedPipes.put(index, id, new CombinedRenderPipe(layer, processor, internalBatch, batchResolverMap, effects));
       this.hasEffects = hasEffects || effects.length > 0;
       pipes.clear();
       pipes.addAll(orderedPipes.valueList());
@@ -171,7 +171,7 @@ public class CombinedRenderPipeline implements RenderPipeline {
       }
       orderedPipes.remove(existingSourceId);
       for (Object o : orderedPipes.valueList()) {
-         CombinedRenderPipe pipe = (CombinedRenderPipe)o;
+         CombinedRenderPipe pipe = (CombinedRenderPipe) o;
          if (pipe.hasEffects()) {
             return;
          }
@@ -245,6 +245,11 @@ public class CombinedRenderPipeline implements RenderPipeline {
    @Override
    public Collection<String> getPipeIds() {
       return orderedPipes.keySet();
+   }
+
+   @Override
+   public Collection<RenderPipe> getPipes() {
+      return new ArrayList<RenderPipe>(pipes);
    }
 
    @SuppressWarnings("unchecked")

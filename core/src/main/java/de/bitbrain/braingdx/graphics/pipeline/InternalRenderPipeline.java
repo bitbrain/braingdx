@@ -14,30 +14,17 @@
  */
 package de.bitbrain.braingdx.graphics.pipeline;
 
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import de.bitbrain.braingdx.graphics.postprocessing.PostProcessorEffect;
+import java.util.Collection;
 
 /**
- * A renderpipe is compatible with other pipes and is responsible for rendering internal layers.
+ * Handles the complete pipeline of rendering internally. The pipeline consists of render pipes.
  *
  * @author Miguel Gonzalez Sanchez
  * @version 1.0.0
  */
-public interface RenderPipe {
+public interface InternalRenderPipeline extends RenderPipeline {
 
-   RenderLayer getLayer();
+   Collection<String> getPipeIds();
 
-   void beforeRender();
-
-   void render(float delta, FrameBuffer buffer);
-
-   boolean isEnabled();
-
-   void setEnabled(boolean enabled);
-
-   void addEffects(PostProcessorEffect... effects);
-
-   void setEffects(PostProcessorEffect[] effects);
-
-   boolean hasEffects();
+   Collection<RenderPipe> getPipes();
 }

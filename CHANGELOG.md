@@ -1,3 +1,8 @@
+# Version 0.6.36
+
+* [[#225](https://github.com/bitbrain/braingdx/issues/225)] fix wrong insertion order of render layers
+* remove `ParticleEffectLoader` since it [now comes with libgdx](https://libgdx.badlogicgames.com/ci/nightlies/docs/api/com/badlogic/gdx/assets/loaders/ParticleEffectLoader.html)
+
 # Version 0.6.35
 
 * fix various bugs
